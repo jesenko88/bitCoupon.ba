@@ -1,7 +1,52 @@
-@(message: String)
+@(message: String)(name: String)
 
-@main("BitCoupon") {
+@import helper._
 
-    @play20.welcome(message, style = "Java")
+@main("Welcome to bitCoupon") {
+	
+	
+@*	<h2>@message @name</h2>
+    <h4>Home: </h4> *@
+    
 
+	 <!-- header for login and registration-->
+	<header id="header"><!--header-->
+		<div class="header_top"><!--header_top-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="col-sm-12">
+						
+							<ul class="nav navbar-nav">
+								<li><a href="/loginpage" class="active"><i class="fa fa-lock"></i> Login </a></li>
+								<li><a href="/registration" class="active"><i class="fa fa-lock"></i> Registration</a></li>
+							</ul>
+						</div>
+					</div>
+					</div>
+					
+				</div>
+			</div>
+		</div><!--/header_top-->
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")"</a>
+						</div>
+					
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="container">
+		<h2>@message @name</h2>
+		</div>
+
+	</header>
+	
 }
+
