@@ -32,15 +32,22 @@ public class User extends Model {
 
 	@Required
 	public String password;
+	
+
+	public boolean isAdmin;
 
 	static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
-	public User(String username, String email, String password) {
+
+	public User(String username, String email, String password, boolean isAdmin){
+
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.isAdmin = isAdmin;
 	}
+
 
 	/**
 	 * Creates a new User and saves it to the database
@@ -53,8 +60,8 @@ public class User extends Model {
 	 *            String
 	 * @return the id of the new user (long)
 	 */
-	public static long createUser(String username, String email, String password) {
-		User newUser = new User(username, email, password);
+	public static long createUser(String username,String email, String password, boolean isAdmin){
+		User newUser = new User(username, email, password, isAdmin);
 		newUser.save();
 		return newUser.id;
 	}
@@ -126,5 +133,14 @@ public class User extends Model {
 	public static User find(long id) {
 		return find.byId(id);
 	}
+	
+	public static User find(boolean isAdmin) {
+		return find.where().eq("isAdmin", isAdmin).findUnique();
+	}
+	
+	public static User find(String mail) {
+		return find.where().eq("email", mail).findUnique();
+	}
+	
 
 }
