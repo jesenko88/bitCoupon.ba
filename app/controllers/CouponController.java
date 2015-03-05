@@ -8,6 +8,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.Loginpage;
+import views.html.coupontemplate;
 import views.html.userIndex;
 
 public class CouponController extends Controller {
@@ -63,6 +64,13 @@ public class CouponController extends Controller {
 	public static Result viewCoupon(int id) {
 		Coupon coupon = Coupon.find(id);
 		return redirect("/");// todo//ok(viewCoupon.render(coupon, couponForm));
+	}
+	
+	public static Result showCoupon(long id) {
+		Coupon current = Coupon.find(id);
+		
+		return ok(coupontemplate.render(session("name"), current));
+		
 	}
 
 }

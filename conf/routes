@@ -11,6 +11,7 @@ GET    /loginpage       controllers.Application.loginpage()
 POST   /login           controllers.Application.login()
 GET    /logout          controllers.Application.logout()
 POST   /addCoupon       controllers.CouponController.addCoupon()
+GET 	/coupon/:id			controllers.CouponController.showCoupon(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file    controllers.Assets.at(path="/public", file)

@@ -1,4 +1,4 @@
-@(message: String)(name: String)
+@(name: String)(coupon: Coupon)
 
 @import helper._
 
@@ -19,7 +19,7 @@
 							<li><a href="/loginpage" class="active"><i class="fa fa-lock"></i> Login </a></li>
 							<li><a href="/signup" class="active"><i class="fa fa-lock"></i> Registration</a></li>
 							} else {
- 							<li><a href="/register" class="active">@message @name </a></li>
+ 							<li><a href="/register" class="active"> @name </a></li>
  							<li><a href="/logout" class="active"><i class="fa fa-lock"></i> Logout</a></li>
 							}						
 							</ul>
@@ -97,9 +97,9 @@
 						<div class="col-sm-7">
 							<div class="product-information"><!--/product-information-->
 								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
-								<h2>Putovanje u sunčani raj! Odmor iz snova provedite u Turskoj</h2>
+								<h2> @coupon.name </h2>
 								<span>
-									<span>429.00 KM</span>
+									<span> @coupon.price KM</span>
 									<label>Number of sold coupons:</label>
 									<input type="text" value="9" />
 									<button type="button" class="btn btn-fefault cart">
@@ -107,7 +107,7 @@
 										Buy Coupon
 									</button>
 								</span>
-								<p><b>Description</b> Platite samo 429 KM i uživajte u osmodnevnom putovanju u Tursku (Antalija, Pamukkale, Hierapolis, Slapovi Karpuzkaldiran) i odsjednite u najluksuznijim hotelima</p>
+								<p><b>Description</b> @coupon.description </p>
 								<p><b>Notes related to the coupon:</b> Jedna osoba može kupiti neograničen broj kupona za ovu ponudu. Kupon se može iskoristiti samo u terminu: 07.04.2015. godine. Ne može se zamijeniti za novac ili neki drugi aranžman. Ponuda se odnosi na organizovano osmodnevno putovanje za jednu osobu u Tursku (Antalija, Pamukkale, Hierapolis,  Slapovi Karpuzkaldiran) i uključuje: let iz Sarajeva za Antalyu i nazad (preko Istanbula) s uključenim aerodromskim taksama, piće dobrodošlice, 7 noćenja u hotelima s 4 ili 5 zvjezdica kao što su Karmir Resort & Spa 5* kod Kemera, Hotel Richmond Pamukkale 4* doručak – švedski sto, transfer autobusima, izleti prema programu bez ulaznica, organizaciju puta i turističke vodiče.Obavezno se javiti agenciji i dostaviti kopiju pasoša nakon kupovine kupona na mail infoATnikal.hr Ulaznice za lokalitete su 20€. Doplata za jednokrevetnu sobu je 90€, a doplata za večeru (svih sedam noći) je 100€.Kupon se smatra iskorištenim ukoliko je korisnik obavio kupovinu, a nije iskoristio kupon u navedenom roku iskoristivosti.Kupljene kupone nije moguće stornirati.</p>
 								<p><b>Location:</b> NIKAL d.o.o. putnička agencija Nadinska cesta 11, 10000 ZagrebTel/Fax: +385 1 555 68 42, +385 1 555 68</p>
 							</div><!--/product-information-->

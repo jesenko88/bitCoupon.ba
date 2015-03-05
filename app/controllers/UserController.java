@@ -72,6 +72,10 @@ public class UserController extends Controller {
 	public static Result show(long id){
 		
 		User u = User.find(id);
+		if ( !u.username.equals(session("name"))){
+			return redirect("/");
+		}
+		
 		return ok(userIndex.render(message, u.username, null));
 		
 	}
