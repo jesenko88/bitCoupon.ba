@@ -288,8 +288,11 @@ public class CouponController extends Controller {
 				description, remark);
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
-		}	
-		return redirect("/couponPanel");
+		}else{
+			Coupon.createCoupon(name, price, date, FileUpload.DEFAULT_IMAGE, category,
+					description, remark);
+			return redirect("/couponPanel");
+		}
 	}
 	
 	

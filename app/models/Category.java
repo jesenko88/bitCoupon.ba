@@ -18,7 +18,7 @@ public class Category extends Model{
 	@Required
 	public String name;
 	
-	String picture;
+	String picture;	
 	
 	@OneToMany
 	public List<Coupon> coupons;

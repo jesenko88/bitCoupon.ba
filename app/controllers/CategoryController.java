@@ -48,7 +48,10 @@ public class CategoryController extends Controller {
 		String picture = FileUpload.imageUpload("category-photos");		
 		
 		if(!Category.checkByName(name)){
-			Category.createCategory(name, picture);
+			if(picture != null){
+				Category.createCategory(name, picture);
+			}
+			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
 		}
 		//else()-dodati flash:"Category already exists!"
 		//return ok(categoryPanel.render( session("name"), "Category \"" + name));

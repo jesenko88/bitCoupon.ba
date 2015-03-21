@@ -12,6 +12,8 @@ import com.google.common.io.Files;
 
 public class FileUpload extends Controller{
 
+	public static final String DEFAULT_IMAGE = "images" + File.separator + "default_image.jpg";
+	
 	/**
 	 * Method for uploading PHOTOS on our website.
 	 * As parameter receives name of sub folder in our public/images folder.
@@ -27,6 +29,10 @@ public class FileUpload extends Controller{
 				+ File.separator;
 
 		FilePart filePart = body.getFile("picture");
+		//Checking if file exists.
+		if(filePart == null){
+			return null;
+		}
 		File image = filePart.getFile();
 		String extension = filePart.getFilename().substring(
 				filePart.getFilename().lastIndexOf('.'));
