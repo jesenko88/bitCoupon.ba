@@ -6,9 +6,7 @@ import helpers.HashHelper;
 
 import org.junit.*;
 
-import controllers.UserController;
 import play.test.WithApplication;
-import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
@@ -18,24 +16,24 @@ public class ModelsTest extends WithApplication {
 		
 		fakeApplication( inMemoryDatabase()); //,fakeGlobal() ne radi u play verzijama > 2.0, uzeti u obzir admina na mjestu 1 zbog global klase
 	}
-
+	
 	@Test
 	public void testCreate() {
-		User.createUser("tester", "test@mail.com", "654321", false);
-		User u = User.find(2);
+		User.createUser("tester", "test@mail.com", "654321", false); //already 2 users in global class
+		User u = User.find(3);
 		assertNotNull(u);
 		assertEquals(u.username, "tester");
 		assertEquals(u.email, "test@mail.com");
 		assertEquals(u.password, "654321");
 	}
-
+	
 	@Test
 	public void testFindNonExisting() {
 		User u = User.find(1000);
-
+		
 		assertNull(u);
 	}
-
+	
 	@Test
 	public void testDelete() {
 		User.createUser("test", "test@bitcamp.ba", HashHelper.createPassword("54321"), false);
@@ -46,8 +44,9 @@ public class ModelsTest extends WithApplication {
 	
 	@Test
 	public void testCouponCreate(){
-		
-		Coupon.createCoupon("Test", 55.3, new Date(), "url", "category", "description", "remark");
+		Category food = new Category("Food");
+		food.save();
+		Coupon.createCoupon("Test", 55.3, new Date(), "url", food, "description", "remark");
 		Coupon c = Coupon.find(4);
 		assertNotNull(c);
 		
@@ -61,7 +60,9 @@ public class ModelsTest extends WithApplication {
 	
 	@Test
 	public void deleteCoupon(){
-		Coupon.createCoupon("test", 2.22, new Date(), "testurl", "category", "description", "remark");
+		Category food = new Category("Food");
+		food.save();
+		Coupon.createCoupon("test", 2.22, new Date(), "testurl", food, "description", "remark");
 		Coupon.delete(4);
 		Coupon c = Coupon.find(4);
 		assertNull(c);
@@ -73,6 +74,7 @@ public class ModelsTest extends WithApplication {
 		Coupon c = Coupon.find(2);
 		assertNull(c);
 	}
+	
 	
 	@Test
 	public void updateUser(){
@@ -89,6 +91,28 @@ public class ModelsTest extends WithApplication {
 		
 	}
 	
+	@Test
+	public void testCategoryCreate(){
+		Category.createCategory("Test Category");
+		Category category=Category.findByName("Test Category");
+		assertNotNull(category);
+	}
+	
+	@Test public void testFindNonExistingCategory(){
+		Category category=Category.find(1333);
+		assertNull(category);
+	}
+	
+	@Test
+	public void deleteCategory(){
+		long id=Category.createCategory("New Category");
+		Category category=Category.find(id);
+		assertNotNull(category);
+		Category.delete(id);
+		Category c=Category.find(id);
+		assertNull(c);
+	}
+
 	
 	@SuppressWarnings("deprecation")
 	@Test
@@ -105,5 +129,49 @@ public class ModelsTest extends WithApplication {
 		assertEquals(coupon.description,"Rucak za troje");
 		assertEquals(coupon.remark,"Test za rucak promjena");
 	}
-
+	
+	@Test
+	public void createFAQ(){
+		FAQ.createFAQ("faqQuestion", "faqAnswer");
+		FAQ newFAQ = FAQ.find(4); // 3 FAQ-s are created in global class already
+		assertNotNull(newFAQ);
+		assertEquals(newFAQ.id, 4);
+		assertEquals(newFAQ.question,"faqQuestion");
+		assertEquals(newFAQ.answer,"faqAnswer");
+	}
+	
+	@Test
+	public void updateFAQ(){
+		FAQ.createFAQ("what question", "what answer");
+		FAQ newFAQ = FAQ.find(4); // 3 FAQ-s are created in global class already
+		newFAQ.question = "where question";
+		newFAQ.answer = "where answer";
+		FAQ.update(newFAQ);
+		assertEquals(newFAQ.question,"where question");
+		assertEquals(newFAQ.answer,"where answer");
+	}
+	
+	@Test
+	public void deleteFAQ(){
+		FAQ.createFAQ("faqQuestion", "faqAnswer");
+		FAQ newFAQ = FAQ.find(4); // 3 FAQ-s are created in global class already
+		assertNotNull(newFAQ);
+		FAQ.delete(4);
+		FAQ test = FAQ.find(4);
+		assertNull(test);
+		
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+

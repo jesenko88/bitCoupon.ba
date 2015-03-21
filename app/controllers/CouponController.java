@@ -1,20 +1,26 @@
 package controllers;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import models.Category;
 import models.Coupon;
 import models.User;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.Logger;
 import views.html.coupon.*;
+import views.html.*;
 
 
 public class CouponController extends Controller {
 	
+
 	
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	
@@ -39,6 +45,7 @@ public class CouponController extends Controller {
 	public static Result addCoupon() throws ParseException {
 
 		if (couponForm.hasErrors()) {
+			Logger.debug("Error adding coupon");
 			return redirect("/couponPanel");
 		}
 
@@ -84,7 +91,15 @@ public class CouponController extends Controller {
 		}
 		
 		String picture = couponForm.bindFromRequest().field("picture").value();
-		String category = couponForm.bindFromRequest().field("category").value();
+		Category category=null;
+		String categoryName=couponForm.bindFromRequest().field("category").value();
+		if(!Category.checkByName(categoryName)){
+			category=Category.find(Category.createCategory(categoryName));
+		
+		}
+		else{
+			category=Category.findByName(categoryName);
+		}
 		String description = couponForm.bindFromRequest().field("description").value();
 		String remark = couponForm.bindFromRequest().field("remark").value();
 		
@@ -180,9 +195,11 @@ public class CouponController extends Controller {
 			}
 			
 		} catch (NumberFormatException e){
+
 			//TODO logger
 			flash("error","Enter a valid price");
 			return ok(updateCouponView.render(session("name"), coupon));
+
 		}
 		coupon.price =  price;
 		Date current = new Date();
@@ -196,7 +213,16 @@ public class CouponController extends Controller {
 		}
 	
 		coupon.picture = couponForm.bindFromRequest().field("picture").value();
-		coupon.category = couponForm.bindFromRequest().field("category").value();
+		Category category=null;
+		String categoryName=couponForm.bindFromRequest().field("category").value();
+		
+		if(!Category.checkByName(categoryName)){
+			category=Category.find(Category.createCategory(categoryName));
+		
+		}
+			else{
+			category=Category.findByName(categoryName);
+		}
 		coupon.description = couponForm.bindFromRequest().field("description").value();
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();
 		Coupon.updateCoupon(coupon);
@@ -204,7 +230,18 @@ public class CouponController extends Controller {
 		flash("success", "Coupon updated");
 		return ok(updateCouponView.render(session("name"), coupon));
 	
-		
 	}
+	
+		public static Result search(String q){
+			List<Coupon> coupons = Coupon.find.where().ilike("name", "%" + q + "%").findList();
+			
+			if(coupons.isEmpty()){
+				flash("error","No such coupon");
+				User u = User.find(session("name"));
+				return badRequest(index.render(u,Coupon.all()));
+			}
+				
+			return ok(index.render(null, coupons));
+		}
 }
 

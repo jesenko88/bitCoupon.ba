@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import play.Logger;
 import play.data.validation.Constraints.MinLength;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
@@ -39,7 +40,8 @@ public class Coupon extends Model {
 
 	public String picture;
 
-	public String category;
+	@ManyToOne
+	public Category category;
 
 	public String description;
 	
@@ -70,7 +72,7 @@ public class Coupon extends Model {
 	 */
 
 	public Coupon(String name, double price,
-			Date dateExpire, String picture, String category_id,
+			Date dateExpire, String picture, Category category,
 			String description, String remark) {
 
 		this.name = name;
@@ -78,7 +80,7 @@ public class Coupon extends Model {
 		this.dateCreated = new Date();
 		this.dateExpire = dateExpire;
 		this.picture = picture;
-		this.category = category_id;
+		this.category = category;
 		this.description = description;
 		this.remark=remark;
 		/*
@@ -91,7 +93,7 @@ public class Coupon extends Model {
 		 */
 	}
 
-	static Finder<Long, Coupon> find = new Finder<Long, Coupon>(Long.class,
+	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(Long.class,
 			Coupon.class);
 
 	/**
@@ -101,11 +103,11 @@ public class Coupon extends Model {
 	 */
 
 	public static long createCoupon(String name, double price, Date dateExpire, String picture,
-			String category, String description,String remark) {
+			Category category, String description,String remark) {
 		if(!picture.contains("http://") ){
 			picture = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAyMuVdpfRWZohd288y7EIqVsnwJPi92txgrn5DBWxEOZDnhJL";
 		}
-		
+		//Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price,dateExpire,
 				picture, category, description, remark);
 		newCoupon.save();
@@ -163,5 +165,14 @@ public class Coupon extends Model {
 	public static void updateCoupon(Coupon coupon){
 		coupon.save();
 	}
+	
+	/**
+	 * @param category name as String
+	 * @return List of coupons by category 
+	 */
+    public static List<Coupon> listByCategory(String categoryName){
+
+    	return find.where().eq("category", Category.findByName(categoryName)).findList();
+    }
 
 }

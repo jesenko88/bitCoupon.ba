@@ -18,8 +18,6 @@
 							<ul class="nav navbar-nav">
 							<!-- if statement for enable od disable button in case of login -->
 								@if( user == null) {
-									
-
 							<li><a href="/loginpage" class="active"><i class="active"></i> Login </a></li>
 							<li><a href="/signup" class="active"><i  class="glyphicon glyphicon-user"></i> Registration</a></li>
 							<li><a href="/contact" class="active"><i></i> Contact</a></li>
@@ -91,15 +89,62 @@
 		
 	</section>
 	
+	
+	@if(flash.get("success")){
+		<div class="alert alert-success" role="alert"> 
+			<div class="container">
+				@flash.get("success") 
+			</div>
+		</div>
+	}
+
+
+	@if(flash.get("error")){
+		<div class="alert alert-danger" role="alert"> 
+			<div class="container">
+				@flash.get("error") 
+			</div>
+		</div>
+	}
+	
 	<ul>
 	
-		
-
+			<div class="container">
+							<form action="/search" method="GET">
+							<input id="q" name="q" type="text"/>
+							<input type="submit"/>
+							</form>
+							</div>
 	
-	<div class="container">
+			<div class="container">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Available Coupons</h2>
-						
+				
+				
+			<div class="containter" id="categories">
+				<ul>
+				<div class="container">
+	        	@for(category <- Category.all()){
+	        		
+	        		<a href="@routes.CategoryController.categoryView(category.name)">@category.name</a>
+	    			
+	    			
+	        	@*	@if(category.name == "Travel"){
+	        		<a href="/">Travel</a> 
+	        		}
+	        		@if(category.name == "Food"){
+	        		<a href="/">Food</a>	
+	        		}
+	        		@if(category.name == "Sport"){
+	    			<a href="/">Sport</a>  
+	       			 } *@
+	       		}
+	       		</ul>
+        </div>
+			
+			</div>	
+				
+			<div class="container">		
 				@for(coupon <- coupons){
 					
 						<div class="col-sm-4">
@@ -122,7 +167,7 @@
 							</div>
 						</div>
 			}			
-
+			</div>	
 		</ul>
 </body>
 }

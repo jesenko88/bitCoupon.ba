@@ -3,6 +3,13 @@
 
 # --- !Ups
 
+create table category (
+  id                        bigint not null,
+  name                      varchar(255),
+  image                     varchar(255),
+  constraint pk_category primary key (id))
+;
+
 create table coupon (
   id                        bigint not null,
   name                      varchar(255),
@@ -10,7 +17,7 @@ create table coupon (
   created_at                timestamp,
   expired_at                timestamp,
   picture                   varchar(255),
-  category                  varchar(255),
+  category_id               bigint,
   description               varchar(255),
   remark                    varchar(255),
   constraint pk_coupon primary key (id))
@@ -42,6 +49,8 @@ create table user (
   constraint pk_user primary key (id))
 ;
 
+create sequence category_seq;
+
 create sequence coupon_seq;
 
 create sequence email_verification_seq;
@@ -50,12 +59,16 @@ create sequence faq_seq;
 
 create sequence user_seq;
 
+alter table coupon add constraint fk_coupon_category_1 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_coupon_category_1 on coupon (category_id);
 
 
 
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
+
+drop table if exists category;
 
 drop table if exists coupon;
 
@@ -66,6 +79,8 @@ drop table if exists faq;
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists category_seq;
 
 drop sequence if exists coupon_seq;
 

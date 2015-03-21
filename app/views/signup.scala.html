@@ -1,4 +1,4 @@
-@(message: String)(nameField: String)(emailField: String)
+@(nameField: String)(emailField: String)
 @import helper._
 
 @main("Registration"){
@@ -75,12 +75,29 @@
 		</header>
 		
 	</section>
+	
+	@if(flash.get("success")){
+		<div class="alert alert-success" role="alert"> 
+			<div class="container">
+				@flash.get("success") 
+			</div>
+		</div>
+	}
+
+
+	@if(flash.get("error")){
+		<div class="alert alert-danger" role="alert"> 
+			<div class="container">
+				@flash.get("error") 
+			</div>
+		</div>
+	}
 	<div class="container">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Registration</h2>
 						<div class="col-sm-6 col-sm-offset-1">
 					<div class="signup-form"><!--sign up form-->
-						<h2>@message</h2>
+						<h4>Sign Up</h4>
 						<form action="@routes.UserController.register" method ="POST" >
 							<input type="text" id="username" name="username"  onClick="this.select()" value="@nameField" placeholder="Username" required/>	<br>
 							<input type="email" id="email" name="email" onClick="this.select()" value="@emailField" placeholder="Email" required/> <br>

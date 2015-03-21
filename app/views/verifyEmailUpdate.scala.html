@@ -1,0 +1,52 @@
+@(message: String)(username: String)
+
+@import helper._
+
+@main("E-mail Verification") {
+	
+	
+<body>
+		<header id="header"><!--header-->
+		<div class="header_top"><!--header_top-->
+			<div class="container">
+					
+			</div>
+		</div>
+		</div><!--/header_top-->
+	
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+				</div>
+			
+		</header>
+		
+	</section>
+	
+	
+	
+		
+
+	
+	<div class="container">
+	<span>@message</span>
+	<br>
+	<br>
+	<br>
+
+	
+	<form action="@routes.UserController.profilePage(username)" >
+							<button type="submit" id="submit" class="btn btn-primary"> Go To Profile Page </button>
+						</form>
+	
+					</div>
+</body>
+}
+

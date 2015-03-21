@@ -119,7 +119,7 @@ public class Application extends Controller {
 	}
 
 	public static Result loginToComplete() {
-		Logger.info("Login to complete this action");
+		Logger.info("Unable to access without login");
 		return badRequest(loginToComplete.render("Login to complete this action"));
 	}
 	

@@ -1,19 +1,15 @@
 import java.util.Date;
-
 import helpers.HashHelper;
+import models.Category;
 import models.Coupon;
 import models.EmailVerification;
 import models.User;
-
 import org.junit.*;
-
-import play.mvc.*;
 import play.test.*;
 import play.libs.F.*;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
-import static org.fluentlenium.core.filter.FilterConstructor.*;
-import static org.junit.Assert.*;
+
 
 public class IntegrationTest {
 
@@ -70,7 +66,7 @@ public class IntegrationTest {
 
 						User.createUser("tester", "tester@bitcamp.ba",
 								HashHelper.createPassword("123456"), true);
-						EmailVerification setVerified = new EmailVerification(2, true);
+						EmailVerification setVerified = new EmailVerification(3, true);
 						setVerified.save();
 
 						browser.goTo("http://localhost:3333/loginpage");
@@ -94,9 +90,10 @@ public class IntegrationTest {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
 				HTMLUNIT, new Callback<TestBrowser>() {
 					public void invoke(TestBrowser browser) {
-
+						Category food = new Category("Food");
+						food.save();
 						Coupon.createCoupon("TestCoupon", 55.4, 
-								new Date(), "url", "category", "description",
+								new Date(), "url", food, "description",
 								"remark");
 						browser.goTo("http://localhost:3333/");
 						assertThat(browser.pageSource()).contains("TestCoupon");
@@ -134,8 +131,9 @@ public class IntegrationTest {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
 				HTMLUNIT, new Callback<TestBrowser>() {
 					public void invoke(TestBrowser browser) {
-
-						long couponId = Coupon.createCoupon("TestCoupon", 55.8, new Date(), "url", "category",
+						Category food = new Category("Food");
+						food.save();
+						long couponId = Coupon.createCoupon("TestCoupon", 55.8, new Date(), "url", food,
 								"description", "remark");
 						Coupon.delete(couponId);
 						browser.goTo("http://localhost:3333/coupon/" + couponId);

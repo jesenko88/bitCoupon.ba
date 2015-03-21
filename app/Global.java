@@ -1,4 +1,5 @@
 import helpers.HashHelper;
+import models.Category;
 import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
@@ -9,6 +10,7 @@ import play.GlobalSettings;
 public class Global extends GlobalSettings {
 	String nameCoupon1 = "Dvije noći za dvoje u Hotelu Sunce Neum";
 	String remarkCoupon1 = "Jedna osoba može kupiti maksimalno četiri kupona za ovu ponudu. Kuponi se mogu spajati.";
+
 
 	String descriptionCoupon1 = "Poželjeli ste da udahnete miris mora i da na bar dva dana pobjegnete od svakodnevnice, da se opustite uz duge šetnje plažom? Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
 
@@ -25,13 +27,34 @@ public class Global extends GlobalSettings {
 			+ "Hotel Brass unikatan po mnogo čemu: dizajnu, usluzi te uslužnom osoblju."
 			+ "Upravo ovakav ambijent začinit će i uljepšati Vašu romantičnu večeru.";
 
+
+	
+
+
 	@Override
 	public void onStart(Application app) {
+		
+		Category food = null;
+		Category travel = null;
+		Category sport = null;
+		
+		if(Category.checkByName("Food") == false){
+			food = new Category("Food"); 
+			food.save();
+		}
+		if(Category.checkByName("Travel") == false){
+			travel = new Category("Travel");	
+			travel.save();
+		}
+		if(Category.checkByName("Sport") == false){
+			sport = new Category("Sport");
+			sport.save();
+		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
 			Coupon.createCoupon(nameCoupon1, 80, null,
 					"http://static.panoramio.com/photos/large/26139268.jpg",
-					"Putovanja",descriptionCoupon1,
+			travel,descriptionCoupon1,
 					remarkCoupon1);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
@@ -40,7 +63,7 @@ public class Global extends GlobalSettings {
 					40,
 					null,
 					"http://www.thepullforhumanity.com/anytime_fitness/wp-content/gallery/general/gym-pics-097.jpg",
-					"Sport", descriptionCoupon2,
+					sport, descriptionCoupon2,
 					remarkCoupon2);
 		}
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -49,7 +72,7 @@ public class Global extends GlobalSettings {
 					20,
 					null,
 					"http://www.mitara.com/wp-content/uploads/2015/02/Candle-Light-Dinner-With-Romantic-Design-For-Beautiful-Valentine-Candle-Light-Dinner-Inspiring-Design-Ideas.jpg",
-					"Food", descriptionCoupon3,
+					food, descriptionCoupon3,
 					remarkCoupon3);
 		}
 
