@@ -70,7 +70,7 @@ public class CategoryController extends Controller {
 			}
 			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
 
-
+		}
 		//String image = categoryForm.bindFromRequest().field("image").value();		
 		//Category.createCategory(name,image);
 		
@@ -134,3 +134,4 @@ public class CategoryController extends Controller {
 	}
 	
 }
+
