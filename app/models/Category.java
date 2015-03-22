@@ -18,7 +18,7 @@ public class Category extends Model{
 	@Required
 	public String name;
 	
-	String picture;	
+	public String picture;	
 	
 	@OneToMany
 	public List<Coupon> coupons;
@@ -64,7 +64,7 @@ public class Category extends Model{
     		return list.get(0);
     	}
     
-    public static boolean checkByName(String name){
+    public static boolean exists(String name){
 		 List<Category> list=find.where().eq("name", name).findList();
 		 if(list.size()>0)
 			 return true;
