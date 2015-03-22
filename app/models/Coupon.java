@@ -1,6 +1,8 @@
 package models;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -172,5 +174,20 @@ public class Coupon extends Model {
 
     	return find.where().eq("category", Category.findByName(categoryName)).findList();
     }
+
+    /* getter*/
+	public String getCategoryName() {
+		return category.name;
+	}
+	
+
+   public String getExpiration(){
+	   if ( dateExpire == null){
+		   return "";
+	   } 
+	   SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	   return "Expiring: " + dateFormat.format(dateExpire);
+	   
+   }
 
 }
