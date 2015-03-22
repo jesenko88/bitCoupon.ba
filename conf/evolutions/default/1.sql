@@ -6,7 +6,7 @@
 create table category (
   id                        bigint not null,
   name                      varchar(255),
-  image                     varchar(255),
+  picture                   varchar(255),
   constraint pk_category primary key (id))
 ;
 

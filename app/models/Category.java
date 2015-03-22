@@ -18,7 +18,7 @@ public class Category extends Model{
 	@Required
 	public String name;
 	
-	String image;
+	String picture;	
 	
 	@OneToMany
 	public List<Coupon> coupons;
@@ -29,7 +29,7 @@ public class Category extends Model{
     
     public Category(String name, String image){
     	this.name=name;
-    	this.image=image;
+    	this.picture=image;
     	
     	}
     

@@ -103,10 +103,8 @@ public class Coupon extends Model {
 	 */
 
 	public static long createCoupon(String name, double price, Date dateExpire, String picture,
-			Category category, String description,String remark) {
-		if(!picture.contains("http://") ){
-			picture = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAyMuVdpfRWZohd288y7EIqVsnwJPi92txgrn5DBWxEOZDnhJL";
-		}
+		Category category, String description,String remark) {
+		
 		//Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price,dateExpire,
 				picture, category, description, remark);

@@ -1,3 +1,5 @@
+import java.io.File;
+
 import helpers.HashHelper;
 import models.Category;
 import models.Coupon;
@@ -44,7 +46,8 @@ public class Global extends GlobalSettings {
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
 			Coupon.createCoupon(nameCoupon1, 80, null,
-					"http://static.panoramio.com/photos/large/26139268.jpg",
+					"images" 
+						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
 					remarkCoupon1);
 		}
@@ -53,7 +56,7 @@ public class Global extends GlobalSettings {
 					nameCoupon2,
 					40,
 					null,
-					"http://www.thepullforhumanity.com/anytime_fitness/wp-content/gallery/general/gym-pics-097.jpg",
+					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
 					remarkCoupon2);
 		}
@@ -62,7 +65,7 @@ public class Global extends GlobalSettings {
 					nameCoupon3,
 					20,
 					null,
-					"http://www.mitara.com/wp-content/uploads/2015/02/Candle-Light-Dinner-With-Romantic-Design-For-Beautiful-Valentine-Candle-Light-Dinner-Inspiring-Design-Ideas.jpg",
+					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
 					remarkCoupon3);
 		}

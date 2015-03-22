@@ -126,7 +126,7 @@
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center">
-									<img src="@coupon.picture" alt=""/>
+									<img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
 										<h2>Only @coupon.getPriceString() KM</h2>
 										<p>@coupon.name</p>
 										<a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
