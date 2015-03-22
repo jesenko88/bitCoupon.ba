@@ -44,8 +44,11 @@ GET    /deleteFAQ						  controllers.FAQController.deleteFAQ(id: Integer)
 
 GET    /categoryPanel                     controllers.CategoryController.addCategoryView()
 GET    /categoryList                      controllers.CategoryController.listCategories()
+GET	   /category/						  controllers.CategoryController.categoryView(name: String)
 POST   /addCategory                       controllers.CategoryController.addCategory()
 GET    /deleteCategory/:id                controllers.CategoryController.deleteCategory(id: Long)
+GET	   /editCategory/					  controllers.CategoryController.editCategoryView(name: String)
+POST   /editCategory/					  controllers.CategoryController.updateCategory(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file             controllers.Assets.at(path="/public", file)

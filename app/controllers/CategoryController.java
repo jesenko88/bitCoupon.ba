@@ -8,25 +8,36 @@ import java.util.List;
 
 import models.Category;
 import models.Coupon;
+import models.User;
 import play.data.Form;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.*;
+import views.html.category.*;
 import play.mvc.Controller;
 
 public class CategoryController extends Controller {
 
 	static Form<Category> categoryForm = new Form<Category>(Category.class);
+	
+	
+	public static Result categoryView(String categoryName){
+		
+		return ok(categoryPage.render(User.find(session("name")),Coupon.listByCategory(categoryName), categoryName));
+	}
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategoryView(){
 		
-		return ok(categoryPanel.render(session("name"), null));
+		return ok(categoryPanel.render(session("name")));
 	}
+	
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCategories(){
 		
 		return ok(CategoriesList.render(session("name"), Category.all()));
 	}
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategory() {
 
@@ -38,11 +49,17 @@ public class CategoryController extends Controller {
 
 		String name = categoryForm.bindFromRequest().field("name").value();
 		if (name.length() < 4) {
-			return ok(categoryPanel.render(session("name"), "Name must be 4 characters long"));
+			flash("error","Name must be at least 4 characters");
+			return ok(categoryPanel.render(session("name")));
 
 		}
-		if(name.length()>20){
-			return ok(categoryPanel.render(session("name"),"Name must be max 120 characters long"));
+		if(name.length() > 20){
+			flash("error","Name must be max 120 characters long");
+			return ok(categoryPanel.render(session("name")));
+		}
+		if(Category.checkByName(name)){
+			flash("error","Category already exists");
+			return ok(categoryPanel.render(session("name")));
 		}
 		
 		String picture = FileUpload.imageUpload("category-photos");		
@@ -52,17 +69,17 @@ public class CategoryController extends Controller {
 				Category.createCategory(name, picture);
 			}
 			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
+
 		}
-		//else()-dodati flash:"Category already exists!"
-		//return ok(categoryPanel.render( session("name"), "Category \"" + name));
-		//String image = categoryForm.bindFromRequest().field("image").value();
-		
+		//String image = categoryForm.bindFromRequest().field("image").value();		
 		//Category.createCategory(name,image);
 		
+		Category.createCategory(name);
 		
-		return ok(categoryPanel.render( session("name"), "Category \"" + name
-				+ "\" added"));
+		flash("success","Category " + "\""+ name + "\"" + " added");
+		return ok(categoryPanel.render( session("name")));
 	}
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteCategory(long id) {
 		Category c = Category.find(id);
@@ -77,4 +94,44 @@ public class CategoryController extends Controller {
 		return ok(CategoriesList.render(session("name"), Category.all()));
 	}
 	
+	public static Result editCategoryView(String name){
+		Category category = Category.findByName(name); /////////////////////----
+		return ok(editCategory.render(session("name"),category));
+	}
+	
+	@Security.Authenticated(AdminFilter.class)
+	public static Result updateCategory(long id) {
+
+		Category category = Category.find(id);
+		
+		if (categoryForm.hasErrors()) {
+			return redirect("/editCategory");
+		}
+		
+		String name = categoryForm.bindFromRequest().field("name").value();
+		
+		if (name.length() < 4) {		
+			flash("error","Name must be at least 4 characters");
+			return ok(editCategory.render(session("name"), category));
+		}
+		
+		if(name.length() > 20){
+			
+			flash("error","Name must be max 120 characters long");
+			return ok(editCategory.render(session("name"), category));
+		}
+		if(Category.checkByName(name)){
+			flash("error","Category already exists");
+			return ok(editCategory.render(session("name"), category));
+		}
+		
+		category.name = name;
+		//TODO image
+		category.save();
+		
+		flash("success","Category " + "\""+ name + "\"" + " updated");
+		return ok(editCategory.render( session("name"), category));
+	}
+	
 }
+

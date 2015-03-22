@@ -36,13 +36,22 @@ public class Global extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
 		
-		Category food = new Category("Food");
-		food.save();
-		Category travel = new Category("Travel");
-		travel.save();
-		Category sport = new Category("Sport");
-		sport.save();
+		Category food = null;
+		Category travel = null;
+		Category sport = null;
 		
+		if(Category.checkByName("Food") == false){
+			food = new Category("Food"); 
+			food.save();
+		}
+		if(Category.checkByName("Travel") == false){
+			travel = new Category("Travel");	
+			travel.save();
+		}
+		if(Category.checkByName("Sport") == false){
+			sport = new Category("Sport");
+			sport.save();
+		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
 			Coupon.createCoupon(nameCoupon1, 80, null,

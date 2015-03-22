@@ -119,7 +119,32 @@
 			<div class="container">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Available Coupons</h2>
-						
+				
+				
+			<div class="containter" id="categories">
+				<ul>
+				<div class="container">
+	        	@for(category <- Category.all()){
+	        		
+	        		<a href="@routes.CategoryController.categoryView(category.name)">@category.name</a>
+	    			
+	    			
+	        	@*	@if(category.name == "Travel"){
+	        		<a href="/">Travel</a> 
+	        		}
+	        		@if(category.name == "Food"){
+	        		<a href="/">Food</a>	
+	        		}
+	        		@if(category.name == "Sport"){
+	    			<a href="/">Sport</a>  
+	       			 } *@
+	       		}
+	       		</ul>
+        </div>
+			
+			</div>	
+				
+			<div class="container">		
 				@for(coupon <- coupons){
 					
 						<div class="col-sm-4">
@@ -142,7 +167,7 @@
 							</div>
 						</div>
 			}			
-
+			</div>	
 		</ul>
 </body>
 }

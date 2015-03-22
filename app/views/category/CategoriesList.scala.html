@@ -10,7 +10,7 @@
 						<div class="col-sm-12">
 						
 							<ul class="nav navbar-nav">
- 							<li><a class="active"> @name </a></li>
+ 							<li><a href="@routes.UserController.profilePage(name)" class="active"> @name </a></li>
  							<li><a href="/logout" class="active"><i class="fa fa-lock"></i> Logout</a></li>					
 							</ul>
 						</div>
@@ -80,6 +80,7 @@
 		@for(category <- categories){
 
 			<tr> <td> @category.name </td> <td> @category.coupons.size() </td> 
+				<td> <a href= "@routes.CategoryController.editCategoryView(category.name)" class="btn btn-default">Edit</a></td>
 				<td> <a href= "@routes.CategoryController.deleteCategory(category.id)" onclick="return confirm('Are you sure you want to delete this user?');"class="btn btn-danger">Delete</a></td>	
 			</tr>
 			
