@@ -2537,4 +2537,291 @@ h2.title {
   color: #FE980F;
 }
 
+----------edib css za bar ----------
 
+@charset"utf-8";
+
+/* CUSTOM CSS ------------------------------------- */
+ @font-face {
+   font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.top-offer {
+    padding: 7px;
+    position: relative;
+}
+.top-box h1 {
+   font-family: 'Roboto', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 40px;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    margin-left: 0px;
+}
+.top-box h1 a {
+    color: #333;
+    text-decoration: none;
+}
+.top-box h1 a:hover {
+    color: #333;
+    text-decoration: none;
+}
+.top-box .intro {
+   font-family: 'Roboto', sans-serif;
+    font-size: 25px;
+    line-height: 1.3em;
+    font-weight: 400;
+    color: #666;
+}
+.top-offer .thumbnail {
+    height: 340px;
+}
+.actionbox {
+    padding-top: 8px;
+}
+.actionbox .btn-buy {
+    float: left;
+    margin-right: 10px;
+    margin-left: -13px;
+}
+.actionbox .btn-buy:hover {
+    background-position: right -102px;
+}
+.pricebox .price {
+   font-family: 'Roboto', sans-serif;
+    font-size: 35px;
+    font-weight: 700;
+    margin: 0px;
+    float: left;
+    padding-right: 8px;
+    line-height: 51px;
+    height: 51px;
+}
+.pricebox .pricedisc {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    float: left;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 6px;
+}
+.pricebox .pricedisc span {
+    color: #FF7F00;
+}
+.sections {
+    list-style-type: none;
+    /* [disabled]border-top-width: 1px;
+    */
+    /* [disabled]border-top-style: solid;
+    */
+    /* [disabled]border-top-color: #A93F89;
+    */
+    margin: 200px;
+    padding: 0px;
+    position: absolute;
+    z-index: 200;
+}
+.sections li a {
+    background-image:url(http://www.ekupon.ba/assets/img/section-icons.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    display: block;
+    height: 45px;
+    width: 45px;
+    position: relative;
+}
+.sections li:hover span {
+    visibility: visible;
+    opacity: 1;
+}
+.sections li a span {
+    display: block;
+    background-color: #FFF;
+    height: 51px;
+    width: 165px;
+    position: absolute;
+    padding-left: 55px;
+    z-index: -1;
+    font-size: 22px;
+    line-height: 51px;
+    color: #FE980F;
+    text-decoration: none;
+    -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.45);
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.45);
+    left: -3px;
+    visibility: hidden;
+    opacity: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    top: -3px;
+}
+.sections .badge {
+    font-style: normal;
+    font-size: 15px;
+    margin-top: 18px;
+    display: inline-block;
+    margin-left: 6px;
+    position: absolute;
+}
+.newbadge {
+    display: inline-block;
+    padding: 2px 4px;
+    font-size: 11.844px;
+    font-weight: bold;
+    line-height: 14px;
+    color: #ffffff;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #FF7000;
+    padding-left: 6px;
+    padding-right: 6px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.sections .newbadge {
+    font-style: normal;
+    font-size: 15px;
+    margin-top: -5px;
+    display: inline-block;
+    margin-left: 40px;
+    position: absolute;
+}
+.sections .home:hover {
+    background-position: -45px 0px;
+}
+.sections .food {
+    background-position: 0px -45px;
+}
+.sections .food:hover {
+    background-position: -45px -45px;
+}
+.sections .travel {
+    background-position: 0px -90px;
+}
+.sections .travel:hover {
+    background-position: -45px -90px;
+}
+.sections .dan {
+    background-position: 0px -535px;
+}
+.sections .dan:hover {
+    background-position: -45px -535px;
+}
+.sections .edu {
+    background-position: 0px -135px;
+}
+.sections .edu:hover {
+    background-position: -45px -135px;
+}
+.sections .prod {
+    background-position: 0px -180px;
+}
+.sections .prod:hover {
+    background-position: -45px -180px;
+}
+.sections .sport {
+    background-position: 0px -225px;
+}
+.sections .sport:hover {
+    background-position: -45px -225px;
+}
+.sections .other {
+    background-position: 0px -270px;
+}
+.sections .other:hover {
+    background-position: -45px -270px;
+}
+.sections .beauty {
+    background-position: 0px -315px;
+}
+.sections .beauty:hover {
+    background-position: -45px -315px;
+}
+.sections .min {
+    background-position: 0px -360px;
+}
+.sections .min:hover {
+    background-position: -45px -360px;
+}
+.sections .super {
+    background-position: 0px -405px;
+}
+.sections .super:hover {
+    background-position: -45px -405px;
+}
+.sections .reg {
+    background-position: 0px -445px;
+}
+.sections .reg:hover {
+    background-position: -45px -445px;
+}
+.sections .ng {
+    background-position: 0px -490px;
+}
+.sections .ng:hover {
+    background-position: -45px -490px;
+}
+.sections .mar {
+    background-position: 0px -579px;
+}
+.sections .mar:hover {
+    background-position: -45px -579px;
+}
+.sections .maj {
+    background-position: 0px -625px;
+}
+.sections .maj:hover {
+    background-position: -45px -625px;
+}
+.sections li {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.thumbnails li {
+    background-color: #FFF;
+    -moz-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    /* [disabled]position:  relative;
+    */
+}
+.offers {
+    margin-left: -1.5%;
+}
+.offer-box {
+    background-color: #FFF;
+    -moz-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    width: 31.8%;
+    float: left;
+    margin-left: 1.5%;
+    margin-bottom: 20px;
+    min-height: 430px;
+}
+.offer-box .pricebox {
+    font-size:24px;
+    padding:5px 10px 5px 10px;
+    background:#fa8500;
+    color:white;
+    margin-left:-11px;
+}
+.offer-box.super .pricebox {
+    background-color: #C65CAB;
+}
