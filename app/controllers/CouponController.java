@@ -224,15 +224,16 @@ public class CouponController extends Controller {
 		}
 
 		coupon.picture = couponForm.bindFromRequest().field("picture").value();
-		Category category = null;
-		String categoryName = couponForm.bindFromRequest().field("category")
-				.value();
-		if (!Category.checkByName(categoryName)) {
-			category = Category.find(Category.createCategory(categoryName));
 
-		} else {
-			category = Category.findByName(categoryName);
+		Category category=null;
+		String categoryName=couponForm.bindFromRequest().field("category").value();
+		
+		if(!Category.checkByName(categoryName)){
+			category=Category.find(Category.createCategory(categoryName));	
 		}
+			else{
+			category=Category.findByName(categoryName);
+			}
 		coupon.description = couponForm.bindFromRequest().field("description")
 				.value();
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();

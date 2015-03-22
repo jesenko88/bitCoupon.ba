@@ -163,5 +163,14 @@ public class Coupon extends Model {
 	public static void updateCoupon(Coupon coupon){
 		coupon.save();
 	}
+	
+	/**
+	 * @param category name as String
+	 * @return List of coupons by category 
+	 */
+    public static List<Coupon> listByCategory(String categoryName){
+
+    	return find.where().eq("category", Category.findByName(categoryName)).findList();
+    }
 
 }
