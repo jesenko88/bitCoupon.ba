@@ -115,9 +115,17 @@
 							
 
 							}
-								</span>
-								<p><b>Description</b> @coupon.description </p>
-								<p><b>Remark: </b> @coupon.remark </p>
+							<div>				
+							<textarea rows="1">@coupon.getExpiration()</textarea>
+							</div><br>
+							<div>
+							<label class="pull-left" >Description</label>
+							<textarea disabled rows="6" >@coupon.description</textarea>
+							</div><br>
+							<div>
+							<label class="pull-left" >Remark</label>
+							<textarea disabled >@coupon.remark</textarea>
+							</div>
 								</div>
 							</div><!--/product-information-->
 						</div>

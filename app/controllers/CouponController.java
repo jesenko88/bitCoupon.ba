@@ -41,87 +41,6 @@ public class CouponController extends Controller {
 		return ok(couponPanel.render(session("name")));
 	}
 	
-	
-	/**
-	 * First checks if the coupon form has errors. Creates a new coupon ot
-	 * renders the view again if any error occurs.
-	 * 
-	 * @return redirect to create coupon view
-	 * @throws ParseException
-	 */
-	@Deprecated
-	public static Result addCoupon1() throws ParseException {
-
-		if (couponForm.hasErrors()) {
-			Logger.debug("Error adding coupon");
-			return redirect("/couponPanel");
-		}
-
-		// TODO handle invalid inputs
-
-		String name = couponForm.bindFromRequest().field("name").value();
-		if (name.length() < 4) {
-			Logger.info("Entered a short coupon name");
-			flash("error", "Name must be 4 characters long");
-			return badRequest(couponPanel.render(session("name")));
-
-		}
-		if (name.length() > 70) {
-			Logger.info("Entered a too long coupon name");
-			flash("error", "Name must be max 70 characters long");
-			return badRequest(couponPanel.render(session("name")));
-		}
-
-		/* Taking the price value from the string and checking if it's valid */
-		double price;
-		String stringPrice = couponForm.bindFromRequest().field("price")
-				.value();
-		stringPrice = stringPrice.replace(",", ".");
-		try {
-			price = Double.valueOf(stringPrice);
-			if (price <= 0) {
-				Logger.info("Invalid price input");
-				flash("error", "Enter a valid price");
-				return badRequest(couponPanel.render(session("name")));
-			}
-		} catch (NumberFormatException e) {
-			Logger.error(e.getMessage(), "Invalid price input");
-			flash("error", "Enter a valid price");
-			return badRequest(couponPanel.render(session("name")));
-		}
-
-		Date current = new Date();
-		Date date = couponForm.bindFromRequest().get().dateExpire;
-		if (date.before(current)) {
-			Logger.info("Invalid date input");
-			flash("error", "Enter a valid expiration date");
-			return badRequest(couponPanel.render(session("name")));
-
-		}
-
-		String picture = couponForm.bindFromRequest().field("picture").value();
-		Category category = null;
-		String categoryName = couponForm.bindFromRequest().field("category")
-				.value();
-		if (!Category.checkByName(categoryName)) {
-			category = Category.find(Category.createCategory(categoryName));
-
-		} else {
-			category = Category.findByName(categoryName);
-		}
-		String description = couponForm.bindFromRequest().field("description")
-				.value();
-		String remark = couponForm.bindFromRequest().field("remark").value();
-
-		/* Creating the new coupon */
-		Coupon.createCoupon(name, price, date, picture, category, description,
-				remark);
-
-		Logger.info("Coupon added");
-		flash("success", "Coupon " + name + " added");
-		return ok(couponPanel.render(session("name")));
-
-	}
 
 	/**
 	 * Finds coupon using id and shows it
@@ -174,8 +93,8 @@ public class CouponController extends Controller {
 	 * @return Result render the coupon update view
 	 */
 	public static Result updateCoupon(long id) {
-
-		Coupon coupon = Coupon.find(id);
+		
+		Coupon coupon=Coupon.find(id);	
 		if (couponForm.hasErrors()) {
 			Logger.info("Coupon updated");
 			return redirect("/");
@@ -185,60 +104,53 @@ public class CouponController extends Controller {
 
 		coupon.name = couponForm.bindFromRequest().field("name").value();
 		if (coupon.name.length() < 4) {
-			flash("error", "Name must be minimal 4 characters long");
-			return ok(updateCouponView.render(session("name"), coupon));
-		}
-		if (coupon.name.length() > 120) {
+			flash("error","Name must be minimal 4 characters long");
+			return ok(updateCouponView.render(session("name"),coupon));
+			}
+		if(coupon.name.length() > 120){
 			flash("error", "Name must be max 120 characters long");
-			return ok(updateCouponView.render(session("name"), coupon));
+			return ok(updateCouponView.render(session("name"),coupon));
 		}
 
 		String strPrice = couponForm.bindFromRequest().field("price").value();
 		strPrice = strPrice.replace(",", ".");
 		double price;
-		try {
+		try{
 			price = Double.valueOf(strPrice);
-			if (price <= 0) {
+			if ( price <= 0){
 				Logger.info("Invalid price input");
-				flash("error", "Enter a valid price");
-				return badRequest(updateCouponView.render(session("name"),
-						coupon));
+				flash("error","Enter a valid price");
+				return badRequest(updateCouponView.render(session("name"), coupon));
 			}
+			
+		} catch (NumberFormatException e){
 
-		} catch (NumberFormatException e) {
-
-			// TODO logger
-			flash("error", "Enter a valid price");
+			//TODO logger
+			flash("error","Enter a valid price");
 			return ok(updateCouponView.render(session("name"), coupon));
 
 		}
-		coupon.price = price;
+		coupon.price =  price;
 		Date current = new Date();
 		Date date = couponForm.bindFromRequest().get().dateExpire;
-		if (date != null) {
-			if (date.before(current)) {
+		if (date != null){  
+			if ( date.before(current)){
 				flash("error", "Enter a valid expiration date");
 				return ok(updateCouponView.render(session("name"), coupon));
 			}
 			coupon.dateExpire = date;
 		}
-
-		coupon.picture = couponForm.bindFromRequest().field("picture").value();
-
-		Category category=null;
-		String categoryName=couponForm.bindFromRequest().field("category").value();
-		
-		if(!Category.checkByName(categoryName)){
-			category=Category.find(Category.createCategory(categoryName));	
-		}
-			else{
-			category=Category.findByName(categoryName);
-			}
-		coupon.description = couponForm.bindFromRequest().field("description")
-				.value();
+	
+		coupon.category = Category.findByName(couponForm.bindFromRequest().field("category").value());
+		coupon.description = couponForm.bindFromRequest().field("description").value();
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();
+	
+		/* file upload only if its changed */
+		String assetsPath = FileUpload.imageUpload("coupon_photos");
+		if(!StringUtils.isNullOrEmpty(assetsPath)){
+			coupon.picture = assetsPath;
+		}
 		Coupon.updateCoupon(coupon);
-
 		flash("success", "Coupon updated");
 		return ok(updateCouponView.render(session("name"), coupon));
 
@@ -257,16 +169,60 @@ public class CouponController extends Controller {
 		return ok(index.render(null, coupons));
 	}
 	
+	
+	/**
+	 * First checks if the coupon form has errors. Creates a new coupon or
+	 * renders the view again if any error occurs.
+	 * 
+	 * @return redirect to create coupon view
+	 * @throws ParseException
+	 */
 	public static Result addCoupon() {
-		DynamicForm df = Form.form().bindFromRequest();
-		/*
-		 * Getting info from forms.
-		 */
-		String name = df.data().get("name");
-		String strPrice = df.data().get("price");
-		strPrice = strPrice.replace(",", ".");
-		double price = Double.parseDouble(strPrice);
+		
+		if (couponForm.hasErrors()) {
+			Logger.debug("Error adding coupon");
+			return redirect("/couponPanel");
+		}
+		
+		/* name */
+		String name = couponForm.bindFromRequest().field("name").value();
+		if (name.length() < 4) {
+			Logger.info("Entered a short coupon name");
+			flash("error", "Name must be 4 characters long");
+			return badRequest(couponPanel.render(session("name")));
+
+		}
+		if (name.length() > 70) {
+			Logger.info("Entered a too long coupon name");
+			flash("error", "Name must be max 70 characters long");
+			return badRequest(couponPanel.render(session("name")));
+		}
+		/* price */
+		String stringPrice = couponForm.bindFromRequest().field("price").value();
+		stringPrice = stringPrice.replace(",", ".");
+		double price;
+		try {
+			price = Double.valueOf(stringPrice);
+				if (price <= 0) {
+				Logger.info("Invalid price input");
+				flash("error", "Enter a valid price");
+				return badRequest(couponPanel.render(session("name")));
+			}
+		} catch (NumberFormatException | IllegalStateException e) {
+			Logger.error(e.getMessage(), "Invalid price input");
+			flash("error", "Enter a valid price");
+			return badRequest(couponPanel.render(session("name")));
+		}
+		/* date */
+		Date current = new Date();
 		Date date = couponForm.bindFromRequest().get().dateExpire;
+		if (date.before(current)) {
+			Logger.info("Invalid date input");
+			flash("error", "Enter a valid expiration date");
+			return badRequest(couponPanel.render(session("name")));
+
+		}
+		/* category */
 		Category category = null;
 		String categoryName = couponForm.bindFromRequest().field("category")
 				.value();
@@ -290,12 +246,12 @@ public class CouponController extends Controller {
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		}else{
+			flash("success", "Coupon created without image");
 			Coupon.createCoupon(name, price, date, FileUpload.DEFAULT_IMAGE, category,
 					description, remark);
 			return redirect("/couponPanel");
 		}
 	}
-	
-	
+
 
 }

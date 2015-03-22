@@ -22,6 +22,7 @@ public class FileUpload extends Controller{
 	 * @return - String path we use to Asset. ( one we use in creation of coupon)
 	 */
 	public static String imageUpload(String subFolder) {
+		System.out.println("request.body.as ...");
 		MultipartFormData body = request().body().asMultipartFormData();
 
 		final String savePath = "." + File.separator + "public"

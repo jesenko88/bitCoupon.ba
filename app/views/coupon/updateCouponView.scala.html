@@ -103,13 +103,14 @@
 						<h4> Coupon: "@coupon.name" </h4>
 				
 					<div class="signup-form"><!--sign up form-->
-						<form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" >
+						<form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" enctype="multipart/form-data">
 							<input type="text" name="name" id="name" placeholder="Title" value="@coupon.name" required/>
 							<input type="text" name="price" id="price" placeholder="Price" value="@coupon.price" required/>
 							<p> Expiration date: @coupon.dateExpire </p>
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
-							<input type="text" name="picture" id="picture" placeholder="URL of image" value="@coupon.picture" />
-							<input type="text" name="category" id="category" placeholder="Category" value= "@coupon.category" required/>
+							<label> Update coupon photo? </label>
+							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+							<input type="text" name="category" id="category" placeholder="Category" value= "@coupon.getCategoryName()" required/>
 							<textarea name="description" id="description" rows="6" placeholder="Description of Coupon" required> @coupon.description </textarea>	
 							<p></p>
 							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> @coupon.remark </textarea>
