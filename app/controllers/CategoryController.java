@@ -57,22 +57,20 @@ public class CategoryController extends Controller {
 			flash("error","Name must be max 120 characters long");
 			return ok(categoryPanel.render(session("name")));
 		}
-		if(Category.checkByName(name)){
+		if(Category.exists(name)){
 			flash("error","Category already exists");
 			return ok(categoryPanel.render(session("name")));
 		}
 		
 		String picture = FileUpload.imageUpload("category-photos");		
 		
-		if(!Category.checkByName(name)){
+		if(!Category.exists(name)){
 			if(picture != null){
 				Category.createCategory(name, picture);
 			}
 			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
 
 		}
-		//String image = categoryForm.bindFromRequest().field("image").value();		
-		//Category.createCategory(name,image);
 		
 		Category.createCategory(name);
 		
@@ -94,6 +92,10 @@ public class CategoryController extends Controller {
 		return ok(CategoriesList.render(session("name"), Category.all()));
 	}
 	
+	/*
+	 * Edit category view
+	 */
+	@Security.Authenticated(AdminFilter.class)
 	public static Result editCategoryView(String name){
 		Category category = Category.findByName(name); /////////////////////----
 		return ok(editCategory.render(session("name"),category));
@@ -119,14 +121,17 @@ public class CategoryController extends Controller {
 			
 			flash("error","Name must be max 120 characters long");
 			return ok(editCategory.render(session("name"), category));
-		}
-		if(Category.checkByName(name)){
-			flash("error","Category already exists");
-			return ok(editCategory.render(session("name"), category));
-		}
-		
+		}		
 		category.name = name;
-		//TODO image
+		
+		String picture = FileUpload.imageUpload("category-photos");		
+		
+		
+		if(picture != null){
+				category.picture = picture;
+			}
+
+		
 		category.save();
 		
 		flash("success","Category " + "\""+ name + "\"" + " updated");

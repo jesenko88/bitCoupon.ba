@@ -40,15 +40,15 @@ public class Global extends GlobalSettings {
 		Category travel = null;
 		Category sport = null;
 		
-		if(Category.checkByName("Food") == false){
+		if(Category.exists("Food") == false){
 			food = new Category("Food"); 
 			food.save();
 		}
-		if(Category.checkByName("Travel") == false){
+		if(Category.exists("Travel") == false){
 			travel = new Category("Travel");	
 			travel.save();
 		}
-		if(Category.checkByName("Sport") == false){
+		if(Category.exists("Sport") == false){
 			sport = new Category("Sport");
 			sport.save();
 		}

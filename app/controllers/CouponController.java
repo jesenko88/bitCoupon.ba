@@ -226,7 +226,7 @@ public class CouponController extends Controller {
 		Category category = null;
 		String categoryName = couponForm.bindFromRequest().field("category")
 				.value();
-		if (!Category.checkByName(categoryName)) {
+		if (!Category.exists(categoryName)) {
 			category = Category.find(Category.createCategory(categoryName));
 		} else {
 			category = Category.findByName(categoryName);
