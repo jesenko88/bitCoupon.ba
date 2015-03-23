@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import com.google.common.io.Files;
 
 import models.Category;
 import models.Coupon;
+import models.Photo;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -236,6 +238,58 @@ public class CouponController extends Controller {
 					description, remark);
 			return redirect("/couponPanel");
 		}
+	}
+	
+	/**
+	 * Method for uploading coupon photos into coupon gallery.
+	 * At this moment its only allowed 4 photos + first one uploaded at creating of coupon.
+	 * Gallery photos are not required, this is option admin have at update coupon panel.
+	 * Also this method is able to get multiple files from one request.
+	 * Each file is being checked by method made in FileUpload class.
+	 * @param couponId - id of coupon we're adding photos add.
+	 * @return 
+	 */
+	public static Result galleryUpload(long couponId){
+		String savePath = "." + File.separator + "public"
+				+ File.separator + "images" + File.separator + "coupon_photos"
+				+ File.separator + "cpn"+couponId + File.separator ;
+		Coupon cp = Coupon.find(couponId);
+		int photos = Photo.findAllByCoupon(cp);
+		
+		if(photos >= 4){
+			flash("error", "You already fullfilled this coupons photos. Delete some to add more.");
+			return redirect("/editCoupon" +cp.id);
+		}			
+		MultipartFormData body = request().body().asMultipartFormData();
+		List<FilePart> photoParts = body.getFiles();	
+		
+		if(photoParts.size() > (4 - photos)){
+			flash("error", "You selected " +photoParts.size() +
+					" photos but you can upload only " +photos +" more."); 
+			return redirect("/editCoupon"+cp.id);
+		}
+		
+		for(FilePart part: photoParts){			
+			if(FileUpload.confirmImage(part) != null){
+				File temp = FileUpload.confirmImage(part);				
+				String extension = FileUpload.getExtension(part);				
+				File saveFile = new File(savePath + UUID.randomUUID().toString()
+						+ extension);
+				try {
+					Files.move(temp, saveFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String assetsPath ="images" + File.separator + "coupon_photos"
+						+ File.separator + "cpn"+couponId + File.separator + saveFile.getName();			
+				
+				Photo.create(assetsPath, cp);
+			}
+		}		
+	
+		
+		return TODO;	
 	}
 
 

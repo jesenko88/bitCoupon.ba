@@ -38,6 +38,13 @@ create table faq (
   constraint pk_faq primary key (id))
 ;
 
+create table photo (
+  id                        integer not null,
+  path                      varchar(255),
+  coupon_id                 bigint,
+  constraint pk_photo primary key (id))
+;
+
 create table user (
   id                        bigint not null,
   username                  varchar(255),
@@ -57,10 +64,14 @@ create sequence email_verification_seq;
 
 create sequence faq_seq;
 
+create sequence photo_seq;
+
 create sequence user_seq;
 
 alter table coupon add constraint fk_coupon_category_1 foreign key (category_id) references category (id) on delete restrict on update restrict;
 create index ix_coupon_category_1 on coupon (category_id);
+alter table photo add constraint fk_photo_coupon_2 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_photo_coupon_2 on photo (coupon_id);
 
 
 
@@ -76,6 +87,8 @@ drop table if exists email_verification;
 
 drop table if exists faq;
 
+drop table if exists photo;
+
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
@@ -87,6 +100,8 @@ drop sequence if exists coupon_seq;
 drop sequence if exists email_verification_seq;
 
 drop sequence if exists faq_seq;
+
+drop sequence if exists photo_seq;
 
 drop sequence if exists user_seq;
 

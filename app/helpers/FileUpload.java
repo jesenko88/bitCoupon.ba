@@ -68,4 +68,31 @@ public class FileUpload extends Controller{
 		}
 
 	}
+	
+	public static File confirmImage(FilePart filePart){
+		String extension = filePart.getFilename().substring(
+				filePart.getFilename().lastIndexOf('.'));
+		extension.trim();		
+		
+		if (!extension.equalsIgnoreCase(".jpeg")
+				&& !extension.equalsIgnoreCase(".jpg")
+				&& !extension.equalsIgnoreCase(".png")) {
+			flash("error", "Image type not valid");
+			return null;
+		}
+		
+		File image = filePart.getFile();
+		double megabyteSize = (double) ((image.length() / 1024) / 1024);
+		if (megabyteSize > 2) {
+			flash("error", "Image size not valid");
+			return null;
+		}
+		
+		return image;
+	}
+	
+	public static String getExtension(FilePart filePart){
+		return filePart.getFilename().substring(
+			   filePart.getFilename().lastIndexOf('.')).trim();		
+	}
 }
