@@ -219,7 +219,12 @@ public class UserController extends Controller {
 		if (newPass.length() > 0) {
 			cUser.password = HashHelper.createPassword(newPass);
 		}
+	    List<User> adminList=User.findAdmins(true);
+		if(adminList.size() == 1 && cUser.equals(adminList.get(0))) {
+			cUser.isAdmin = true;
+		} else {
 		cUser.isAdmin = Boolean.parseBoolean(admin);
+		}
 		cUser.updated = new Date();
 		cUser.save();
 		flash("success", "User " + cUser.username + " updated!");
