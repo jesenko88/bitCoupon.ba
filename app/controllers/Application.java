@@ -194,7 +194,8 @@ public class Application extends Controller {
 								}
 								
 								flash("error", "WARNING! An error occured! You need to fill in the captcha!");
-								return redirect("/contact");
+								User currentUser = User.find(name);
+								return ok(contact.render(currentUser,submit));
 							}
 						});
 				return holder;
