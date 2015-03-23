@@ -26,33 +26,27 @@
 </head><!--/head-->
 
     <body>
-     <ul class="sections">
+    
+      
+
+       <div class="container">
+  <div class="col-md-1">
+    <ul class="sections">
         <li><a href="/" class="home"><span class="transition">Home</span></a>
         </li>
-        <li> <a href="/category/?name=Food" class="food">
-                                            <span class="transition">
-                            Food </i>                        </span>
-                    </a>
+    @for(category <- Category.all()){
+	        		
+	        	 <li>	<a href="@routes.CategoryController.categoryView(category.name)" class="@category.name">
+	        	   <span class="transition"> @category.name </i>  </span></a>   </li>
 
-        </li>
-         <li> <a href="/category/?name=Travel" class="travel">
-                                            <span class="transition">
-                            Travel </i>                        </span>
-                    </a>
-
-        </li>
-         <li> <a href="/category/?name=Sport" class="sport">
-                                            <span class="transition">
-                            Sport </i>                        </span>
-                    </a>
-
-        </li>
-       
+	       		}
     </ul>
-       <div class="container">
-    
+      </div>
+      </div>
+	<div class="row">
+			
         @content
-        		   	
+        	 </div>	   	
      </div>
      
     </body>

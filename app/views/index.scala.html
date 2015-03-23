@@ -39,20 +39,24 @@
 	
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
-			<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-				<div class="row">
-				
+			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+				<div class="logo pull-right">
 			<div class="search_box">
 							<form action="/search" method="GET">
 							<input id="q" name="q" type="text" placeholder="Search" />
 							</form>
 							</div>
-								</div>					
+								</div>	
+								</div>		
+			
+							
+				<div class="row">
+				
+						
 							
 
 						</div>
-					</div>
+				
 				</div>
 			</div>
 
@@ -91,26 +95,7 @@
 						<h2 class="title text-center">Available Coupons</h2>
 					
 				
-			<div class="containter" id="categories">
-				<ul>
-				<div class="container">
-	        	@for(category <- Category.all()){
-	        		
-	        		<a href="@routes.CategoryController.categoryView(category.name)">@category.name</a>
-	    			
-	    			
-	        	@*	@if(category.name == "Travel"){
-	        		<a href="/">Travel</a> 
-	        		}
-	        		@if(category.name == "Food"){
-	        		<a href="/">Food</a>	
-	        		}
-	        		@if(category.name == "Sport"){
-	    			<a href="/">Sport</a>  
-	       			 } *@
-	       		}
-	       		</ul>
-        </div>
+		
 			
 			</div>	
 				

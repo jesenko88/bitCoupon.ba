@@ -2629,10 +2629,11 @@ h2.title {
     */
     /* [disabled]border-top-color: #A93F89;
     */
-    margin: 200px;
-    padding: 0px;
-    position: absolute;
-    z-index: 200;
+  margin: 0px;
+  top: 300px;
+  left: -100px;
+  position: absolute;
+  z-index: 200;
 }
 .sections li a {
     background-image:url(http://www.ekupon.ba/assets/img/section-icons.png);
@@ -2705,88 +2706,88 @@ h2.title {
 .sections .home:hover {
     background-position: -45px 0px;
 }
-.sections .food {
+.sections .Food {
     background-position: 0px -45px;
 }
-.sections .food:hover {
+.sections .Food:hover {
     background-position: -45px -45px;
 }
-.sections .travel {
+.sections .Travel {
     background-position: 0px -90px;
 }
-.sections .travel:hover {
+.sections .Travel:hover {
     background-position: -45px -90px;
 }
-.sections .dan {
+.sections .Dan {
     background-position: 0px -535px;
 }
-.sections .dan:hover {
+.sections .Dan:hover {
     background-position: -45px -535px;
 }
-.sections .edu {
+.sections .Edu {
     background-position: 0px -135px;
 }
-.sections .edu:hover {
+.sections .Edu:hover {
     background-position: -45px -135px;
 }
-.sections .prod {
+.sections .Prod {
     background-position: 0px -180px;
 }
-.sections .prod:hover {
+.sections .Prod:hover {
     background-position: -45px -180px;
 }
-.sections .sport {
+.sections .Sport {
     background-position: 0px -225px;
 }
-.sections .sport:hover {
+.sections .Sport:hover {
     background-position: -45px -225px;
 }
-.sections .other {
+.sections .Other {
     background-position: 0px -270px;
 }
-.sections .other:hover {
+.sections .Other:hover {
     background-position: -45px -270px;
 }
-.sections .beauty {
+.sections .Beauty {
     background-position: 0px -315px;
 }
-.sections .beauty:hover {
+.sections .Beauty:hover {
     background-position: -45px -315px;
 }
-.sections .min {
+.sections .Min {
     background-position: 0px -360px;
 }
-.sections .min:hover {
+.sections .Min:hover {
     background-position: -45px -360px;
 }
-.sections .super {
+.sections .Super {
     background-position: 0px -405px;
 }
-.sections .super:hover {
+.sections .Super:hover {
     background-position: -45px -405px;
 }
-.sections .reg {
+.sections .Reg {
     background-position: 0px -445px;
 }
-.sections .reg:hover {
+.sections .Reg:hover {
     background-position: -45px -445px;
 }
-.sections .ng {
+.sections .Ng {
     background-position: 0px -490px;
 }
-.sections .ng:hover {
+.sections .Ng:hover {
     background-position: -45px -490px;
 }
-.sections .mar {
+.sections .Mar {
     background-position: 0px -579px;
 }
-.sections .mar:hover {
+.sections .Mar:hover {
     background-position: -45px -579px;
 }
-.sections .maj {
+.sections .Maj {
     background-position: 0px -625px;
 }
-.sections .maj:hover {
+.sections .Maj:hover {
     background-position: -45px -625px;
 }
 .sections li {
