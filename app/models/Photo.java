@@ -35,7 +35,7 @@ public class Photo extends Model {
 		finder.byId(id).delete();
 	}
 	
-	public static int findAllByCoupon(Coupon c){
+	public static int photoStackLength(Coupon c){
 		List<Photo> photos =  finder.all();
 		int counter = 0;
 		for(Photo p: photos){

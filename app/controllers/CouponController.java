@@ -253,20 +253,21 @@ public class CouponController extends Controller {
 		String savePath = "." + File.separator + "public"
 				+ File.separator + "images" + File.separator + "coupon_photos"
 				+ File.separator + "cpn"+couponId + File.separator ;
+		new File(savePath).mkdir();
 		Coupon cp = Coupon.find(couponId);
-		int photos = Photo.findAllByCoupon(cp);
+		int photos = Photo.photoStackLength(cp);
 		
 		if(photos >= 4){
 			flash("error", "You already fullfilled this coupons photos. Delete some to add more.");
-			return redirect("/editCoupon" +cp.id);
+			return redirect("/editCoupon/" +cp.id);
 		}			
 		MultipartFormData body = request().body().asMultipartFormData();
 		List<FilePart> photoParts = body.getFiles();	
 		
 		if(photoParts.size() > (4 - photos)){
 			flash("error", "You selected " +photoParts.size() +
-					" photos but you can upload only " +photos +" more."); 
-			return redirect("/editCoupon"+cp.id);
+					" photos but you can upload only " +(4-photos) +" more."); 
+			return redirect("/editCoupon/"+cp.id);
 		}
 		
 		for(FilePart part: photoParts){			
@@ -278,8 +279,7 @@ public class CouponController extends Controller {
 				try {
 					Files.move(temp, saveFile);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.error("File " +saveFile.getName() +" failed to move.");
 				}
 				String assetsPath ="images" + File.separator + "coupon_photos"
 						+ File.separator + "cpn"+couponId + File.separator + saveFile.getName();			
@@ -287,7 +287,6 @@ public class CouponController extends Controller {
 				Photo.create(assetsPath, cp);
 			}
 		}		
-	
 		
 		return TODO;	
 	}
