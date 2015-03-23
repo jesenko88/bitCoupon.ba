@@ -17,6 +17,8 @@ public class IntegrationTest {
 	 * add your integration test here in this example we just check if the
 	 * welcome page is being shown
 	 */
+	
+
 	@Test
 	public void test() {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
@@ -143,5 +145,78 @@ public class IntegrationTest {
 				});
 
 	}
+	
+	/**
+	 * Testing if user (non-admin) can accesse to admin panel
+	 */
+	@Test
+	public void testSecurityAdmin() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						User.createUser("tester", "tester@bitcamp.ba",
+								HashHelper.createPassword("123456"), false);
+						EmailVerification setVerified = new EmailVerification(3, true);
+						setVerified.save();
+
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("tester@bitcamp.ba");
+						browser.fill("#password").with("123456");
+						browser.submit("#submit");
+						
+						browser.goTo("http://localhost:3333/control-panel/user/2");
+						assertThat(browser.pageSource().contains(":( Login to complete this action"));
+
+					
+					}
+					});
+
+		}
+	/**
+	 * Test if admin can accesse to loginpage
+	 */
+	@Test
+	public void testSecurityAdmin2() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("admin@mail.com");
+						browser.fill("#password").with("bitadmin");
+						browser.submit("#submit");
+						
+						browser.goTo("http://localhost:3333//userPanel");
+						assertThat(browser.pageSource().contains("List of Users"));
+
+					
+					}
+					});
+
+		}
+	/**
+	 * Test if admin can accesse to couponePanel
+	 */
+	@Test
+	public void testSecurityAdmin3() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("admin@mail.com");
+						browser.fill("#password").with("bitadmin");
+						browser.submit("#submit");
+						
+						browser.goTo("http://localhost:3333//couponPanel");
+						assertThat(browser.pageSource().contains("COUPON CREATION"));
+
+					
+					}
+					});
+
+		}
 
 }
