@@ -68,7 +68,14 @@ public class FileUpload extends Controller{
 		}
 
 	}
-	
+	/**
+	 * Method confirming that file user wants to upload is valid 
+	 * image file. It checks format of picture and its size.
+	 * TODO edit this method so we can handle exceptions in other
+	 * 		classes.
+	 * @param filePart
+	 * @return
+	 */
 	public static File confirmImage(FilePart filePart){
 		String extension = filePart.getFilename().substring(
 				filePart.getFilename().lastIndexOf('.'));
@@ -91,6 +98,11 @@ public class FileUpload extends Controller{
 		return image;
 	}
 	
+	/**
+	 * Method returning extension of file.
+	 * @param filePart
+	 * @return
+	 */
 	public static String getExtension(FilePart filePart){
 		return filePart.getFilename().substring(
 			   filePart.getFilename().lastIndexOf('.')).trim();		

@@ -250,26 +250,39 @@ public class CouponController extends Controller {
 	 * @return 
 	 */
 	public static Result galleryUpload(long couponId){
+		/*
+		 * Save path where our photos are going to be saved.
+		 * Each coupon gets his own folder with name cpn(+ID of coupon)
+		 */
 		String savePath = "." + File.separator + "public"
 				+ File.separator + "images" + File.separator + "coupon_photos"
 				+ File.separator + "cpn"+couponId + File.separator ;
-		new File(savePath).mkdir();
+		
 		Coupon cp = Coupon.find(couponId);
 		int photos = Photo.photoStackLength(cp);
 		
+		/*
+		 * Checking if coupon has fulfilled his stack for photos
+		 * and if user has chosen more then available number of photos. 
+		 */
 		if(photos >= 4){
 			flash("error", "You already fullfilled this coupons photos. Delete some to add more.");
 			return redirect("/editCoupon/" +cp.id);
 		}			
 		MultipartFormData body = request().body().asMultipartFormData();
-		List<FilePart> photoParts = body.getFiles();	
-		
+		List<FilePart> photoParts = body.getFiles();			
 		if(photoParts.size() > (4 - photos)){
 			flash("error", "You selected " +photoParts.size() +
 					" photos but you can upload only " +(4-photos) +" more."); 
 			return redirect("/editCoupon/"+cp.id);
 		}
 		
+		/*
+		 * Once all checks are passed, we create folder for this coupon 
+		 * and add photos user selected. Also if user uploaded files
+		 * which are not photos they're not going to  be accepted.
+		 */
+		new File(savePath).mkdir(); 
 		for(FilePart part: photoParts){			
 			if(FileUpload.confirmImage(part) != null){
 				File temp = FileUpload.confirmImage(part);				
@@ -288,7 +301,7 @@ public class CouponController extends Controller {
 			}
 		}		
 		
-		return TODO;	
+		return redirect("/editCoupon/"+cp.id);	
 	}
 
 
