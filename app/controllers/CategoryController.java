@@ -63,17 +63,12 @@ public class CategoryController extends Controller {
 		}
 		
 		String picture = FileUpload.imageUpload("category-photos");		
-		
-		if(!Category.exists(name)){
-			if(picture != null){
-				Category.createCategory(name, picture);
-			}
+		if(picture != null){
+			Category.createCategory(name, picture);
+		}else {
 			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
-
 		}
-		
-		Category.createCategory(name);
-		
+	
 		flash("success","Category " + "\""+ name + "\"" + " added");
 		return ok(categoryPanel.render( session("name")));
 	}
