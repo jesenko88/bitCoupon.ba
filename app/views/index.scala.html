@@ -9,33 +9,7 @@
     <h4>Home: </h4> *@
 <body>
 		<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
-			<div class="container">
-						<div class="col-sm-12">
-						
-							<ul class="nav navbar-nav pull-left">
-							<li><a href="/faq" class="active"><i class="active"></i> FAQ </a></li>
-							<li><a href="/contact" class="active"><i></i> Contact</a></li>
-							</ul>
-						
-							<ul class="nav navbar-nav pull-right">
-					
-							<!-- if statement for enable od disable button in case of login -->	
-								@if( user == null) {
-							<li><a href="/loginpage" class="active"><i class="active"></i> Login </a></li>
-							<li><a href="/signup" class="active"><i  class="glyphicon glyphicon-user"></i> Registration</a></li>
-							} else {
- 							<li><a href="@routes.UserController.profilePage(user.username)" method="GET" class="active"> @user.username </a></li>
- 							<li><a href="/logout" class="active"><i></i> Logout</a></li>
-							}	
-							</ul>
-				
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		</div><!--/header_top-->
+
 	
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
