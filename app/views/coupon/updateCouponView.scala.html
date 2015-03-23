@@ -105,7 +105,7 @@
 					<div class="signup-form"><!--sign up form-->
 						<form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" enctype="multipart/form-data">
 							<input type="text" name="name" id="name" placeholder="Title" value="@coupon.name" required/>
-							<input type="text" name="price" id="price" placeholder="Price" value="@coupon.price" required/>
+							<input type="number" name="price" id="price" min="1" step="0.1" placeholder="@coupon.getPriceString()" />
 							<p> Expiration date: @coupon.dateExpire </p>
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
 							<label> Update coupon photo? </label>

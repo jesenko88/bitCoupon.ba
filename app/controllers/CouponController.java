@@ -111,26 +111,16 @@ public class CouponController extends Controller {
 			flash("error", "Name must be max 120 characters long");
 			return ok(updateCouponView.render(session("name"),coupon));
 		}
+		/* price */
+		double price = couponForm.bindFromRequest().get().price;
 
-		String strPrice = couponForm.bindFromRequest().field("price").value();
-		strPrice = strPrice.replace(",", ".");
-		double price;
-		try{
-			price = Double.valueOf(strPrice);
-			if ( price <= 0){
-				Logger.info("Invalid price input");
-				flash("error","Enter a valid price");
-				return badRequest(updateCouponView.render(session("name"), coupon));
-			}
-			
-		} catch (NumberFormatException e){
-
-			//TODO logger
+		if ( price <= 0){
+			Logger.info("Invalid price input");
 			flash("error","Enter a valid price");
-			return ok(updateCouponView.render(session("name"), coupon));
-
+			return badRequest(updateCouponView.render(session("name"), coupon));
 		}
 		coupon.price =  price;
+		/* date */
 		Date current = new Date();
 		Date date = couponForm.bindFromRequest().get().dateExpire;
 		if (date != null){  
@@ -200,19 +190,14 @@ public class CouponController extends Controller {
 		/* price */
 		String stringPrice = couponForm.bindFromRequest().field("price").value();
 		stringPrice = stringPrice.replace(",", ".");
-		double price;
-		try {
-			price = Double.valueOf(stringPrice);
-				if (price <= 0) {
-				Logger.info("Invalid price input");
-				flash("error", "Enter a valid price");
-				return badRequest(couponPanel.render(session("name")));
-			}
-		} catch (NumberFormatException | IllegalStateException e) {
-			Logger.error(e.getMessage(), "Invalid price input");
-			flash("error", "Enter a valid price");
+		double price = couponForm.bindFromRequest().get().price;
+
+		if ( price <= 0){
+			Logger.info("Invalid price input");
+			flash("error","Enter a valid price");
 			return badRequest(couponPanel.render(session("name")));
 		}
+		
 		/* date */
 		Date current = new Date();
 		Date date = couponForm.bindFromRequest().get().dateExpire;
