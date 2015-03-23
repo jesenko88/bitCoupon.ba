@@ -1,4 +1,4 @@
-@(name: String)
+@(name: String)(categories: List[Category])
 
 @import helper._
 
@@ -94,7 +94,12 @@
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
 							<label> Choose your coupon photo</label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
-							<input type="text" name="category" id="category" placeholder="Category" required/>
+					        <label>Select category</label>
+							<select id="category" name="category" required/>
+							@for(category <- categories) {
+								<option>@category.name</option>
+								}
+								
 							<textarea name="description" id="description" rows="6" placeholder="Description of Coupon" required></textarea>	
 							<p></p>
 							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>
