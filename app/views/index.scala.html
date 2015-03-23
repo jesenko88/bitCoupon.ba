@@ -13,66 +13,35 @@
 	
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
-			<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-				<div class="row">
-				
+			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+				<div class="logo pull-right">
 			<div class="search_box">
 							<form action="/search" method="GET">
 							<input id="q" name="q" type="text" placeholder="Search" />
 							</form>
 							</div>
-								</div>					
+								</div>	
+								</div>		
+			
+							
+				<div class="row">
+				
+						
 							
 
 						</div>
-					</div>
+				
 				</div>
 			</div>
-			<div class="header-bottom"><!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li>
-								<a href="/">Home</a></li>
-								<li class="dropdown"><a href="#" class="active">Page1<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="/" class="active">Page2</a></li>
-										<li><a href="/">Page3</a></li> 
-										<li><a href="/">Page4</a></li> 
-										<li><a href="/">Page5</a></li> 
-										<li><a href="/loginpage">Login</a></li> 
-                                    </ul>
-                                </li> 
-								<li class="dropdown"><a href="#">Page6<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="/">Page7</a></li>
-										<li><a href="/">Page8</a></li>
-                                    </ul>
-                                </li> 
-								<li><a href="/">Page9</a></li>
-								<li><a href="/">Page10</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				</div>
-			</div>
+
 			
 		</header>
 		
 	</section>
-	
+	<ul>
+	</div>
+						
+</div>
 	
 	@if(flash.get("success")){
 		<div class="alert alert-success" role="alert"> 
@@ -91,39 +60,21 @@
 		</div>
 	}
 	
-	<ul>
-	</div>
-							
+	
 	
 			<div class="container">
+		
+   
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Available Coupons</h2>
+					
 				
-				
-			<div class="containter" id="categories">
-				<ul>
-				<div class="container">
-	        	@for(category <- Category.all()){
-	        		
-	        		<a href="@routes.CategoryController.categoryView(category.name)">@category.name</a>
-	    			
-	    			
-	        	@*	@if(category.name == "Travel"){
-	        		<a href="/">Travel</a> 
-	        		}
-	        		@if(category.name == "Food"){
-	        		<a href="/">Food</a>	
-	        		}
-	        		@if(category.name == "Sport"){
-	    			<a href="/">Sport</a>  
-	       			 } *@
-	       		}
-	       		</ul>
-        </div>
+		
 			
 			</div>	
 				
 			<div class="container">		
+			
 				@for(coupon <- coupons){
 					
 						<div class="col-sm-4">

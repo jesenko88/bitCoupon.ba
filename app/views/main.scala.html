@@ -17,19 +17,39 @@
 	<link href="@routes.Assets.at("css/main.css")" rel="stylesheet">
 	<link href="@routes.Assets.at("css/responsive.css")" rel="stylesheet">
 
-
-         
-
     <link rel="shortcut icon" href="home/logo.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    
 </head><!--/head-->
+
     <body>
-    <div class="container">
+
 		@navbar()
+
+       <div class="container">
+  <div class="col-md-1">
+    <ul class="sections">
+        <li><a href="/" class="home"><span class="transition">Home</span></a>
+        </li>
+    @for(category <- Category.all()){
+	        		
+	        	 <li>	<a href="@routes.CategoryController.categoryView(category.name)" class="@category.name">
+	        	   <span class="transition"> @category.name </i>  </span></a>   </li>
+
+	       		}
+    </ul>
+      </div>
+      </div>
+	<div class="row">
+			
+
         @content
-        </div>
+        	 </div>	   	
+     </div>
+     
     </body>
+  
 </html>
