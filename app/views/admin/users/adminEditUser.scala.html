@@ -94,18 +94,7 @@
 							<input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
 										
 										
-								@if(!user.equals(admins.get(0)) && admins.size() >= 1) {
-						   				<label for="isAdmin">Option for promoting user to administrator. Option "false" for removing user from Administrators and option "true" for adding user to Administrator group.</label>
-						    			<select id="isAdmin" name="isAdmin" id="isAdmin" value=@user.isAdmin>
-					     					<option selected="selected">@user.isAdmin</option>
-					     					@if( user.isAdmin == true ){
-						     				<option>false</option> 
-						     				} else{
-						     				<option>true</option> 
-						     				}					     							
-					    				</select>
-					    				}
-					    				@if(user.equals(admins.get(0)) && admins.size() > 1) {
+								@if((!user.equals(admins.get(0)) && admins.size() >= 1) || (user.equals(admins.get(0)) && admins.size() > 1)) {
 						   				<label for="isAdmin">Option for promoting user to administrator. Option "false" for removing user from Administrators and option "true" for adding user to Administrator group.</label>
 						    			<select id="isAdmin" name="isAdmin" id="isAdmin" value=@user.isAdmin>
 					     					<option selected="selected">@user.isAdmin</option>
