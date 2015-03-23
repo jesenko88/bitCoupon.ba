@@ -178,11 +178,13 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminEditUserView(long id) {
+		
 		if (Sesija.adminCheck(ctx()) != true) {
 			return redirect("/");
 		}
+		List<User> adminList = User.findAdmins(true);
 		User userToUpdate = User.find(id);
-		return ok(adminEditUser.render(session("name"), userToUpdate));
+		return ok(adminEditUser.render(session("name"), userToUpdate, adminList));
 	}
 
 	/**
@@ -194,6 +196,7 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateUser(long id) {
+		List<User> adminList = User.findAdmins(true);
 
 		if (Sesija.adminCheck(ctx()) != true) {
 			return redirect("/");
@@ -216,15 +219,18 @@ public class UserController extends Controller {
 		 * if admin doesn't explicitly change the users password, it stays
 		 * intact
 		 */
+		
 		if (newPass.length() > 0) {
 			cUser.password = HashHelper.createPassword(newPass);
 		}
+		if(!User.isLastAdmin(cUser)) {
 		cUser.isAdmin = Boolean.parseBoolean(admin);
+		}
 		cUser.updated = new Date();
 		cUser.save();
 		flash("success", "User " + cUser.username + " updated!");
 		Logger.info(session("name") + " updated user: " + cUser.username);
-		return ok(adminEditUser.render(session("name"), cUser));
+		return ok(adminEditUser.render(session("name"), cUser, adminList));
 	}
 
 	/*
