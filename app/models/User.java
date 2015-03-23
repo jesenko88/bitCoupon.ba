@@ -205,4 +205,16 @@ public class User extends Model {
 		return find.where().eq("email", mail).findUnique() != null;
 	}
 	
+	/**
+	 * Checks if the user is last admin
+	 * @param user - user which we check
+	 * @return true if user is admin, else return false
+	 */
+	public static boolean isLastAdmin(User user) {
+		List<User> adminList=User.findAdmins(true);
+		if(adminList.size() == 1 && user.equals(adminList.get(0))) 
+			return true;
+		return false;
+	}
+	
 }
