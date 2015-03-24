@@ -60,7 +60,7 @@
 						<form action="@routes.CouponController.addCoupon" method ="POST"
 						enctype="multipart/form-data" >
 						
-							<input type="text" name="name" id="name" placeholder="Title" required/>
+							<input type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
 							<input type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
 							<label> Choose your coupon photo</label>
