@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -13,7 +14,9 @@ import com.google.common.io.Files;
 public class FileUpload extends Controller{
 
 	public static final String DEFAULT_IMAGE = "images" + File.separator + "default_image.jpg";
-	
+	public static final double MAX_IMAGE_SIZE = 2.5;
+	public static final String IMAGES_FOLDER = "." + File.separator + "public"
+			+ File.separator + "images" + File.separator;
 	/**
 	 * Method for uploading PHOTOS on our website.
 	 * As parameter receives name of sub folder in our public/images folder.
@@ -32,6 +35,7 @@ public class FileUpload extends Controller{
 		FilePart filePart = body.getFile("picture");
 		//Checking if file exists.
 		if(filePart == null){
+			Logger.debug("File part is null");
 			return null;
 		}
 		File image = filePart.getFile();
@@ -47,7 +51,8 @@ public class FileUpload extends Controller{
 		}
 
 		double megabyteSize = (double) ((image.length() / 1024) / 1024);
-		if (megabyteSize > 2) {
+		if (megabyteSize >MAX_IMAGE_SIZE) {
+			Logger.debug("Image size not valid ");
 			flash("error", "Image size not valid");
 			return null;
 		}
@@ -63,9 +68,49 @@ public class FileUpload extends Controller{
 			// Finally creating coupon.
 
 		} catch (IOException e) {
+			Logger.debug("Failed to move file");
 			e.printStackTrace();
 			return null;
 		}
 
+	}
+	/**
+	 * Method confirming that file user wants to upload is valid 
+	 * image file. It checks format of picture and its size.
+	 * TODO edit this method so we can handle exceptions in other
+	 * 		classes.
+	 * @param filePart
+	 * @return
+	 */
+	public static File confirmImage(FilePart filePart){
+		String extension = filePart.getFilename().substring(
+				filePart.getFilename().lastIndexOf('.'));
+		extension.trim();		
+		
+		if (!extension.equalsIgnoreCase(".jpeg")
+				&& !extension.equalsIgnoreCase(".jpg")
+				&& !extension.equalsIgnoreCase(".png")) {
+			flash("error", "Image type not valid");
+			return null;
+		}
+		
+		File image = filePart.getFile();
+		double megabyteSize = (double) ((image.length() / 1024) / 1024);
+		if (megabyteSize > 2) {
+			flash("error", "Image size not valid");
+			return null;
+		}
+		
+		return image;
+	}
+	
+	/**
+	 * Method returning extension of file.
+	 * @param filePart
+	 * @return
+	 */
+	public static String getExtension(FilePart filePart){
+		return filePart.getFilename().substring(
+			   filePart.getFilename().lastIndexOf('.')).trim();		
 	}
 }

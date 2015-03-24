@@ -3,39 +3,26 @@
 @import helper._
 
 @main("Login"){
-@*	
-	
-    <h4>@info: </h4> 
 
- 	  @helper.form(routes.Application.login(), 'id->"login"){
-    	<p> Enter email: </p>
-    	<input type="text" id="email" name="email" /> <br>
-    	<p> Enter Password: </p>
-    	<input type="password"  id="password" name="password" /> <br>
-    	<p></p>
-    	<input type="submit" value="Login" />
-      }
-   *@
 
 <body>
-		<header id="header"><!--header-->
-		
-		
+<header id="header"><!--header-->
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-						</div>
+				<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+					<div class="logo pull-right">
+						<div class="search_box">
+								<form action="/search" method="GET">
+									<input id="q" name="q" type="text" placeholder="Search" />
+								</form>
+									</div>
+								</div>	
+							</div>		
+						<div class="row">
 					</div>
 				</div>
-			</div>
-			
-			
+			</div>	
 		</header>
-		
-	</section>
 		<div class="container">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Login</h2>

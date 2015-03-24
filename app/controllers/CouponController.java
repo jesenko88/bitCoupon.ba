@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import com.google.common.io.Files;
 
 import models.Category;
 import models.Coupon;
+import models.Photo;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -78,7 +80,6 @@ public class CouponController extends Controller {
 	public static Result editCoupon(long id) {
 		Coupon coupon = Coupon.find(id);
 		List<Category> categories = Category.all();
-
 		return ok(updateCouponView.render(session("name"), coupon, categories));
 
 	}
@@ -106,11 +107,13 @@ public class CouponController extends Controller {
 		coupon.name = couponForm.bindFromRequest().field("name").value();
 		if (coupon.name.length() < 4) {
 			flash("error", "Name must be minimal 4 characters long");
-			return ok(updateCouponView.render(session("name"), coupon, categories));
+			return ok(updateCouponView.render(session("name"), coupon,
+					categories));
 		}
 		if (coupon.name.length() > 120) {
 			flash("error", "Name must be max 120 characters long");
-			return ok(updateCouponView.render(session("name"), coupon, categories));
+			return ok(updateCouponView.render(session("name"), coupon,
+					categories));
 		}
 		/* price */
 		double price = couponForm.bindFromRequest().get().price;
@@ -118,7 +121,9 @@ public class CouponController extends Controller {
 		if (price <= 0) {
 			Logger.info("Invalid price input");
 			flash("error", "Enter a valid price");
-			return badRequest(updateCouponView.render(session("name"), coupon, categories));
+
+			return badRequest(updateCouponView.render(session("name"), coupon,
+					categories));
 		}
 		coupon.price = price;
 		/* date */
@@ -127,13 +132,27 @@ public class CouponController extends Controller {
 		if (date != null) {
 			if (date.before(current)) {
 				flash("error", "Enter a valid expiration date");
-				return ok(updateCouponView.render(session("name"), coupon, categories));
+				return ok(updateCouponView.render(session("name"), coupon,
+						categories));
 			}
 			coupon.dateExpire = date;
 		}
-
-		coupon.category = Category.findByName(couponForm.bindFromRequest()
-				.field("category").value());
+		/* category */
+		String newCategory = couponForm.bindFromRequest().field("newCategory")
+				.value();
+		String category = couponForm.bindFromRequest().field("category")
+				.value();
+		if (!category.equals("New Category")) {
+			coupon.category = Category.findByName(category);
+		} else {
+			if (newCategory.isEmpty()) {
+				flash("error", "Enter new Category name");
+				return ok(updateCouponView.render(session("name"), coupon,
+						categories));
+			}
+			coupon.category = Category.find(Category
+					.createCategory(newCategory));
+		}
 		coupon.description = couponForm.bindFromRequest().field("description")
 				.value();
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();
@@ -214,12 +233,18 @@ public class CouponController extends Controller {
 		}
 		/* category */
 		Category category = null;
-		String categoryName = couponForm.bindFromRequest().field("category")
+		String newCategory = couponForm.bindFromRequest().field("newCategory")
 				.value();
-		if (!Category.exists(categoryName)) {
-			category = Category.find(Category.createCategory(categoryName));
+		String categoryy = couponForm.bindFromRequest().field("category")
+				.value();
+		if (!categoryy.equals("New Category")) {
+			category = Category.findByName(categoryy);
 		} else {
-			category = Category.findByName(categoryName);
+			if (newCategory.isEmpty()) {
+				flash("error", "Enter new Category name");
+				return redirect("/couponPanel");
+			}
+			category = Category.find(Category.createCategory(newCategory));
 		}
 		String description = couponForm.bindFromRequest().field("description")
 				.value();
@@ -241,6 +266,76 @@ public class CouponController extends Controller {
 					category, description, remark);
 			return redirect("/couponPanel");
 		}
+	}
+
+	/**
+	 * Method for uploading coupon photos into coupon gallery. At this moment
+	 * its only allowed 4 photos + first one uploaded at creating of coupon.
+	 * Gallery photos are not required, this is option admin have at update
+	 * coupon panel. Also this method is able to get multiple files from one
+	 * request. Each file is being checked by method made in FileUpload class.
+	 * 
+	 * @param couponId
+	 *            - id of coupon we're adding photos add.
+	 * @return
+	 */
+	public static Result galleryUpload(long couponId) {
+		/*
+		 * Save path where our photos are going to be saved. Each coupon gets
+		 * his own folder with name cpn(+ID of coupon)
+		 */
+		String savePath = "." + File.separator + "public" + File.separator
+				+ "images" + File.separator + "coupon_photos" + File.separator
+				+ "cpn" + couponId + File.separator;
+
+		Coupon cp = Coupon.find(couponId);
+		int photos = Photo.photoStackLength(cp);
+
+		/*
+		 * Checking if coupon has fulfilled his stack for photos and if user has
+		 * chosen more then available number of photos.
+		 */
+		if (photos >= 4) {
+			flash("error",
+					"You already fullfilled this coupons photos. Delete some to add more.");
+			return redirect("/editCoupon/" + cp.id);
+		}
+		MultipartFormData body = request().body().asMultipartFormData();
+		List<FilePart> photoParts = body.getFiles();
+		if (photoParts.size() > (4 - photos)) {
+			flash("error", "You selected " + photoParts.size()
+					+ " photos but you can upload only " + (4 - photos)
+					+ " more.");
+			return redirect("/editCoupon/" + cp.id);
+		}
+
+		/*
+		 * Once all checks are passed, we create folder for this coupon and add
+		 * photos user selected. Also if user uploaded files which are not
+		 * photos they're not going to be accepted.
+		 */
+		new File(savePath).mkdir();
+		for (FilePart part : photoParts) {
+			if (FileUpload.confirmImage(part) != null) {
+				File temp = FileUpload.confirmImage(part);
+				String extension = FileUpload.getExtension(part);
+				File saveFile = new File(savePath
+						+ UUID.randomUUID().toString() + extension);
+				try {
+					Files.move(temp, saveFile);
+				} catch (IOException e) {
+					Logger.error("File " + saveFile.getName()
+							+ " failed to move.");
+				}
+				String assetsPath = "images" + File.separator + "coupon_photos"
+						+ File.separator + "cpn" + couponId + File.separator
+						+ saveFile.getName();
+
+				Photo.create(assetsPath, cp);
+			}
+		}
+
+		return redirect("/editCoupon/" + cp.id);
 	}
 
 }
