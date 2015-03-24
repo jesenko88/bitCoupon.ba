@@ -48,7 +48,7 @@
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
 							<label> Category </label>
 						    <select id="category" name="category" >
-						    <option value="" style="display:none">@coupon.getCategoryName()</option>
+						    <option  style="display:none">@coupon.getCategoryName()</option>
 							@for(category <- categories) {
 								<option value="@category.name">@category.name</option>
 								}

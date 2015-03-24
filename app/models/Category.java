@@ -60,9 +60,9 @@ public class Category extends Model{
     }
     
     public static Category findByName(String name){
-    	List<Category>list=find.where().eq("name", name).findList();
-    		return list.get(0);
-    	}
+    	Category category= find.where().eq("name", name).findUnique();
+    	return category;
+    }
     
     public static boolean exists(String name){
 		 List<Category> list=find.where().eq("name", name).findList();

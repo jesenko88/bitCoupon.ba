@@ -135,7 +135,7 @@ public class CouponController extends Controller {
 			}
 			coupon.dateExpire = date;
 		}
-
+		/* category */
 		String newCategory = couponForm.bindFromRequest().field("newCategory")
 				.value();
 		String category = couponForm.bindFromRequest().field("category")
