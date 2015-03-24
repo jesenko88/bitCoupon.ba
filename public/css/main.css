@@ -44,6 +44,34 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: none;
 }
 
+/**  Morali smo staviti classe na ovo mjesto jer nece da povuce html ukoliko ubacimo na kraj main.css-a **/
+.profilePicture img{
+	width: 80%;
+	heigth: 200px;
+	margin: 10px;
+	padding: 10px;
+	border: #f5f5f5 solid 1px;	
+	
+}
+
+.userInforamtion{
+	width: 40%;
+	display: inline-block;
+	float: left;
+
+	}
+.rightBox{
+	width:50%;
+	display: inline-block;
+	float: left;
+	margin-top: 10px;
+	padding-top: 10px;
+	color: rgb(129, 124, 124);
+  	font-size: 18px;
+  	font-family: initial;
+}
+
+
 .navbar-toggle {
   background-color: #000;
 }
@@ -66,6 +94,7 @@ a#scrollUp i{
 /*************************
 *******Header CSS******
 **************************/
+
 
 .header_top {
   background: none repeat scroll 0 0 #F0F0E9;
@@ -2538,6 +2567,10 @@ h2.title {
 }
 
 ----------edib css za bar ----------
+
+
+
+
 
 @charset"utf-8";
 
