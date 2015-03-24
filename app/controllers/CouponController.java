@@ -130,8 +130,17 @@ public class CouponController extends Controller {
 			coupon.dateExpire = date;
 		}
 
-		coupon.category = Category.findByName(couponForm.bindFromRequest()
-				.field("category").value());
+		String newCategory = couponForm.bindFromRequest().field("newCategory").value();
+		String category = couponForm.bindFromRequest().field("category").value();
+		if ( !category.equals("New Category")){
+			coupon.category = Category.findByName(category);
+		}else{
+			if ( newCategory.isEmpty() ){
+				flash("error", "Enter new Category name");
+				return ok(updateCouponView.render(session("name"), coupon, categories));
+			}
+			coupon.category = Category.find(Category.createCategory(newCategory));
+		}
 		coupon.description = couponForm.bindFromRequest().field("description")
 				.value();
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();
