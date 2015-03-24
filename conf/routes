@@ -26,6 +26,7 @@ POST   /updateUser/:id					  controllers.UserController.adminUpdateUser(id: Long
 
 GET	   /couponPanel						  controllers.CouponController.addCouponView()
 POST   /addCoupon      					  controllers.CouponController.addCoupon()
+POST	/galleryUpload					  controllers.CouponController.galleryUpload(id: Long)
 GET    /coupon/:id						  controllers.CouponController.showCoupon(id: Long)
 GET    /deleteCoupon/:id				  controllers.CouponController.deleteCoupon(id :Long)
 POST   /editCoupon/:id     				  controllers.CouponController.updateCoupon(id: Long)

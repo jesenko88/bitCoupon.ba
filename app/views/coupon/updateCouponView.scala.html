@@ -3,8 +3,8 @@
 @import helper._
 
 @main("Coupon Panel") {
-
 <body>
+
 <header id="header"><!--header-->
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -79,6 +79,19 @@
 										<p></p>
 											<p></p>
 						</form>
+						<div class="container">
+             				  <div class="features_items">
+                				  <div class="col-sm-6 col-sm-offset-1">
+                  					   <h4>Add photos to coupon gallery </h4>
+                   				  <div class="signup-form">
+                       		 <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
+                           <input name="photo" type="file" multiple="multiple" max-uploads=3/>
+                           <input type="submit"/>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
 					</div><!--/update Coupon form-->
 				
 				</div>
@@ -97,4 +110,5 @@
 
 	
 }
+
 
