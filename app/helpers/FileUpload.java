@@ -68,4 +68,43 @@ public class FileUpload extends Controller{
 		}
 
 	}
+	/**
+	 * Method confirming that file user wants to upload is valid 
+	 * image file. It checks format of picture and its size.
+	 * TODO edit this method so we can handle exceptions in other
+	 * 		classes.
+	 * @param filePart
+	 * @return
+	 */
+	public static File confirmImage(FilePart filePart){
+		String extension = filePart.getFilename().substring(
+				filePart.getFilename().lastIndexOf('.'));
+		extension.trim();		
+		
+		if (!extension.equalsIgnoreCase(".jpeg")
+				&& !extension.equalsIgnoreCase(".jpg")
+				&& !extension.equalsIgnoreCase(".png")) {
+			flash("error", "Image type not valid");
+			return null;
+		}
+		
+		File image = filePart.getFile();
+		double megabyteSize = (double) ((image.length() / 1024) / 1024);
+		if (megabyteSize > 2) {
+			flash("error", "Image size not valid");
+			return null;
+		}
+		
+		return image;
+	}
+	
+	/**
+	 * Method returning extension of file.
+	 * @param filePart
+	 * @return
+	 */
+	public static String getExtension(FilePart filePart){
+		return filePart.getFilename().substring(
+			   filePart.getFilename().lastIndexOf('.')).trim();		
+	}
 }
