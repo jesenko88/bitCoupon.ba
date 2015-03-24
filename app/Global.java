@@ -79,15 +79,15 @@ public class Global extends GlobalSettings {
 					remarkCoupon3);
 		}
 
-		if (User.check("admin@mail.com") == false) {
-			User.createUser("Admin", "admin@mail.com",
+		if (User.check("bitcoupon@gmail.com") == false) {
+			User.createUser("Admin", "bitcoupon@gmail.com",
 					HashHelper.createPassword("bitadmin"), true);
 			EmailVerification setVerified = new EmailVerification(1, true);
 			setVerified.save();
 		}
 		
-		if (User.check("john@mail.com") == false) {
-			User.createUser("John", "john@mail.com",
+		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
+			User.createUser("John", "jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false);
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();

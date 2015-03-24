@@ -2,6 +2,7 @@ package models;
 
 import helpers.HashHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -132,6 +133,19 @@ public class User extends Model {
 		} else
 			return false;
 
+	}
+	
+	/**
+	 * Returns all admin email's
+	 * @return List<String>
+	 */
+	public static List<String> allAdminMails(){	
+		List<User> userList =  find.where().eq("isAdmin", true).findList();
+		List<String> emails = new ArrayList<String>();
+		for(User u: userList){
+			emails.add(u.email);
+		}
+		return emails;
 	}
 
 	/*

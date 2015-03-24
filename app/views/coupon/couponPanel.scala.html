@@ -6,23 +6,7 @@
 
 <body>
 		<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
 		
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="col-sm-12">
-						
-							<ul class="nav navbar-nav">
- 							<li><a href="@routes.UserController.profilePage(name)" class="active"> @name </a></li>
- 							<li><a href="/logout" class="active"><i class="active"></i> Logout</a></li>					
-							</ul>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		</div><!--/header_top-->
 		
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -90,7 +74,7 @@
 						enctype="multipart/form-data" >
 						
 							<input type="text" name="name" id="name" placeholder="Title" required/>
-							<input type="number" name="price" id="price" min="1" step="0.1" placeholder="Price" required/>
+							<input type="number" name="price" id="price" min="1" step="0.10" placeholder="Price" required/>
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
 							<label> Choose your coupon photo</label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />

@@ -1,0 +1,364 @@
+2015-03-19 21:52:14 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 21:52:15 +0100 [ERROR] from application in New I/O worker #1 - 
+
+! @6lgiopelc - Internal server error, for (GET) [/] ->
+
+play.api.db.evolutions.InvalidDatabaseRevision: Database 'default' needs evolution![An SQL script need to be run on your database.]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1$$anonfun$apply$1.apply$mcV$sp(Evolutions.scala:510) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin.withLock(Evolutions.scala:531) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:485) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.db.evolutions.EvolutionsPlugin.onStart(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$start$1.apply$mcV$sp(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$.start(Play.scala:90) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:157) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library-2.11.1.jar:na]
+2015-03-19 21:52:20 +0100 [WARN] from play in play-internal-execution-context-1 - Error stopping plugin
+java.lang.NullPointerException: null
+	at play.libs.ws.ning.NingWSPlugin.onStop(NingWSPlugin.java:31) ~[play-java-ws_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:108) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) [scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply$mcV$sp(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:106) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.api.Play$.stop(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:142) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) [scala-library-2.11.1.jar:na]
+2015-03-19 21:52:20 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 21:52:21 +0100 [INFO] from play in play-internal-execution-context-1 - Application started (Dev)
+2015-03-19 21:52:27 +0100 [INFO] from application in play-akka.actor.default-dispatcher-7 - Login to your account
+2015-03-19 21:53:05 +0100 [INFO] from application in play-akka.actor.default-dispatcher-6 - Admin logged in
+2015-03-19 21:54:44 +0100 [INFO] from application in play-akka.actor.default-dispatcher-23 - Admin has logout
+2015-03-19 21:54:46 +0100 [INFO] from application in play-akka.actor.default-dispatcher-17 - Login to your account
+2015-03-19 21:54:58 +0100 [INFO] from application in play-akka.actor.default-dispatcher-17 - John logged in
+2015-03-19 21:55:10 +0100 [INFO] from application in play-akka.actor.default-dispatcher-20 - John is updated
+2015-03-19 21:55:10 +0100 [WARN] from play in play-akka.actor.default-dispatcher-20 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:00:51 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 22:00:52 +0100 [INFO] from play in play-internal-execution-context-1 - Application started (Dev)
+2015-03-19 22:01:03 +0100 [INFO] from application in play-akka.actor.default-dispatcher-32 - John is updated
+2015-03-19 22:01:03 +0100 [WARN] from play in play-akka.actor.default-dispatcher-32 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:01:12 +0100 [WARN] from play in play-akka.actor.default-dispatcher-33 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:08:57 +0100 [ERROR] from application in New I/O worker #5 - 
+
+! @6lgj14fbh - Internal server error, for (GET) [/] ->
+
+play.PlayExceptions$CompilationException: Compilation error[error: method render in class signup cannot be applied to given types;]
+	at play.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27) ~[na:na]
+	at play.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49) ~[na:na]
+	at play.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.PlayReload$.taskFailureHandler(PlayReload.scala:44) ~[na:na]
+	at play.PlayReload$.compileFailure(PlayReload.scala:40) ~[na:na]
+	at play.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17) ~[na:na]
+	at play.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17) ~[na:na]
+	at scala.util.Either$LeftProjection.map(Either.scala:377) ~[scala-library-2.11.1.jar:na]
+	at play.PlayReload$.compile(PlayReload.scala:17) ~[na:na]
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61) ~[na:na]
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61) ~[na:na]
+	at play.runsupport.Reloader.reload(Reloader.scala:295) ~[na:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:122) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library-2.11.1.jar:na]
+2015-03-19 22:09:20 +0100 [ERROR] from application in New I/O worker #5 - 
+
+! @6lgj15mle - Internal server error, for (GET) [/] ->
+
+play.PlayExceptions$CompilationException: Compilation error[error: method render in class signup cannot be applied to given types;]
+	at play.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27) ~[na:na]
+	at play.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49) ~[na:na]
+	at play.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.PlayReload$.taskFailureHandler(PlayReload.scala:44) ~[na:na]
+	at play.PlayReload$.compileFailure(PlayReload.scala:40) ~[na:na]
+	at play.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17) ~[na:na]
+	at play.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17) ~[na:na]
+	at scala.util.Either$LeftProjection.map(Either.scala:377) ~[scala-library-2.11.1.jar:na]
+	at play.PlayReload$.compile(PlayReload.scala:17) ~[na:na]
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61) ~[na:na]
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61) ~[na:na]
+	at play.runsupport.Reloader.reload(Reloader.scala:295) ~[na:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:122) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library-2.11.1.jar:na]
+2015-03-19 22:10:17 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 22:10:19 +0100 [INFO] from play in play-internal-execution-context-1 - Application started (Dev)
+2015-03-19 22:10:22 +0100 [INFO] from application in play-akka.actor.default-dispatcher-41 - John has logout
+2015-03-19 22:11:16 +0100 [WARN] from play in play-akka.actor.default-dispatcher-41 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:11:47 +0100 [WARN] from play in play-akka.actor.default-dispatcher-53 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:12:04 +0100 [INFO] from application in play-akka.actor.default-dispatcher-58 - Username or email allready exists!
+2015-03-19 22:12:04 +0100 [WARN] from play in play-akka.actor.default-dispatcher-58 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:25:37 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 22:25:38 +0100 [ERROR] from application in New I/O worker #1 - 
+
+! @6lgj39efg - Internal server error, for (GET) [/] ->
+
+play.api.db.evolutions.InvalidDatabaseRevision: Database 'default' needs evolution![An SQL script need to be run on your database.]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1$$anonfun$apply$1.apply$mcV$sp(Evolutions.scala:510) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin.withLock(Evolutions.scala:531) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:485) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.db.evolutions.EvolutionsPlugin.onStart(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$start$1.apply$mcV$sp(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$.start(Play.scala:90) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:157) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library-2.11.1.jar:na]
+2015-03-19 22:25:42 +0100 [WARN] from play in play-internal-execution-context-1 - Error stopping plugin
+java.lang.NullPointerException: null
+	at play.libs.ws.ning.NingWSPlugin.onStop(NingWSPlugin.java:31) ~[play-java-ws_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:108) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) [scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply$mcV$sp(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:106) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.api.Play$.stop(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:142) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) [scala-library-2.11.1.jar:na]
+2015-03-19 22:25:42 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 22:25:43 +0100 [INFO] from play in play-internal-execution-context-1 - Application started (Dev)
+2015-03-19 22:25:46 +0100 [INFO] from application in play-akka.actor.default-dispatcher-7 - Login to your account
+2015-03-19 22:25:51 +0100 [INFO] from application in play-akka.actor.default-dispatcher-5 - Admin logged in
+2015-03-19 22:26:03 +0100 [INFO] from application in play-akka.actor.default-dispatcher-9 - Question 1 deleted by: Admin
+2015-03-19 22:26:03 +0100 [WARN] from play in play-akka.actor.default-dispatcher-9 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:27:41 +0100 [INFO] from application in play-akka.actor.default-dispatcher-20 - Question: 3 updated by: Admin
+2015-03-19 22:27:41 +0100 [WARN] from play in play-akka.actor.default-dispatcher-20 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 22:28:23 +0100 [INFO] from play in play-internal-execution-context-2 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 22:28:23 +0100 [INFO] from play in play-internal-execution-context-2 - Application started (Dev)
+2015-03-19 22:28:31 +0100 [INFO] from application in play-akka.actor.default-dispatcher-27 - Question deleted by: Admin
+2015-03-19 22:28:31 +0100 [WARN] from play in play-akka.actor.default-dispatcher-27 - You are using status code '200' with flashing, which should only be used with a redirect status!
+2015-03-19 23:08:57 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 23:08:58 +0100 [ERROR] from application in New I/O worker #1 - 
+
+! @6lgj91ck7 - Internal server error, for (GET) [/] ->
+
+play.api.db.evolutions.InvalidDatabaseRevision: Database 'default' needs evolution![An SQL script need to be run on your database.]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1$$anonfun$apply$1.apply$mcV$sp(Evolutions.scala:510) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin.withLock(Evolutions.scala:531) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:485) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.db.evolutions.EvolutionsPlugin.onStart(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$start$1.apply$mcV$sp(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$.start(Play.scala:90) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:157) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library-2.11.1.jar:na]
+2015-03-19 23:09:16 +0100 [WARN] from play in play-internal-execution-context-1 - Error stopping plugin
+java.lang.NullPointerException: null
+	at play.libs.ws.ning.NingWSPlugin.onStop(NingWSPlugin.java:31) ~[play-java-ws_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:108) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) [scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply$mcV$sp(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:106) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.api.Play$.stop(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:142) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) [scala-library-2.11.1.jar:na]
+2015-03-19 23:09:16 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 23:09:17 +0100 [INFO] from play in play-internal-execution-context-1 - Application started (Dev)
+2015-03-19 23:11:10 +0100 [INFO] from application in play-akka.actor.default-dispatcher-9 - Login to your account
+2015-03-19 23:11:16 +0100 [INFO] from application in play-akka.actor.default-dispatcher-14 - Admin logged in
+2015-03-19 23:18:09 +0100 [WARN] from play in play-akka.actor.default-dispatcher-17 - You are using status code '400' with flashing, which should only be used with a redirect status!
+2015-03-19 23:18:18 +0100 [WARN] from play in play-akka.actor.default-dispatcher-25 - You are using status code '400' with flashing, which should only be used with a redirect status!
+2015-03-19 23:18:28 +0100 [WARN] from play in play-akka.actor.default-dispatcher-29 - You are using status code '400' with flashing, which should only be used with a redirect status!
+2015-03-19 23:18:34 +0100 [WARN] from play in play-akka.actor.default-dispatcher-25 - You are using status code '400' with flashing, which should only be used with a redirect status!
+2015-03-19 23:18:43 +0100 [WARN] from play in play-akka.actor.default-dispatcher-25 - You are using status code '400' with flashing, which should only be used with a redirect status!
+2015-03-19 23:18:46 +0100 [INFO] from application in play-akka.actor.default-dispatcher-32 - Admin has logout
+2015-03-19 23:18:48 +0100 [INFO] from application in play-akka.actor.default-dispatcher-29 - Login to your account
+2015-03-19 23:18:53 +0100 [INFO] from application in play-akka.actor.default-dispatcher-31 - Admin logged in
+2015-03-19 23:19:02 +0100 [WARN] from play in play-akka.actor.default-dispatcher-37 - You are using status code '400' with flashing, which should only be used with a redirect status!
+2015-03-19 23:31:47 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 23:31:48 +0100 [ERROR] from application in New I/O worker #1 - 
+
+! @6lgjc1bi1 - Internal server error, for (GET) [/] ->
+
+play.api.db.evolutions.InvalidDatabaseRevision: Database 'default' needs evolution![An SQL script need to be run on your database.]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1$$anonfun$apply$1.apply$mcV$sp(Evolutions.scala:510) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin.withLock(Evolutions.scala:531) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:485) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.db.evolutions.EvolutionsPlugin$$anonfun$onStart$1.apply(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.db.evolutions.EvolutionsPlugin.onStart(Evolutions.scala:483) ~[play-jdbc_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1$$anonfun$apply$mcV$sp$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) ~[scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$start$1.apply$mcV$sp(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$start$1.apply(Play.scala:91) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$.start(Play.scala:90) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:157) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) ~[scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) ~[play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) ~[play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library-2.11.1.jar:na]
+2015-03-19 23:31:51 +0100 [WARN] from play in play-internal-execution-context-1 - Error stopping plugin
+java.lang.NullPointerException: null
+	at play.libs.ws.ning.NingWSPlugin.onStop(NingWSPlugin.java:31) ~[play-java-ws_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:108) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1$$anonfun$apply$mcV$sp$2.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.collection.immutable.List.foreach(List.scala:383) [scala-library-2.11.1.jar:na]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply$mcV$sp(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1$$anonfun$apply$1.apply(Play.scala:107) [play_2.11-2.3.8.jar:2.3.8]
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:106) [play_2.11-2.3.8.jar:2.3.8]
+	at play.api.Play$$anonfun$stop$1.apply(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.api.Play$.stop(Play.scala:105) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:142) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1$$anonfun$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.Option.map(Option.scala:145) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:130) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1$$anonfun$apply$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.util.Success.flatMap(Try.scala:230) [scala-library-2.11.1.jar:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:128) [play_2.11-2.3.8.jar:2.3.8]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:120) [play_2.11-2.3.8.jar:2.3.8]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) [scala-library-2.11.1.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) [scala-library-2.11.1.jar:na]
+2015-03-19 23:31:52 +0100 [INFO] from play in play-internal-execution-context-1 - database [default] connected at jdbc:h2:mem:play
+2015-03-19 23:31:52 +0100 [INFO] from play in play-internal-execution-context-1 - Application started (Dev)
+2015-03-19 23:31:57 +0100 [INFO] from application in play-akka.actor.default-dispatcher-7 - Login to your account
+2015-03-19 23:32:02 +0100 [INFO] from application in play-akka.actor.default-dispatcher-5 - Admin logged in

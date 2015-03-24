@@ -1,5 +1,8 @@
 package helpers;
 
+import java.util.List;
+
+import models.User;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerPlugin;
 
@@ -42,9 +45,15 @@ public class MailHelper {
 		Email mail = new Email();
 		mail.setSubject("bitCoupon.ba Feedback!");
 		mail.setFrom(email);
-		mail.addTo("bitCoupon.ba Feedback <bit.play.test@gmail.com>");
-		mail.addTo(adminMail);
 		
+		mail.addTo("bitCoupon.ba Feedback <bit.play.test@gmail.com>");
+		
+		List<String> emailList = User.allAdminMails();
+		
+		for(String e : emailList){
+			mail.addTo(e);
+		}
+	
 		mail.setBodyText(message);
 		mail.setBodyHtml(String
 				.format("<html>"
