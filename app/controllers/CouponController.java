@@ -135,7 +135,7 @@ public class CouponController extends Controller {
 			}
 			coupon.dateExpire = date;
 		}
-
+		/* category */
 		String newCategory = couponForm.bindFromRequest().field("newCategory")
 				.value();
 		String category = couponForm.bindFromRequest().field("category")
@@ -187,6 +187,7 @@ public class CouponController extends Controller {
 	 * @throws ParseException
 	 */
 	public static Result addCoupon() {
+
 		if (couponForm.hasErrors()) {
 			Logger.debug("Error adding coupon");
 			return redirect("/couponPanel");
@@ -195,7 +196,6 @@ public class CouponController extends Controller {
 		/* name */
 		String name = couponForm.bindFromRequest().field("name").value();
 		List<Category> categories = Category.all();
-
 		if (name.length() < 4) {
 			Logger.info("Entered a short coupon name");
 			flash("error", "Name must be 4 characters long");
@@ -239,7 +239,7 @@ public class CouponController extends Controller {
 		} else {
 			if (newCategory.isEmpty()) {
 				flash("error", "Enter new Category name");
-				return ok(couponPanel.render(session("name"), categories));
+				return redirect("/couponPanel");
 			}
 			category = Category.find(Category.createCategory(newCategory));
 		}
@@ -264,69 +264,75 @@ public class CouponController extends Controller {
 			return redirect("/couponPanel");
 		}
 	}
-	
+
 	/**
-	 * Method for uploading coupon photos into coupon gallery.
-	 * At this moment its only allowed 4 photos + first one uploaded at creating of coupon.
-	 * Gallery photos are not required, this is option admin have at update coupon panel.
-	 * Also this method is able to get multiple files from one request.
-	 * Each file is being checked by method made in FileUpload class.
-	 * @param couponId - id of coupon we're adding photos add.
-	 * @return 
+	 * Method for uploading coupon photos into coupon gallery. At this moment
+	 * its only allowed 4 photos + first one uploaded at creating of coupon.
+	 * Gallery photos are not required, this is option admin have at update
+	 * coupon panel. Also this method is able to get multiple files from one
+	 * request. Each file is being checked by method made in FileUpload class.
+	 * 
+	 * @param couponId
+	 *            - id of coupon we're adding photos add.
+	 * @return
 	 */
-	public static Result galleryUpload(long couponId){
+	public static Result galleryUpload(long couponId) {
 		/*
-		 * Save path where our photos are going to be saved.
-		 * Each coupon gets his own folder with name cpn(+ID of coupon)
+		 * Save path where our photos are going to be saved. Each coupon gets
+		 * his own folder with name cpn(+ID of coupon)
 		 */
-		String savePath = "." + File.separator + "public"
-				+ File.separator + "images" + File.separator + "coupon_photos"
-				+ File.separator + "cpn"+couponId + File.separator ;
-		
+		String savePath = "." + File.separator + "public" + File.separator
+				+ "images" + File.separator + "coupon_photos" + File.separator
+				+ "cpn" + couponId + File.separator;
+
 		Coupon cp = Coupon.find(couponId);
 		int photos = Photo.photoStackLength(cp);
-		
+
 		/*
-		 * Checking if coupon has fulfilled his stack for photos
-		 * and if user has chosen more then available number of photos. 
+		 * Checking if coupon has fulfilled his stack for photos and if user has
+		 * chosen more then available number of photos.
 		 */
-		if(photos >= 4){
-			flash("error", "You already fullfilled this coupons photos. Delete some to add more.");
-			return redirect("/editCoupon/" +cp.id);
-		}			
-		MultipartFormData body = request().body().asMultipartFormData();
-		List<FilePart> photoParts = body.getFiles();			
-		if(photoParts.size() > (4 - photos)){
-			flash("error", "You selected " +photoParts.size() +
-					" photos but you can upload only " +(4-photos) +" more."); 
-			return redirect("/editCoupon/"+cp.id);
+		if (photos >= 4) {
+			flash("error",
+					"You already fullfilled this coupons photos. Delete some to add more.");
+			return redirect("/editCoupon/" + cp.id);
 		}
-		
+		MultipartFormData body = request().body().asMultipartFormData();
+		List<FilePart> photoParts = body.getFiles();
+		if (photoParts.size() > (4 - photos)) {
+			flash("error", "You selected " + photoParts.size()
+					+ " photos but you can upload only " + (4 - photos)
+					+ " more.");
+			return redirect("/editCoupon/" + cp.id);
+		}
+
 		/*
-		 * Once all checks are passed, we create folder for this coupon 
-		 * and add photos user selected. Also if user uploaded files
-		 * which are not photos they're not going to  be accepted.
+		 * Once all checks are passed, we create folder for this coupon and add
+		 * photos user selected. Also if user uploaded files which are not
+		 * photos they're not going to be accepted.
 		 */
-		new File(savePath).mkdir(); 
-		for(FilePart part: photoParts){			
-			if(FileUpload.confirmImage(part) != null){
-				File temp = FileUpload.confirmImage(part);				
-				String extension = FileUpload.getExtension(part);				
-				File saveFile = new File(savePath + UUID.randomUUID().toString()
-						+ extension);
+		new File(savePath).mkdir();
+		for (FilePart part : photoParts) {
+			if (FileUpload.confirmImage(part) != null) {
+				File temp = FileUpload.confirmImage(part);
+				String extension = FileUpload.getExtension(part);
+				File saveFile = new File(savePath
+						+ UUID.randomUUID().toString() + extension);
 				try {
 					Files.move(temp, saveFile);
 				} catch (IOException e) {
-					Logger.error("File " +saveFile.getName() +" failed to move.");
+					Logger.error("File " + saveFile.getName()
+							+ " failed to move.");
 				}
-				String assetsPath ="images" + File.separator + "coupon_photos"
-						+ File.separator + "cpn"+couponId + File.separator + saveFile.getName();			
-				
+				String assetsPath = "images" + File.separator + "coupon_photos"
+						+ File.separator + "cpn" + couponId + File.separator
+						+ saveFile.getName();
+
 				Photo.create(assetsPath, cp);
 			}
-		}		
-		
-		return redirect("/editCoupon/"+cp.id);	
+		}
+
+		return redirect("/editCoupon/" + cp.id);
 	}
 
 }

@@ -32,8 +32,11 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="/">Home</a></li>							                            
-								<li><a href="#">Coupon panel</a></li>
+								<li><a href="/">Home</a></li>
+								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
+								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
+								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
+								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
 							</ul>
 						</div>
 						
@@ -57,8 +60,8 @@
 						<form action="@routes.CouponController.addCoupon" method ="POST"
 						enctype="multipart/form-data" >
 						
-							<input type="text" name="name" id="name" placeholder="Title" required/>
-							<input type="number" name="price" id="price" min="1" step="0.10" placeholder="Price" required/>
+							<input type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
+							<input type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
 							<label> Choose your coupon photo</label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
