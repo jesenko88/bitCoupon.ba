@@ -104,11 +104,13 @@ public class CouponController extends Controller {
 		coupon.name = couponForm.bindFromRequest().field("name").value();
 		if (coupon.name.length() < 4) {
 			flash("error", "Name must be minimal 4 characters long");
-			return ok(updateCouponView.render(session("name"), coupon, categories));
+			return ok(updateCouponView.render(session("name"), coupon,
+					categories));
 		}
 		if (coupon.name.length() > 120) {
 			flash("error", "Name must be max 120 characters long");
-			return ok(updateCouponView.render(session("name"), coupon, categories));
+			return ok(updateCouponView.render(session("name"), coupon,
+					categories));
 		}
 		/* price */
 		double price = couponForm.bindFromRequest().get().price;
@@ -116,7 +118,8 @@ public class CouponController extends Controller {
 		if (price <= 0) {
 			Logger.info("Invalid price input");
 			flash("error", "Enter a valid price");
-			return badRequest(updateCouponView.render(session("name"), coupon, categories));
+			return badRequest(updateCouponView.render(session("name"), coupon,
+					categories));
 		}
 		coupon.price = price;
 		/* date */
@@ -125,21 +128,26 @@ public class CouponController extends Controller {
 		if (date != null) {
 			if (date.before(current)) {
 				flash("error", "Enter a valid expiration date");
-				return ok(updateCouponView.render(session("name"), coupon, categories));
+				return ok(updateCouponView.render(session("name"), coupon,
+						categories));
 			}
 			coupon.dateExpire = date;
 		}
 
-		String newCategory = couponForm.bindFromRequest().field("newCategory").value();
-		String category = couponForm.bindFromRequest().field("category").value();
-		if ( !category.equals("New Category")){
+		String newCategory = couponForm.bindFromRequest().field("newCategory")
+				.value();
+		String category = couponForm.bindFromRequest().field("category")
+				.value();
+		if (!category.equals("New Category")) {
 			coupon.category = Category.findByName(category);
-		}else{
-			if ( newCategory.isEmpty() ){
+		} else {
+			if (newCategory.isEmpty()) {
 				flash("error", "Enter new Category name");
-				return ok(updateCouponView.render(session("name"), coupon, categories));
+				return ok(updateCouponView.render(session("name"), coupon,
+						categories));
 			}
-			coupon.category = Category.find(Category.createCategory(newCategory));
+			coupon.category = Category.find(Category
+					.createCategory(newCategory));
 		}
 		coupon.description = couponForm.bindFromRequest().field("description")
 				.value();
@@ -177,7 +185,6 @@ public class CouponController extends Controller {
 	 * @throws ParseException
 	 */
 	public static Result addCoupon() {
-
 		if (couponForm.hasErrors()) {
 			Logger.debug("Error adding coupon");
 			return redirect("/couponPanel");
@@ -221,12 +228,18 @@ public class CouponController extends Controller {
 		}
 		/* category */
 		Category category = null;
-		String categoryName = couponForm.bindFromRequest().field("category")
+		String newCategory = couponForm.bindFromRequest().field("newCategory")
 				.value();
-		if (!Category.exists(categoryName)) {
-			category = Category.find(Category.createCategory(categoryName));
+		String categoryy = couponForm.bindFromRequest().field("category")
+				.value();
+		if (!categoryy.equals("New Category")) {
+			category = Category.findByName(categoryy);
 		} else {
-			category = Category.findByName(categoryName);
+			if (newCategory.isEmpty()) {
+				flash("error", "Enter new Category name");
+				return ok(couponPanel.render(session("name"), categories));
+			}
+			category = Category.find(Category.createCategory(newCategory));
 		}
 		String description = couponForm.bindFromRequest().field("description")
 				.value();
