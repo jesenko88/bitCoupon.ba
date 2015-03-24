@@ -60,7 +60,7 @@ public class UserController extends Controller {
 			return badRequest(signup.render(username, null));
 		} else if (password.length() < 6) {
 			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render(username,mail));
+			return badRequest(signup.render(username, mail));
 		} else if (!password.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
 			return badRequest(signup.render(username, mail));
@@ -88,7 +88,7 @@ public class UserController extends Controller {
 					.render("A verification mail has been sent to your email address"));
 
 		} else {
-			flash("error","Username or email allready exists!");
+			flash("error", "Username or email allready exists!");
 			Logger.info("Username or email allready exists!");
 			return badRequest(signup.render(username, mail));
 		}
@@ -144,29 +144,32 @@ public class UserController extends Controller {
 				flash("error", "You're old password is incorrect!");
 				return badRequest(userUpdate.render(cUser));
 			}
-			if (newPass.length() < 6){
+			if (newPass.length() < 6) {
 				flash("error", "The password must be at least 6 characters");
 				return badRequest(userUpdate.render(cUser));
 			}
 			cUser.password = HashHelper.createPassword(newPass);
 		}
-		if(!cUser.email.equals(email)){
+		if (!cUser.email.equals(email)) {
 			String verificationEmail = EmailVerification.addNewRecord(cUser.id);
-			MailHelper.send(email, "Click on the link below to verify your e-mail adress <br>"
-					+ "http://localhost:9000/verifyEmailUpdate/" + verificationEmail);
+			MailHelper.send(email,
+					"Click on the link below to verify your e-mail adress <br>"
+							+ "http://localhost:9000/verifyEmailUpdate/"
+							+ verificationEmail);
 			cUser.email = email;
 			cUser.save();
-			flash("success", "A new verification email has been sent to this e-mail: " + email);
+			flash("success",
+					"A new verification email has been sent to this e-mail: "
+							+ email);
 			return ok(userUpdate.render(cUser));
 		}
-			cUser.email = email;
-			cUser.save();
-			flash("success", "Profile updated!");
-			Logger.info(cUser.username + " is updated");
-			return ok(userUpdate.render(cUser));
-		
-	}
+		cUser.email = email;
+		cUser.save();
+		flash("success", "Profile updated!");
+		Logger.info(cUser.username + " is updated");
+		return ok(userUpdate.render(cUser));
 
+	}
 
 	/**
 	 * Receives a user id, initializes the user, and renders the adminEditUser
@@ -178,13 +181,14 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminEditUserView(long id) {
-		
+
 		if (Sesija.adminCheck(ctx()) != true) {
 			return redirect("/");
 		}
 		List<User> adminList = User.findAdmins(true);
 		User userToUpdate = User.find(id);
-		return ok(adminEditUser.render(session("name"), userToUpdate, adminList));
+		return ok(adminEditUser
+				.render(session("name"), userToUpdate, adminList));
 	}
 
 	/**
@@ -219,12 +223,12 @@ public class UserController extends Controller {
 		 * if admin doesn't explicitly change the users password, it stays
 		 * intact
 		 */
-		
+
 		if (newPass.length() > 0) {
 			cUser.password = HashHelper.createPassword(newPass);
 		}
-		if(!User.isLastAdmin(cUser)) {
-		cUser.isAdmin = Boolean.parseBoolean(admin);
+		if (!User.isLastAdmin(cUser)) {
+			cUser.isAdmin = Boolean.parseBoolean(admin);
 		}
 		cUser.updated = new Date();
 		cUser.save();
@@ -286,23 +290,21 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteUser(Long id){
-	    User user=User.find(id);
 	    List<User> adminList=User.findAdmins(true);
-			User currentUser = Sesija.getCurrentUser(ctx());
-			if (currentUser.id == id || Sesija.adminCheck(ctx())){
-				if((user.isAdmin==true)&&(adminList.size()>1)){
-				User.delete(id);
-	
-				if(currentUser.id==id){
-					return redirect("/signup ");
-				}
-				}
-				else {
-					return ok( userList.render(session("name"),User.all()) );
-				}
-		}
+	    User currentUser = Sesija.getCurrentUser(ctx());
+	    
+	    if( adminList.size()== 1 && id == currentUser.id ){
+	    	flash("error", "You are the last admin!");
+	    	return ok( userList.render(session("name"),User.all()) );
+	    }
+    
+		if (currentUser.id == id || Sesija.adminCheck(ctx())){	
+			User.delete(id);
+			if(currentUser.id == id){
+				return redirect("/signup ");
+			}		
+		}	
 		return ok( userList.render(session("name"),User.all()) );
-
 	}
 
 	/**
@@ -327,19 +329,17 @@ public class UserController extends Controller {
 		return ok(verifyEmail.render(message));
 	}
 
-	
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result verifyEmailUpdate(String id) {
 		User u = User.find(session("name"));
 		EmailVerification recordToUpdate = EmailVerification.find(id);
 		String message = "";
-		if(recordToUpdate.createdOn.compareTo(new Date()) < 0){
+		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
 			EmailVerification.updateRecord(recordToUpdate);
 			message = "Your profile is updated. To go to the profile page click on the button below";
-		}
-		else{
+		} else {
 			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
-		}		
+		}
 		return ok(verifyEmailUpdate.render(message, u.username));
 	}
 }
