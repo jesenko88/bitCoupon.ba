@@ -45,12 +45,13 @@
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
 							<label> Update coupon photo? </label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
-						    <label>Select category</label>
-							<select id="category" name="category" required/>
+						    <select id="category" name="category" required>
+						    <option value="" style="display:none">@coupon.getCategoryName()</option>
 							@for(category <- categories) {
-								<option>@category.name</option>
+								<option value="@category.name">@category.name</option>
 								}
-								
+							</select>
+						
 							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>	
 							<p></p>
 							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> @coupon.remark </textarea>
