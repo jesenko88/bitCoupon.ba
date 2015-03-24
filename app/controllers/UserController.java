@@ -243,10 +243,10 @@ public class UserController extends Controller {
 		return ok(adminEditUser.render(session("name"), cUser, adminList));
 	}
 
-	/*
-	 * 
-	 * 
-	 * 
+	/**
+	 * Renders the admin panel page
+	 * @param id of the current user
+	 * @return
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result controlPanel(long id) {
@@ -299,6 +299,7 @@ public class UserController extends Controller {
 	    List<User> adminList=User.findAdmins(true);
 	    User currentUser = Sesija.getCurrentUser(ctx());
 	    
+	    /* checking if the current admin is the last admin in the DB */
 	    if( adminList.size()== 1 && id == currentUser.id ){
 	    	flash("error", "You are the last admin!");
 	    	return ok( userList.render(session("name"),User.all()) );

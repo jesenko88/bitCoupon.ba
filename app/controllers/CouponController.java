@@ -87,7 +87,7 @@ public class CouponController extends Controller {
 	/**
 	 * Update coupon Method receives an id, finds the specific coupon and
 	 * renders the update View for the coupon. If any error occurs, the view is
-	 * rendered repeatedly.
+	 * rendered again.
 	 * 
 	 * @param id
 	 *            long
@@ -166,6 +166,13 @@ public class CouponController extends Controller {
 
 	}
 
+	/**
+	 * Search method for coupons.
+	 * If search is unsuccessful a flash message is sent 
+	 * @param string 
+	 * @return renders index with matching coupons //TODO render a different view for search result
+	 *
+	 */
 	public static Result search(String q) {
 		List<Coupon> coupons = Coupon.find.where().ilike("name", "%" + q + "%")
 				.findList();

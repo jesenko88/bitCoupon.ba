@@ -151,15 +151,6 @@ public class User extends Model {
 	}
 
 	/*
-	 * TODO return a username by given mail
-	 */
-	public static long getId(String mail) {
-		User user = find.where().eq("email", mail).findUnique();
-		
-		return user.id;
-	}
-
-	/*
 	 * Return user by mail
 	 */
 	public static User getUser(String mail) {
@@ -168,10 +159,6 @@ public class User extends Model {
 		return user;
 	}
 	
-	public static void update(long id){
-		//TODO
-	}
-
 	/*
 	 * Delete user by id
 	 */

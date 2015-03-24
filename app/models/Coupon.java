@@ -177,19 +177,27 @@ public class Coupon extends Model {
     	return find.where().eq("category", Category.findByName(categoryName)).findList();
     }
 
-    /* getter*/
+    /**
+     * Get the category of the coupon as String
+     * @return category name
+     */
 	public String getCategoryName() {
 		return category.name;
 	}
 	
 
-   public String getExpiration(){
+	/**
+	 * Get the expiration date as String
+	 * in a simple date format day/month/year
+	 * @return date String
+	 */
+    public String getExpiration(){
 	   if ( dateExpire == null){
 		   return "";
 	   } 
 	   SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	   return "Expiring: " + dateFormat.format(dateExpire);
 	   
-   }
+    }
 
 }
