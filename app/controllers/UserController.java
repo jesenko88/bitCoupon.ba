@@ -83,9 +83,11 @@ public class UserController extends Controller {
 							+ "http://localhost:9000/verifyEmail/"
 							+ verificationEmail);
 			// User cc = User.getUser(mail);
+			
 			Logger.info("A verification mail has been sent to email address");
+			flash("success", "A verification mail has been sent to email address");
 			return ok(Loginpage
-					.render("A verification mail has been sent to your email address"));
+					.render(" "));
 
 		} else {
 			flash("error", "Username or email allready exists!");
@@ -304,6 +306,7 @@ public class UserController extends Controller {
 				return redirect("/signup ");
 			}		
 		}	
+    	flash("success", "User successfully deleted!");
 		return ok( userList.render(session("name"),User.all()) );
 	}
 
@@ -321,12 +324,13 @@ public class UserController extends Controller {
 		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
 			EmailVerification.updateRecord(recordToUpdate);
 			Logger.info("e-mail is now verified");
-			message = "You're e-mail is now verified. To login click on the button below";
+			flash("success", "You're e-mail is now verified. To login click on the button below");
 		} else {
 			Logger.info("Verification period is expired");
-			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
+			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
+
 		}
-		return ok(verifyEmail.render(message));
+		return ok(verifyEmail.render(" "));
 	}
 
 	@Security.Authenticated(CurrentUserFilter.class)

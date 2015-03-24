@@ -32,6 +32,8 @@ GET    /deleteCoupon/:id				  controllers.CouponController.deleteCoupon(id :Long
 POST   /editCoupon/:id     				  controllers.CouponController.updateCoupon(id: Long)
 GET    /editCoupon/:id     				  controllers.CouponController.editCoupon(id: Long)
 GET	   /search							  controllers.CouponController.search(q: String)
+GET	   /allCoupons						  controllers.CouponController.listCoupons()
+
 
 GET    /verifyEmail/:id         		  controllers.UserController.verifyEmail(id: String)
 
