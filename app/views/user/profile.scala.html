@@ -32,8 +32,26 @@
 
 				</div>
 			</div>
-	<img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
-
+			<div class="userInforamtion">
+			
+			<div class="profilePicture">
+			@if(user.profilePicture == null){
+				<img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+			}else{
+				<img src='@routes.Assets.at(user.profilePicture)' class="avatar-profile"/>
+			}
+			
+			</div>
+			
+			
+			</div>
+			<div class="rightBox">
+			<ul>
+  				<li>Name: @user.username</li>
+  				<li>Email: @user.email</li>
+  				<li>Date create: @user.created</li>
+			</ul>
+			</div>
 		</div>
 	</section><!--/form-->
 							</div>

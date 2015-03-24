@@ -5,8 +5,7 @@
 @main("User Panel") {
 
 <body>
-		<header id="header"><!--header-->
-		
+		<header id="header"><!--header-->		
 		
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -21,22 +20,7 @@
 		</header>
 	</section>
 	
-	@if(flash.get("success")){
-		<div class="alert alert-success" role="alert"> 
-			<div class="container">
-				@flash.get("success") 
-			</div>
-		</div>
-	}
 
-
-	@if(flash.get("error")){
-		<div class="alert alert-danger" role="alert"> 
-			<div class="container">
-				@flash.get("error") 
-			</div>
-		</div>
-	}
 	
 	<div class="container">
 					
@@ -58,6 +42,15 @@
 						</form>
 					</div><!--/sign up form-->
 					
+					
+					
+					<!--  For testing purpoeses -->
+					<div class="signup-form"><!--sign up form-->
+					 <form action="@routes.UserController.updatePhoto(user.id)" enctype="multipart/form-data" method="post">
+                           <input name="picture" id="picture" type="file" />
+                           <input type="submit"/>
+                        </form>					
+					</div>
 				</div>
 			</div>
 		</div>

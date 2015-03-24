@@ -43,6 +43,8 @@ public class User extends Model {
 	public Date created;
 	
 	public Date updated;
+	
+	public String profilePicture;
 
 
 	static Finder<Long, User> find = new Finder<Long, User>(Long.class,
