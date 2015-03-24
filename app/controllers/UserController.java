@@ -1,10 +1,16 @@
 package controllers;
 
+import java.io.File;
 import java.util.Date;
+
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
+import helpers.FileUpload;
+
 import java.util.List;
+
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
+
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -341,5 +347,25 @@ public class UserController extends Controller {
 			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
 		}
 		return ok(verifyEmailUpdate.render(message, u.username));
+	}
+	
+	public static Result updatePhoto(long userId){
+		User u = User.find(userId);
+		String subFolder = "user_profile" +File.separator +"user_" +userId;
+		boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER + subFolder).isDirectory();
+		if(checkIfDirectoryExists){
+			String assetsPath = FileUpload.imageUpload(subFolder);
+			Logger.debug(assetsPath);
+			u.profilePicture = assetsPath;
+			u.save();
+			return redirect("/profile/@" +u.username);
+		}else{
+			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
+			String assetsPath = FileUpload.imageUpload(subFolder);
+			Logger.debug(assetsPath);
+			u.profilePicture = assetsPath;
+			u.save();
+			return redirect("/profile/@" +u.username);
+		}
 	}
 }
