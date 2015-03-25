@@ -36,10 +36,10 @@
 								@if(Sesija.adminCheck(ctx()) == false) {
 									<label>Enter the amount of coupons </label>
 									<form action="/couponpurchase" method="POST" data-paypal-button="true">
-									<input type="number" value="0" />
+									<input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
+									<input type="number" step="1" id="quantity" name="quantity" placeholder="0" />
 									<button type="submit" >
  										 <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
-									</a>
 									</button>
 									</form>
 								}

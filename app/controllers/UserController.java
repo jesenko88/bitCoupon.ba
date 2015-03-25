@@ -6,15 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
 import helpers.FileUpload;
-
 import java.util.List;
-
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
-
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -24,8 +20,8 @@ import play.mvc.*;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
+import views.html.coupon.*;
 import models.*;
-
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
@@ -406,7 +402,16 @@ public class UserController extends Controller {
 			apiContext.setConfigurationMap(sdkConfig);
 			
 			Amount amount = new Amount();
-			amount.setTotal("7.47");
+			
+			DynamicForm buyForm = Form.form().bindFromRequest();
+			
+			Coupon coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
+			int quantity = Integer.parseInt(buyForm.data().get("quantity"));
+			Double couponPrice = coupon.price;
+			Double totalPrice = couponPrice * quantity;
+			String price = String.format("%1.2f",totalPrice);
+			
+			amount.setTotal(price);
 			amount.setCurrency("USD");
 			
 			Transaction transaction = new Transaction();
@@ -449,7 +454,9 @@ public class UserController extends Controller {
 			Logger.warn(e.getMessage());
 		}
 		
-		return TODO;
+		flash("error", "Something went wrong, please try again later");
+		User currentUser = User.find(name);
+		return ok(index.render(currentUser, Coupon.all()));
 	}
 	
 	/**
