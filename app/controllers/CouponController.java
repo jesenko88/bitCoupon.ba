@@ -1,5 +1,6 @@
 package controllers;
 
+import helpers.AdminFilter;
 import helpers.FileUpload;
 
 import java.io.File;
@@ -23,12 +24,14 @@ import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import play.Logger;
 import views.html.coupon.*;
 import views.html.*;
+import views.html.admin.users.*;
 
 public class CouponController extends Controller {
 
@@ -341,5 +344,14 @@ public class CouponController extends Controller {
 
 		return redirect("/editCoupon/" + cp.id);
 	}
+	
+	
+	
+	@Security.Authenticated(AdminFilter.class)
+	public static Result listCoupons() {
+
+		return ok(couponsAll.render(session("name"), Coupon.all()));
+	}
+
 
 }
