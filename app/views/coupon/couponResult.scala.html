@@ -1,10 +1,68 @@
-@(status: String)
+@(curUser: User)(coupon: Coupon)(details: List[String])
 
-@main("nest"){
+@import helper._
+
+@main("Welcome to bitCoupon") {
+	
+<body>
+		<header id="header"><!--header-->
 	
 	
+	
+		
+	
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+			
+			
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</header>
+		
+	</section>
 	<div class="container">
-		<h1> @status </h1>
-	</div>
 	
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+						
+										<ul>
+										@for( info <- details ){
+											<li><p> @info </p></li>
+										}	
+										</ul>
+						
+							<div class="product-information"><!--/product-information-->
+								<h2> @coupon.name </h2>
+								<span>
+									<span> @coupon.getPriceString() KM</span>
+							<div>				
+							<textarea rows="1">@coupon.getExpiration()</textarea>
+							</div><br>
+							<div>
+							<label class="pull-left" >Description</label>
+							<textarea disabled rows="6" >@coupon.description</textarea>
+							</div><br>
+							<div>
+							<label class="pull-left" >Remark</label>
+							<textarea disabled rows="4">@coupon.remark</textarea>
+							</div>
+								</div>
+							</div><!--/product-information-->
+						</div>
+					</div><!--/product-details-->
+					
+						</div>
+						</body>
+					
 }
+
+

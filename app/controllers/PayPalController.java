@@ -1,10 +1,12 @@
 package controllers;
 
+import java.awt.ItemSelectable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import models.Coupon;
 import models.User;
 import play.Logger;
@@ -14,7 +16,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import views.html.coupon.*;
+
 import com.paypal.api.payments.Amount;
+import com.paypal.api.payments.Details;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payer;
 import com.paypal.api.payments.Payment;
@@ -27,6 +31,8 @@ import com.paypal.base.rest.PayPalRESTException;
 
 public class PayPalController extends Controller {
 	
+	static Coupon coupon;
+	static List<String> details;
 	
 	/*  paypal  */
 	
@@ -55,20 +61,29 @@ public class PayPalController extends Controller {
 			
 			Amount amount = new Amount();
 			
-			DynamicForm buyForm = Form.form().bindFromRequest();
-			
-			Coupon coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
+			DynamicForm buyForm = Form.form().bindFromRequest();		
+			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			int quantity = Integer.parseInt(buyForm.data().get("quantity"));
-			Double couponPrice = coupon.price;
-			Double totalPrice = couponPrice * quantity;
-			String price = String.format("%1.2f",totalPrice);
+			Double totalPrice = coupon.price * quantity;
 			
-			amount.setTotal(price);
+			String totalPriceString = String.format("%1.2f",totalPrice);
+			
+			amount.setTotal(totalPriceString);
 			amount.setCurrency("USD");
 			
+			String description = String.format("Coupon: %s\n"
+					+ "Price: %s\n"
+					+ "Quantity: %d\n"
+					+ "Total: %s", coupon.name, coupon.price, quantity, totalPriceString);
+					
 			Transaction transaction = new Transaction();
-			transaction.setDescription("So we have a really cool description here");
+			transaction.setDescription(description);
 			transaction.setAmount(amount);
+			
+			/* details to render in the success view*/
+			details = new ArrayList<String>();
+			details.add("Quantity: " + Integer.toString(quantity));
+			details.add("Todal price: " + totalPriceString);
 			
 			List<Transaction> transactions = new ArrayList<Transaction>();
 			transactions.add(transaction);
@@ -98,8 +113,9 @@ public class PayPalController extends Controller {
 			
 			Logger.debug(createdPayment.toJSON());
 			
-			/* napravit sta bude ako nesto nije proslo kako treba s paypalom */
-			return TODO;
+			flash("error", "Something went wrong, please try again later");
+			User currentUser = User.find(session("name"));
+			return ok(index.render(currentUser, Coupon.all()));
 			
 			
 		} catch (PayPalRESTException e){
@@ -147,13 +163,16 @@ public class PayPalController extends Controller {
 	} catch(Exception e){
 		Logger.debug(e.getMessage());
 	}
-		
-		return ok(couponResult.render("Proslo"));
+		flash("success","Transaction successful");
+		User currentUser = User.find(session("name"));
+		return ok(couponResult.render(currentUser, coupon, details));
 	}
 	
 	
 	public static Result couponFail(){
-		return ok(couponResult.render("Nije proslo"));
+		User currentUser = User.find(session("name"));
+		flash("error","Transaction canceled");
+		return ok(coupontemplate.render(currentUser, coupon));
 	}
-
+	
 }
