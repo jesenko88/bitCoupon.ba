@@ -1,10 +1,16 @@
 package controllers;
 
+import java.io.File;
 import java.util.Date;
+
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
+import helpers.FileUpload;
+
 import java.util.List;
+
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
+
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -83,9 +89,11 @@ public class UserController extends Controller {
 							+ "http://localhost:9000/verifyEmail/"
 							+ verificationEmail);
 			// User cc = User.getUser(mail);
+			
 			Logger.info("A verification mail has been sent to email address");
+			flash("success", "A verification mail has been sent to email address");
 			return ok(Loginpage
-					.render("A verification mail has been sent to your email address"));
+					.render(" "));
 
 		} else {
 			flash("error", "Username or email allready exists!");
@@ -237,10 +245,10 @@ public class UserController extends Controller {
 		return ok(adminEditUser.render(session("name"), cUser, adminList));
 	}
 
-	/*
-	 * 
-	 * 
-	 * 
+	/**
+	 * Renders the admin panel page
+	 * @param id of the current user
+	 * @return
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result controlPanel(long id) {
@@ -293,6 +301,7 @@ public class UserController extends Controller {
 	    List<User> adminList=User.findAdmins(true);
 	    User currentUser = Sesija.getCurrentUser(ctx());
 	    
+	    /* checking if the current admin is the last admin in the DB */
 	    if( adminList.size()== 1 && id == currentUser.id ){
 	    	flash("error", "You are the last admin!");
 	    	return ok( userList.render(session("name"),User.all()) );
@@ -304,6 +313,7 @@ public class UserController extends Controller {
 				return redirect("/signup ");
 			}		
 		}	
+    	flash("success", "User successfully deleted!");
 		return ok( userList.render(session("name"),User.all()) );
 	}
 
@@ -321,12 +331,13 @@ public class UserController extends Controller {
 		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
 			EmailVerification.updateRecord(recordToUpdate);
 			Logger.info("e-mail is now verified");
-			message = "You're e-mail is now verified. To login click on the button below";
+			flash("success", "You're e-mail is now verified. To login click on the button below");
 		} else {
 			Logger.info("Verification period is expired");
-			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
+			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
+
 		}
-		return ok(verifyEmail.render(message));
+		return ok(verifyEmail.render(" "));
 	}
 
 	@Security.Authenticated(CurrentUserFilter.class)
@@ -341,5 +352,25 @@ public class UserController extends Controller {
 			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
 		}
 		return ok(verifyEmailUpdate.render(message, u.username));
+	}
+	
+	public static Result updatePhoto(long userId){
+		User u = User.find(userId);
+		String subFolder = "user_profile" +File.separator +"user_" +userId;
+		boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER + subFolder).isDirectory();
+		if(checkIfDirectoryExists){
+			String assetsPath = FileUpload.imageUpload(subFolder);
+			Logger.debug(assetsPath);
+			u.profilePicture = assetsPath;
+			u.save();
+			return redirect("/profile/@" +u.username);
+		}else{
+			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
+			String assetsPath = FileUpload.imageUpload(subFolder);
+			Logger.debug(assetsPath);
+			u.profilePicture = assetsPath;
+			u.save();
+			return redirect("/profile/@" +u.username);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package models;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -177,19 +178,53 @@ public class Coupon extends Model {
     	return find.where().eq("category", Category.findByName(categoryName)).findList();
     }
 
-    /* getter*/
+    /**
+     * Get the category of the coupon as String
+     * @return category name
+     */
 	public String getCategoryName() {
 		return category.name;
 	}
 	
 
-   public String getExpiration(){
+	/**
+	 * Get the expiration date as String
+	 * in a simple date format day/month/year
+	 * @return date String
+	 */
+    public String getExpiration(){
 	   if ( dateExpire == null){
 		   return "";
 	   } 
 	   SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	   return "Expiring: " + dateFormat.format(dateExpire);
 	   
-   }
+    }
+
+   
+/*
+   public static List<Coupon> listByDate(){
+	   List<Coupon> oldCoupon = new ArrayList<Coupon>();
+	   List<Coupon> allCoupon = Coupon.all();
+	   
+	   for(Coupon cp: allCoupon){
+		   Date today = new Date();
+		   Date expire = cp.dateExpire;
+		   if(today.before(expire)){
+			   oldCoupon.add(cp);
+		   }
+		  
+		   
+	   }
+	   if (oldCoupon.isEmpty()){
+		   return null;
+	   }
+	}   
+	   return oldCoupon;
+	   
+	 */
+  
+  
+
 
 }

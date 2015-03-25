@@ -1,5 +1,6 @@
 package controllers;
 
+import helpers.AdminFilter;
 import helpers.FileUpload;
 
 import java.io.File;
@@ -23,12 +24,14 @@ import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import play.Logger;
 import views.html.coupon.*;
 import views.html.*;
+import views.html.admin.users.*;
 
 public class CouponController extends Controller {
 
@@ -87,7 +90,7 @@ public class CouponController extends Controller {
 	/**
 	 * Update coupon Method receives an id, finds the specific coupon and
 	 * renders the update View for the coupon. If any error occurs, the view is
-	 * rendered repeatedly.
+	 * rendered again.
 	 * 
 	 * @param id
 	 *            long
@@ -103,6 +106,7 @@ public class CouponController extends Controller {
 
 		// TODO handle invalid inputs
 		List<Category> categories = Category.all();
+
 		coupon.name = couponForm.bindFromRequest().field("name").value();
 		if (coupon.name.length() < 4) {
 			flash("error", "Name must be minimal 4 characters long");
@@ -120,6 +124,7 @@ public class CouponController extends Controller {
 		if (price <= 0) {
 			Logger.info("Invalid price input");
 			flash("error", "Enter a valid price");
+
 			return badRequest(updateCouponView.render(session("name"), coupon,
 					categories));
 		}
@@ -135,7 +140,7 @@ public class CouponController extends Controller {
 			}
 			coupon.dateExpire = date;
 		}
-
+		/* category */
 		String newCategory = couponForm.bindFromRequest().field("newCategory")
 				.value();
 		String category = couponForm.bindFromRequest().field("category")
@@ -166,6 +171,13 @@ public class CouponController extends Controller {
 
 	}
 
+	/**
+	 * Search method for coupons.
+	 * If search is unsuccessful a flash message is sent 
+	 * @param string 
+	 * @return renders index with matching coupons //TODO render a different view for search result
+	 *
+	 */
 	public static Result search(String q) {
 		List<Coupon> coupons = Coupon.find.where().ilike("name", "%" + q + "%")
 				.findList();
@@ -196,6 +208,7 @@ public class CouponController extends Controller {
 		/* name */
 		String name = couponForm.bindFromRequest().field("name").value();
 		List<Category> categories = Category.all();
+
 		if (name.length() < 4) {
 			Logger.info("Entered a short coupon name");
 			flash("error", "Name must be 4 characters long");
@@ -334,5 +347,14 @@ public class CouponController extends Controller {
 
 		return redirect("/editCoupon/" + cp.id);
 	}
+	
+	
+	
+	@Security.Authenticated(AdminFilter.class)
+	public static Result listCoupons() {
+
+		return ok(couponsAll.render(session("name"), Coupon.all()));
+	}
+
 
 }

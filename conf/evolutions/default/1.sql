@@ -53,6 +53,7 @@ create table user (
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,
+  profile_picture           varchar(255),
   constraint pk_user primary key (id))
 ;
 

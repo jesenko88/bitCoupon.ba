@@ -43,6 +43,8 @@ public class User extends Model {
 	public Date created;
 	
 	public Date updated;
+	
+	public String profilePicture;
 
 
 	static Finder<Long, User> find = new Finder<Long, User>(Long.class,
@@ -149,15 +151,6 @@ public class User extends Model {
 	}
 
 	/*
-	 * TODO return a username by given mail
-	 */
-	public static long getId(String mail) {
-		User user = find.where().eq("email", mail).findUnique();
-		
-		return user.id;
-	}
-
-	/*
 	 * Return user by mail
 	 */
 	public static User getUser(String mail) {
@@ -166,10 +159,6 @@ public class User extends Model {
 		return user;
 	}
 	
-	public static void update(long id){
-		//TODO
-	}
-
 	/*
 	 * Delete user by id
 	 */

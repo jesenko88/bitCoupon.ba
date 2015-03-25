@@ -16,6 +16,7 @@ POST   /register       					  controllers.UserController.register()
 GET    /control-panel/user/:id     		  controllers.UserController.controlPanel(id: Long)
 GET	   /profile/@:username	   			  controllers.UserController.profilePage(username: String)
 POST   /updateUser					  	  controllers.UserController.updateUser(id: Long)
+POST   /userUpdatePhoto					  controllers.UserController.updatePhoto(id: Long)	
 GET    /updateUser						  controllers.UserController.userUpdateView()
 GET	   /userPanel						  controllers.UserController.listUsers()
 GET	   /verifyEmailUpdate/:username		  controllers.UserController.verifyEmailUpdate(username: String)
@@ -32,6 +33,8 @@ GET    /deleteCoupon/:id				  controllers.CouponController.deleteCoupon(id :Long
 POST   /editCoupon/:id     				  controllers.CouponController.updateCoupon(id: Long)
 GET    /editCoupon/:id     				  controllers.CouponController.editCoupon(id: Long)
 GET	   /search							  controllers.CouponController.search(q: String)
+GET	   /allCoupons						  controllers.CouponController.listCoupons()
+
 
 GET    /verifyEmail/:id         		  controllers.UserController.verifyEmail(id: String)
 
