@@ -106,6 +106,7 @@ public class CouponController extends Controller {
 
 		// TODO handle invalid inputs
 		List<Category> categories = Category.all();
+
 		coupon.name = couponForm.bindFromRequest().field("name").value();
 		if (coupon.name.length() < 4) {
 			flash("error", "Name must be minimal 4 characters long");
@@ -123,6 +124,7 @@ public class CouponController extends Controller {
 		if (price <= 0) {
 			Logger.info("Invalid price input");
 			flash("error", "Enter a valid price");
+
 			return badRequest(updateCouponView.render(session("name"), coupon,
 					categories));
 		}
@@ -206,6 +208,7 @@ public class CouponController extends Controller {
 		/* name */
 		String name = couponForm.bindFromRequest().field("name").value();
 		List<Category> categories = Category.all();
+
 		if (name.length() < 4) {
 			Logger.info("Entered a short coupon name");
 			flash("error", "Name must be 4 characters long");

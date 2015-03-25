@@ -46,6 +46,7 @@
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
 							<label> Update coupon photo? </label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+
 							<label> Category </label>
 						    <select id="category" name="category" >
 						    <option  style="display:none">@coupon.getCategoryName()</option>
@@ -54,7 +55,7 @@
 								}
 								<option >New Category</option>
 							</select>
-							<input type="text" name="newCategory" style="margin-top:10px" id="newCategory" placeholder="New Category ?" />
+							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
 						
 							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>	
 							<p></p>
