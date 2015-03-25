@@ -53,10 +53,10 @@ GET	   /editCategory/					  controllers.CategoryController.editCategoryView(name
 POST   /editCategory/					  controllers.CategoryController.updateCategory(id: Long)
 
 #Ovaj prvi get ne koristimo, mozda poslije dodati poseban view nakon klika na buy pa ovdje proslijedit
-GET	   /couponpurchase 					  controllers.UserController.showPurchase()
-POST   /couponpurchase					  controllers.UserController.purchaseProcessing()
-GET	   /couponsuccess					  controllers.UserController.couponSuccess()
-GET    /couponfail						  controllers.UserController.couponFail()
+GET	   /couponpurchase 					  controllers.PayPalController.showPurchase()
+POST   /couponpurchase					  controllers.PayPalController.purchaseProcessing()
+GET	   /couponsuccess					  controllers.PayPalController.couponSuccess()
+GET    /couponfail						  controllers.PayPalController.couponFail()
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file             controllers.Assets.at(path="/public", file)
