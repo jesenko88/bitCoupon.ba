@@ -14,8 +14,17 @@
     <link href="@routes.Assets.at("css/prettyPhoto.css")" rel="stylesheet">
     <link href="@routes.Assets.at("css/price-range.css")" rel="stylesheet">
 	<link href="@routes.Assets.at("css/animate.css")" rel="stylesheet">
-	<link href="@routes.Assets.at("css/main.css")" rel="stylesheet">
+	<link href="@routes.Assets.at("css/main.css")"  rel="stylesheet">
 	<link href="@routes.Assets.at("css/responsive.css")" rel="stylesheet">
+	
+	<script src="@routes.Assets.at("//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")" rel="stylesheet"></script>
+	<script src="@routes.Assets.at("js/jquery.js")"></script>
+	<script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
+	<script src="@routes.Assets.at("js/jquery.scrollUp.min.js")"></script>
+	<script src="@routes.Assets.at("js/price-range.js")"></script>
+	<script src="@routes.Assets.at("js/jquery.prettyPhoto.js")"></script>
+	<script src="@routes.Assets.at("js/main.js")"></script>
+
 
     <link rel="shortcut icon" href="home/logo.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
@@ -49,7 +58,7 @@
         @content
         	 </div>	   	
      </div>
-     
+     <a id="scrollUp" href="#top" style="position: fixed; z-index: 2147483647;"><i class="fa fa-angle-up"></i></a>
     </body>
   
 </html>
