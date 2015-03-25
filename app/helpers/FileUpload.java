@@ -1,8 +1,14 @@
 package helpers;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
+
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
 
 import play.Logger;
 import play.mvc.Controller;
@@ -60,10 +66,24 @@ public class FileUpload extends Controller{
 		try {
 			File profile = new File(savePath + UUID.randomUUID().toString()
 					+ extension);
+			
+			//Trying to resize img.
+			BufferedImage img;
+			try{
+				img = ImageIO.read(image);
+				BufferedImage resizedImg = resize(img, 600, 400);
+				ImageIO.write(resizedImg, "jpg", image);
+			}catch(IOException e1){
+				Logger.error("Failed to resize image: " +profile.getPath());
+			}
+			
 			Files.move(image, profile);
 			// Path for Assets.to()
 			String assetsPath = "images" + File.separator + subFolder
 					+ File.separator + profile.getName();
+			
+			//Trying to resize image.
+			
 			return assetsPath;
 			// Finally creating coupon.
 
@@ -112,5 +132,17 @@ public class FileUpload extends Controller{
 	public static String getExtension(FilePart filePart){
 		return filePart.getFilename().substring(
 			   filePart.getFilename().lastIndexOf('.')).trim();		
+	}
+	
+	/**
+	 * Method which resizes photo sent to method as BufferedImage.
+	 * @param image buffered image, photo to be resized
+	 * @param height 
+	 * @param width
+	 * @return	new resized buffered image.
+	 */
+	public static BufferedImage resize(BufferedImage image, int width, int height){
+		return Scalr.resize(image, Method.QUALITY, width, height, Scalr.OP_ANTIALIAS);		
+		
 	}
 }

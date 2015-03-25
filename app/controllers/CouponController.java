@@ -3,6 +3,7 @@ package controllers;
 import helpers.AdminFilter;
 import helpers.FileUpload;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.h2.util.StringUtils;
 
@@ -331,6 +334,18 @@ public class CouponController extends Controller {
 				String extension = FileUpload.getExtension(part);
 				File saveFile = new File(savePath
 						+ UUID.randomUUID().toString() + extension);
+				
+				//Resizing photos.
+				BufferedImage img;
+				try {
+					img = ImageIO.read(temp);
+					BufferedImage resizedImg = FileUpload.resize(img, 600, 400);
+					ImageIO.write(resizedImg, "jpg", temp);
+				} catch (IOException e1) {
+					Logger.error("Failed to resize image");
+				}
+				
+				//Moving file.
 				try {
 					Files.move(temp, saveFile);
 				} catch (IOException e) {
