@@ -261,6 +261,24 @@ public class UserController extends Controller {
 		return ok(adminPanel.render(u, null));
 
 	}
+	/**
+	 * Search method for users.
+	 * If search is unsuccessful a flash message is sent 
+	 * @param string 
+	 * @return renders index with matching coupons //TODO render a different view for search result
+	 *
+	 */
+	public static Result searchUsers(String qU) {
+		List<User> users = User.getFind().where().ilike("username", "%" + qU + "%")
+				.findList();
+
+		if (users.isEmpty()) {
+			flash("error", "No such user");
+			return badRequest(userList.render(null, User.all()));
+		}
+
+		return ok(userList.render(null, users));
+	}
 
 	/**
 	 * Renders the profile page view
