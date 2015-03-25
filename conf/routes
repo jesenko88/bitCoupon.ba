@@ -52,6 +52,12 @@ GET    /deleteCategory/:id                controllers.CategoryController.deleteC
 GET	   /editCategory/					  controllers.CategoryController.editCategoryView(name: String)
 POST   /editCategory/					  controllers.CategoryController.updateCategory(id: Long)
 
+#Ovaj prvi get ne koristimo, mozda poslije dodati poseban view nakon klika na buy pa ovdje proslijedit
+GET	   /couponpurchase 					  controllers.UserController.showPurchase()
+POST   /couponpurchase					  controllers.UserController.purchaseProcessing()
+GET	   /couponsuccess					  controllers.UserController.couponSuccess()
+GET    /couponfail						  controllers.UserController.couponFail()
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file             controllers.Assets.at(path="/public", file)
 GET    /webjars/*file            controllers.WebJarAssets.at(file)

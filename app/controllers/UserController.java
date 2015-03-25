@@ -1,7 +1,11 @@
 package controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
@@ -21,6 +25,12 @@ import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
 import models.*;
+
+import com.paypal.api.payments.*;
+import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.OAuthTokenCredential;
+import com.paypal.base.rest.PayPalRESTException;
+
 
 public class UserController extends Controller {
 
@@ -369,4 +379,128 @@ public class UserController extends Controller {
 			return redirect("/profile/@" +u.username);
 		}
 	}
+	
+	/*  paypal  */
+	
+	//get route for purchase //ovo nam ne treba, koristit cemo buy na coupon template-u
+	public static Result showPurchase(){
+		return TODO;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static Result purchaseProcessing(){
+
+		try { 
+			String accessToken = new OAuthTokenCredential(
+					"AXefj_ltBrqquxwtgvio9GBcfFMxFDh7GP8FTfXi489Vt0xCL7OmnKq6IRyXISYVKD98bVutaHBMwN9h",
+					"EPlX3tMGxjQYv0Wf2de9c-QeMlc8PT22jqWDAnexpFTbk1WJNlOgvS2ZQXfhrlQ_7DCbPYl1ElEDYDH9")
+					.getAccessToken();
+			
+			Map<String, String> sdkConfig = new HashMap<String, String>();
+			sdkConfig.put("mode", "sandbox");
+				
+			APIContext apiContext = new APIContext(accessToken);
+			apiContext.setConfigurationMap(sdkConfig);
+			
+			Amount amount = new Amount();
+			amount.setTotal("7.47");
+			amount.setCurrency("USD");
+			
+			Transaction transaction = new Transaction();
+			transaction.setDescription("So we have a really cool description here");
+			transaction.setAmount(amount);
+			
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			transactions.add(transaction);
+			
+			Payer payer = new Payer();
+			payer.setPaymentMethod("paypal");
+			
+			Payment payment = new Payment();
+			payment.setIntent("sale");
+			payment.setPayer(payer);
+			payment.setTransactions(transactions);
+			RedirectUrls redirectUrls = new RedirectUrls();
+			redirectUrls.
+						setCancelUrl("http://localhost:9000/couponfail");
+			redirectUrls.
+						setReturnUrl("http://localhost:9000/couponsuccess");
+			payment.setRedirectUrls(redirectUrls);
+			
+			Payment createdPayment = payment.create(apiContext);
+			
+			Iterator<Links> itr = createdPayment.getLinks().iterator();
+			while(itr.hasNext()){
+				Links link = itr.next();
+				if (link.getRel().equals("approval_url"))
+					return redirect(link.getHref());
+			}
+			
+			Logger.debug(createdPayment.toJSON());
+			
+			/* napravit sta bude ako nesto nije proslo kako treba s paypalom */
+			return TODO;
+			
+			
+		} catch (PayPalRESTException e){
+			Logger.warn(e.getMessage());
+		}
+		
+		return TODO;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static Result couponSuccess(){
+		
+		DynamicForm paypalReturn = Form.form().bindFromRequest();
+		
+		String paymentID;
+		String payerID;
+		String token;
+		
+		paymentID = paypalReturn.get("paymentId");
+		payerID = paypalReturn.get("PayerID");
+		token = paypalReturn.get("token");
+	try{
+		String accessToken = new OAuthTokenCredential(
+				"AXefj_ltBrqquxwtgvio9GBcfFMxFDh7GP8FTfXi489Vt0xCL7OmnKq6IRyXISYVKD98bVutaHBMwN9h",
+				"EPlX3tMGxjQYv0Wf2de9c-QeMlc8PT22jqWDAnexpFTbk1WJNlOgvS2ZQXfhrlQ_7DCbPYl1ElEDYDH9")
+				.getAccessToken();
+		
+		Map<String, String> sdkConfig = new HashMap<String, String>();
+		sdkConfig.put("mode", "sandbox");		
+		APIContext apiContext = new APIContext(accessToken);
+		apiContext.setConfigurationMap(sdkConfig);
+		
+		Payment payment = Payment.get(accessToken, paymentID);
+		
+		PaymentExecution paymentExecution = new PaymentExecution();
+		paymentExecution.setPayerId(payerID);
+		
+		Payment newPayment = payment.execute(apiContext, paymentExecution);
+		
+	} catch(Exception e){
+		Logger.debug(e.getMessage());
+	}
+		
+		return ok(couponResult.render("Proslo"));
+	}
+	
+	
+	public static Result couponFail(){
+		return ok(couponResult.render("Nije proslo"));
+	}
+	
+	
+	
+	
+	
+	
+	
 }
