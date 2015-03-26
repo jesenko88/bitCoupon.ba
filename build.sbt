@@ -18,5 +18,7 @@ libraryDependencies ++= Seq(
   "log4j" % "log4j" % "1.2.17",
   "joda-time" % "joda-time" % "2.7",
   "edu.vt.middleware" % "vt-password" % "3.1.2",
-  "org.imgscalr" % "imgscalr-lib" % "4.2"
+  "org.imgscalr" % "imgscalr-lib" % "4.2",
+  "com.paypal.sdk" % "rest-api-sdk" % "1.2.0"
 )
+

@@ -1,16 +1,16 @@
 package controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
 import helpers.FileUpload;
-
 import java.util.List;
-
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
-
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -20,7 +20,13 @@ import play.mvc.*;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
+import views.html.coupon.*;
 import models.*;
+import com.paypal.api.payments.*;
+import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.OAuthTokenCredential;
+import com.paypal.base.rest.PayPalRESTException;
+
 
 public class UserController extends Controller {
 
@@ -391,4 +397,12 @@ public class UserController extends Controller {
 			return redirect("/profile/@" +u.username);
 		}
 	}
+	
+
+	
+	
+	
+	
+	
+	
 }
