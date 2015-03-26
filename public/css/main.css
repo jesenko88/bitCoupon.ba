@@ -622,7 +622,7 @@ ul.sub-menu {
 }
 
 .item {
-  padding-left: 100px;
+  padding-left: 0px;
 }
 
 
@@ -1285,7 +1285,7 @@ h2.title {
 }
 
 .product-information span {
-  display: inline-block;
+  display: ;
   margin-bottom: 8px;
   margin-top: 18px;
 }
