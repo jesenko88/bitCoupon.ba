@@ -1,4 +1,4 @@
-@(username: String)(coupon: Coupon)(categories: List[Category])
+@(username: String)(coupon: Coupon)(categories: List[Category])(photos : List[Photo])
 @import helper._
 @main("Coupon Panel") {
 <body>
@@ -73,7 +73,7 @@
             
 	            <div class="col-sm-5">
 		           @if(Photo.photosByCoupon(coupon) != null){
-			          @for(photo <- Photo.photosByCoupon(coupon)){
+			          @for(photo <- photos){
 				        <form method="POST" action="@routes.CouponController.deletePhoto(photo.id)">
 				           <div div class="col-md-6 column">
 				            	<img alt="140x140" src="@routes.Assets.at(photo.path)" class="img-thumbnail" />
