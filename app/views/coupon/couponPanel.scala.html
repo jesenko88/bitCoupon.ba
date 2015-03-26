@@ -31,12 +31,17 @@
 							</button>
 						</div>
 						<div class="mainmenu pull-left">
+
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="/">Home</a></li>
 								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
 								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
 								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
 								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
+
+							<ul class="nav navbar-nav collapse navbar-collapse">						                            
+								<li><a href="#">Coupon panel</a></li>
+
 							</ul>
 						</div>
 						
@@ -65,6 +70,7 @@
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
 							<label> Choose your coupon photo</label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+
 							<select id="category" name="category" required>
 						    <option value="" style="display:none">Select category</option>
 							@for(category <- categories) {
@@ -72,7 +78,7 @@
 								}
 								<option >New Category</option>
 							</select>
-							<input type="text" name="newCategory" style="margin-top:10px" id="newCategory" placeholder="New Category ?" />
+							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
 							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
 							<p></p>
 							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>

@@ -14,7 +14,10 @@ public class FAQController extends Controller{
 	
 	
 	/**
-	 * Show FAQ page
+	 * Show FAQ page with list
+	 * of all Frequently Asked Questions 
+	 * If current user is admin, an edit and delete 
+	 * button are showed for each question.
 	 * @return
 	 */
 	public static Result showFAQ(){
@@ -40,7 +43,6 @@ public class FAQController extends Controller{
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addFAQ(){
 		
-	//TODO  error handling
 		DynamicForm form = Form.form().bindFromRequest();
 		
 		if (form.hasErrors() || form.hasGlobalErrors()) {
@@ -67,7 +69,7 @@ public class FAQController extends Controller{
 	
 	/**
 	 * Show Edit FAQ page
-	 * @param id
+	 * @param id of the question
 	 * @return
 	 */
 	@Security.Authenticated(AdminFilter.class)
@@ -114,7 +116,7 @@ public class FAQController extends Controller{
 	
 	/**
 	 * Delete existing FAQ
-	 * @param id
+	 * @param id of the question
 	 * @return
 	 */
 	@Security.Authenticated(AdminFilter.class)

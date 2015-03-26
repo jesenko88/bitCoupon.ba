@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+<<<<<<< HEAD
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
 POST   /login                         controllers.Application.login()
@@ -25,11 +26,6 @@ GET    /deletUser                     controllers.UserController.deleteUser(id: 
 GET    /editUser/:id                  controllers.UserController.adminEditUserView(id: Long)
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 
-GET    /creditPurchase                controllers.UserController.showPurchase()
-POST   /creditPurchase                controllers.UserController.purchaseProcessing()
-GET    /creditSuccess                 controllers.UserController.creditSuccess()
-GET    /creditFail                    controllers.UserController.crediFail()
-
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
 POST   /galleryUpload                 controllers.CouponController.galleryUpload(id: Long)
@@ -38,6 +34,41 @@ GET    /deleteCoupon/:id              controllers.CouponController.deleteCoupon(
 POST   /editCoupon/:id                controllers.CouponController.updateCoupon(id: Long)
 GET    /editCoupon/:id                controllers.CouponController.editCoupon(id: Long)
 GET    /search                        controllers.CouponController.search(q: String)
+=======
+GET    /                        		  controllers.Application.index()
+GET    /loginpage              			  controllers.Application.loginpage()
+POST   /login                  			  controllers.Application.login()
+GET    /logout                 			  controllers.Application.logout()
+GET	   /loginToComplete					  controllers.Application.loginToComplete()
+POST   /contact            				  controllers.Application.sendMail()
+GET    /contact							  controllers.Application.contact()
+
+GET    /signup        					  controllers.UserController.signup()
+POST   /register       					  controllers.UserController.register()
+GET    /control-panel/user/:id     		  controllers.UserController.controlPanel(id: Long)
+GET	   /profile/@:username	   			  controllers.UserController.profilePage(username: String)
+POST   /updateUser					  	  controllers.UserController.updateUser(id: Long)
+POST   /userUpdatePhoto					  controllers.UserController.updatePhoto(id: Long)	
+GET    /updateUser						  controllers.UserController.userUpdateView()
+GET	   /userPanel						  controllers.UserController.listUsers()
+GET	   /verifyEmailUpdate/:username		  controllers.UserController.verifyEmailUpdate(username: String)
+GET	   /searchUsers						  controllers.UserController.searchUsers(qU: String)
+
+GET	   /deletUser						  controllers.UserController.deleteUser(id: Long)
+GET	   /editUser/:id					  controllers.UserController.adminEditUserView(id: Long)
+POST   /updateUser/:id					  controllers.UserController.adminUpdateUser(id: Long)
+
+GET	   /couponPanel						  controllers.CouponController.addCouponView()
+POST   /addCoupon      					  controllers.CouponController.addCoupon()
+POST	/galleryUpload					  controllers.CouponController.galleryUpload(id: Long)
+GET    /coupon/:id						  controllers.CouponController.showCoupon(id: Long)
+GET    /deleteCoupon/:id				  controllers.CouponController.deleteCoupon(id :Long)
+POST   /editCoupon/:id     				  controllers.CouponController.updateCoupon(id: Long)
+GET    /editCoupon/:id     				  controllers.CouponController.editCoupon(id: Long)
+GET	   /search							  controllers.CouponController.search(q: String)
+GET	   /allCoupons						  controllers.CouponController.listCoupons()
+
+>>>>>>> c0a9b299af4de3041e7963512a1b849f65238d0e
 
 GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
 

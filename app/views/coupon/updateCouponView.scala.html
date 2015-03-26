@@ -31,7 +31,8 @@
 				
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Coupon Update</h2>
-						<div class="col-sm-6 col-sm-offset-1">
+						<div class="row">
+						<div class="col-sm-7">
 						
 						<h4> Coupon: "@coupon.name" </h4>
 				
@@ -46,6 +47,7 @@
 							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
 							<label> Update coupon photo? </label>
 							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+
 							<label> Category </label>
 						    <select id="category" name="category" >
 						    <option  style="display:none">@coupon.getCategoryName()</option>
@@ -54,7 +56,7 @@
 								}
 								<option >New Category</option>
 							</select>
-							<input type="text" name="newCategory" style="margin-top:10px" id="newCategory" placeholder="New Category ?" />
+							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
 						
 							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>	
 							<p></p>
@@ -65,18 +67,19 @@
 										<p></p>
 											<p></p>
 						</form>
-						<div class="container">
-             				  <div class="features_items">
-                				  <div class="col-sm-6 col-sm-offset-1">
+     </div>
+       </div>
+                				  <div class="col-sm-5">
                   					   <h4>Add photos to coupon gallery </h4>
                    				  <div class="signup-form">
                        		 <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
                            <input name="photo" type="file" multiple="multiple" max-uploads=3/>
-                           <input type="submit"/>
+                           <button type="submit" class="btn btn-default">Submit</button>
+                          
                         </form>
                      </div>
                   </div>
-               </div>
+             
             </div>
 					</div><!--/update Coupon form-->
 				

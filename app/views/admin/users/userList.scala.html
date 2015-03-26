@@ -28,8 +28,8 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="/">Home</a></li>
 								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
+								<li><a href="/allCoupons">Coupons panel</a></li>
 								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
 								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
 								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
@@ -44,15 +44,24 @@
 	</section>
 
 	<div class='container'>
-
+<div class="logo pull-right">
+			<div class="search_box">
+							<form action="/searchUsers" method="GET">
+							<input id="qU" name="qU" type="text" placeholder="Search for user" />
+							</form>
+							</div>
+								</div>	
+								
+								<div class="col-sm-10">
 	<div class="review-payment">
 				<h2>List of Users</h2>
 			</div>
-<div class="table-responsive cart_info">
-				<div class='container'>
+				
+				<div class="table-responsive cart_info">
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
+			
 							<td class="image">Username</td>
 							<td class="description">Email</td>
 							<td class="price">Registered</td>
