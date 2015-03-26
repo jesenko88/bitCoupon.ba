@@ -218,7 +218,33 @@ public class IntegrationTest {
 					});
 
 		}
-
+	/**
+	 * Test for user search
+	 */
+	
+	 @Test
+	    public void testSearchUser() {
+	        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+	            public void invoke(TestBrowser browser) {
+	                browser.goTo("http://localhost:3333/searchUsers ");
+	                assertThat(browser.pageSource()).contains("Admin");
+	            }
+	        });
+	    }
+	 
+	 /**
+		 * Test for user search
+		 */
+		
+		 @Test
+		    public void testSearch() {
+		        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+		            public void invoke(TestBrowser browser) {
+		                browser.goTo("http://localhost:3333/search ");
+		                assertThat(browser.pageSource()).contains("Neum");
+		            }
+		        });
+		    }
 
 						
 }
