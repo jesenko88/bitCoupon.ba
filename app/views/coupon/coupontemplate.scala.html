@@ -35,10 +35,14 @@
 									<label>Enter the amount of coupons </label>
 									<input type="text" value="0" />
 								@if(Sesija.adminCheck(ctx()) == false) {
-									<button type="button" class="btn btn-fefault cart">
-										<i class="fa fa-shopping-cart"></i>
-										Buy Coupon
-									</button>
+									
+
+
+										<button type="button">
+											<a href="/youraction" data-paypal-button="true">
+  											<img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
+											</a>
+										</button>	
 										}
 									@if(Sesija.adminCheck(ctx()) == true) {
 										<!-- edibe dodaj css za ovaj form sa id-eom macic -->

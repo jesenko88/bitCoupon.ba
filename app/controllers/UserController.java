@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
@@ -21,6 +22,8 @@ import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
 import models.*;
+import com.paypal.api.payments.*;
+
 
 public class UserController extends Controller {
 
@@ -368,4 +371,34 @@ public class UserController extends Controller {
 			return redirect("/profile/@" +u.username);
 		}
 	}
-}
+	
+	public static Result showCredit() {
+		return ok(creditPurchase.render());
+		}
+	
+	public static Result purchaseProcessing() {
+	
+		try {
+		String accessToken = new OAuthTokenCredential("id here", "secret here").getAccessToken();
+		
+		HashMap<String, String> sdConfig = new HashMap<String, String>();
+		sdConfig.put("mode", "sandbox");
+		
+		APIContext.apiContext = new APIContext(accessToken);
+		apiContext.setConfigurationMap(sdConfig);
+		
+		} catch (PayPalRESTException e) {
+			Logger.warn(e.getMessagge);
+		}
+		
+		return TODO;
+	}
+	
+	public static Result creditSuccess() {
+		return TODO;
+	}
+	
+	public static Result crediFail() {
+		return TODO;
+	}
+ }
