@@ -4,8 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+<<<<<<< HEAD
 import java.util.Iterator;
 import java.util.Map;
+=======
+
+>>>>>>> passchange
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
 import helpers.FileUpload;
@@ -95,11 +99,9 @@ public class UserController extends Controller {
 							+ "http://localhost:9000/verifyEmail/"
 							+ verificationEmail);
 			// User cc = User.getUser(mail);
-			
 			Logger.info("A verification mail has been sent to email address");
-			flash("success", "A verification mail has been sent to email address");
 			return ok(Loginpage
-					.render(" "));
+					.render("A verification mail has been sent to your email address"));
 
 		} else {
 			flash("error", "Username or email allready exists!");
@@ -145,25 +147,6 @@ public class UserController extends Controller {
 		// cUser.email = email;
 		cUser.updated = new Date();
 
-		/* if only one password field is filled out */
-		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
-				&& !oldPass.isEmpty()) {
-			flash("error", "If you want to change your password,"
-					+ " please fill out both fields");
-			return badRequest(userUpdate.render(cUser));
-		}
-		/* if there was a input in password fields */
-		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
-			if (HashHelper.checkPass(oldPass, cUser.password) == false) {
-				flash("error", "You're old password is incorrect!");
-				return badRequest(userUpdate.render(cUser));
-			}
-			if (newPass.length() < 6) {
-				flash("error", "The password must be at least 6 characters");
-				return badRequest(userUpdate.render(cUser));
-			}
-			cUser.password = HashHelper.createPassword(newPass);
-		}
 		if (!cUser.email.equals(email)) {
 			String verificationEmail = EmailVerification.addNewRecord(cUser.id);
 			MailHelper.send(email,
@@ -251,10 +234,10 @@ public class UserController extends Controller {
 		return ok(adminEditUser.render(session("name"), cUser, adminList));
 	}
 
-	/**
-	 * Renders the admin panel page
-	 * @param id of the current user
-	 * @return
+	/*
+	 * 
+	 * 
+	 * 
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result controlPanel(long id) {
@@ -266,24 +249,6 @@ public class UserController extends Controller {
 
 		return ok(adminPanel.render(u, null));
 
-	}
-	/**
-	 * Search method for users.
-	 * If search is unsuccessful a flash message is sent 
-	 * @param string 
-	 * @return renders index with matching coupons //TODO render a different view for search result
-	 *
-	 */
-	public static Result searchUsers(String qU) {
-		List<User> users = User.getFind().where().ilike("username", "%" + qU + "%")
-				.findList();
-
-		if (users.isEmpty()) {
-			flash("error", "No such user");
-			return badRequest(userList.render(null, User.all()));
-		}
-
-		return ok(userList.render(null, users));
 	}
 
 	/**
@@ -325,7 +290,6 @@ public class UserController extends Controller {
 	    List<User> adminList=User.findAdmins(true);
 	    User currentUser = Sesija.getCurrentUser(ctx());
 	    
-	    /* checking if the current admin is the last admin in the DB */
 	    if( adminList.size()== 1 && id == currentUser.id ){
 	    	flash("error", "You are the last admin!");
 	    	return ok( userList.render(session("name"),User.all()) );
@@ -337,7 +301,6 @@ public class UserController extends Controller {
 				return redirect("/signup ");
 			}		
 		}	
-    	flash("success", "User successfully deleted!");
 		return ok( userList.render(session("name"),User.all()) );
 	}
 
@@ -355,13 +318,12 @@ public class UserController extends Controller {
 		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
 			EmailVerification.updateRecord(recordToUpdate);
 			Logger.info("e-mail is now verified");
-			flash("success", "You're e-mail is now verified. To login click on the button below");
+			message = "You're e-mail is now verified. To login click on the button below";
 		} else {
 			Logger.info("Verification period is expired");
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-
+			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
 		}
-		return ok(verifyEmail.render(" "));
+		return ok(verifyEmail.render(message));
 	}
 
 	@Security.Authenticated(CurrentUserFilter.class)
@@ -397,12 +359,55 @@ public class UserController extends Controller {
 			return redirect("/profile/@" +u.username);
 		}
 	}
-	
 
+	@Security.Authenticated(CurrentUserFilter.class)
+	public static Result changePassView() {
+		User currentUser = User.find(session("name"));
+		return ok(changePassView.render(currentUser));
+	}
 	
-	
-	
-	
-	
+	@Security.Authenticated(CurrentUserFilter.class)
+	public static Result changePass(long id) {
+		DynamicForm updateForm = Form.form().bindFromRequest();
+		if (updateForm.hasErrors()) {
+			return redirect("/updateUser ");
+		}
+
+		String oldPass = updateForm.data().get("password");
+		String newPass = updateForm.data().get("newPassword");
+		String confPass = updateForm.data().get("confirmPassword");
+		User cUser = User.find(id);
+		cUser.updated = new Date();
+
+		/* if only one password field is filled out */
+		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
+				&& !oldPass.isEmpty()) {
+			flash("error", "If you want to change your password,"
+					+ " please fill out both fields");
+			return badRequest(changePassView.render(cUser));
+		}
+		/* if there was a input in password fields */
+		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
+			if (HashHelper.checkPass(oldPass, cUser.password) == false) {
+				flash("error", "You're old password is incorrect!");
+				return badRequest(changePassView.render(cUser));
+			}
+			if (newPass.length() < 6) {
+				flash("error", "The password must be at least 6 characters");
+				return badRequest(changePassView.render(cUser));
+			}
+			cUser.password = HashHelper.createPassword(newPass);
+		}
+		if (!newPass.equals(confPass)) {
+			flash("error", "Passwords don't match, try again ");
+			return badRequest(changePassView.render(cUser));
+		}
+		cUser.save();
+		flash("success", "Password changed!");
+		Logger.info(cUser.username + " is updated");
+		return ok(profile.render(cUser));
+
+	}
+
 	
 }

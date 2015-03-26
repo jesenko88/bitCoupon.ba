@@ -21,4 +21,3 @@ libraryDependencies ++= Seq(
   "org.imgscalr" % "imgscalr-lib" % "4.2",
   "com.paypal.sdk" % "rest-api-sdk" % "1.2.0"
 )
-
