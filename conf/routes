@@ -28,6 +28,10 @@ POST   /updateUser/:id                controllers.UserController.adminUpdateUser
 POST   /changePass/:id                controllers.UserController.changePass(id: Long)
 GET    /changePass                    controllers.UserController.changePassView()
 
+GET    /inputEmail                    controllers.UserController.inputEmailView()
+POST   /sendRequest                   controllers.UserController.sendRequest()
+POST   /setNewPassword                controllers.UserController.setNewPassword()
+
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
 POST   /galleryUpload                 controllers.CouponController.galleryUpload(id: Long)

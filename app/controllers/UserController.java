@@ -27,7 +27,6 @@ import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
 
-
 public class UserController extends Controller {
 
 	/* TODO move all messages to conf */
@@ -246,17 +245,19 @@ public class UserController extends Controller {
 		return ok(adminPanel.render(u, null));
 
 	}
-	
+
 	/**
-	 * Search method for users.
-	 * If search is unsuccessful a flash message is sent 
-	 * @param string 
-	 * @return renders index with matching coupons //TODO render a different view for search result
+	 * Search method for users. If search is unsuccessful a flash message is
+	 * sent
+	 * 
+	 * @param string
+	 * @return renders index with matching coupons //TODO render a different
+	 *         view for search result
 	 *
 	 */
 	public static Result searchUsers(String qU) {
-		List<User> users = User.getFind().where().ilike("username", "%" + qU + "%")
-				.findList();
+		List<User> users = User.getFind().where()
+				.ilike("username", "%" + qU + "%").findList();
 
 		if (users.isEmpty()) {
 			flash("error", "No such user");
@@ -265,7 +266,6 @@ public class UserController extends Controller {
 
 		return ok(userList.render(null, users));
 	}
-
 
 	/**
 	 * Renders the profile page view
@@ -302,22 +302,22 @@ public class UserController extends Controller {
 	 * @return Result renders the same view
 	 */
 	@Security.Authenticated(AdminFilter.class)
-	public static Result deleteUser(Long id){
-	    List<User> adminList=User.findAdmins(true);
-	    User currentUser = Sesija.getCurrentUser(ctx());
-	    
-	    if( adminList.size()== 1 && id == currentUser.id ){
-	    	flash("error", "You are the last admin!");
-	    	return ok( userList.render(session("name"),User.all()) );
-	    }
-    
-		if (currentUser.id == id || Sesija.adminCheck(ctx())){	
+	public static Result deleteUser(Long id) {
+		List<User> adminList = User.findAdmins(true);
+		User currentUser = Sesija.getCurrentUser(ctx());
+
+		if (adminList.size() == 1 && id == currentUser.id) {
+			flash("error", "You are the last admin!");
+			return ok(userList.render(session("name"), User.all()));
+		}
+
+		if (currentUser.id == id || Sesija.adminCheck(ctx())) {
 			User.delete(id);
-			if(currentUser.id == id){
+			if (currentUser.id == id) {
 				return redirect("/signup ");
-			}		
-		}	
-		return ok( userList.render(session("name"),User.all()) );
+			}
+		}
+		return ok(userList.render(session("name"), User.all()));
 	}
 
 	/**
@@ -355,24 +355,25 @@ public class UserController extends Controller {
 		}
 		return ok(verifyEmailUpdate.render(message, u.username));
 	}
-	
-	public static Result updatePhoto(long userId){
+
+	public static Result updatePhoto(long userId) {
 		User u = User.find(userId);
-		String subFolder = "user_profile" +File.separator +"user_" +userId;
-		boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER + subFolder).isDirectory();
-		if(checkIfDirectoryExists){
+		String subFolder = "user_profile" + File.separator + "user_" + userId;
+		boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
+				+ subFolder).isDirectory();
+		if (checkIfDirectoryExists) {
 			String assetsPath = FileUpload.imageUpload(subFolder);
 			Logger.debug(assetsPath);
 			u.profilePicture = assetsPath;
 			u.save();
-			return redirect("/profile/@" +u.username);
-		}else{
+			return redirect("/profile/@" + u.username);
+		} else {
 			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
 			String assetsPath = FileUpload.imageUpload(subFolder);
 			Logger.debug(assetsPath);
 			u.profilePicture = assetsPath;
 			u.save();
-			return redirect("/profile/@" +u.username);
+			return redirect("/profile/@" + u.username);
 		}
 	}
 
@@ -381,7 +382,7 @@ public class UserController extends Controller {
 		User currentUser = User.find(session("name"));
 		return ok(changePassView.render(currentUser));
 	}
-	
+
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result changePass(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
@@ -425,5 +426,65 @@ public class UserController extends Controller {
 
 	}
 
-	
+	public static Result inputEmailView() {
+		return ok(inputEmail.render());
+	}
+
+	public static Result newPassword() {
+		if (userForm.hasErrors()) {
+			return redirect("/inputEmail");
+		}
+		String mail = userForm.bindFromRequest().get().email;
+
+		if (mail.equals("Email")) {
+			flash("error", "Email is required for new password !");
+			return badRequest(inputEmail.render());
+		}
+		return ok(inputEmail.render());
+	}
+
+	public static Result sendRequest() {
+		DynamicForm forma = Form.form().bindFromRequest();
+		String mail = forma.data().get("email");
+		User u = User.getUser(mail);
+		if (mail.equals("Email")) {
+			flash("error", "Email is required for new password !");
+			return badRequest(inputEmail.render());
+		}
+		if (User.getUser(mail) == null) {
+			flash("error", "You are not registered!");
+			return badRequest(inputEmail.render());
+		}
+		String verificationEmail = EmailVerification.addNewRecord(u.id);
+		MailHelper.send(mail,
+				"Click on the link below to set a new password <br>"
+						+ "http://localhost:9000/setNewPassword/");
+		flash("success",
+				"Request for new password has been sent on this email: " + mail);
+		return ok(inputEmail.render());
+	}
+
+	public static Result setNewPassword() {
+		if (userForm.hasErrors()) {
+			return redirect("/setNewPassword");
+		}
+		String mail = userForm.bindFromRequest().get().email;
+		User u = User.getUser(mail);
+		String password = userForm.bindFromRequest().get().password;
+		String confPass = userForm.bindFromRequest().field("confirmPassword")
+				.value();
+
+		if (mail.equals("Email")) {
+			flash("error", "Email is required for registration !");
+			return badRequest(setNewPassword.render());
+		} else if (password.length() < 6) {
+			flash("error", "Password must be at least 6 characters!");
+			return badRequest(setNewPassword.render());
+		} else if (!password.equals(confPass)) {
+			flash("error", "Passwords don't match, try again ");
+			return badRequest(setNewPassword.render());
+		}
+		return ok(profile.render(u));
+	}
+
 }
