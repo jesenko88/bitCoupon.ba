@@ -33,6 +33,10 @@ public class PayPalController extends Controller {
 	
 	static Coupon coupon;
 	static List<String> details;
+	static APIContext apiContext;
+	static PaymentExecution paymentExecution;
+	static Payment payment;
+
 	
 	/*  paypal  */
 	
@@ -56,7 +60,7 @@ public class PayPalController extends Controller {
 			Map<String, String> sdkConfig = new HashMap<String, String>();
 			sdkConfig.put("mode", "sandbox");
 				
-			APIContext apiContext = new APIContext(accessToken);
+			apiContext = new APIContext(accessToken);
 			apiContext.setConfigurationMap(sdkConfig);
 			
 			Amount amount = new Amount();
@@ -150,29 +154,51 @@ public class PayPalController extends Controller {
 		
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		sdkConfig.put("mode", "sandbox");		
-		APIContext apiContext = new APIContext(accessToken);
+		apiContext = new APIContext(accessToken);
 		apiContext.setConfigurationMap(sdkConfig);
 		
-		Payment payment = Payment.get(accessToken, paymentID);
+		payment = Payment.get(accessToken, paymentID);
 		
-		PaymentExecution paymentExecution = new PaymentExecution();
+		paymentExecution = new PaymentExecution();
 		paymentExecution.setPayerId(payerID);
 		
-		Payment newPayment = payment.execute(apiContext, paymentExecution);
+//		Payment newPayment = payment.execute(apiContext, paymentExecution);
 		
 	} catch(Exception e){
 		Logger.debug(e.getMessage());
 	}
-		flash("success","Transaction successful");
+		flash("info","Approve transaction");
 		User currentUser = User.find(session("name"));
 		return ok(couponResult.render(currentUser, coupon, details));
 	}
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public static Result couponFail(){
 		User currentUser = User.find(session("name"));
 		flash("error","Transaction canceled");
 		return ok(coupontemplate.render(currentUser, coupon));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static Result approveTransaction(){
+		
+		try {
+			
+			payment.execute(apiContext, paymentExecution);
+			
+		} catch (PayPalRESTException e) {
+			Logger.debug(e.getMessage());
+		}
+		
+		flash("success","Transaction complete");
+		User currentUser = User.find(session("name"));
+		return ok(couponResult.render(currentUser, coupon, details));
 	}
 	
 }

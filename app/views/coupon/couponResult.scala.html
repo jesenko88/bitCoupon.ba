@@ -36,9 +36,15 @@
 						
 										<ul>
 										@for( info <- details ){
-											<li><p> @info </p></li>
+											<h3><li><p> @info </p></li></h3>
 										}	
 										</ul>
+										
+							<form>
+							<button  type="submit" formaction="@routes.PayPalController.approveTransaction()">Submit</button>
+							<button  type="submit" formaction="/" >Cancel transaction</button>
+							</form>
+					
 						
 							<div class="product-information"><!--/product-information-->
 								<h2> @coupon.name </h2>

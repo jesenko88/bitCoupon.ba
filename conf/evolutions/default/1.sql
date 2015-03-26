@@ -46,6 +46,11 @@ create table photo (
   constraint pk_photo primary key (id))
 ;
 
+create table transactions (
+  id                        bigint not null,
+  constraint pk_transactions primary key (id))
+;
+
 create table user (
   id                        bigint not null,
   username                  varchar(255),
@@ -67,6 +72,8 @@ create sequence email_verification_seq;
 create sequence faq_seq;
 
 create sequence photo_seq;
+
+create sequence transactions_seq;
 
 create sequence user_seq;
 
@@ -91,6 +98,8 @@ drop table if exists faq;
 
 drop table if exists photo;
 
+drop table if exists transactions;
+
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
@@ -104,6 +113,8 @@ drop sequence if exists email_verification_seq;
 drop sequence if exists faq_seq;
 
 drop sequence if exists photo_seq;
+
+drop sequence if exists transactions_seq;
 
 drop sequence if exists user_seq;
 

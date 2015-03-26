@@ -46,7 +46,33 @@
 				<div class="col-md-12 column">
 					<div class="alert alert-dismissable alert-success">
 					 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-					<h4>	Info	</h4> @flash.get("success") 
+					 @flash.get("success") 
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	
+		@if(flash.get("info")){
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div class="alert alert-dismissable alert-info">
+					 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					 @flash.get("info") 
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	
+	@if(flash.get("warning")){
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div class="alert alert-dismissable alert-warning">
+					 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					 @flash.get("warning") 
 					</div>
 				</div>
 			</div>
