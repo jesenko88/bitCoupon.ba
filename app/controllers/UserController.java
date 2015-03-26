@@ -139,14 +139,14 @@ public class UserController extends Controller {
 		cUser.updated = new Date();
 
 		/* if only one password field is filled out */
-		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
+		/*if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
 				&& !oldPass.isEmpty()) {
 			flash("error", "If you want to change your password,"
 					+ " please fill out both fields");
 			return badRequest(userUpdate.render(cUser));
-		}
+		}*/
 		/* if there was a input in password fields */
-		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
+		/*if (!oldPass.isEmpty() && !newPass.isEmpty()) {
 			if (HashHelper.checkPass(oldPass, cUser.password) == false) {
 				flash("error", "You're old password is incorrect!");
 				return badRequest(userUpdate.render(cUser));
@@ -156,7 +156,7 @@ public class UserController extends Controller {
 				return badRequest(userUpdate.render(cUser));
 			}
 			cUser.password = HashHelper.createPassword(newPass);
-		}
+		}*/
 		if (!cUser.email.equals(email)) {
 			String verificationEmail = EmailVerification.addNewRecord(cUser.id);
 			MailHelper.send(email,
