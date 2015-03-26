@@ -332,8 +332,9 @@ public class CouponController extends Controller {
 			if (FileUpload.confirmImage(part) != null) {
 				File temp = FileUpload.confirmImage(part);
 				String extension = FileUpload.getExtension(part);
+				String name = UUID.randomUUID().toString();
 				File saveFile = new File(savePath
-						+ UUID.randomUUID().toString() + extension);
+						+ name  + extension);
 				
 				//Resizing photos.
 				BufferedImage img;
@@ -356,13 +357,31 @@ public class CouponController extends Controller {
 						+ File.separator + "cpn" + couponId + File.separator
 						+ saveFile.getName();
 
-				Photo.create(assetsPath, cp);
+				Photo.create(assetsPath,saveFile.getPath(), cp);
 			}
 		}
 
 		return redirect("/editCoupon/" + cp.id);
 	}
 	
+	@Security.Authenticated(AdminFilter.class)
+	public static Result deletePhoto(int id){
+		Photo temp = Photo.find(id);
+		Coupon cp = temp.coupon;		
+		File image = new File(temp.savePath);
+		
+		try{
+			image.delete();				
+			temp.delete();
+			temp.save();
+			flash("succes", "You have successfuly deleted photo.");
+		}catch(Exception e){
+			
+		}
+		
+		return editCoupon(cp.id);
+		
+	}
 	
 	
 	@Security.Authenticated(AdminFilter.class)

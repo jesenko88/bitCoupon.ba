@@ -41,6 +41,7 @@ create table faq (
 create table photo (
   id                        integer not null,
   path                      varchar(255),
+  save_path                 varchar(255),
   coupon_id                 bigint,
   constraint pk_photo primary key (id))
 ;
