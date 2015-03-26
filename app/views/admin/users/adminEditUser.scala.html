@@ -1,0 +1,106 @@
+@(username: String)(user: User)(admins: List[User])
+
+@import helper._
+
+@main("User Panel") {
+
+<body>
+		<header id="header"><!--header-->
+		
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-bottom"><!--header-bottom-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
+								<li><a href="/allCoupons">Coupons panel</a></li>
+								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
+								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
+								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</div>
+		</header>
+	</section>
+	
+
+	
+	<div class="container">
+					
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Edit User</h2>
+						<div class="col-sm-6 col-sm-offset-1">
+						
+						<h5>Edit user: @user.username</h5>
+					
+					<div class="signup-form"><!--sign up form-->
+						<form action="@routes.UserController.adminUpdateUser(user.id)" method ="POST" >
+						
+													
+							<input type="text" name="username" id="username" placeholder="Username" value=@user.username required/>
+							<input type="text" name="email" id="email" placeholder=Email value=@user.email required/>
+							<input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
+										
+										
+								@if((!user.equals(admins.get(0)) && admins.size() >= 1) || (user.equals(admins.get(0)) && admins.size() > 1)) {
+						   				<label for="isAdmin">Option for promoting user to administrator. Option "false" for removing user from Administrators and option "true" for adding user to Administrator group.</label>
+						    			<select id="isAdmin" name="isAdmin" value=@user.isAdmin>
+					     					<option selected="selected">@user.isAdmin</option>
+					     					@if( user.isAdmin == true ){
+						     				<option>false</option> 
+						     				} else{
+						     				<option>true</option> 
+						     				}					     							
+					    				</select>
+					    				}
+					    				<br>
+					    				<br>
+							<button type="submit" class="btn btn-default">Update user</button>
+								<br>
+					    				<br>
+					    				<br>
+			
+						</form>
+					</div><!--/sign up form-->
+					
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+							</div>
+						</div>
+					</div>
+	<p></p>
+										<p></p>
+											<p></p>
+	</body>
+		
+	
+
+	
+}
+

@@ -1,0 +1,46 @@
+@(info: String)
+
+@import helper._
+
+@main("Login"){
+
+
+<body>
+<header id="header"><!--header-->
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+					<div class="logo pull-right">
+						<div class="search_box">
+								<form action="/search" method="GET">
+									<input id="q" name="q" type="text" placeholder="Search" />
+								</form>
+									</div>
+								</div>	
+							</div>		
+						<div class="row">
+					</div>
+				</div>
+			</div>	
+		</header>
+		<div class="container">
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Login</h2>
+						<div class="col-sm-6 col-sm-offset-1">
+					<div class="signup-form"><!--sign up form-->
+						<h2>@info</h2>
+						<form action="@routes.Application.login" method="POST">
+							<input type="text" id="email" name="email" placeholder="Email" />
+							<input type="password" id="password" name="password" placeholder="Password" />
+							<button type="submit" id="submit">Login</button>
+						</form>
+					</div><!--/login form-->
+						<br>
+						<br>
+						<br>
+						<br>
+				</div>
+			</body>
+		</html>
+   
+}

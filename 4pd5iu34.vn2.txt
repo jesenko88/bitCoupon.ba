@@ -1,0 +1,82 @@
+﻿Added first page for sprint 2 , with menu and 3 coupons.
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch frontendsprint2
+# Changes to be committed:
+#	modified:   app/views/index.scala.html
+#	modified:   bin/views/index.scala.html
+#	new file:   public/css/styleeaa6.css
+#	new file:   public/images/404/404.png
+#	new file:   public/images/404/Thumbs.db
+#	new file:   public/images/Thumbs.db
+#	modified:   public/images/_DS_Store
+#	new file:   public/images/blog/Thumbs.db
+#	new file:   public/images/blog/blog-one.jpg
+#	new file:   public/images/blog/blog-three.jpg
+#	new file:   public/images/blog/blog-two.jpg
+#	new file:   public/images/blog/man-four.jpg
+#	new file:   public/images/blog/man-one.jpg
+#	new file:   public/images/blog/man-three.jpg
+#	new file:   public/images/blog/man-two.jpg
+#	new file:   public/images/blog/socials.png
+#	new file:   public/images/cart/Thumbs.db
+#	new file:   public/images/cart/one.png
+#	new file:   public/images/cart/three.png
+#	new file:   public/images/cart/two.png
+#	new file:   public/images/home/Thumbs.db
+#	new file:   public/images/home/bg_border.png
+#	new file:   public/images/home/gallery1.jpg
+#	new file:   public/images/home/gallery2.jpg
+#	new file:   public/images/home/gallery3.jpg
+#	new file:   public/images/home/gallery4.jpg
+#	new file:   public/images/home/girl1.jpg
+#	new file:   public/images/home/girl2.jpg
+#	new file:   public/images/home/girl3.jpg
+#	new file:   public/images/home/iframe1.png
+#	new file:   public/images/home/iframe2.png
+#	new file:   public/images/home/iframe3.png
+#	new file:   public/images/home/iframe4.png
+#	new file:   public/images/home/logo.png.jpg
+#	new file:   public/images/home/map.png
+#	new file:   public/images/home/new.png
+#	new file:   public/images/home/partner1.png
+#	new file:   public/images/home/partner2.png
+#	new file:   public/images/home/partner3.png
+#	new file:   public/images/home/partner4.png
+#	new file:   public/images/home/pricing.png
+#	new file:   public/images/home/product1.jpg
+#	new file:   public/images/home/product2.jpg
+#	new file:   public/images/home/product3.jpg
+#	new file:   public/images/home/product4.jpg
+#	new file:   public/images/home/product5.jpg
+#	new file:   public/images/home/product6.jpg
+#	new file:   public/images/home/recommend1.jpg
+#	new file:   public/images/home/recommend2.jpg
+#	new file:   public/images/home/recommend3.jpg
+#	new file:   public/images/home/sale.png
+#	new file:   public/images/home/searchicon.png
+#	new file:   public/images/home/shipping.jpg
+#	new file:   public/images/product-details/1.jpg
+#	new file:   public/images/product-details/Thumbs.db
+#	new file:   public/images/product-details/new.jpg
+#	new file:   public/images/product-details/rating.png
+#	new file:   public/images/product-details/share.png
+#	new file:   public/images/product-details/similar1.jpg
+#	new file:   public/images/product-details/similar2.jpg
+#	new file:   public/images/product-details/similar3.jpg
+#	new file:   public/images/shop/Thumbs.db
+#	new file:   public/images/shop/advertisement.jpg
+#	new file:   public/images/shop/product10.jpg
+#	new file:   public/images/shop/product11.jpg
+#	new file:   public/images/shop/product12.jpg
+#	new file:   public/images/shop/product7.jpg
+#	new file:   public/images/shop/product8.jpg
+#	new file:   public/images/shop/product9.jpg
+#	new file:   public/js/ajaxanval.js
+#	new file:   public/js/ajaxanvaleaa6.js
+#	new file:   public/js/customeaa6.js
+#	new file:   public/js/jquery.countdown.min.js
+#	new file:   public/js/jquery.icheck.min.js
+#	new file:   public/js/jquery.royalslider.mineaa6.js
+#
+

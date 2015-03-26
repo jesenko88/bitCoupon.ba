@@ -1,0 +1,113 @@
+@(name: String)(categories: List[Category])
+
+@import helper._
+
+@main("User Panel") {
+
+<body>
+		<header id="header"><!--header-->
+		
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-bottom"><!--header-bottom-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="/">Home</a></li>
+								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
+								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
+								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
+								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
+
+							<ul class="nav navbar-nav collapse navbar-collapse">						                            
+								<li><a href="#">Coupon panel</a></li>
+
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</div>
+		</header>
+	</section>
+
+
+	<div class="container">
+					
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Coupon Creation</h2>
+						<div class="col-sm-6 col-sm-offset-1">
+						
+						
+					@if(Sesija.adminCheck(ctx()) == true) {
+					<div class="signup-form"><!--sign up form-->
+						<form action="@routes.CouponController.addCoupon" method ="POST"
+						enctype="multipart/form-data" >
+						
+							<input type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
+							<input type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
+							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
+							<label> Choose your coupon photo</label>
+							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+
+							<select id="category" name="category" required>
+						    <option value="" style="display:none">Select category</option>
+							@for(category <- categories) {
+								<option>@category.name</option>
+								}
+								<option >New Category</option>
+							</select>
+							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
+							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
+							<p></p>
+							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>
+							<button type="submit" class="btn btn-default">Create Coupon</button>
+								<p></p>
+									<p></p>
+										<p></p>
+											<p></p>
+						</form>
+					</div><!--/sign up form-->
+					} else {
+					<div class="container">
+					<label>Sorry! You need to be registered company to be able to create a coupon!</label>
+					</div>
+					}	
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+							</div>
+						</div>
+					</div>
+	<p></p>
+										<p></p>
+											<p></p>
+	</body>
+		
+	
+
+	
+}
+
