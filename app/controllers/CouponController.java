@@ -388,7 +388,7 @@ public class CouponController extends Controller {
 			Logger.error("There was error with deleting photo with id: " +id);
 		}
 		
-		return ok(updateCouponView.render(session("name"), cp, allCategories, Photo.photosByCoupon(cp)));
+		return redirect("/editCoupon/" +cp.id);
 		
 	}
 	
