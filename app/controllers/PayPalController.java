@@ -86,7 +86,7 @@ public class PayPalController extends Controller {
 			 */
 			details = new ArrayList<String>();
 			details.add("Quantity: " + Integer.toString(quantity));
-			details.add("Todal price: " + totalPriceString);
+			details.add("Total price: " + totalPriceString);
 			
 			List<Transaction> transactions = new ArrayList<Transaction>();
 			transactions.add(transaction);
