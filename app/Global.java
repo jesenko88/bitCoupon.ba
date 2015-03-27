@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Date;
 
 import helpers.HashHelper;
 import models.Category;
@@ -54,7 +55,7 @@ public class Global extends GlobalSettings {
 		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
-			Coupon.createCoupon(nameCoupon1, 80, null,
+			Coupon.createCoupon(nameCoupon1, 80, new Date(),
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
@@ -64,7 +65,7 @@ public class Global extends GlobalSettings {
 			Coupon.createCoupon(
 					nameCoupon2,
 					40,
-					null,
+					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
 					remarkCoupon2);
@@ -73,7 +74,7 @@ public class Global extends GlobalSettings {
 			Coupon.createCoupon(
 					nameCoupon3,
 					20,
-					null,
+					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
 					remarkCoupon3);

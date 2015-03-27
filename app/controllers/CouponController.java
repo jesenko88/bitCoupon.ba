@@ -211,11 +211,11 @@ public class CouponController extends Controller {
 	 */
 	
 
-	public static boolean expCoupon(){
+	public static boolean isExpired(long id){
 	Date current = new Date();
-	Date expDate = couponForm.bindFromRequest().get().dateExpire;
+	Date expDate = Coupon.find(id).dateExpire;
 	
-		if (current.after(expDate)) {
+		if (expDate.after(current)) {
 			return true;
 		} else {
 			return false;
