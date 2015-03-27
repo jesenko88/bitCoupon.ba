@@ -87,7 +87,7 @@ public class Application extends Controller {
 			Logger.info("Invalid login form");
 			return badRequest(Loginpage.render(loginMsg));
 		}
-
+		Logger.debug("Mail: " + mail + " Pass: " + password);
 		if (User.verifyLogin(mail, password) == true) {
 			User cc = User.getUser(mail);
 			session().clear();

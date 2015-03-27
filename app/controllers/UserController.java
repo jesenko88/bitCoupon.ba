@@ -498,14 +498,19 @@ public class UserController extends Controller {
 		}
 
 			User u = User.getUser(mail);
-			u.username = u.username;
-			u.email = mail;
+			if(u == null) {
+				flash("error", "Please enter the email you registered with!");
+				return badRequest(setNewPassView.render(mail));
+			}
 			u.password = HashHelper.createPassword(newPassword);
+			EmailVerification setVerified = new EmailVerification(u.id, true);
+			setVerified.save();
 			u.updated = new Date();
-			session().clear();
 			session("name", u.username);
 			u.save();
-			Logger.info(u.username + " logged in");	
+			Logger.info(u.username + " logged in. With password: " +newPassword);	
+			Logger.debug(u.password);
+			Logger.debug("Hash: " +  HashHelper.checkPass(newPassword,u.password) );
 		return ok(profile.render(u));
 	}
 
