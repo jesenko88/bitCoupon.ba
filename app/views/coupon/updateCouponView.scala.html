@@ -71,9 +71,10 @@
                </div>
             </div>
             <!-- GALERY -->
-            
-	            <div class="col-sm-5">
-	            
+             <p>If you cannot see images, please refresh page. </p>
+	            <div class="col-sm-5">	           
+       	 			
+       	
 		           @if(Photo.photosByCoupon(coupon) != null){
 			          @for(photo <- photos){
 				        <form method="POST" action="@routes.CouponController.deletePhoto(photo.id)">
@@ -88,7 +89,7 @@
 		           }
 		          	           	            
 	            </div>
-       
+       	
        <!--  Gallery  -->            
          </div>
       </div>
