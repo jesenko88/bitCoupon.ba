@@ -6,46 +6,33 @@
 	
 	
 <body>
-		<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
-			<div class="container">
-					
+<header id="header"><!--header-->
+	<div class="header-middle"><!--header-middle-->
+		<div class="container">
+			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+			<div class="logo pull-right">
+				<div class="search_box">
+					<form action="/search" method="GET">
+							<input id="q" name="q" type="text" placeholder="Search" />
+					</form>
+				</div>
+			</div>	
+				</div>	
+				<div class="row">
 			</div>
 		</div>
-		</div><!--/header_top-->
-	
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-						</div>
-					</div>
-				</div>
-			</div>
-				</div>
-			
-		</header>
-		
-	</section>
-	
-	
-	
-		
+	</div>	
+</header>
 
-	
 	<div class="container">
 	<span>@message</span>
 	<br>
 	<br>
 	<br>
 
-	
 	<form action="/loginpage" >
 							<button type="submit" id="submit" class="btn btn-primary"> Go To Login </button>
 						</form>
-	
 					</div>
 </body>
 }

@@ -84,7 +84,7 @@ public class Application extends Controller {
 
 		if (mail.isEmpty() || password.length() < 6) {
 
-			Logger.info("Invalid login form");
+			Logger.info("Invalid login form, mail empty or short password");
 			return badRequest(Loginpage.render(loginMsg));
 		}
 
@@ -113,13 +113,18 @@ public class Application extends Controller {
 	 */
 	public static Result logout() {
 
-		Logger.info(session("name") + " has logout");
+		Logger.info(session("name") + " has logged out");
 		session().clear();
 		return redirect("/");
 	}
 
+	/**
+	 * Renders the info page if user tries to access a page
+	 * without needed permission
+	 * @return
+	 */
 	public static Result loginToComplete() {
-		Logger.info("Login to complete this action");
+		Logger.info("Login to complete page previewed");
 		return badRequest(loginToComplete.render("Login to complete this action"));
 	}
 	
@@ -133,6 +138,7 @@ public class Application extends Controller {
 			return ok(contact.render(null, new Form<Contact>(Contact.class)));
 		} else {
 			User currentUser = User.find(name);
+			Logger.info("User " + currentUser + " accessed the contact page");
 			return ok(contact.render(currentUser, new Form<Contact>(Contact.class)));
 		}
 	}
@@ -194,7 +200,8 @@ public class Application extends Controller {
 								}
 								
 								flash("error", "WARNING! An error occured! You need to fill in the captcha!");
-								return redirect("/contact");
+								User currentUser = User.find(name);
+								return ok(contact.render(currentUser,submit));
 							}
 						});
 				return holder;

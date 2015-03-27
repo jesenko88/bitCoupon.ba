@@ -1,4 +1,4 @@
-@(name: String)
+@(name: String)(categories: List[Category])
 
 @import helper._
 
@@ -6,23 +6,7 @@
 
 <body>
 		<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
 		
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="col-sm-12">
-						
-							<ul class="nav navbar-nav">
- 							<li><a href="@routes.UserController.profilePage(name)" class="active"> @name </a></li>
- 							<li><a href="/logout" class="active"><i class="active"></i> Logout</a></li>					
-							</ul>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		</div><!--/header_top-->
 		
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -47,9 +31,16 @@
 							</button>
 						</div>
 						<div class="mainmenu pull-left">
+
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="/">Home</a></li>							                            
+								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
+								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
+								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
+								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
+
+							<ul class="nav navbar-nav collapse navbar-collapse">						                            
 								<li><a href="#">Coupon panel</a></li>
+
 							</ul>
 						</div>
 						
@@ -59,23 +50,7 @@
 			</div>
 		</header>
 	</section>
-	
-	@if(flash.get("success")){
-		<div class="alert alert-success" role="alert"> 
-			<div class="container">
-				@flash.get("success") 
-			</div>
-		</div>
-	}
 
-
-	@if(flash.get("error")){
-		<div class="alert alert-danger" role="alert"> 
-			<div class="container">
-				@flash.get("error") 
-			</div>
-		</div>
-	}
 
 	<div class="container">
 					
@@ -86,13 +61,25 @@
 						
 					@if(Sesija.adminCheck(ctx()) == true) {
 					<div class="signup-form"><!--sign up form-->
-						<form action="@routes.CouponController.addCoupon" method ="POST" >
-							<input type="text" name="name" id="name" placeholder="Title" required/>
-							<input type="text" name="price" id="price" placeholder="Price" required/>
-							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
-							<input type="text" name="picture" id="picture" placeholder="URL of image" />
-							<input type="text" name="category" id="category" placeholder="Category" required/>
-							<textarea name="description" id="description" rows="6" placeholder="Description of Coupon" required></textarea>	
+						<form action="@routes.CouponController.addCoupon" method ="POST"
+						enctype="multipart/form-data" >
+						
+							<input type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
+							<input type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
+					 	@*	<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
+						*@	<input type="date" id="datepicker" name="dateExpire">
+							<label> Choose your coupon photo</label>
+							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+
+							<select id="category" name="category" required>
+						    <option value="" style="display:none">Select category</option>
+							@for(category <- categories) {
+								<option>@category.name</option>
+								}
+								<option >New Category</option>
+							</select>
+							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
+							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
 							<p></p>
 							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>
 							<button type="submit" class="btn btn-default">Create Coupon</button>

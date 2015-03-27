@@ -1,19 +1,15 @@
 import java.util.Date;
-
 import helpers.HashHelper;
+import models.Category;
 import models.Coupon;
 import models.EmailVerification;
 import models.User;
-
 import org.junit.*;
-
-import play.mvc.*;
 import play.test.*;
 import play.libs.F.*;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
-import static org.fluentlenium.core.filter.FilterConstructor.*;
-import static org.junit.Assert.*;
+
 
 public class IntegrationTest {
 
@@ -21,6 +17,8 @@ public class IntegrationTest {
 	 * add your integration test here in this example we just check if the
 	 * welcome page is being shown
 	 */
+	
+
 	@Test
 	public void test() {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
@@ -70,7 +68,7 @@ public class IntegrationTest {
 
 						User.createUser("tester", "tester@bitcamp.ba",
 								HashHelper.createPassword("123456"), true);
-						EmailVerification setVerified = new EmailVerification(2, true);
+						EmailVerification setVerified = new EmailVerification(3, true);
 						setVerified.save();
 
 						browser.goTo("http://localhost:3333/loginpage");
@@ -94,9 +92,10 @@ public class IntegrationTest {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
 				HTMLUNIT, new Callback<TestBrowser>() {
 					public void invoke(TestBrowser browser) {
-
+						Category food = new Category("Food");
+						food.save();
 						Coupon.createCoupon("TestCoupon", 55.4, 
-								new Date(), "url", "category", "description",
+								new Date(), "url", food, "description",
 								"remark");
 						browser.goTo("http://localhost:3333/");
 						assertThat(browser.pageSource()).contains("TestCoupon");
@@ -134,8 +133,9 @@ public class IntegrationTest {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
 				HTMLUNIT, new Callback<TestBrowser>() {
 					public void invoke(TestBrowser browser) {
-
-						long couponId = Coupon.createCoupon("TestCoupon", 55.8, new Date(), "url", "category",
+						Category food = new Category("Food");
+						food.save();
+						long couponId = Coupon.createCoupon("TestCoupon", 55.8, new Date(), "url", food,
 								"description", "remark");
 						Coupon.delete(couponId);
 						browser.goTo("http://localhost:3333/coupon/" + couponId);
@@ -145,5 +145,119 @@ public class IntegrationTest {
 				});
 
 	}
+	
+	/**
+	 * Testing if user (non-admin) can accesse to admin panel
+	 */
+	@Test
+	public void testSecurityAdmin() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						User.createUser("tester", "tester@bitcamp.ba",
+								HashHelper.createPassword("123456"), false);
+						EmailVerification setVerified = new EmailVerification(3, true);
+						setVerified.save();
 
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("tester@bitcamp.ba");
+						browser.fill("#password").with("123456");
+						browser.submit("#submit");
+						
+						browser.goTo("http://localhost:3333/control-panel/user/2");
+						assertThat(browser.pageSource().contains(":( Login to complete this action"));
+
+					
+					}
+					});
+
+		}
+	/**
+	 * Test if admin can accesse to loginpage
+	 */
+	@Test
+	public void testSecurityAdmin2() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("bitcoupon@gmail.com");
+						browser.fill("#password").with("bitadmin");
+						browser.submit("#submit");
+						
+						browser.goTo("http://localhost:3333//userPanel");
+						assertThat(browser.pageSource().contains("List of Users"));
+
+					
+					}
+					});
+
+		}
+	/**
+	 * Test if admin can accesse to couponePanel
+	 */
+	@Test
+	public void testSecurityAdmin3() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("admin@mail.com");
+						browser.fill("#password").with("bitadmin");
+						browser.submit("#submit");
+						
+						browser.goTo("http://localhost:3333//couponPanel");
+						assertThat(browser.pageSource().contains("COUPON CREATION"));
+
+					
+					}
+					});
+
+		}
+	/*
+	 * 
+	 * @Test for search user
+	 */
+	
+	@Test
+	public void testSearchUser() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback <TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("bitcoupon@gmail.com");
+						browser.fill("#password").with("bitadmin");
+						browser.submit("#submit");
+						browser.goTo("http://localhost:3333/userPanel");
+						browser.fill("#qU").with("bitadmin");
+						assertThat(browser.pageSource()).contains("John");
+	
+						
+					}
+					});
+		
+	}
+	
+	/**
+	 * 
+	 *  @Test for coupon search
+	 */
+	
+		@Test
+	    public void testSearch() {
+	        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+	            public void invoke(TestBrowser browser) {
+	                browser.goTo("http://localhost:3333");
+	                browser.fill("#q").with("neum");
+	                assertThat(browser.pageSource()).contains("Dvije noći za dvoje u Hotelu Sunce Neum");
+	            }
+	        });
+	    }
+
+						
 }

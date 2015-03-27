@@ -6,27 +6,7 @@
 
 <body>
 		<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
 		
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="col-sm-12">
-						
-							<ul class="nav navbar-nav">
- 							<li><a class="active">@user.username </a></li>
- 								<li><a href="@routes.UserController.userUpdateView">Edit profile</a>
- 							<li><a href="/logout" class="active"><i class="active"></i> Logout</a></li>	
- 							@if(Sesija.adminCheck(ctx()) == true) {
- 							<li><a href="@routes.UserController.controlPanel(user.id)" class="fa fa-lock">Admin Panel</a></li>	
- 							}					
-							</ul>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		</div><!--/header_top-->
 		
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -37,46 +17,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="header-bottom"><!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li>
-								<a href="/">Home</a></li>
-								<li class="dropdown"><a href="#" class="active">Page1<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="/" class="active">Page2</a></li>
-										<li><a href="/">Page3</a></li> 
-										<li><a href="/">Page4</a></li> 
-										<li><a href="/">Page5</a></li> 
-										<li><a href="/loginpage">Login</a></li> 
-                                    </ul>
-                                </li> 
-								<li class="dropdown"><a href="#">Page6<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="/">Page7</a></li>
-										<li><a href="/">Page8</a></li>
-                                    </ul>
-                                </li> 
-								<li><a href="/">Page9</a></li>
-								<li><a href="/">Page10</a></li>
-							</ul>
-						</div>
-						
-					</div>
-				</div>
-			</div>
 			</div>
 		</header>
 	</section>
@@ -92,16 +32,35 @@
 
 				</div>
 			</div>
-	<img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+			<div class="userInforamtion">
+			
+			<div class="profilePicture">
+			@if(user.profilePicture == null){
+				<img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+			}else{
+				<img src='@routes.Assets.at(user.profilePicture)' class="avatar-profile"/>
+			}
+			
+			</div>
+			
+			
+			</div>
+			<div class="rightBox">
+			<ul>
+  				<li>Name: @user.username</li>
+  				<li>Email: @user.email</li>
+  				<li>Date create: @user.created</li>
+			</ul>
 
+			</div>
 		</div>
 	</section><!--/form-->
 							</div>
 						</div>
 					</div>
-	<p></p>
-										<p></p>
-											<p></p>
+		<br>
+		<br>
+		<br>
 	</body>
 		
 	

@@ -1,4 +1,4 @@
-@(username: String)(user: User)
+@(username: String)(user: User)(admins: List[User])
 
 @import helper._
 
@@ -6,23 +6,7 @@
 
 <body>
 		<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
 		
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="col-sm-12">
-						
-							<ul class="nav navbar-nav">
- 							<li><a href="@routes.UserController.profilePage(username)" class="active"> @username </a></li>
- 							<li><a href="/logout" class="active"><i class="active"></i> Logout</a></li>					
-							</ul>
-						</div>
-					</div>
-				</div>	
-			</div>
-		</div>
-		</div><!--/header_top-->
 		
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -48,8 +32,11 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li>
-								<a href="/">Home</a></li>
+								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
+								<li><a href="/allCoupons">Coupons panel</a></li>
+								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
+								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
+								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
 							</ul>
 						</div>
 						
@@ -60,22 +47,7 @@
 		</header>
 	</section>
 	
-		@if(flash.get("success")){
-		<div class="alert alert-success" role="alert"> 
-			<div class="container">
-				@flash.get("success") 
-			</div>
-		</div>
-	}
 
-
-		@if(flash.get("error")){
-		<div class="alert alert-danger" role="alert"> 
-			<div class="container">
-				@flash.get("error") 
-			</div>
-		</div>
-		}
 	
 	<div class="container">
 					
@@ -94,9 +66,9 @@
 							<input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
 										
 										
-								
+								@if((!user.equals(admins.get(0)) && admins.size() >= 1) || (user.equals(admins.get(0)) && admins.size() > 1)) {
 						   				<label for="isAdmin">Option for promoting user to administrator. Option "false" for removing user from Administrators and option "true" for adding user to Administrator group.</label>
-						    			<select id="isAdmin" name="isAdmin" id="isAdmin" value=@user.isAdmin>
+						    			<select id="isAdmin" name="isAdmin" value=@user.isAdmin>
 					     					<option selected="selected">@user.isAdmin</option>
 					     					@if( user.isAdmin == true ){
 						     				<option>false</option> 
@@ -104,6 +76,7 @@
 						     				<option>true</option> 
 						     				}					     							
 					    				</select>
+					    				}
 					    				<br>
 					    				<br>
 							<button type="submit" class="btn btn-default">Update user</button>

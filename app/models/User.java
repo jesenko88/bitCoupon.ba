@@ -2,12 +2,15 @@ package models;
 
 import helpers.HashHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
 import javax.persistence.*;
 
+import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
@@ -40,9 +43,11 @@ public class User extends Model {
 	public Date created;
 	
 	public Date updated;
+	
+	public String profilePicture;
 
 
-	static Finder<Long, User> find = new Finder<Long, User>(Long.class,
+	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
 	public User(String username, String email, String password, boolean isAdmin) {
@@ -74,8 +79,18 @@ public class User extends Model {
 
 	/* Return all users */
 	public static List<User> all() {
-		return find.all();
+		return getFind().all();
 	}
+	
+	/**
+	 * 
+	 * @return all users as List<User>
+	 */
+	public static List<User> allList() {
+		List<User> users = find.findList();
+		return users;
+	}
+
 	
 	
 	public void setAdmin(boolean isAdmin){
@@ -96,7 +111,7 @@ public class User extends Model {
 	 */
 	public static boolean verifyLogin(String mail, String password) {
 		try {
-			User user = find.where().eq("email", mail).findUnique();
+			User user = getFind().where().eq("email", mail).findUnique();
 			if(user != null && EmailVerification.isEmailVerified(user.id)){
 				return HashHelper.checkPass(password, user.password);
 			}
@@ -106,6 +121,7 @@ public class User extends Model {
 				
 
 		} catch (NullPointerException e) {
+			Logger.error(e.getMessage());
 			return false;
 		}
 
@@ -122,65 +138,96 @@ public class User extends Model {
 	 * @return boolean true or false
 	 */
 	public static boolean verifyRegistration(String username, String email) {
-		List<User> usname = find.where().eq("username", username).findList();
-		List<User> mail = find.where().eq("email", email).findList();
+		List<User> usname = getFind().where().eq("username", username).findList();
+		List<User> mail = getFind().where().eq("email", email).findList();
 		if (usname.isEmpty() && mail.isEmpty()) {
 			return true;
 		} else
 			return false;
 
 	}
-
-	/*
-	 * TODO return a username by given mail
+	
+	/**
+	 * Returns all admin email's
+	 * @return List<String>
 	 */
-	public static long getId(String mail) {
-		User user = find.where().eq("email", mail).findUnique();
-		
-		return user.id;
+	public static List<String> allAdminMails(){	
+		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
+		List<String> emails = new ArrayList<String>();
+		for(User u: userList){
+			emails.add(u.email);
+		}
+		return emails;
 	}
 
 	/*
 	 * Return user by mail
 	 */
 	public static User getUser(String mail) {
-		User user = find.where().eq("email", mail).findUnique();
+		User user = getFind().where().eq("email", mail).findUnique();
 
 		return user;
 	}
 	
-	public static void update(long id){
-		//TODO
-	}
-
 	/*
 	 * Delete user by id
 	 */
 	public static void delete(long id) {
-		find.byId(id).delete();
+		getFind().byId(id).delete();
 	}
 
 	/*
 	 * Find user by ID
 	 */
 	public static User find(long id) {
-		return find.byId(id);
+		return getFind().byId(id);
 	}
 
 	public static User find(boolean isAdmin) {
-		return find.where().eq("isAdmin", isAdmin).findUnique();
+		return getFind().where().eq("isAdmin", isAdmin).findUnique();
+	}
+	/*
+	 * Find and return list of admins
+	 */
+	public static List<User>findAdmins(boolean isAdmin){
+		return getFind().where().eq("isAdmin",isAdmin).findList();//proba-provjeriti
 	}
 
 	/* 
 	 * Find and return user by username 
 	 */
 	public static User find(String username) {
-		return find.where().eq("username", username).findUnique();
+		return getFind().where().eq("username", username).findUnique();
 	}
 
 	public static boolean check(String mail) {
-		return find.where().eq("email", mail).findUnique() != null;
+		return getFind().where().eq("email", mail).findUnique() != null;
 	}
-		
 	
-}//end of class User
+	/**
+	 * Checks if the user is last admin
+	 * @param user - user which we check
+	 * @return true if user is admin, else return false
+	 */
+	public static boolean isLastAdmin(User user) {
+		List<User> adminList=User.findAdmins(true);
+		if(adminList.size() == 1 && user.equals(adminList.get(0))) 
+			return true;
+		return false;
+	}
+
+	/**
+	 * @return the find
+	 */
+	public static Finder<Long, User> getFind() {
+		return find;
+	}
+
+	/**
+	 * @param find the find to set
+	 */
+	public static void setFind(Finder<Long, User> find) {
+		User.find = find;
+	}
+	
+}
