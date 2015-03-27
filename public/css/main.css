@@ -911,6 +911,17 @@ h2.title {
   color: #696763;
 }
 
+.productinfoOrange{
+	font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #FE980F;
+}
+.boxS{
+	width: 80%;
+	border: gray,
+	
+}
 .productinfo img{
   width: 100%;
 }

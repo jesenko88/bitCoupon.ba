@@ -172,6 +172,7 @@ public class IntegrationTest {
 					});
 
 		}
+	
 	/**
 	 * Test if admin can accesse to loginpage
 	 */
@@ -195,6 +196,7 @@ public class IntegrationTest {
 					});
 
 		}
+	
 	/**
 	 * Test if admin can accesse to couponePanel
 	 */
@@ -218,5 +220,5 @@ public class IntegrationTest {
 					});
 
 		}
-
+					
 }

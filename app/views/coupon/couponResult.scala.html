@@ -33,18 +33,19 @@
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center">
-						
+										<div>
 										<ul>
 										@for( info <- details ){
 											<h3><li><p> @info </p></li></h3>
 										}	
 										</ul>
+										</div>
 										
-							<form>
-							<button  type="submit" formaction="@routes.PayPalController.approveTransaction()">Submit</button>
+						<form action="@routes.PayPalController.approveTransaction()" method="POST">
+							<button  type="submit" id="submit">Submit</button>
 							<button  type="submit" formaction="/" >Cancel transaction</button>
-							</form>
-					
+							
+					<form>
 						
 							<div class="product-information"><!--/product-information-->
 								<h2> @coupon.name </h2>
@@ -70,5 +71,3 @@
 						</body>
 					
 }
-
-
