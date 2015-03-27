@@ -6,11 +6,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
 import helpers.FileUpload;
+
 import java.util.List;
+
 import com.avaje.ebeaninternal.server.persist.BindValues.Value;
+
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -22,6 +26,7 @@ import views.html.user.*;
 import views.html.admin.users.*;
 import views.html.coupon.*;
 import models.*;
+
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
@@ -431,10 +436,11 @@ public class UserController extends Controller {
 	}
 
 	public static Result newPassword() {
-		if (userForm.hasErrors()) {
+		DynamicForm forma = Form.form().bindFromRequest();
+		if (forma.hasErrors()) {
 			return redirect("/inputEmail");
 		}
-		String mail = userForm.bindFromRequest().get().email;
+		String mail = forma.data().get("email");
 
 		if (mail.equals("Email")) {
 			flash("error", "Email is required for new password !");
@@ -458,32 +464,48 @@ public class UserController extends Controller {
 		String verificationEmail = EmailVerification.addNewRecord(u.id);
 		MailHelper.send(mail,
 				"Click on the link below to set a new password <br>"
-						+ "http://localhost:9000/setNewPassword/");
-		flash("success",
-				"Request for new password has been sent on this email: " + mail);
+						+ "http://localhost:9000/setNewPassView/"
+						+ verificationEmail);
+		flash("success", "Request for password has been sent on this email: "
+				+ mail);
 		return ok(inputEmail.render());
 	}
+	
+	public static Result setNewPassView(String email) {
+		return ok(setNewPassView.render(email));
+	}
 
-	public static Result setNewPassword() {
-		if (userForm.hasErrors()) {
+	public static Result setNewPassword(String email) {
+
+		DynamicForm forma = Form.form().bindFromRequest();
+		String mail = forma.data().get("email");
+		String newPassword = forma.data().get("newPassword");
+		String confPass = forma.data().get("confirmPassword");
+		if (forma.hasErrors()) {
 			return redirect("/setNewPassword");
 		}
-		String mail = userForm.bindFromRequest().get().email;
-		User u = User.getUser(mail);
-		String password = userForm.bindFromRequest().get().password;
-		String confPass = userForm.bindFromRequest().field("confirmPassword")
-				.value();
 
-		if (mail.equals("Email")) {
+		if (mail.isEmpty()) {
 			flash("error", "Email is required for registration !");
-			return badRequest(setNewPassword.render());
-		} else if (password.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return badRequest(setNewPassword.render());
-		} else if (!password.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return badRequest(setNewPassword.render());
+			return badRequest(setNewPassView.render(mail));
 		}
+		if (newPassword.length() < 6) {
+			flash("error", "Password must be at least 6 characters!");
+			return badRequest(setNewPassView.render(mail));
+		} else if (!newPassword.equals(confPass)) {
+			flash("error", "Passwords don't match, try again ");
+			return badRequest(setNewPassView.render(mail));
+		}
+
+			User u = User.getUser(mail);
+			u.username = u.username;
+			u.email = mail;
+			u.password = HashHelper.createPassword(newPassword);
+			u.updated = new Date();
+			session().clear();
+			session("name", u.username);
+			u.save();
+			Logger.info(u.username + " logged in");	
 		return ok(profile.render(u));
 	}
 
