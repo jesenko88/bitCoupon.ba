@@ -79,7 +79,7 @@
 									<label>Enter the amount of coupons </label>
 									<form action="/couponpurchase" method="POST" data-paypal-button="true">
 									<input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
-									<input type="number" step="1" id="quantity" name="quantity" placeholder="0" required/>
+									<input type="number" step="1" id="quantity" name="quantity" min="1" placeholder="0" required/>
 									<button type="submit" >
  										 <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
 									</button>
