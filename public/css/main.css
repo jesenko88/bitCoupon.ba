@@ -44,6 +44,16 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: none;
 }
 
+.paypal-info{
+	text-align: center;
+	margin-left: 30%;
+	margin-right: 30%;
+}
+.paypal-approve{
+	text-align: center;
+	margin-left: 9%;
+}
+
 /**  Morali smo staviti classe na ovo mjesto jer nece da povuce html ukoliko ubacimo na kraj main.css-a **/
 .uploadPicture{
 	width: 100%;

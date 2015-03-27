@@ -14,7 +14,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.index;
+import views.html.*;
 import views.html.coupon.*;
 
 import com.paypal.api.payments.Amount;
@@ -86,7 +86,7 @@ public class PayPalController extends Controller {
 			 */
 			details = new ArrayList<String>();
 			details.add("Quantity: " + Integer.toString(quantity));
-			details.add("Todal price: " + totalPriceString);
+			details.add("Total price: " + totalPriceString);
 			
 			List<Transaction> transactions = new ArrayList<Transaction>();
 			transactions.add(transaction);
@@ -197,7 +197,7 @@ public class PayPalController extends Controller {
 		Logger.info(session("name") + " approved transaction: //TODO");
 		flash("success","Transaction complete");
 		User currentUser = User.find(session("name"));
-		return ok(couponResult.render(currentUser, coupon, details));
+		return ok(index.render(currentUser, Coupon.all()));
 	}
 	
 }
