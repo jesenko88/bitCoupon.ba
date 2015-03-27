@@ -19,6 +19,7 @@ POST   /updateUser                    controllers.UserController.updateUser(id: 
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /updateUser                    controllers.UserController.userUpdateView()
 GET    /userPanel                     controllers.UserController.listUsers()
+GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
 GET    /verifyEmailUpdate/:username   controllers.UserController.verifyEmailUpdate(username: String)
 GET    /searchUsers                   controllers.UserController.searchUsers(qU: String)
 
@@ -27,6 +28,12 @@ GET    /editUser/:id                  controllers.UserController.adminEditUserVi
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /changePass/:id                controllers.UserController.changePass(id: Long)
 GET    /changePass                    controllers.UserController.changePassView()
+
+GET    /inputEmail                    controllers.UserController.inputEmailView()
+POST   /sendRequest                   controllers.UserController.sendRequest()
+
+GET    /setNewPassView/:id            controllers.UserController.setNewPassView(id: String)
+POST   /setNewPassword                controllers.UserController.setNewPassword(id: String)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
@@ -40,7 +47,6 @@ GET    /search                        controllers.CouponController.search(q: Str
 GET    /allCoupons                    controllers.CouponController.listCoupons()
 
 
-GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()
