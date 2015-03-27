@@ -67,6 +67,14 @@ public class CouponController extends Controller {
 	 */
 	public static Result deleteCoupon(long id) {
 		Coupon c = Coupon.find(id);
+		List<Photo> photos = Photo.photosByCoupon(c);
+		if(photos != null){
+			for(Photo photo: photos){
+				photo.coupon = null;
+				Photo.delete(photo.id);
+			}
+		}
+		
 		Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");
 		Coupon.delete(id);
 		return redirect("/");
