@@ -50,8 +50,6 @@ public class Coupon extends Model {
 	
 	public String remark;
 
-	@OneToMany
-	public Photo photo;
 	/*
 	 * public String code;
 	 * 

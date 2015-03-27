@@ -71,6 +71,16 @@ public class CouponController extends Controller {
 	 * @return redirect to index after delete
 	 */
 	public static Result deleteCoupon(long id) {
+		Coupon c = Coupon.find(id);
+		List<Photo> photos = Photo.photosByCoupon(c);
+		if(photos != null){
+			for(Photo photo: photos){
+				photo.coupon = null;
+				Photo.delete(photo.id);
+			}
+		}
+		
+		
 		Coupon.delete(id);
 		Logger.info("coupon deleted");
 		return redirect("/");
