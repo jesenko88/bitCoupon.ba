@@ -12,13 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.imageio.ImageIO;
-
 import org.h2.util.StringUtils;
-
 import com.google.common.io.Files;
-
 import models.Category;
 import models.Coupon;
 import models.Photo;
@@ -31,7 +27,6 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import play.Logger;
 import views.html.coupon.*;
 import views.html.*;
 import views.html.admin.users.*;

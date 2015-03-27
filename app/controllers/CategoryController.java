@@ -3,17 +3,19 @@ package controllers;
 import helpers.AdminFilter;
 import helpers.FileUpload;
 
-import java.text.ParseException;
 import java.util.List;
 
 import models.Category;
 import models.Coupon;
 import models.User;
 import play.data.Form;
+import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.category.*;
-import play.mvc.Controller;
+import views.html.category.CategoriesList;
+import views.html.category.categoryPage;
+import views.html.category.categoryPanel;
+import views.html.category.editCategory;
 
 public class CategoryController extends Controller {
 
@@ -65,6 +67,7 @@ public class CategoryController extends Controller {
 
 		String name = categoryForm.bindFromRequest().field("name").value();
 		if (name.length() < 4) {
+			
 			flash("error","Name must be at least 4 characters");
 			return ok(categoryPanel.render(session("name")));
 
