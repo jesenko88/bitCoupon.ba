@@ -58,8 +58,6 @@ GET    /deleteCategory/:id            controllers.CategoryController.deleteCateg
 GET    /editCategory/                 controllers.CategoryController.editCategoryView(name: String)
 POST   /editCategory/                 controllers.CategoryController.updateCategory(id: Long)
 
-#Ovaj prvi get ne koristimo, mozda poslije dodati poseban view nakon klika na buy pa ovdje proslijedit
-GET    /couponpurchase                controllers.PayPalController.showPurchase()
 POST   /couponpurchase                controllers.PayPalController.purchaseProcessing()
 GET    /couponsuccess                 controllers.PayPalController.couponSuccess()
 GET    /couponfail                    controllers.PayPalController.couponFail()

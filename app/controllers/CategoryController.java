@@ -8,6 +8,7 @@ import java.util.List;
 import models.Category;
 import models.Coupon;
 import models.User;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -67,16 +68,18 @@ public class CategoryController extends Controller {
 
 		String name = categoryForm.bindFromRequest().field("name").value();
 		if (name.length() < 4) {
-			
+			Logger.info(session("name") + " entered a short category name");
 			flash("error","Name must be at least 4 characters");
 			return ok(categoryPanel.render(session("name")));
 
 		}
 		if(name.length() > 20){
+			Logger.info(session("name") + " entered a too long category name");
 			flash("error","Name must be max 120 characters long");
 			return ok(categoryPanel.render(session("name")));
 		}
 		if(Category.exists(name)){
+			Logger.info(session("name") + " tried to add a existing category. (" + name +")");
 			flash("error","Category already exists");
 			return ok(categoryPanel.render(session("name")));
 		}
@@ -88,6 +91,7 @@ public class CategoryController extends Controller {
 			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
 		}
 	
+		Logger.info(session("name") + " created a new category: \"" + name + "\"");
 		flash("success","Category " + "\""+ name + "\"" + " added");
 		return ok(categoryPanel.render( session("name")));
 	}
@@ -108,6 +112,7 @@ public class CategoryController extends Controller {
 		}
 		c.coupons = null;
 		c.save();
+		Logger.info(session("name") + " deleted category: \"" + c.name + "\"");
 		Category.delete(id);
 		return ok(CategoriesList.render(session("name"), Category.all()));
 	}
@@ -121,7 +126,7 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result editCategoryView(String name){
-		Category category = Category.findByName(name); /////////////////////----
+		Category category = Category.findByName(name);
 		return ok(editCategory.render(session("name"),category));
 	}
 	
@@ -162,7 +167,7 @@ public class CategoryController extends Controller {
 
 		
 		category.save();
-		
+		Logger.info(session("name") + " updated category \"" + category.name + "\"");
 		flash("success","Category " + "\""+ name + "\"" + " updated");
 		return ok(editCategory.render( session("name"), category));
 	}

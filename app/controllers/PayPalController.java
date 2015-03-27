@@ -37,13 +37,6 @@ public class PayPalController extends Controller {
 	static PaymentExecution paymentExecution;
 	static Payment payment;
 
-	
-	/*  paypal  */
-	
-	//get route for purchase //ovo nam ne treba, koristit cemo buy na coupon template-u
-	public static Result showPurchase(){
-		return TODO;
-	}
 
 	/**
 	 * 
@@ -75,6 +68,10 @@ public class PayPalController extends Controller {
 			amount.setTotal(totalPriceString);
 			amount.setCurrency("USD");
 			
+			/*
+			 * Formation description to send to the PayPal checkout page
+			 * >temporary solution<
+			 */
 			String description = String.format("Coupon: %s\n"
 					+ "Price: %s\n"
 					+ "Quantity: %d\n"
@@ -84,7 +81,9 @@ public class PayPalController extends Controller {
 			transaction.setDescription(description);
 			transaction.setAmount(amount);
 			
-			/* details to render in the success view*/
+			/*
+			 *  details to render in the success view
+			 */
 			details = new ArrayList<String>();
 			details.add("Quantity: " + Integer.toString(quantity));
 			details.add("Todal price: " + totalPriceString);
@@ -195,7 +194,7 @@ public class PayPalController extends Controller {
 		} catch (PayPalRESTException e) {
 			Logger.debug(e.getMessage());
 		}
-		
+		Logger.info(session("name") + " approved transaction: //TODO");
 		flash("success","Transaction complete");
 		User currentUser = User.find(session("name"));
 		return ok(couponResult.render(currentUser, coupon, details));
