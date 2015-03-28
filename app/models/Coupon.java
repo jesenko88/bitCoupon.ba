@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -199,7 +200,58 @@ public class Coupon extends Model {
 	   
     }
 
-   
+    /**
+     * Method sorting coupons by category.
+     * @return
+     */
+    public static List<Coupon> sortByCategory(){
+    	List<Coupon> all = find.all();
+    	
+    	/*
+    	 * Implementing comparator.
+    	 * Comparing category names and return its string compare value.
+    	 */
+    	Comparator<Coupon> c = new Comparator<Coupon>() {
+    		@Override
+			public int compare(Coupon c1, Coupon c2) {
+				return c1.category.name.compareTo(c2.category.name);
+			}
+		};
+		 all.sort(c);		
+    	return all;
+    }
+    
+    
+    public static List<Coupon> sortByPrice(){
+    	List<Coupon> all = find.all();
+    	Comparator<Coupon> c = new Comparator<Coupon>() {
+    		@Override
+			public int compare(Coupon c1, Coupon c2) {				
+    			return (int)(c1.price - c2.price);
+			}
+		};
+		all.sort(c);
+		return all;
+    }
+    
+    public static List<Coupon> sortByDate(){
+    	List<Coupon> all = find.all();
+    	Comparator<Coupon> c = new Comparator<Coupon>() {
+    		@Override
+			public int compare(Coupon c1, Coupon c2) {				
+    			if(c1.dateExpire.before(c2.dateExpire)){
+    				return -1;
+    			}else if(c1.dateExpire.after(c2.dateExpire)){
+    				return 1;
+    			}else{
+    				return 0;		
+    			}    			
+			}
+		};
+		all.sort(c);
+		return all;
+    }
+    
 /*
    public static List<Coupon> listByDate(){
 	   List<Coupon> oldCoupon = new ArrayList<Coupon>();
