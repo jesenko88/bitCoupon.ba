@@ -199,14 +199,17 @@ public class Coupon extends Model {
 	   return "Expiring: " + dateFormat.format(dateExpire);
 	   
     }
-
+    
+    //Static constants we're going to use for sorts.
+    static final int SORT_ASCENDING = 1;
+    static final int SORT_DESCENDING = -1; 
     /**
      * Method sorting coupons by category.
+     * @param method which you choose to sort, 1 for ascending, -1 for descending.
      * @return
-     */
-    public static List<Coupon> sortByCategory(){
-    	List<Coupon> all = find.all();
-    	
+     */   
+    public static List<Coupon> sortByCategory(int method){
+    	List<Coupon> all = find.all();    
     	/*
     	 * Implementing comparator.
     	 * Comparing category names and return its string compare value.
@@ -215,27 +218,60 @@ public class Coupon extends Model {
     		@Override
 			public int compare(Coupon c1, Coupon c2) {
 				return c1.category.name.compareTo(c2.category.name);
-			}
+			} 
 		};
+		
+		if(method == SORT_ASCENDING){
 		 all.sort(c);		
+		}else if(method == SORT_DESCENDING){
+			all.sort(c.reversed()); 
+		}else{
+			Logger.error("Wrong method type for sorting");
+			return null;
+		}
     	return all;
     }
     
-    
-    public static List<Coupon> sortByPrice(){
+    /**
+     * Method sorting by price.
+     * @param method for sort. 1 for ascending, -1 for descending.
+     * @return
+     */
+    public static List<Coupon> sortByPrice(int method){
     	List<Coupon> all = find.all();
+    	
+    	/*
+    	 * Creating comparator for sorting by price.
+    	 */
     	Comparator<Coupon> c = new Comparator<Coupon>() {
     		@Override
 			public int compare(Coupon c1, Coupon c2) {				
     			return (int)(c1.price - c2.price);
 			}
 		};
-		all.sort(c);
+		
+		if(method == SORT_ASCENDING){
+			all.sort(c);
+		}else if(method == SORT_DESCENDING){
+			all.sort(c.reversed());
+		}else{
+			Logger.error("Sorted by price went wrong, parameter sent as method is wrong");
+			return null;
+		}		
 		return all;
     }
     
-    public static List<Coupon> sortByDate(){
+    /**
+     * Method sorting coupons by date.
+     * @param method for sort. 1` for ascending sort, -1 for descending.
+     * @return List of sorted coupons or null if list was empty or method was wrong.
+     */
+    public static List<Coupon> sortByDate(int method){
     	List<Coupon> all = find.all();
+    	
+    	/*
+    	 * Creating comparator for sorting by date.
+    	 */
     	Comparator<Coupon> c = new Comparator<Coupon>() {
     		@Override
 			public int compare(Coupon c1, Coupon c2) {				
@@ -248,9 +284,108 @@ public class Coupon extends Model {
     			}    			
 			}
 		};
-		all.sort(c);
+		if(method == SORT_ASCENDING){
+			all.sort(c); 		
+		}else if(method == SORT_DESCENDING){
+			all.sort(c.reversed());
+		}else{
+			Logger.error("Sorting by date went wrong, method not accepted.");
+			return null;
+		}		
 		return all;
     }
+    
+    /**
+     * Method for sorting coupon list.
+     * @param cpns List of coupons to sort.
+     * @param method method of sorting, 1 for ascending, -1 for descending.
+     * @return sorted list of coupons or null if there was error.
+     */
+    public static List<Coupon> sortByCategory(List<Coupon> cpns, int method){  ;    
+    	/*
+    	 * Implementing comparator.
+    	 * Comparing category names and return its string compare value.
+    	 */
+    	Comparator<Coupon> c = new Comparator<Coupon>() {
+    		@Override
+			public int compare(Coupon c1, Coupon c2) {
+				return c1.category.name.compareTo(c2.category.name);
+			} 
+		};
+		
+		if(method == SORT_ASCENDING){
+		 cpns.sort(c);		
+		}else if(method == SORT_DESCENDING){
+			cpns.sort(c.reversed()); 
+		}else{
+			Logger.error("Wrong method type for sorting");
+			return null;
+		}
+    	return cpns;
+    }
+    
+    /**
+     * Method for sorting list sent as parameter. 
+     * @param cpns list of coupons
+     * @param method of sorting, 1 for ascending, -1 for descending
+     * @return sorted list or null
+     */
+    public static List<Coupon> sortByPrice(List<Coupon> cpns, int method){    	
+    	/*
+    	 * Creating comparator for sorting by price.
+    	 */
+    	Comparator<Coupon> c = new Comparator<Coupon>() {
+    		@Override
+			public int compare(Coupon c1, Coupon c2) {				
+    			return (int)(c1.price - c2.price);
+			}
+		};
+		
+		if(method == SORT_ASCENDING){
+			cpns.sort(c);
+		}else if(method == SORT_DESCENDING){
+			cpns.sort(c.reversed());
+		}else{
+			Logger.error("Sorted by price went wrong, parameter sent as method is wrong");
+			return null;
+		}		
+		return cpns;
+    }
+    
+    /**
+     * Method for sorting list of coupons by date.
+     * @param cpns
+     * @param method
+     * @return
+     */
+    public static List<Coupon> sortByDate(List<Coupon> cpns, int method){
+    /*
+   	 * Creating comparator for sorting by date.
+   	 */
+   	Comparator<Coupon> c = new Comparator<Coupon>() {
+   		@Override
+			public int compare(Coupon c1, Coupon c2) {				
+   			if(c1.dateExpire.before(c2.dateExpire)){
+   				return -1;
+   			}else if(c1.dateExpire.after(c2.dateExpire)){
+   				return 1;
+   			}else{
+   				return 0;		
+   			}    			
+			}
+		};
+		if(method == SORT_ASCENDING){
+			cpns.sort(c); 		
+		}else if(method == SORT_DESCENDING){
+			cpns.sort(c.reversed());
+		}else{
+			Logger.error("Sorting by date went wrong, method not accepted.");
+			return null;
+		}		
+		return cpns;
+    }
+    
+    
     
 /*
    public static List<Coupon> listByDate(){
