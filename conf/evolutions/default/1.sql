@@ -41,8 +41,14 @@ create table faq (
 create table photo (
   id                        integer not null,
   path                      varchar(255),
+  save_path                 varchar(255),
   coupon_id                 bigint,
   constraint pk_photo primary key (id))
+;
+
+create table transactions (
+  id                        bigint not null,
+  constraint pk_transactions primary key (id))
 ;
 
 create table user (
@@ -67,6 +73,8 @@ create sequence faq_seq;
 
 create sequence photo_seq;
 
+create sequence transactions_seq;
+
 create sequence user_seq;
 
 alter table coupon add constraint fk_coupon_category_1 foreign key (category_id) references category (id) on delete restrict on update restrict;
@@ -90,6 +98,8 @@ drop table if exists faq;
 
 drop table if exists photo;
 
+drop table if exists transactions;
+
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
@@ -103,6 +113,8 @@ drop sequence if exists email_verification_seq;
 drop sequence if exists faq_seq;
 
 drop sequence if exists photo_seq;
+
+drop sequence if exists transactions_seq;
 
 drop sequence if exists user_seq;
 

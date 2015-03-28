@@ -183,7 +183,7 @@ public class IntegrationTest {
 						
 
 						browser.goTo("http://localhost:3333/loginpage");
-						browser.fill("#email").with("admin@mail.com");
+						browser.fill("#email").with("bitcoupon@gmail.com");
 						browser.fill("#password").with("bitadmin");
 						browser.submit("#submit");
 						
@@ -218,5 +218,46 @@ public class IntegrationTest {
 					});
 
 		}
+	/*
+	 * 
+	 * @Test for search user
+	 */
+	
+	@Test
+	public void testSearchUser() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				HTMLUNIT, new Callback <TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("bitcoupon@gmail.com");
+						browser.fill("#password").with("bitadmin");
+						browser.submit("#submit");
+						browser.goTo("http://localhost:3333/userPanel");
+						browser.fill("#qU").with("bitadmin");
+						assertThat(browser.pageSource()).contains("John");
+	
+						
+					}
+					});
+		
+	}
+	
+	/**
+	 * 
+	 *  @Test for coupon search
+	 */
+	
+		@Test
+	    public void testSearch() {
+	        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+	            public void invoke(TestBrowser browser) {
+	                browser.goTo("http://localhost:3333");
+	                browser.fill("#q").with("neum");
+	                assertThat(browser.pageSource()).contains("Dvije noći za dvoje u Hotelu Sunce Neum");
+	            }
+	        });
+	    }
 
+						
 }

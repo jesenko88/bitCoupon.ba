@@ -12,13 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.imageio.ImageIO;
-
 import org.h2.util.StringUtils;
-
 import com.google.common.io.Files;
-
 import models.Category;
 import models.Coupon;
 import models.Photo;
@@ -31,7 +27,6 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import play.Logger;
 import views.html.coupon.*;
 import views.html.*;
 import views.html.admin.users.*;
@@ -39,7 +34,8 @@ import views.html.admin.users.*;
 public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
-
+	static List<Category> allCategories = Category.all();
+	
 	/**
 	 * 
 	 * @return renders the view for coupon add form
@@ -59,7 +55,7 @@ public class CouponController extends Controller {
 	public static Result showCoupon(long id) {
 		Coupon current = Coupon.find(id);
 		User cUser = User.find(session("name"));
-		return ok(coupontemplate.render(session("name"), cUser, current));
+		return ok(coupontemplate.render(cUser, current));
 	}
 
 	/**
@@ -70,8 +66,17 @@ public class CouponController extends Controller {
 	 * @return redirect to index after delete
 	 */
 	public static Result deleteCoupon(long id) {
+		Coupon c = Coupon.find(id);
+		List<Photo> photos = Photo.photosByCoupon(c);
+		if(photos != null){
+			for(Photo photo: photos){
+				photo.coupon = null;
+				Photo.delete(photo.id);
+			}
+		}
+		
+		Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");
 		Coupon.delete(id);
-		Logger.info("coupon deleted");
 		return redirect("/");
 	}
 
@@ -86,7 +91,7 @@ public class CouponController extends Controller {
 	public static Result editCoupon(long id) {
 		Coupon coupon = Coupon.find(id);
 		List<Category> categories = Category.all();
-		return ok(updateCouponView.render(session("name"), coupon, categories));
+		return ok(updateCouponView.render(session("name"), coupon, categories, Photo.photosByCoupon(coupon)));
 
 	}
 
@@ -109,27 +114,27 @@ public class CouponController extends Controller {
 
 		// TODO handle invalid inputs
 		List<Category> categories = Category.all();
-
+		List<Photo> photos = Photo.photosByCoupon(coupon);
 		coupon.name = couponForm.bindFromRequest().field("name").value();
 		if (coupon.name.length() < 4) {
-			flash("error", "Name must be minimal 4 characters long");
+			Logger.info(session("name") + "entered a short coupon name in coupon update");
 			return ok(updateCouponView.render(session("name"), coupon,
-					categories));
+					categories, photos ));
 		}
 		if (coupon.name.length() > 120) {
-			flash("error", "Name must be max 120 characters long");
+			Logger.info(session("name") + "entered a too long coupon name in coupon update");
 			return ok(updateCouponView.render(session("name"), coupon,
-					categories));
+					categories, photos));
 		}
 		/* price */
 		double price = couponForm.bindFromRequest().get().price;
 
 		if (price <= 0) {
-			Logger.info("Invalid price input");
+			Logger.info(session("name") + " entered a invalid price in coupon update");
 			flash("error", "Enter a valid price");
 
 			return badRequest(updateCouponView.render(session("name"), coupon,
-					categories));
+					categories, photos));
 		}
 		coupon.price = price;
 		/* date */
@@ -138,8 +143,9 @@ public class CouponController extends Controller {
 		if (date != null) {
 			if (date.before(current)) {
 				flash("error", "Enter a valid expiration date");
+				Logger.info(session("name") + " entered a invalid date in coupon update");
 				return ok(updateCouponView.render(session("name"), coupon,
-						categories));
+						categories, photos));
 			}
 			coupon.dateExpire = date;
 		}
@@ -154,7 +160,7 @@ public class CouponController extends Controller {
 			if (newCategory.isEmpty()) {
 				flash("error", "Enter new Category name");
 				return ok(updateCouponView.render(session("name"), coupon,
-						categories));
+						categories, photos));
 			}
 			coupon.category = Category.find(Category
 					.createCategory(newCategory));
@@ -169,8 +175,9 @@ public class CouponController extends Controller {
 			coupon.picture = assetsPath;
 		}
 		Coupon.updateCoupon(coupon);
+		Logger.info(session("name") + " updated coupon: " + coupon.id );
 		flash("success", "Coupon updated");
-		return ok(updateCouponView.render(session("name"), coupon, categories));
+		return ok(updateCouponView.render(session("name"), coupon, categories, photos));
 
 	}
 
@@ -190,7 +197,7 @@ public class CouponController extends Controller {
 			User u = User.find(session("name"));
 			return badRequest(index.render(u, Coupon.all()));
 		}
-
+		Logger.info(session("name") + " searched for: \"" + q + "\"");
 		return ok(index.render(null, coupons));
 	}
 
@@ -213,13 +220,13 @@ public class CouponController extends Controller {
 		List<Category> categories = Category.all();
 
 		if (name.length() < 4) {
-			Logger.info("Entered a short coupon name");
+			Logger.info(session("name") + "entered a short coupon name");
 			flash("error", "Name must be 4 characters long");
 			return badRequest(couponPanel.render(session("name"), categories));
 
 		}
 		if (name.length() > 70) {
-			Logger.info("Entered a too long coupon name");
+			Logger.info(session("name") + "entered a too long coupon name");
 			flash("error", "Name must be max 70 characters long");
 			return badRequest(couponPanel.render(session("name"), categories));
 		}
@@ -230,7 +237,7 @@ public class CouponController extends Controller {
 		double price = couponForm.bindFromRequest().get().price;
 
 		if (price <= 0) {
-			Logger.info("Invalid price input");
+			Logger.info(session("name") + "entered a invalid price ( <= 0 )");
 			flash("error", "Enter a valid price");
 			return badRequest(couponPanel.render(session("name"), categories));
 		}
@@ -239,7 +246,7 @@ public class CouponController extends Controller {
 		Date current = new Date();
 		Date date = couponForm.bindFromRequest().get().dateExpire;
 		if (date.before(current)) {
-			Logger.info("Invalid date input");
+			Logger.info(session("name") + "entered a invalid date");
 			flash("error", "Enter a valid expiration date");
 			return badRequest(couponPanel.render(session("name"), categories));
 
@@ -269,14 +276,16 @@ public class CouponController extends Controller {
 		// Path for saving file.
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
-			Coupon.createCoupon(name, price, date, assetsPath, category,
+			long id = Coupon.createCoupon(name, price, date, assetsPath, category,
 					description, remark);
+			Logger.info(session("name") + " created coupon " + id);
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		} else {
 			flash("success", "Coupon created without image");
-			Coupon.createCoupon(name, price, date, FileUpload.DEFAULT_IMAGE,
+			long id = Coupon.createCoupon(name, price, date, FileUpload.DEFAULT_IMAGE,
 					category, description, remark);
+			Logger.info(session("name") + " created coupon " + id + " without image");
 			return redirect("/couponPanel");
 		}
 	}
@@ -309,6 +318,7 @@ public class CouponController extends Controller {
 		 * chosen more then available number of photos.
 		 */
 		if (photos >= 4) {
+			Logger.info(session("name") + " tried to add too many photos");
 			flash("error",
 					"You already fullfilled this coupons photos. Delete some to add more.");
 			return redirect("/editCoupon/" + cp.id);
@@ -332,8 +342,9 @@ public class CouponController extends Controller {
 			if (FileUpload.confirmImage(part) != null) {
 				File temp = FileUpload.confirmImage(part);
 				String extension = FileUpload.getExtension(part);
+				String name = UUID.randomUUID().toString();
 				File saveFile = new File(savePath
-						+ UUID.randomUUID().toString() + extension);
+						+ name  + extension);
 				
 				//Resizing photos.
 				BufferedImage img;
@@ -356,13 +367,39 @@ public class CouponController extends Controller {
 						+ File.separator + "cpn" + couponId + File.separator
 						+ saveFile.getName();
 
-				Photo.create(assetsPath, cp);
+				Photo.create(assetsPath,saveFile.getPath(), cp);
 			}
 		}
-
-		return redirect("/editCoupon/" + cp.id);
+		flash("success", "Successfully uploaded photos.");	
+		Coupon coupon = Coupon.find(couponId);
+		return ok(updateCouponView.render(session("name"), coupon, allCategories, Photo.photosByCoupon(coupon)));
 	}
 	
+	/**
+	 * Method deletes photo from database and from folder where photo is.
+	 * 
+	 * @param id of photo
+	 * @return returns to editCoupon view.
+	 */
+	@Security.Authenticated(AdminFilter.class)
+	public static Result deletePhoto(int id){
+		Photo temp = Photo.find(id);
+		Coupon cp = temp.coupon;		
+		File image = new File(temp.savePath);	
+		try{
+			image.delete();				
+			temp.delete();
+			temp.save();
+			Logger.info(session("name") + " deleted image id:\"" + id + "\" from " + cp.name);
+			flash("succes", "You have successfuly deleted photo.");
+		}catch(Exception e){
+			flash("error", "There was error with deleting file");
+			Logger.error("There was error with deleting photo with id: " +id);
+		}
+		
+		return redirect("/editCoupon/" +cp.id);
+		
+	}
 	
 	
 	@Security.Authenticated(AdminFilter.class)

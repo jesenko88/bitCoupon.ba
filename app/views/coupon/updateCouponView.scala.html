@@ -1,103 +1,108 @@
-@(username: String)(coupon: Coupon)(categories: List[Category])
-
+@(username: String)(coupon: Coupon)(categories: List[Category])(photos : List[Photo])
 @import helper._
-
 @main("Coupon Panel") {
 <body>
-
-<header id="header"><!--header-->
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-				<div class="logo pull-right">
-			<div class="search_box">
-							<form action="/search" method="GET">
-							<input id="q" name="q" type="text" placeholder="Search" />
-							</form>
-							</div>
-								</div>	
-								</div>		
-			
-							
-				<div class="row">
-						</div>
-				</div>
-			</div>	
-		</header>
-	
-
-	
-	<div class="container">
-				
-					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">Coupon Update</h2>
-						<div class="row">
-						<div class="col-sm-7">
-						
-						<h4> Coupon: "@coupon.name" </h4>
-				
-					<div class="signup-form"><!--sign up form-->
-						<form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" enctype="multipart/form-data">
-							<label> Title: </label>
-							<input type="text" name="name" id="name" placeholder="Title" minlength="4" maxlength="70" value="@coupon.name" required/>
-
-							<label> Price: </label>
-							<input type="number" name="price" id="price" min="1" step="any" value="@coupon.getPriceString()" required/>
-							<p> Expiration date: @coupon.dateExpire </p>
-							<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
-							<label> Update coupon photo? </label>
-							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
-
-							<label> Category </label>
-						    <select id="category" name="category" >
-						    <option  style="display:none">@coupon.getCategoryName()</option>
-							@for(category <- categories) {
-								<option value="@category.name">@category.name</option>
-								}
-								<option >New Category</option>
-							</select>
-							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
-						
-							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>	
-							<p></p>
-							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> "@coupon.remark" </textarea>
-							<button type="submit" class="btn btn-default">Update Coupon</button>
-								<p></p>
-									<p></p>
-										<p></p>
-											<p></p>
-						</form>
-     </div>
-       </div>
-                				  <div class="col-sm-5">
-                  					   <h4>Add photos to coupon gallery </h4>
-                   				  <div class="signup-form">
-                       		 <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
-                           <input name="photo" type="file" multiple="multiple" max-uploads=3/>
-                           <button type="submit" class="btn btn-default">Submit</button>
-                          
-                        </form>
-                     </div>
-                  </div>
-             
+   <header id="header">
+      <!--header-->
+      <div class="header-middle">
+         <!--header-middle-->
+         <div class="container">
+            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            <div class="logo pull-right">
+               <div class="search_box">
+                  <form action="/search" method="GET">
+                     <input id="q" name="q" type="text" placeholder="Search" />
+                  </form>
+               </div>
             </div>
-					</div><!--/update Coupon form-->
-				
-				</div>
-			</div>
-		</div>
-	</section><!--/form-->
-							</div>
-						</div>
-					</div>
-	<p></p>
-										<p></p>
-											<p></p>
-	</body>
-		
-	
-
-	
+         </div>
+         <div class="row">
+         </div>
+      </div>
+      </div>	
+   </header>
+   <div class="container">
+      <div class="features_items">
+         <!--features_items-->
+         <h2 class="title text-center">Coupon Update</h2>
+         <div class="row">
+            <div class="col-sm-7">
+               <h4> Coupon: "@coupon.name" </h4>
+               <div class="signup-form">
+                  <!--sign up form-->
+                  <form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" enctype="multipart/form-data">
+                     <label> Title: </label>
+                     <input type="text" name="name" id="name" placeholder="Title" minlength="4" maxlength="70" value="@coupon.name" required/>
+                     <label> Price: </label>
+                     <input type="number" name="price" id="price" min="1" step="any" value="@coupon.getPriceString()" required/>
+                     <p> Expiration date: @coupon.dateExpire </p>
+                     <input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
+                     <label> Update coupon photo? </label>
+                     <input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+                     <label> Category </label>
+                     <select id="category" name="category" >
+                        <option  style="display:none">@coupon.getCategoryName()</option>
+                        @for(category <- categories) {
+                        <option value="@category.name">@category.name</option>
+                        }
+                        <option >New Category</option>
+                     </select>
+                     <input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
+                     <textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>
+                     <p></p>
+                     <textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> "@coupon.remark" </textarea>
+                     <button type="submit" class="btn btn-default">Update Coupon</button>
+                     <p></p>
+                     <p></p>
+                     <p></p>
+                     <p></p>
+                  </form>
+               </div>
+            </div>
+           
+            <div class="col-sm-5">
+               <h4>Add photos to coupon gallery </h4>
+               <br>
+               <div class="signup-form">
+                  <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
+                     <input name="photo" type="file" multiple="multiple" max-uploads=3/>
+                     <button type="submit" class="btn btn-default">Submit</button>
+                  </form>
+               </div>
+            </div>
+            <!-- GALERY -->
+             <p>If you cannot see images, please refresh page. </p>
+	            <div class="col-sm-5">	           
+       	 			
+       	
+		           @if(Photo.photosByCoupon(coupon) != null){
+			          @for(photo <- photos){
+				        <form method="POST" action="@routes.CouponController.deletePhoto(photo.id)">
+				          
+				           <div class="uploadPicture">
+				            	<img alt="140x140" src="@routes.Assets.at(photo.path)" class="img-thumbnail" />
+				           	
+				            	<button type="submit"  class="btn btn-danger btn-sm">DELETE</button>
+				           </div>
+				       </form>
+				          }
+		           }
+		          	           	            
+	            </div>
+       	
+       <!--  Gallery  -->            
+         </div>
+      </div>
+      <!--/update Coupon form-->
+   </div>
+   </div>
+   </div>
+   </section><!--/form-->
+   </div>
+   </div>
+   </div>
+   <p></p>
+   <p></p>
+   <p></p>
+</body>
 }
-
-

@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
 POST   /login                         controllers.Application.login()
@@ -19,6 +20,9 @@ POST   /updateUser                    controllers.UserController.updateUser(id: 
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /updateUser                    controllers.UserController.userUpdateView()
 GET    /userPanel                     controllers.UserController.listUsers()
+
+GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
+
 GET    /verifyEmailUpdate/:username   controllers.UserController.verifyEmailUpdate(username: String)
 GET    /searchUsers                   controllers.UserController.searchUsers(qU: String)
 
@@ -29,18 +33,23 @@ POST   /updateUser/:id                controllers.UserController.adminUpdateUser
 POST   /changePass/:id                controllers.UserController.changePass(id: Long)
 GET    /changePass                    controllers.UserController.changePassView()
 
+GET    /inputEmail                    controllers.UserController.inputEmailView()
+POST   /sendRequest                   controllers.UserController.sendRequest()
+
+GET    /setNewPassView/:id            controllers.UserController.setNewPassView(id: String)
+POST   /setNewPassword                controllers.UserController.setNewPassword(id: String)
+
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
 POST   /galleryUpload                 controllers.CouponController.galleryUpload(id: Long)
+POST   /deletephoto                   controllers.CouponController.deletePhoto(id: Integer)					
+
 GET    /coupon/:id                    controllers.CouponController.showCoupon(id: Long)
 GET    /deleteCoupon/:id              controllers.CouponController.deleteCoupon(id :Long)
 POST   /editCoupon/:id                controllers.CouponController.updateCoupon(id: Long)
 GET    /editCoupon/:id                controllers.CouponController.editCoupon(id: Long)
 GET    /search                        controllers.CouponController.search(q: String)
 GET    /allCoupons                    controllers.CouponController.listCoupons()
-
-
-GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()
@@ -49,7 +58,6 @@ POST   /editFAQ                       controllers.FAQController.updateFAQ(id: In
 GET    /editFAQ/@:id                  controllers.FAQController.editFAQView(id: Integer)
 GET    /deleteFAQ                     controllers.FAQController.deleteFAQ(id: Integer)
 
-
 GET    /categoryPanel                 controllers.CategoryController.addCategoryView()
 GET    /categoryList                  controllers.CategoryController.listCategories()
 GET    /category/                     controllers.CategoryController.categoryView(name: String)
@@ -57,6 +65,11 @@ POST   /addCategory                   controllers.CategoryController.addCategory
 GET    /deleteCategory/:id            controllers.CategoryController.deleteCategory(id: Long)
 GET    /editCategory/                 controllers.CategoryController.editCategoryView(name: String)
 POST   /editCategory/                 controllers.CategoryController.updateCategory(id: Long)
+
+POST   /couponpurchase                controllers.PayPalController.purchaseProcessing()
+GET    /couponsuccess                 controllers.PayPalController.couponSuccess()
+GET    /couponfail                    controllers.PayPalController.couponFail()
+GET    /approveTransaction            controllers.PayPalController.approveTransaction()
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
