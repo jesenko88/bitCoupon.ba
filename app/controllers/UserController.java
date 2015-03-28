@@ -98,10 +98,10 @@ public class UserController extends Controller {
 					"Click on the link below to verify your e-mail adress <br>"
 							+ "http://localhost:9000/verifyEmail/"
 							+ verificationEmail);
-			// User cc = User.getUser(mail);
+			flash("success", "A verification mail has been sent to your email address!");
 			Logger.info("A verification mail has been sent to email address");
 			return ok(Loginpage
-					.render("A verification mail has been sent to your email address"));
+					.render(" "));
 
 		} else {
 			flash("error", "Username or email allready exists!");
@@ -338,11 +338,13 @@ public class UserController extends Controller {
 		String message = "";
 		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
 			EmailVerification.updateRecord(recordToUpdate);
+			flash("success", "Your e-mail is now verified. To login click on the button below");
 			Logger.info("e-mail is now verified");
-			message = "You're e-mail is now verified. To login click on the button below";
+			message = " ";
 		} else {
+			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
 			Logger.info("Verification period is expired");
-			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
+			message = " ";
 		}
 		return ok(verifyEmail.render(message));
 	}
@@ -354,9 +356,11 @@ public class UserController extends Controller {
 		String message = "";
 		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
 			EmailVerification.updateRecord(recordToUpdate);
-			message = "Your profile is updated. To go to the profile page click on the button below";
+		flash("success", "Your profile is updated. To go to the profile page click on the button below");
+			message = " ";
 		} else {
-			message = "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'";
+			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
+			message = " ";
 		}
 		return ok(verifyEmailUpdate.render(message, u.username));
 	}

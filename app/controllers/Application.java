@@ -75,28 +75,31 @@ public class Application extends Controller {
 		Form<Login> login = new Form<Login>(Login.class);
 		
 		if (login.hasGlobalErrors()) {
+			flash("error", "Invalid email or password");
 			Logger.info("Login global error");
-			return badRequest(Loginpage.render(loginMsg));
+			return badRequest(Loginpage.render(" "));
 		}
 		
 		String mail = login.bindFromRequest().get().email;
 		String password = login.bindFromRequest().get().password;
 
 		if (mail.isEmpty() || password.length() < 6) {
-
+flash("error", "Invalid login form, mail empty or short password");
 			Logger.info("Invalid login form, mail empty or short password");
-			return badRequest(Loginpage.render(loginMsg));
+			return badRequest(Loginpage.render(" "));
 		}
 		Logger.debug("Mail: " + mail + " Pass: " + password);
 		if (User.verifyLogin(mail, password) == true) {
 			User cc = User.getUser(mail);
 			session().clear();
 			session("name", cc.username);
+			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.username + " logged in");
 			return ok(index.render(cc, Coupon.all()));
 		}
+		flash("error", "Invalid email or password");
 		Logger.info("User tried to login with invalid email or password");
-		return badRequest(Loginpage.render("Invalid email or password"));
+		return badRequest(Loginpage.render(" "));
 	}
 
 	/** 
