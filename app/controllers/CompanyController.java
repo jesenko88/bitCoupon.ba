@@ -3,7 +3,9 @@ package controllers;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-
+import views.html.*;
+import views.html.coupon.*;
+import views.html.company.*;
 import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.CurrentUserFilter;
@@ -26,7 +28,7 @@ public class CompanyController extends Controller {
 	 * @return Renders the registration view
 	 */
 	public static Result signup() {
-		return ok(signup.render("Username", "Email"));
+		return ok(companySignup.render("Name", "Email"));
 	}
 
 	/**
@@ -39,7 +41,7 @@ public class CompanyController extends Controller {
 	public static Result register() {
 
 		if (companyForm.hasErrors()) {
-			return redirect("/signup ");
+			return redirect("/companySignup");
 		}
 
 		String name = companyForm.bindFromRequest().get().name;
@@ -51,17 +53,17 @@ public class CompanyController extends Controller {
 				.value();
 
 		if (name.length() < 4 || name.equals("Name")) {
-			flash("error", "Usernam must be at least 4 chatacters");
-			return badRequest(signup.render(null, mail));
+			flash("error", "Name must be at least 4 chatacters");
+			return badRequest(companySignup.render(null, mail));
 		} else if (mail.equals("Email")) {
 			flash("error", "Email is required for registration !");
-			return badRequest(signup.render(name, null));
+			return badRequest(companySignup.render(name, null));
 		} else if (password.length() < 6) {
 			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render(name, mail));
+			return badRequest(companySignup.render(name, mail));
 		} else if (!password.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render(name, mail));
+			return badRequest(companySignup.render(name, mail));
 		}
 
 		else if (Company.verifyRegistration(name, mail) == true) {
@@ -81,7 +83,7 @@ public class CompanyController extends Controller {
 		} else {
 			flash("error", "Username or email allready exists!");
 			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render(name, mail));
+			return badRequest(companySignup.render(name, mail));
 		}
 	}
 	
@@ -93,7 +95,7 @@ public class CompanyController extends Controller {
 	 * @return Renders the user update view for editing profile
 	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result companyUpdateView() {   // dodati view za update kompanije
+	public static Result companyUpdateView() {   
 		Company currentCompany = Company.find(session("name"));
 		return ok(companyUpdate.render(currentCompany));
 	}
@@ -162,7 +164,7 @@ public class CompanyController extends Controller {
 		List<User> adminList = User.findAdmins(true);
 		Company companyToUpdate = Company.findById(id);
 		return ok(adminEditCompany
-				.render(session("name"), companyToUpdate, adminList));
+				.render(session("name"), companyToUpdate));
 	}
 
 	/**
@@ -204,7 +206,7 @@ public class CompanyController extends Controller {
 		company.save();
 		flash("success", "Company " + company.name + " updated!");
 		Logger.info(session("name") + " updated company: " + company.name);
-		return ok(adminEditCompany.render(session("name"), company, adminList)); // add adminEditCompany view
+		return ok(adminEditCompany.render(session("name"), company));
 	}
 
 	
@@ -222,7 +224,7 @@ public class CompanyController extends Controller {
 
 		if (companies.isEmpty()) {
 			flash("error", "No such user");
-			return badRequest(companyList.render(null, User.all())); // add view for company list
+			return badRequest(companyList.render(null, Company.all())); 
 		}
 
 		return ok(companyList.render(null, companies));
@@ -240,7 +242,7 @@ public class CompanyController extends Controller {
 			return redirect("/");
 		}
 
-		return ok(profile.render(c));  // add view for company profile page
+		return ok(companyProfile.render(c)); 
 	}
 	
 	/**
@@ -322,7 +324,7 @@ public class CompanyController extends Controller {
 			Logger.debug(assetsPath);
 			c.logo = assetsPath;
 			c.save();
-			return redirect("/profile/@" + u.username);
+			return redirect("/profile/@" + c.name);
 		} else {
 			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
 			String assetsPath = FileUpload.imageUpload(subFolder);
@@ -378,7 +380,7 @@ public class CompanyController extends Controller {
 		company.save();
 		flash("success", "Password changed!");
 		Logger.info(company.name + " is updated");
-		return ok(profile.render(company));
+		return ok(companyProfile.render(company));
 
 	}
 
@@ -462,7 +464,7 @@ public class CompanyController extends Controller {
 			Logger.info(c.name + " logged in. With password: " + newPassword);	
 			Logger.debug(c.password);
 			Logger.debug("Hash: " +  HashHelper.checkPass(newPassword,c.password) );
-		return ok(profile.render(c));
+		return ok(companyProfile.render(c));
 	}
 
 }

@@ -10,6 +10,18 @@ create table category (
   constraint pk_category primary key (id))
 ;
 
+create table company (
+  id                        bigint not null,
+  name                      varchar(255),
+  email                     varchar(255),
+  password                  varchar(255),
+  created                   timestamp,
+  updated                   timestamp,
+  logo                      varchar(255),
+  verfied                   boolean,
+  constraint pk_company primary key (id))
+;
+
 create table coupon (
   id                        bigint not null,
   name                      varchar(255),
@@ -65,6 +77,8 @@ create table user (
 
 create sequence category_seq;
 
+create sequence company_seq;
+
 create sequence coupon_seq;
 
 create sequence email_verification_seq;
@@ -90,6 +104,8 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists category;
 
+drop table if exists company;
+
 drop table if exists coupon;
 
 drop table if exists email_verification;
@@ -105,6 +121,8 @@ drop table if exists user;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists category_seq;
+
+drop sequence if exists company_seq;
 
 drop sequence if exists coupon_seq;
 
