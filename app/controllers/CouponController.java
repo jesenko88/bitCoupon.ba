@@ -12,9 +12,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.imageio.ImageIO;
+
 import org.h2.util.StringUtils;
+
 import com.google.common.io.Files;
+
 import models.Category;
 import models.Coupon;
 import models.Photo;
@@ -200,7 +204,24 @@ public class CouponController extends Controller {
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
 		return ok(index.render(null, coupons));
 	}
+	
+	/**
+	 * Edib pokusaj :)
+	 * @return
+	 */
+	
 
+	public static boolean expCoupon(){
+	Date current = new Date();
+	Date expDate = couponForm.bindFromRequest().get().dateExpire;
+	
+		if (current.after(expDate)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * First checks if the coupon form has errors. Creates a new coupon or
 	 * renders the view again if any error occurs.
@@ -208,6 +229,9 @@ public class CouponController extends Controller {
 	 * @return redirect to create coupon view
 	 * @throws ParseException
 	 */
+		
+	
+	
 	public static Result addCoupon() {
 
 		if (couponForm.hasErrors()) {
