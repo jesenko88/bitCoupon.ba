@@ -34,8 +34,7 @@ public class FileUpload extends Controller{
 		System.out.println("request.body.as ...");
 		MultipartFormData body = request().body().asMultipartFormData();
 
-		final String savePath = "." + File.separator + "public"
-				+ File.separator + "images" + File.separator + subFolder
+		final String savePath = IMAGES_FOLDER + subFolder
 				+ File.separator;
 
 		FilePart filePart = body.getFile("picture");
@@ -45,10 +44,8 @@ public class FileUpload extends Controller{
 			return null;
 		}
 		File image = filePart.getFile();
-		String extension = filePart.getFilename().substring(
-				filePart.getFilename().lastIndexOf('.'));
-		extension.trim();
-
+		String extension = getExtension(filePart);
+		
 		if (!extension.equalsIgnoreCase(".jpeg")
 				&& !extension.equalsIgnoreCase(".jpg")
 				&& !extension.equalsIgnoreCase(".png")) {

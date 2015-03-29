@@ -359,8 +359,7 @@ public class CouponController extends Controller {
 		 * Save path where our photos are going to be saved. Each coupon gets
 		 * his own folder with name cpn(+ID of coupon)
 		 */
-		String savePath = "." + File.separator + "public" + File.separator
-				+ "images" + File.separator + "coupon_photos" + File.separator
+		String savePath = FileUpload.IMAGES_FOLDER + "coupon_photos" + File.separator
 				+ "cpn" + couponId + File.separator;
 
 		Coupon cp = Coupon.find(couponId);
