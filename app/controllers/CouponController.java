@@ -200,7 +200,60 @@ public class CouponController extends Controller {
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
 		return ok(index.render(null, coupons));
 	}
-
+	
+	/**
+	 * Method for sorting coupon result. Can sort list of all coupons on index, 
+	 * or  just searched result of coupons.
+	 * @param ids
+	 * @return
+	 */
+	public static Result sort(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		String orderBy = df.data().get("orderby");
+		
+		//Getting sort method.
+		String parseMethod = df.data().get("method");		
+		int method = 0;		
+		if(parseMethod.equalsIgnoreCase("ascending")){
+			method = Coupon.SORT_ASCENDING;
+		}else if(parseMethod.equalsIgnoreCase("descending")){
+			method = Coupon.SORT_DESCENDING;
+		}else{
+			Logger.debug("Method went wrong");		}
+		
+		
+		Logger.debug("Method: " +method);
+		List<Coupon> sorted;
+		
+		if(orderBy.equalsIgnoreCase("Category")){
+			sorted = Coupon.sortByCategory(coupons, method);
+		}else if(orderBy.equalsIgnoreCase("Price")){
+			sorted = Coupon.sortByPrice(coupons, method);
+		}else if(orderBy.equalsIgnoreCase("Date")){
+			sorted = Coupon.sortByDate(coupons, method);
+		}else{
+			Logger.error("Wrong orderby type");
+			return TODO;
+		}
+		User current = Sesija.getCurrentUser(ctx());
+		return ok(index.render(current, sorted));
+	}
+	
+	
 	/**
 	 * First checks if the coupon form has errors. Creates a new coupon or
 	 * renders the view again if any error occurs.
