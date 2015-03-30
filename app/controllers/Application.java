@@ -76,7 +76,8 @@ public class Application extends Controller {
 		
 		if (login.hasGlobalErrors()) {
 			Logger.info("Login global error");
-			return badRequest(Loginpage.render(loginMsg));
+			flash("error","Login failed");
+			return badRequest(Loginpage.render(" "));
 		}
 		
 		String mail = login.bindFromRequest().get().email;
@@ -84,8 +85,11 @@ public class Application extends Controller {
 
 		if (mail.isEmpty() || password.length() < 6) {
 
+
 			Logger.info("Invalid login form, mail empty or short password");
-			return badRequest(Loginpage.render(loginMsg));
+			flash("error","Password incorect");
+			return badRequest(Loginpage.render(" "));
+
 		}
 		Logger.debug("Mail: " + mail + " Pass: " + password);
 		if (User.verifyLogin(mail, password) == true) {
@@ -93,18 +97,20 @@ public class Application extends Controller {
 			session().clear();
 			session("name", cc.username);
 			Logger.info(cc.username + " logged in");
+			flash("success","You are logged in as: " + mail);
 			return ok(index.render(cc, Coupon.all()));
 		}
 		Logger.info("User tried to login with invalid email or password");
-		return badRequest(Loginpage.render("Invalid email or password"));
+		flash("error","Incorecte password or email!");
+		return badRequest(Loginpage.render(" "));
 	}
 
 	/** 
 	 * @return renders the loginpage view
 	 */
 	public static Result loginpage() {
-		Logger.info(loginMsg);
-		return ok(Loginpage.render(loginMsg));
+		Logger.info("Log in successe");	
+		return ok(Loginpage.render(" "));
 	}
 
 	/**
@@ -112,9 +118,9 @@ public class Application extends Controller {
 	 * @return redirects to index
 	 */
 	public static Result logout() {
-
 		Logger.info(session("name") + " has logged out");
 		session().clear();
+		flash("success","You are logged out!");
 		return redirect("/");
 	}
 
