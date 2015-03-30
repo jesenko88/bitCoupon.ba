@@ -1,4 +1,6 @@
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import helpers.HashHelper;
@@ -70,11 +72,20 @@ public class Global extends GlobalSettings {
 					sport, descriptionCoupon2,
 					remarkCoupon2);
 		}
+		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "01/01/2051";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 			Coupon.createCoupon(
 					nameCoupon3,
 					20,
-					new Date(),
+					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
 					remarkCoupon3);

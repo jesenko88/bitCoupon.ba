@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.Coupon;
+import models.TransactionC;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -31,6 +32,7 @@ import com.paypal.base.rest.PayPalRESTException;
 
 public class PayPalController extends Controller {
 	
+	static User currentUser = User.find(session("name"));
 	static Coupon coupon;
 	static List<String> details;
 	static APIContext apiContext;
@@ -126,7 +128,6 @@ public class PayPalController extends Controller {
 		}
 		
 		flash("error", "Something went wrong, please try again later");
-		User currentUser = User.find(session("name"));
 		return ok(index.render(currentUser, Coupon.all()));
 	}
 	
@@ -167,7 +168,6 @@ public class PayPalController extends Controller {
 		Logger.debug(e.getMessage());
 	}
 		flash("info","Approve transaction");
-		User currentUser = User.find(session("name"));
 		return ok(couponResult.render(currentUser, coupon, details));
 	}
 	
@@ -176,7 +176,6 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result couponFail(){
-		User currentUser = User.find(session("name"));
 		flash("error","Transaction canceled");
 		return ok(coupontemplate.render(currentUser, coupon));
 	}
@@ -186,17 +185,17 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result approveTransaction(){
-		
-		try {
-			
+		//TODO add real seller
+		try {	
 			payment.execute(apiContext, paymentExecution);
+			TransactionC.createTransaction("testTransaction", currentUser, null, coupon);
 			
 		} catch (PayPalRESTException e) {
 			Logger.debug(e.getMessage());
 		}
 		Logger.info(session("name") + " approved transaction: //TODO");
 		flash("success","Transaction complete");
-		User currentUser = User.find(session("name"));
+		
 		return ok(index.render(currentUser, Coupon.all()));
 	}
 	
