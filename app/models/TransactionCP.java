@@ -1,12 +1,16 @@
 package models;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
 import controllers.PayPalController;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
+import scala.Array;
 
 @Entity
 public class TransactionCP extends Model{
@@ -28,6 +32,8 @@ public class TransactionCP extends Model{
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	public Coupon coupon;
+	
+	public Date date;
 
 	
 	private static Finder<Long, TransactionCP> find = new Finder<Long, TransactionCP>(Long.class,
@@ -43,6 +49,7 @@ public class TransactionCP extends Model{
 		this.buyer = buyer;
 		this.seller = seller;
 		this.coupon = coupon;
+		this.date = new Date();
 	}
 
 	public static long createTransaction(String payment_id, double money_amount, String token,
@@ -60,6 +67,14 @@ public class TransactionCP extends Model{
 	}
 	
 	
+	public static List<Coupon> boughtCoupons(long id) {
+		List<TransactionCP> ids = find.where().eq("buyer_id", id).findList();
+		List<Coupon> coupons = new ArrayList<>();
+		for ( TransactionCP tsc : ids) {
+			coupons.add(Coupon.find(tsc.coupon.id));
+		}
+		return coupons;
+	}
 	
 	
 }

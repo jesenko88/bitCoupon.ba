@@ -66,6 +66,7 @@ create table transaction_cp (
   buyer_id                  bigint,
   seller_id                 bigint,
   coupon_id                 bigint,
+  date                      timestamp,
   constraint pk_transaction_cp primary key (id))
 ;
 

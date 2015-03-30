@@ -514,4 +514,12 @@ public class UserController extends Controller {
 		return ok(profile.render(u));
 	}
 
+	
+	public static Result showBoughtCoupons(long uid) {
+		List<Coupon> boughtList = TransactionCP.boughtCoupons(uid);
+		
+		return ok(boughtCoupons.render(session("name"),boughtList));
+		
+	}
+	
 }
