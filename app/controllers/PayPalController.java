@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.Coupon;
-import models.TransactionC;
+import models.TransactionCP;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -38,6 +38,8 @@ public class PayPalController extends Controller {
 	static APIContext apiContext;
 	static PaymentExecution paymentExecution;
 	static Payment payment;
+	static double totalPrice;
+	static String paymentID, token;
 
 
 	/**
@@ -63,7 +65,7 @@ public class PayPalController extends Controller {
 			DynamicForm buyForm = Form.form().bindFromRequest();		
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			int quantity = Integer.parseInt(buyForm.data().get("quantity"));
-			Double totalPrice = coupon.price * quantity;
+			totalPrice = coupon.price * quantity;
 			
 			String totalPriceString = String.format("%1.2f",totalPrice);
 			
@@ -139,9 +141,9 @@ public class PayPalController extends Controller {
 		
 		DynamicForm paypalReturn = Form.form().bindFromRequest();
 		
-		String paymentID;
+		//paymentID;
 		String payerID;
-		String token;
+		
 		
 		paymentID = paypalReturn.get("paymentId");
 		payerID = paypalReturn.get("PayerID");
@@ -188,8 +190,9 @@ public class PayPalController extends Controller {
 		//TODO add real seller
 		try {	
 			payment.execute(apiContext, paymentExecution);
-			TransactionC.createTransaction("testTransaction", currentUser, null, coupon);
-			
+			TransactionCP.createTransaction( paymentID, totalPrice, token, currentUser, null, coupon);
+
+					
 		} catch (PayPalRESTException e) {
 			Logger.debug(e.getMessage());
 		}

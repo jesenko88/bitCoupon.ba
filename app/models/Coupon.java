@@ -58,7 +58,7 @@ public class Coupon extends Model {
 	public User seller;
 	
 	@OneToMany(mappedBy="coupon", cascade=CascadeType.ALL)
-	public List<TransactionC> buyers;
+	public List<TransactionCP> buyers;
 
 	/*
 	 * public String code;

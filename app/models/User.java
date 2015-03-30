@@ -47,10 +47,10 @@ public class User extends Model {
 	public String profilePicture;
 	
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
-	public List<TransactionC> bought_coupons;
+	public List<TransactionCP> bought_coupons;
 	
 	@OneToMany(mappedBy="seller", cascade=CascadeType.ALL)
-	public List<TransactionC> sold_coupons;
+	public List<TransactionCP> sold_coupons;
 
 
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
