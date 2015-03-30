@@ -174,7 +174,7 @@ public class IntegrationTest {
 		}
 	
 	/**
-	 * Test if admin can accesse to loginpage
+	 * Test if admin can access the loginpage
 	 */
 	@Test
 	public void testSecurityAdmin2() {
@@ -198,7 +198,7 @@ public class IntegrationTest {
 		}
 	
 	/**
-	 * Test if admin can accesse to couponePanel
+	 * Test if admin can access the couponePanel
 	 */
 	@Test
 	public void testSecurityAdmin3() {

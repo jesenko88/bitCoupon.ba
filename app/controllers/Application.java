@@ -87,7 +87,7 @@ public class Application extends Controller {
 
 
 			Logger.info("Invalid login form, mail empty or short password");
-			flash("error","Password incorect");
+			flash("error","Password incorrect");
 			return badRequest(Loginpage.render(" "));
 
 		}
@@ -101,7 +101,7 @@ public class Application extends Controller {
 			return ok(index.render(cc, Coupon.all()));
 		}
 		Logger.info("User tried to login with invalid email or password");
-		flash("error","Incorecte password or email!");
+		flash("error","Incorrect email or password!");
 		return badRequest(Loginpage.render(" "));
 	}
 
@@ -109,7 +109,7 @@ public class Application extends Controller {
 	 * @return renders the loginpage view
 	 */
 	public static Result loginpage() {
-		Logger.info("Log in successe");	
+		Logger.info("Log in successful");	
 		return ok(Loginpage.render(" "));
 	}
 
