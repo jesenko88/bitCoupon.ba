@@ -47,8 +47,8 @@ GET    /search                        controllers.CouponController.search(q: Str
 GET    /allCoupons                    controllers.CouponController.listCoupons()
 POST    /orderby                      controllers.CouponController.sort(ids: String)
 GET		/searchFilter				controllers.CouponController.searchPage()
-POST    /searchFilter               controllers.CouponController.searchfilter(ids: String)
-
+POST    /filterCategory               controllers.CouponController.filterCategory(ids: String)
+POST	/filterPrice				controllers.CouponController.filterPrice(ids: String)
 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()

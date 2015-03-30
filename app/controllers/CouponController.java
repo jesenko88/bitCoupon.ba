@@ -486,7 +486,7 @@ public class CouponController extends Controller {
 		return ok(searchFilter.render(coupons, categorys));
 	}
 
-	public static Result searchfilter(String ids){
+	public static Result filterCategory(String ids){
 		Logger.debug("Ids: "+ids);
 		/*
 		 * Getting all ids of coupons and adding them to list
@@ -509,11 +509,68 @@ public class CouponController extends Controller {
 				list.add(coupon);
 			}
 		}
+		/* PRICE Filter
+		double startPrice =Double.parseDouble( df.data().get("start_price"));
+		double endPrice   = Double.parseDouble( df.data().get("end_price"));
+		
+		
+		for(Coupon coupon : coupons){
+			if (coupon.price >= startPrice || coupon.price <= endPrice){
+				list.add(coupon);
+			}
+		}
+		*/
+		
+		
 		List<Category> categorys = Category.all();
 		return ok(index.render(null, list));
 		
 	
 
 	}
+	
+	
+	public static Result filterPrice(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		
+		// PRICE Filter
+		double startPrice =Double.parseDouble( df.data().get("start_price"));
+		double endPrice   = Double.parseDouble( df.data().get("end_price"));
+		if(startPrice > endPrice){
+			flash("error", "Please input correct values");
+			return ok(index.render(null, Coupon.all()));
+		}
+		
+		
+		for(Coupon coupon : coupons){
+			if (coupon.price >= startPrice && coupon.price <= endPrice){
+				list.add(coupon);
+			}
+		}
+		
+		List<Category> categorys = Category.all();
+		return ok(index.render(null, list));
+		
+	
+
+	}
+	
+	
+	
 	
 }

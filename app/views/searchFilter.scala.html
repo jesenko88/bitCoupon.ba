@@ -13,7 +13,14 @@
 			<div class="container">
 			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
 				<div class="logo pull-right">
-			
+			  <div class="search_box">
+                  <form action="/search" method="GET">
+                     <input id="q" name="q" type="text" placeholder="Search" />
+                  </form>               
+                  
+                  
+                  
+               </div>
 								</div>	
 								</div>		
 			
@@ -37,7 +44,7 @@
  
 				
 				
-	 <form action="@routes.CouponController.searchfilter(Coupon.commaSeparatedIds(coupons))" method="POST">
+	 <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
         
 		<select id="category" name="category" required>
 						    <option value="" style="display:none">Select category</option>
@@ -45,12 +52,18 @@
 								<option>@category.name</option>
 								}
 				</select>
-		      
-				<input type="submit" class="btn btn-success">                 
+				<input type="submit" class="btn btn-success"> 
+		                
   </form>			
 				
-				
-						      
+		
+	 <form action="@routes.CouponController.filterPrice(Coupon.commaSeparatedIds(coupons))" method="POST">
+	 <input type="number" name="start_price" id="start_price" min="1" step="any" placeholder="Price"/>
+	  <input type="number" name="end_price" id="end_price" min="1" step="any" placeholder="Price"/>
+		  
+				<input type="submit" class="btn btn-success"> 
+     </form>
+	 						      
    <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
          <select id="orderby" name="orderby" required>
 			<option value="" style="display:none">Order by: </option>							
