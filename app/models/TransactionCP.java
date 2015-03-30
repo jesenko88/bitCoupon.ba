@@ -1,6 +1,7 @@
 package models;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,16 @@ import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 import scala.Array;
 
+/**
+ * 
+ * TransactionCP class
+ * Name specified with 'CP' at the end because of
+ * possible naming issues, and standard usage of the name Transaction.
+ * This entity makes the relation between user and coupon.
+ * It stores the id's of the buyer, seller and the id of the sold coupon.
+ * Among that, other data is stored as well (payment_id, date ...etc)
+ *
+ */
 @Entity
 public class TransactionCP extends Model{
 	
@@ -35,12 +46,12 @@ public class TransactionCP extends Model{
 	
 	public Date date;
 
-	
+	/* ebean finder */
 	private static Finder<Long, TransactionCP> find = new Finder<Long, TransactionCP>(Long.class,
 			TransactionCP.class);
 	
 
-	
+	/* constructor */
 	public TransactionCP(String payment_id, double money_amount, String token,
 			User buyer, User seller, Coupon coupon) {
 		this.payment_id = payment_id;
@@ -52,6 +63,16 @@ public class TransactionCP extends Model{
 		this.date = new Date();
 	}
 
+	/**
+	 * Creates a new transaction and saves it to the database
+	 * @param payment_id String
+	 * @param money_amount double
+	 * @param token String
+	 * @param buyer User
+	 * @param seller to be declared**
+	 * @param coupon Coupon
+	 * @return id of the created transaction (long)
+	 */
 	public static long createTransaction(String payment_id, double money_amount, String token,
 			User buyer, User seller, Coupon coupon) {
 		
@@ -62,12 +83,21 @@ public class TransactionCP extends Model{
 		
 	}
 	
+	/**
+	 * Returns a transaction
+	 * @param id of the transaction
+	 * @return
+	 */
 	public static TransactionCP find(long id) {
 		return find.byId(id);
 	}
 	
-	
-	public static List<Coupon> boughtCoupons(long id) {
+	/**
+	 * Returns all coupons that someone bought
+	 * @param id of the buyer
+	 * @return List of coupons
+	 */
+	public static List<Coupon> allBoughtCoupons(long id) {
 		List<TransactionCP> ids = find.where().eq("buyer_id", id).findList();
 		List<Coupon> coupons = new ArrayList<>();
 		for ( TransactionCP tsc : ids) {
@@ -76,5 +106,26 @@ public class TransactionCP extends Model{
 		return coupons;
 	}
 	
+	/**
+	 * Returns all transactions from a certain buyer
+	 * @param id of the buyer
+	 * @return List of transactions
+	 */
+	public static List<TransactionCP> allFromBuyer(long id) {
+		return find.where().eq("buyer_id", id).findList();
+	}
+	
+	/**
+	 * Get transaction date and time as String
+	 * @return
+	 */
+	public String getDateString() {
+		if (date == null) {
+			return "";
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return "Expiring: " + dateFormat.format(date);
+
+	}
 	
 }
