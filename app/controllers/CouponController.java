@@ -199,10 +199,10 @@ public class CouponController extends Controller {
 		if (coupons.isEmpty()) {
 			flash("error", "No such coupon");
 			User u = User.find(session("name"));
-			return badRequest(index.render(u, Coupon.all()));
+			return badRequest(searchFilter.render(Coupon.all(), Category.all()));
 		}
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
-		return ok(index.render(null, coupons));
+		return ok(searchFilter.render(coupons, Category.all()));
 	}
 	
 	/**
@@ -570,7 +570,52 @@ public class CouponController extends Controller {
 
 	}
 	
+	public static Result filterDate(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		
+		// Date Filter
+		Date date = couponForm.bindFromRequest().get().dateExpire;
+		Date current = new Date();
+		
+		
+		if (date.before(current)) {
+			Logger.info("entered a invalid date");
+			flash("error", "Enter a valid expiration date");
+			return badRequest(index.render(null, list));
+		
+		}
+		
+		
+		for(Coupon coupon : coupons){
+			Date couponDate = coupon.dateExpire;
+		
+			if (couponDate.before(date)) {
+				list.add(coupon);
+			}
+		}
+		
+		List<Category> categorys = Category.all();
+		return ok(index.render(null, list));
+	
+	
+
 	
 	
 	
-}
+	}
+	}

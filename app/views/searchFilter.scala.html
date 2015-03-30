@@ -63,6 +63,13 @@
 		  
 				<input type="submit" class="btn btn-success"> 
      </form>
+     
+     <form action="@routes.CouponController.filterDate(Coupon.commaSeparatedIds(coupons))" method="POST">
+     @*	<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
+						*@	<input type="date" id="datepicker" name="dateExpire">
+    				<input type="submit" class="btn btn-success"> 
+    
+    </form> 
 	 						      
    <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
          <select id="orderby" name="orderby" required>
