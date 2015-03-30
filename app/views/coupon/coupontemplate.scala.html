@@ -87,7 +87,7 @@
 										</form>
 										}
 									@if(CouponController.isExpired(coupon.id)==false) {
-									<label>Coupon is expired </label>
+									<label>Coupon has expired </label>
 										}
 								
 							}
@@ -98,10 +98,14 @@
 							     <a href='@routes.CouponController.deleteCoupon(coupon.id)' onclick="return confirm('Are you sure you want to delete this coupon?');"
 							   	class="btn btn-fefault cart">Delete coupon</a>
 								}
+							<label class="pull-left" >Minimum coupons to be sold:
+							<span><textarea disabled rows="1">@coupon.minOrder</textarea></span>
+							 </label>	
+							
 							<div>				
 							<textarea disabled rows="1">@coupon.getExpiration()</textarea>
 							</div><br>
-							<div>
+														<div>
 							<label class="pull-left" >Description</label>
 							<textarea disabled rows="6" >@coupon.description</textarea>
 							</div><br>

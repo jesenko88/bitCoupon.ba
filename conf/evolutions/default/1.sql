@@ -20,6 +20,7 @@ create table coupon (
   category_id               bigint,
   description               varchar(255),
   remark                    varchar(255),
+  min_order                 integer,
   constraint pk_coupon primary key (id))
 ;
 

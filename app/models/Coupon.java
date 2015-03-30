@@ -54,6 +54,7 @@ public class Coupon extends Model {
 
 	public String remark;
 
+	public int minOrder;
 	/*
 	 * public String code;
 	 * 
@@ -98,6 +99,19 @@ public class Coupon extends Model {
 		 * response_company_id;
 		 */
 	}
+	public Coupon(String name, double price, Date dateExpire, String picture,
+			Category category, String description, String remark, int minOrder) {
+
+		this.name = name;
+		this.price = price;
+		this.dateCreated = new Date();
+		this.dateExpire = dateExpire;
+		this.picture = picture;
+		this.category = category;
+		this.description = description;
+		this.remark = remark;
+		this.minOrder = minOrder;
+	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
 			Long.class, Coupon.class);
@@ -114,6 +128,19 @@ public class Coupon extends Model {
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark);
+		newCoupon.save();
+		return newCoupon.id;
+	}
+	
+	/**
+	 * Method with minimum order variable.
+	 */
+	public static long createCoupon(String name, double price, Date dateExpire,
+			String picture, Category category, String description, String remark, int minOrder) {
+
+		// Logger.debug(category.name);
+		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
+				category, description, remark, minOrder);
 		newCoupon.save();
 		return newCoupon.id;
 	}
