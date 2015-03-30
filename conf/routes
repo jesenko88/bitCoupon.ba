@@ -45,8 +45,9 @@ POST   /editCoupon/:id                controllers.CouponController.updateCoupon(
 GET    /editCoupon/:id                controllers.CouponController.editCoupon(id: Long)
 GET    /search                        controllers.CouponController.search(q: String)
 GET    /allCoupons                    controllers.CouponController.listCoupons()
-POST    /orderby                       controllers.CouponController.sort(ids: String)
-
+POST    /orderby                      controllers.CouponController.sort(ids: String)
+GET		/searchFilter				controllers.CouponController.searchPage()
+POST    /searchFilter               controllers.CouponController.searchfilter(ids: String)
 
 
 POST   /addFAQ                        controllers.FAQController.addFAQ()

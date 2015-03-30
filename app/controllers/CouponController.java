@@ -476,9 +476,44 @@ public class CouponController extends Controller {
 	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCoupons() {
-
 		return ok(couponsAll.render(session("name"), Coupon.all()));
 	}
 
+	
+	public static Result searchPage() {
+		List<Coupon> coupons = Coupon.all();
+		List<Category> categorys = Category.all();
+		return ok(searchFilter.render(coupons, categorys));
+	}
 
+	public static Result searchfilter(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		String categoryChosed = df.data().get("category");
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		for(Coupon coupon : coupons){
+			if (coupon.category.name.equalsIgnoreCase(categoryChosed)){
+				list.add(coupon);
+			}
+		}
+		List<Category> categorys = Category.all();
+		return ok(index.render(null, list));
+		
+	
+
+	}
+	
 }
