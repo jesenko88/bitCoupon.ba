@@ -473,19 +473,30 @@ public class CouponController extends Controller {
 		
 	}
 	
-	
+	/**
+	 * Returns all cupons to view couponsAll
+	 * @return
+	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCoupons() {
 		return ok(couponsAll.render(session("name"), Coupon.all()));
 	}
 
-	
+	/**
+	 * Returns all searched coupons on view searchFilter
+	 * @return
+	 */
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
 		List<Category> categorys = Category.all();
 		return ok(searchFilter.render(coupons, categorys));
 	}
-
+	
+	/**
+	 * 
+	 * @param ids
+	 * @return
+	 */
 	public static Result filterCategory(String ids){
 		Logger.debug("Ids: "+ids);
 		/*
@@ -509,27 +520,17 @@ public class CouponController extends Controller {
 				list.add(coupon);
 			}
 		}
-		/* PRICE Filter
-		double startPrice =Double.parseDouble( df.data().get("start_price"));
-		double endPrice   = Double.parseDouble( df.data().get("end_price"));
-		
-		
-		for(Coupon coupon : coupons){
-			if (coupon.price >= startPrice || coupon.price <= endPrice){
-				list.add(coupon);
-			}
-		}
-		*/
-		
 		
 		List<Category> categorys = Category.all();
 		return ok(index.render(null, list));
 		
-	
-
 	}
 	
-	
+	/**
+	 * 
+	 * @param ids
+	 * @return
+	 */
 	public static Result filterPrice(String ids){
 		Logger.debug("Ids: "+ids);
 		/*
@@ -565,11 +566,14 @@ public class CouponController extends Controller {
 		
 		List<Category> categorys = Category.all();
 		return ok(index.render(null, list));
-		
-	
 
 	}
 	
+	/**
+	 * 
+	 * @param ids
+	 * @return
+	 */
 	public static Result filterDate(String ids){
 		Logger.debug("Ids: "+ids);
 		/*
@@ -612,10 +616,5 @@ public class CouponController extends Controller {
 		List<Category> categorys = Category.all();
 		return ok(index.render(null, list));
 	
-	
-
-	
-	
-	
 	}
-	}
+}

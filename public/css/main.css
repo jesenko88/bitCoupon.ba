@@ -100,7 +100,12 @@ width: 50%;
  	font-weight: 300;
 }
 
-
+.center12{
+	margin-left:7%;
+	margin-right: 7%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
 .navbar-toggle {
   background-color: #000;
 }
