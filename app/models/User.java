@@ -224,5 +224,6 @@ public class User extends SuperUser {
 	public static void setFind(Finder<Long, User> find) {
 		User.find = find;
 	}
+
 	
 }

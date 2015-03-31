@@ -59,6 +59,10 @@ public class Application extends Controller {
 		return ok(index.render(currentUser, Coupon.all()));
 
 	}
+	
+	public static Result test(){
+		return ok(test.render(SuperUser.allSuperUsers()));
+	}
 
 	public static Result chooseRegistration() {
 		return ok(chooseRegistration.render());

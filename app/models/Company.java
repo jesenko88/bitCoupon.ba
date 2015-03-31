@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+
 import controllers.Sesija;
 import play.Logger;
 import play.data.DynamicForm;
@@ -58,7 +59,8 @@ public class Company  extends SuperUser{
 		Date now = new Date();
 		Company c = new Company(name, email, password, now, logo);
 		c.save();
-		return c.id;	
+		return c.id;
+	
 	}
 	
 	public static Company findById(long id){
