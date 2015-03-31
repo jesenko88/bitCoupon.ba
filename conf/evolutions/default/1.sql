@@ -18,7 +18,6 @@ create table company (
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
-  verfied                   boolean,
   constraint pk_company primary key (id))
 ;
 

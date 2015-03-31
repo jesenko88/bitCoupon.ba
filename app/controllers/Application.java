@@ -98,6 +98,15 @@ public class Application extends Controller {
 			Logger.info(cc.username + " logged in");
 			return ok(index.render(cc, Coupon.all()));
 		}
+		if (Company.verifyLogin(mail, password) == true) {
+			Company cc = Company.findByEmail(mail);
+			session().clear();
+			session("name", cc.name);
+			flash("success", "You are logged in as: " + mail);
+			Logger.info(cc.name + " logged in");
+			return ok(indexC.render(cc, Coupon.all()));
+		}
+		
 		flash("error", "Invalid email or password");
 		Logger.info("User tried to login with invalid email or password");
 		return badRequest(Loginpage.render(" "));

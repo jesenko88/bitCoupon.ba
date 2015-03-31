@@ -9,11 +9,11 @@
          </ul>
          <ul class="nav navbar-nav pull-right">
             <!-- if statement for enable od disable button in case of login -->	
-            @if( currentUser == null || currentCompany == null) {
+            @if( currentUser == null && currentCompany == null) {
             <li><a href="/loginpage" class="active"><i class="active"></i> Login </a></li>
             <li><a href="/chooseRegistration" class="active"><i  class="glyphicon glyphicon-user"></i> Registration</a></li>
             } else {
-            @if(currentUser != null) {
+            @if(currentUser != null && currentCompany == null) {
               <li><a href="@routes.UserController.profilePage(currentUser.username)" method="GET" class="active"> @currentUser.username </a></li>
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu<strong class="caret"></strong></a>
@@ -28,7 +28,7 @@
                </ul>
             </li>
             }
-             @if(currentCompany != null) {
+             @if(currentCompany != null && currentUser == null) {
               <li><a href="@routes.CompanyController.companyProfilePage(currentCompany.name)" method="GET" class="active"> @currentCompany.name </a></li>
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu<strong class="caret"></strong></a>

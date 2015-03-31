@@ -42,7 +42,7 @@ public class Company  extends Model{
 	
 	public String logo;
 	
-	public boolean verfied;
+	
 	
 	static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
 				Company.class);
@@ -61,7 +61,7 @@ public class Company  extends Model{
 		this.password = password;
 		this.created = created;
 		this.logo = logo;
-		this.verfied = false;
+	
 	}
 	
 	public static long createCompany(String name, String email, String password, String logo){
@@ -106,7 +106,7 @@ public class Company  extends Model{
 	 * Find and return user by username 
 	 */
 	public static Company find(String name) {
-		return getFind().where().eq("username", name).findUnique();
+		return getFind().where().eq("name", name).findUnique();
 	}
 	
 	/**
@@ -119,8 +119,8 @@ public class Company  extends Model{
 	 *            String
 	 * @return boolean true or false
 	 */
-	public static boolean verifyRegistration(String username, String email) {
-		List<Company> usname = find.where().eq("username", username).findList();
+	public static boolean verifyRegistration(String name, String email) {
+		List<Company> usname = find.where().eq("name", name).findList();
 		List<Company> mail = find.where().eq("email", email).findList();
 		if (usname.isEmpty() && mail.isEmpty()) {
 			return true;

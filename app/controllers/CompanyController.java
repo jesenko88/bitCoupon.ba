@@ -27,7 +27,7 @@ public class CompanyController extends Controller {
 	/**
 	 * @return Renders the registration view
 	 */
-	public static Result signup() {
+	public static Result signupC() {
 		return ok(companySignup.render("Name", "Email"));
 	}
 
@@ -38,7 +38,7 @@ public class CompanyController extends Controller {
 	 * @return redirects to the index page with welcome, or renders the page
 	 *         repeatedly if any error occurs
 	 */
-	public static Result register() {
+	public static Result registerC() {
 
 		if (companyForm.hasErrors()) {
 			return redirect("/companySignup");
@@ -77,8 +77,7 @@ public class CompanyController extends Controller {
 							+ verificationEmail);
 			flash("success", "A verification mail has been sent to your email address!");
 			Logger.info("A verification mail has been sent to email address");
-			return ok(Loginpage
-					.render(" "));
+			return ok(companySignup.render(name, mail));
 
 		} else {
 			flash("error", "Username or email allready exists!");
@@ -94,7 +93,7 @@ public class CompanyController extends Controller {
 	 * 
 	 * @return Renders the user update view for editing profile
 	 */
-	@Security.Authenticated(CurrentCompanyFilter.class)
+	//@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result companyUpdateView() {   
 		Company currentCompany = Company.find(session("name"));
 		return ok(companyUpdate.render(currentCompany));
@@ -335,13 +334,13 @@ public class CompanyController extends Controller {
 		}
 	}
 
-	@Security.Authenticated(CurrentCompanyFilter.class)
+	//@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result changePassView() {
 		Company currentCompany = Company.find(session("name"));
 		return ok(changePassView.render(currentCompany));
 	}
 
-	@Security.Authenticated(CurrentUserFilter.class)
+	//@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result changePass(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
