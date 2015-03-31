@@ -33,7 +33,7 @@ import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
 
 public class UserController extends Controller {
-
+	public static final String PATH = "localhost:9000"; 
 	/* TODO move all messages to conf */
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
@@ -96,7 +96,7 @@ public class UserController extends Controller {
 
 			MailHelper.send(mail,
 					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://localhost:9000/verifyEmail/"
+							+ "http://" + PATH + "/verifyEmail/"
 							+ verificationEmail);
 			flash("success", "A verification mail has been sent to your email address!");
 			Logger.info("A verification mail has been sent to email address");
@@ -151,7 +151,7 @@ public class UserController extends Controller {
 			String verificationEmail = EmailVerification.addNewRecord(cUser.id);
 			MailHelper.send(email,
 					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://localhost:9000/verifyEmailUpdate/"
+							+ "http://" + PATH + "/verifyEmailUpdate/"
 							+ verificationEmail);
 			cUser.email = email;
 			cUser.save();
@@ -468,7 +468,7 @@ public class UserController extends Controller {
 		String verificationEmail = EmailVerification.addNewRecord(u.id);
 		MailHelper.send(mail,
 				"Click on the link below to set a new password <br>"
-						+ "http://localhost:9000/setNewPassView/"
+						+ "http://" + PATH + "/setNewPassView/"
 						+ verificationEmail);
 		flash("success", "Request for password has been sent on this email: "
 				+ mail);
