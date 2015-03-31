@@ -26,6 +26,7 @@ GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id:
 
 GET    /verifyEmailUpdate/:username   controllers.UserController.verifyEmailUpdate(username: String)
 GET    /searchUsers                   controllers.UserController.searchUsers(qU: String)
+GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
 
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
 GET    /editUser/:id                  controllers.UserController.adminEditUserView(id: Long)
@@ -77,7 +78,7 @@ POST   /editCoupon/:id                controllers.CouponController.updateCoupon(
 GET    /editCoupon/:id                controllers.CouponController.editCoupon(id: Long)
 GET    /search                        controllers.CouponController.search(q: String)
 GET    /allCoupons                    controllers.CouponController.listCoupons()
-POST    /orderby                       controllers.CouponController.sort(ids: String)
+POST   /orderby                       controllers.CouponController.sort(ids: String)
 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()

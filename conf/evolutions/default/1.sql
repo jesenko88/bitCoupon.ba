@@ -18,6 +18,7 @@ create table company (
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
+
   constraint pk_company primary key (id))
 ;
 
@@ -31,6 +32,7 @@ create table coupon (
   category_id               bigint,
   description               varchar(255),
   remark                    varchar(255),
+  min_order                 integer,
   constraint pk_coupon primary key (id))
 ;
 
@@ -57,9 +59,16 @@ create table photo (
   constraint pk_photo primary key (id))
 ;
 
-create table transactions (
+create table transaction_cp (
   id                        bigint not null,
-  constraint pk_transactions primary key (id))
+  payment_id                varchar(255),
+  money_amount              double,
+  token                     varchar(255),
+  buyer_id                  bigint,
+  seller_id                 bigint,
+  coupon_id                 bigint,
+  date                      timestamp,
+  constraint pk_transaction_cp primary key (id))
 ;
 
 create table user (
@@ -86,7 +95,7 @@ create sequence faq_seq;
 
 create sequence photo_seq;
 
-create sequence transactions_seq;
+create sequence transaction_cp_seq;
 
 create sequence user_seq;
 
@@ -94,6 +103,12 @@ alter table coupon add constraint fk_coupon_category_1 foreign key (category_id)
 create index ix_coupon_category_1 on coupon (category_id);
 alter table photo add constraint fk_photo_coupon_2 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
 create index ix_photo_coupon_2 on photo (coupon_id);
+alter table transaction_cp add constraint fk_transaction_cp_buyer_3 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_buyer_3 on transaction_cp (buyer_id);
+alter table transaction_cp add constraint fk_transaction_cp_seller_4 foreign key (seller_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_seller_4 on transaction_cp (seller_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_5 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_5 on transaction_cp (coupon_id);
 
 
 
@@ -113,7 +128,7 @@ drop table if exists faq;
 
 drop table if exists photo;
 
-drop table if exists transactions;
+drop table if exists transaction_cp;
 
 drop table if exists user;
 
@@ -131,7 +146,7 @@ drop sequence if exists faq_seq;
 
 drop sequence if exists photo_seq;
 
-drop sequence if exists transactions_seq;
+drop sequence if exists transaction_cp_seq;
 
 drop sequence if exists user_seq;
 

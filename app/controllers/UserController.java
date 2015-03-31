@@ -518,4 +518,14 @@ public class UserController extends Controller {
 		return ok(profile.render(u));
 	}
 
+	
+	public static Result showBoughtCoupons(long userId) {
+		//List<Coupon> boughtCouponsList = TransactionCP.allBoughtCoupons(userId);
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
+		return ok(boughtCoupons.render(session("name"), transactions));
+		
+	}
+	
+	
+	
 }
