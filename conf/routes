@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
 POST   /login                         controllers.Application.login()
@@ -10,6 +11,7 @@ GET    /logout                        controllers.Application.logout()
 GET    /loginToComplete               controllers.Application.loginToComplete()
 POST   /contact                       controllers.Application.sendMail()
 GET    /contact                       controllers.Application.contact()
+GET    /chooseRegistration            controllers.Application.chooseRegistration()
 
 GET    /signup                        controllers.UserController.signup()
 POST   /register                      controllers.UserController.register()
@@ -19,13 +21,16 @@ POST   /updateUser                    controllers.UserController.updateUser(id: 
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /updateUser                    controllers.UserController.userUpdateView()
 GET    /userPanel                     controllers.UserController.listUsers()
+
 GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
+
 GET    /verifyEmailUpdate/:username   controllers.UserController.verifyEmailUpdate(username: String)
 GET    /searchUsers                   controllers.UserController.searchUsers(qU: String)
 
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
 GET    /editUser/:id                  controllers.UserController.adminEditUserView(id: Long)
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
+
 POST   /changePass/:id                controllers.UserController.changePass(id: Long)
 GET    /changePass                    controllers.UserController.changePassView()
 
@@ -35,10 +40,37 @@ POST   /sendRequest                   controllers.UserController.sendRequest()
 GET    /setNewPassView/:id            controllers.UserController.setNewPassView(id: String)
 POST   /setNewPassword                controllers.UserController.setNewPassword(id: String)
 
+GET    /companySignup                 controllers.CompanyController.signupC()
+POST   /registerC                      controllers.CompanyController.registerC()
+GET    /companyProfile/@:name         controllers.CompanyController.companyProfilePage(name: String)
+POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
+POST   /userUpdatePhoto               controllers.CompanyController.updatePhoto(id: Long)	
+GET    /updateCompany                 controllers.CompanyController.companyUpdateView()
+GET    /userPanel                     controllers.CompanyController.listCompanies()
+
+GET    /verifyEmail/:id               controllers.CompanyController.verifyEmail(id: String)
+
+GET    /verifyEmailUpdate/:username   controllers.CompanyController.verifyEmailUpdate(username: String)
+GET    /searchUsers                   controllers.CompanyController.searchCompanies(qU: String)
+
+GET    /deletUser                     controllers.CompanyController.deleteCompany(id: Long)
+GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
+POST   /updateUser/:id                controllers.CompanyController.adminUpdateCompany(id: Long)
+
+POST   /changePass/:id                controllers.CompanyController.changePass(id: Long)
+GET    /changePass                    controllers.CompanyController.changePassView()
+
+GET    /inputEmail                    controllers.CompanyController.inputEmailView()
+POST   /sendRequest                   controllers.CompanyController.sendRequest()
+
+GET    /setNewPassView/:id            controllers.CompanyController.setNewPassView(id: String)
+POST   /setNewPassword                controllers.CompanyController.setNewPassword(id: String)
+
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
 POST   /galleryUpload                 controllers.CouponController.galleryUpload(id: Long)
 POST   /deletephoto                   controllers.CouponController.deletePhoto(id: Integer)					
+
 GET    /coupon/:id                    controllers.CouponController.showCoupon(id: Long)
 GET    /deleteCoupon/:id              controllers.CouponController.deleteCoupon(id :Long)
 POST   /editCoupon/:id                controllers.CouponController.updateCoupon(id: Long)
@@ -47,15 +79,12 @@ GET    /search                        controllers.CouponController.search(q: Str
 GET    /allCoupons                    controllers.CouponController.listCoupons()
 POST    /orderby                       controllers.CouponController.sort(ids: String)
 
-
-
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()
 GET    /faq                           controllers.FAQController.showFAQ()
 POST   /editFAQ                       controllers.FAQController.updateFAQ(id: Integer)
 GET    /editFAQ/@:id                  controllers.FAQController.editFAQView(id: Integer)
 GET    /deleteFAQ                     controllers.FAQController.deleteFAQ(id: Integer)
-
 
 GET    /categoryPanel                 controllers.CategoryController.addCategoryView()
 GET    /categoryList                  controllers.CategoryController.listCategories()

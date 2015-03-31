@@ -1,0 +1,42 @@
+
+@import helper._
+
+@main("Registration") {
+	
+	
+<body>
+<header id="header"><!--header-->
+	<div class="header-middle"><!--header-middle-->
+		<div class="container">
+			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+			<div class="logo pull-right">
+				<div class="search_box">
+					<form action="/search" method="GET">
+							<input id="q" name="q" type="text" placeholder="Search" />
+					</form>
+				</div>
+			</div>	
+	<h1 style="text-aline:center">Register</h1>
+				</div>	
+				<div class="row">
+			</div>
+		</div>
+	</div>	
+</header>
+
+	<div class="container">
+	<br>
+	<br>
+	<br>
+
+	<form action="@routes.UserController.signup" >
+							<button type="submit" id="submit" class="btn btn-primary"> As user </button>
+						</form>
+	<form action="@routes.CompanyController.signupC" >
+							<button type="submit" id="submit" class="btn btn-primary"> As company </button>
+						</form>
+	
+					</div>
+</body>
+}
+
