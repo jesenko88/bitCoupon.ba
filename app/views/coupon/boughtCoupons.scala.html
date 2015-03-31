@@ -1,4 +1,4 @@
-@(username: String)(coupons: List[Coupon])
+@(username: String)(transactions: List[TransactionCP])
  
 @import helper._
 
@@ -41,16 +41,23 @@
 	</section>
 
 	<div class="container">		
-				@for(coupon <- coupons){
+				@for(transaction <- transactions){
 					
 						<div class="col-sm-4">
 						<div class="logo pull-left">
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center">
-									<img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-										<h3>@coupon.getPriceString()</h3>
-										<p>@coupon.name</p>
+									<img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
+									
+										<ul class="col-md-12" style="text-align: left" >
+											<br>
+											<li><strong>Coupon price:</strong> @transaction.coupon.getPriceString()</li>
+											<li><strong>Coupon name:</strong> @transaction.coupon.name</li>
+											<li><strong>Transaction date:</strong> @transaction.getDateString</li>
+											<li><strong>Payment id:</strong> @transaction.payment_id</li>
+										</ul>
+									
 									</div>
 								</div>
 							</div>

@@ -516,10 +516,12 @@ public class UserController extends Controller {
 
 	
 	public static Result showBoughtCoupons(long userId) {
-		List<Coupon> boughtCouponsList = TransactionCP.allBoughtCoupons(userId);
-		//List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
-		return ok(boughtCoupons.render(session("name"), boughtCouponsList));
+		//List<Coupon> boughtCouponsList = TransactionCP.allBoughtCoupons(userId);
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
+		return ok(boughtCoupons.render(session("name"), transactions));
 		
 	}
+	
+	
 	
 }
