@@ -21,7 +21,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 public class CompanyController extends Controller {
-
+public static final String PATH = "localhost:9000"; 
 	static Form<Company> companyForm = new Form<Company>(Company.class);
 
 	/**
@@ -73,7 +73,7 @@ public class CompanyController extends Controller {
 
 			MailHelper.send(mail,
 					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://localhost:9000/verifyEmail/"
+							+ "http://" + PATH + "/verifyEmail/"
 							+ verificationEmail);
 			flash("success", "A verification mail has been sent to your email address!");
 			Logger.info("A verification mail has been sent to email address");
@@ -129,7 +129,7 @@ public class CompanyController extends Controller {
 			String verificationEmail = EmailVerification.addNewRecord(company.id);
 			MailHelper.send(email,
 					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://localhost:9000/verifyEmailUpdate/"
+							+ "http://"+ PATH + "/verifyEmailUpdate/"
 							+ verificationEmail);
 			company.email = email;
 			company.save();
@@ -416,7 +416,7 @@ public class CompanyController extends Controller {
 		String verificationEmail = EmailVerification.addNewRecord(u.id);
 		MailHelper.send(mail,
 				"Click on the link below to set a new password <br>"
-						+ "http://localhost:9000/setNewPassView/"
+						+ "http://" + PATH + "/setNewPassView/"
 						+ verificationEmail);
 		flash("success", "Request for password has been sent on this email: "
 				+ mail);
