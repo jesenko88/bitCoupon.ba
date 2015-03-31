@@ -87,4 +87,16 @@ public class Sesija extends Security.Authenticator {
 		return null;
 	}
 	
+	/**
+	 * Returns true if company is the current user 
+	 * @param ctx
+	 * @return
+	 */
+	public static boolean companyCheck(Context ctx) {
+
+		if (getCurrentCompany(ctx) == null)
+			return false;
+		return true;
+	}
+	
 }

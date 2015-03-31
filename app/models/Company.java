@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-
 import controllers.Sesija;
 import play.Logger;
 import play.data.DynamicForm;
@@ -33,6 +32,12 @@ public class Company  extends SuperUser{
 	public Date updated;
 	
 	public String logo;
+
+	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
+	public List<Coupon> coupons;
+	
+//	@OneToMany(mappedBy="seller", cascade=CascadeType.ALL)
+//	public List<TransactionCP> sold_coupons;
 	
 	
 	
@@ -143,6 +148,15 @@ public class Company  extends SuperUser{
 			Logger.error(e.getMessage());
 			return false;
 		}
+	}
+	/**
+	 * Checks if a company exists in the database
+	 * searching by name
+	 * @param name of the Company
+	 * @return true or false
+	 */
+	public static boolean exists(String name) {
+		return getFind().where().eq("name", name).findUnique() != null;
 	}
 
 }

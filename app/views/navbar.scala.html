@@ -21,7 +21,7 @@
                   <li><a href="@routes.UserController.userUpdateView">Edit profile</a>
                      @if(Sesija.adminCheck(ctx()) == true) {
                   <li><a href="@routes.UserController.controlPanel(currentUser.id)" class="fa fa-lock">Admin Panel</a></li>
-                     }                
+                     }                      
                   <li class="divider">
                   </li>
                   <li><a href="/logout" class="active"><i></i> Logout</a></li>

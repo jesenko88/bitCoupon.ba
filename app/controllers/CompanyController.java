@@ -3,7 +3,9 @@ package controllers;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
 import views.html.*;
+import views.html.admin.users.adminPanel;
 import views.html.coupon.*;
 import views.html.company.*;
 import helpers.AdminFilter;
@@ -464,6 +466,17 @@ public static final String PATH = "localhost:9000";
 			Logger.debug(c.password);
 			Logger.debug("Hash: " +  HashHelper.checkPass(newPassword,c.password) );
 		return ok(companyProfile.render(c));
+	}
+	
+	
+	//TODO security
+	public static Result companyPanel(long id) {
+		Company company = Company.findById(id);
+		if (!company.name.equals(session("name"))) {
+			return redirect("/");
+		}
+		return ok(companyPanel.render(company, Coupon.ownedCoupons(company.id) ) );
+
 	}
 
 }

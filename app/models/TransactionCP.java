@@ -38,8 +38,8 @@ public class TransactionCP extends Model{
 	@ManyToOne(cascade=CascadeType.ALL)
 	public User buyer;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	public User seller;
+//	@ManyToOne(cascade=CascadeType.ALL)
+//	public Company seller;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	public Coupon coupon;
@@ -53,12 +53,12 @@ public class TransactionCP extends Model{
 
 	/* constructor */
 	public TransactionCP(String payment_id, double money_amount, String token,
-			User buyer, User seller, Coupon coupon) {
+			User buyer, Coupon coupon) {
 		this.payment_id = payment_id;
 		this.money_amount = money_amount;
 		this.token = token;
 		this.buyer = buyer;
-		this.seller = seller;
+		//this.seller = seller;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
@@ -74,9 +74,9 @@ public class TransactionCP extends Model{
 	 * @return id of the created transaction (long)
 	 */
 	public static long createTransaction(String payment_id, double money_amount, String token,
-			User buyer, User seller, Coupon coupon) {
+			User buyer,  Coupon coupon) {
 		
-		TransactionCP transaction = new TransactionCP(payment_id, money_amount, token, buyer, seller, coupon);
+		TransactionCP transaction = new TransactionCP(payment_id, money_amount, token, buyer, coupon);
 		transaction.save();
 		
 		return transaction.id;
