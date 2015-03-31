@@ -22,6 +22,7 @@ import com.google.common.io.Files;
 import models.Category;
 import models.Coupon;
 import models.Photo;
+import models.SuperUser;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -39,6 +40,8 @@ public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
+	
+
 	
 	/**
 	 * 
@@ -60,6 +63,7 @@ public class CouponController extends Controller {
 		Coupon current = Coupon.find(id);
 		User cUser = User.find(session("name"));
 		return ok(coupontemplate.render(cUser, current));
+	
 	}
 
 	/**

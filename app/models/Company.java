@@ -22,19 +22,10 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 @Entity
-public class Company  extends Model{
-
-	@Id
-	public long id;
+public class Company  extends SuperUser{	
 
 	@Required
-	public String name;
-
-	@Email
-	public String email;
-
-	@Required
-	public String password;
+	public String name;	
 	
 	public Date created;
 	
@@ -56,9 +47,8 @@ public class Company  extends Model{
 	 * @param logo logo, picture path.
 	 */
 	public Company(String name, String email, String password, Date created, String logo){
+		super(email,password);
 		this.name = name;
-		this.email = email;
-		this.password = password;
 		this.created = created;
 		this.logo = logo;
 	

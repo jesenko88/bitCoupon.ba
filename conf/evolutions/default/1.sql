@@ -12,13 +12,12 @@ create table category (
 
 create table company (
   id                        bigint not null,
-  name                      varchar(255),
   email                     varchar(255),
   password                  varchar(255),
+  name                      varchar(255),
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
-
   constraint pk_company primary key (id))
 ;
 
@@ -73,9 +72,9 @@ create table transaction_cp (
 
 create table user (
   id                        bigint not null,
-  username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
+  username                  varchar(255),
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,

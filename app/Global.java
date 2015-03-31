@@ -5,6 +5,7 @@ import java.util.Date;
 
 import helpers.HashHelper;
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
@@ -42,6 +43,8 @@ public class Global extends GlobalSettings {
 		Category food = null;
 		Category travel = null;
 		Category sport = null;
+		Company bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", "bitcamp", new Date(), "/");
+		bitCamp.save();
 		
 		if(Category.exists("Food") == false){
 			food = new Category("Food"); 

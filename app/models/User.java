@@ -24,19 +24,10 @@ import play.db.ebean.Model;
  */
 
 @Entity
-public class User extends Model {
-
-	@Id
-	public long id;
-
+public class User extends SuperUser {
+	
 	@Required
 	public String username;
-
-	@Email
-	public String email;
-
-	@Required
-	public String password;
 
 	public boolean isAdmin;
 	
@@ -57,10 +48,8 @@ public class User extends Model {
 			User.class);
 
 	public User(String username, String email, String password, boolean isAdmin) {
-
-		this.username = username;
-		this.email = email;
-		this.password = password;
+		super(email, password);
+		this.username = username;		
 		this.created = new Date();
 		this.isAdmin = isAdmin;
 	}
