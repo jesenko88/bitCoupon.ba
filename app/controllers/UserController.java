@@ -478,49 +478,7 @@ public class UserController extends Controller {
 		return ok(inputEmail.render());
 	}
 	
-	public static Result setNewPassView(String email) {
-		return ok(setNewPassView.render(email));
-	}
-
-	public static Result setNewPassword(String email) {
-
-		DynamicForm forma = Form.form().bindFromRequest();
-		String mail = forma.data().get("email");
-		String newPassword = forma.data().get("newPassword");
-		String confPass = forma.data().get("confirmPassword");
-		if (forma.hasErrors()) {
-			return redirect("/setNewPassword");
-		}
-
-		if (mail.isEmpty()) {
-			flash("error", "Email is required for registration !");
-			return badRequest(setNewPassView.render(mail));
-		}
-		if (newPassword.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return badRequest(setNewPassView.render(mail));
-		} else if (!newPassword.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return badRequest(setNewPassView.render(mail));
-		}
-
-			User u = User.getUser(mail);
-			if(u == null) {
-				flash("error", "Please enter the email you registered with!");
-				return badRequest(setNewPassView.render(mail));
-			}
-			u.password = HashHelper.createPassword(newPassword);
-			EmailVerification setVerified = new EmailVerification(u.id, true);
-			setVerified.save();
-			u.updated = new Date();
-			session("name", u.username);
-			u.save();
-			Logger.info(u.username + " logged in. With password: " +newPassword);	
-			Logger.debug(u.password);
-			Logger.debug("Hash: " +  HashHelper.checkPass(newPassword,u.password) );
-		return ok(profile.render(u));
-	}
-
+	
 	
 	public static Result showBoughtCoupons(long userId) {
 		//List<Coupon> boughtCouponsList = TransactionCP.allBoughtCoupons(userId);

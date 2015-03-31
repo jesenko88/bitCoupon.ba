@@ -10,6 +10,7 @@ import views.html.coupon.*;
 import views.html.company.*;
 import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
+
 import helpers.FileUpload;
 import helpers.HashHelper;
 import helpers.MailHelper;
@@ -137,13 +138,13 @@ public static final String PATH = "localhost:9000";
 			flash("success",
 					"A new verification email has been sent to this e-mail: "
 							+ email);
-			return ok(companyUpdate.render(company));
+			return ok(userUpdate.render(company));
 		}
 		company.email = email;
 		company.save();
 		flash("success", "Profile updated!");
 		Logger.info(company.name + " is updated");
-		return ok(companyUpdate.render(company));
+		return ok(userUpdate.render(company));
 
 	}
 
@@ -426,48 +427,6 @@ public static final String PATH = "localhost:9000";
 		return ok(inputEmail.render());
 	}
 	
-	public static Result setNewPassView(String email) {
-		return ok(setNewPassView.render(email));
-	}
-
-	
-	public static Result setNewPassword(String email) {
-		DynamicForm forma = Form.form().bindFromRequest();
-		String mail = forma.data().get("email");
-		String newPassword = forma.data().get("newPassword");
-		String confPass = forma.data().get("confirmPassword");
-		if (forma.hasErrors()) {
-			return redirect("/setNewPassword");
-		}
-
-		if (mail.isEmpty()) {
-			flash("error", "Email is required for registration !");
-			return badRequest(setNewPassView.render(mail));
-		}
-		if (newPassword.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return badRequest(setNewPassView.render(mail));
-		} else if (!newPassword.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return badRequest(setNewPassView.render(mail));
-		}
-
-			Company c = Company.findByEmail(mail);
-			if(c == null) {
-				flash("error", "Please enter the email you registered with!");
-				return badRequest(setNewPassView.render(mail));
-			}
-			c.password = HashHelper.createPassword(newPassword);
-			EmailVerification setVerified = new EmailVerification(c.id, true);
-			setVerified.save();
-			c.updated = new Date();
-			session("name", c.name);
-			c.save();
-			Logger.info(c.name + " logged in. With password: " + newPassword);	
-			Logger.debug(c.password);
-			Logger.debug("Hash: " +  HashHelper.checkPass(newPassword,c.password) );
-		return ok(companyProfile.render(c));
-	}
 	
 	
 	//TODO security

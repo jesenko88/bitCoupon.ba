@@ -32,8 +32,7 @@ POST   /changePass/:id                controllers.UserController.changePass(id: 
 GET    /changePass                    controllers.UserController.changePassView()
 GET    /inputEmail                    controllers.UserController.inputEmailView()
 POST   /sendRequest                   controllers.UserController.sendRequest()
-GET    /setNewPassView/:id            controllers.UserController.setNewPassView(id: String)
-POST   /setNewPassword                controllers.UserController.setNewPassword(id: String)
+
 
 GET    /companySignup                 controllers.CompanyController.signupC()
 POST   /registerC                     controllers.CompanyController.registerC()
@@ -48,13 +47,11 @@ GET    /searchUsers                   controllers.CompanyController.searchCompan
 GET    /deletUser                     controllers.CompanyController.deleteCompany(id: Long)
 GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
 POST   /updateUser/:id                controllers.CompanyController.adminUpdateCompany(id: Long)
-POST   /changePassw/:id                controllers.CompanyController.changePass(id: Long)
+POST   /changePassw/:id               controllers.CompanyController.changePass(id: Long)
 GET    /changePass                    controllers.CompanyController.changePassView()
 GET    /inputEmail                    controllers.CompanyController.inputEmailView()
 POST   /sendRequest                   controllers.CompanyController.sendRequest()
-GET    /setNewPassView/:id            controllers.CompanyController.setNewPassView(id: String)
-POST   /setNewPassword                controllers.CompanyController.setNewPassword(id: String)
-GET	   /companyPanel				  controllers.CompanyController.companyPanel(id: Long)
+GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
