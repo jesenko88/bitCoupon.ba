@@ -27,7 +27,7 @@ public class CurrentUserFilter extends Security.Authenticator {
 
 	@Override
 	public Result onUnauthorized(Context ctx) {
-		Logger.error("Login To Complete");
+		Logger.error("Login To Complete, only users allowed to change this pw.");
 		return redirect("/loginToComplete");
 	}
 

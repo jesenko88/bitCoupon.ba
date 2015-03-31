@@ -220,6 +220,10 @@ public class User extends SuperUser {
 	public static void setFind(Finder<Long, User> find) {
 		User.find = find;
 	}
+	
+	public static User findByEmail(String email){
+		return find.where().eq("email", email).findUnique();
+	}
 
 	
 }

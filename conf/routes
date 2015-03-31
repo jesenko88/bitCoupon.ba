@@ -48,7 +48,7 @@ GET    /searchUsers                   controllers.CompanyController.searchCompan
 GET    /deletUser                     controllers.CompanyController.deleteCompany(id: Long)
 GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
 POST   /updateUser/:id                controllers.CompanyController.adminUpdateCompany(id: Long)
-POST   /changePass/:id                controllers.CompanyController.changePass(id: Long)
+POST   /changePassw/:id                controllers.CompanyController.changePass(id: Long)
 GET    /changePass                    controllers.CompanyController.changePassView()
 GET    /inputEmail                    controllers.CompanyController.inputEmailView()
 POST   /sendRequest                   controllers.CompanyController.sendRequest()

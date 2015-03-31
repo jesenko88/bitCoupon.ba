@@ -1,11 +1,9 @@
 package controllers;
 
 import java.io.File;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
 
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
@@ -13,7 +11,6 @@ import helpers.FileUpload;
 
 import java.util.List;
 
-import com.avaje.ebeaninternal.server.persist.BindValues.Value;
 
 import helpers.HashHelper;
 import helpers.MailHelper;
@@ -25,12 +22,10 @@ import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
 import views.html.coupon.*;
+import views.html.company.*;
 import models.*;
 
-import com.paypal.api.payments.*;
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.rest.OAuthTokenCredential;
-import com.paypal.base.rest.PayPalRESTException;
+
 
 public class UserController extends Controller {
 	public static final String PATH = "localhost:9000"; 
@@ -116,10 +111,19 @@ public class UserController extends Controller {
 	 * 
 	 * @return Renders the user update view for editing profile
 	 */
-	@Security.Authenticated(CurrentUserFilter.class)
+	//@Security.Authenticated(CurrentUserFilter.class)
 	public static Result userUpdateView() {
 		User currentUser = User.find(session("name"));
-		return ok(userUpdate.render(currentUser));
+		Company currentCompany = Company.find(session("name"));
+		
+		if(currentUser == null){
+			Logger.debug("RENDERING COMPANY");
+			return ok(userUpdate.render(currentCompany));
+		}else if(currentCompany == null){
+			return ok(userUpdate.render(currentUser));
+		}else{
+			return TODO;
+		}
 	}
 
 	/**
@@ -136,7 +140,7 @@ public class UserController extends Controller {
 		if (updateForm.hasErrors()) {
 			return redirect("/updateUser ");
 		}
-
+		
 		String username = updateForm.data().get("username");
 		String email = updateForm.data().get("email");
 		String oldPass = updateForm.data().get("password");
@@ -397,8 +401,7 @@ public class UserController extends Controller {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
 			return redirect("/updateUser ");
-		}
-
+		}		
 		String oldPass = updateForm.data().get("password");
 		String newPass = updateForm.data().get("newPassword");
 		String confPass = updateForm.data().get("confirmPassword");

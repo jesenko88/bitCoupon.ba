@@ -1,4 +1,4 @@
-@(company: Company)
+@(user: SuperUser)
 
 @import helper._
 
@@ -31,7 +31,7 @@
 						<h5>Update account</h5>
 					
 					<div class="signup-form"><!--sign up form-->
-						<form action="@routes.CompanyController.changePass(company.id)" method ="POST" >
+						<form action="@routes.CompanyController.changePass(user.id)" method ="POST" >
 						
 							<input type="password" name="password" id="password" placeholder="Old password" value="" />
 							<input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />

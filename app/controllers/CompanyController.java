@@ -5,12 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import views.html.*;
-import views.html.admin.users.adminPanel;
+import views.html.user.*;
 import views.html.coupon.*;
 import views.html.company.*;
 import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
-import helpers.CurrentUserFilter;
 import helpers.FileUpload;
 import helpers.HashHelper;
 import helpers.MailHelper;
@@ -98,7 +97,7 @@ public static final String PATH = "localhost:9000";
 	//@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result companyUpdateView() {   
 		Company currentCompany = Company.find(session("name"));
-		return ok(companyUpdate.render(currentCompany));
+		return ok(userUpdate.render(currentCompany));
 	}
 
 	/**
@@ -334,16 +333,17 @@ public static final String PATH = "localhost:9000";
 			c.save();
 			return redirect("/profile/@" + c.name);
 		}
-	}
+	}	
 
 	//@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result changePassView() {
 		Company currentCompany = Company.find(session("name"));
-		return ok(changePassView.render(currentCompany));
+		return ok(changePassViewC.render(currentCompany));
 	}
 
-	//@Security.Authenticated(CurrentCompanyFilter.class)
+	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result changePass(long id) {
+		
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
 			return redirect("/updateUser ");
@@ -354,30 +354,31 @@ public static final String PATH = "localhost:9000";
 		String confPass = updateForm.data().get("confirmPassword");
 		Company company = Company.findById(id);
 		company.updated = new Date();
-
+				
 		/* if only one password field is filled out */
 		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
 				&& !oldPass.isEmpty()) {
 			flash("error", "If you want to change your password,"
 					+ " please fill out both fields");
-			return badRequest(changePassView.render(company));
+			return badRequest(changePassViewC.render(company));
 		}
 		/* if there was a input in password fields */
 		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
 			if (HashHelper.checkPass(oldPass, company.password) == false) {
 				flash("error", "You're old password is incorrect!");
-				return badRequest(changePassView.render(company));
+				return badRequest(changePassViewC.render(company));
 			}
 			if (newPass.length() < 6) {
 				flash("error", "The password must be at least 6 characters");
-				return badRequest(changePassView.render(company));
+				return badRequest(changePassViewC.render(company));
 			}
 			company.password = HashHelper.createPassword(newPass);
 		}
 		if (!newPass.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(changePassView.render(company));
+			return badRequest(changePassViewC.render(company));
 		}
+		
 		company.save();
 		flash("success", "Password changed!");
 		Logger.info(company.name + " is updated");

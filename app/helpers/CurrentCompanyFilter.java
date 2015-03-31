@@ -13,11 +13,13 @@ import play.mvc.Http.Context;
  */
 public class CurrentCompanyFilter extends Security.Authenticator {
 
-	public String getCompanyName(Context ctx) {
-		if(!ctx.session().containsKey("name"))
+	public String getUsername(Context ctx) {
+		if(!ctx.session().containsKey("email"))
 			return null;
-		String name = ctx.session().get("name");
-		Company c = Company.find(name);
+		String email = ctx.session().get("email");
+		Logger.debug("Email: " +email);
+		Company c = Company.findByEmail(email);
+		Logger.debug("Company: " +c.id);
 		if (c != null)
 			return c.name;
 		return null;
@@ -25,7 +27,7 @@ public class CurrentCompanyFilter extends Security.Authenticator {
 
 	@Override
 	public Result onUnauthorized(Context ctx) {
-		Logger.error("Login To Complete");
+		Logger.error("Login To Complete, only companies here.");
 		return redirect("/loginToComplete");
 	}
 

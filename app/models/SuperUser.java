@@ -45,10 +45,33 @@ public  abstract class SuperUser extends Model{
 		return (this instanceof User);
 	}
 	
+	public boolean isCompany(){
+		return (this instanceof Company);
+	}
+	
 	public User getUser(){
 		User u = (User) this;
 		Logger.debug("User: " +u.username);
 		return u;
+	}
+	
+	public Company getCompany(){
+		return (Company) this;
+	}
+	
+	/**
+	 * Method checks if user with this email already exists.
+	 * @param email
+	 * @return
+	 */
+	public static boolean verifyRegistration(String email) {
+		User u = User.findByEmail(email);
+		Company c = Company.findByEmail(email);
+		if (u == null && c == null) {
+			return true;
+		} else
+			return false;
+
 	}
 
 }
