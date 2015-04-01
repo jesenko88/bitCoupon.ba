@@ -31,17 +31,18 @@ public class TransactionCP extends Model{
 	
 	public String payment_id; //zasada
 	
-	public double money_amount;
+	public double couponPrice;
+	
+	public int quantity;
+	
+	public double totalPrice;
 	
 	public String token; //token from paypalReturn
 
 	@ManyToOne(cascade=CascadeType.ALL)
 	public User buyer;
-
-//	@ManyToOne(cascade=CascadeType.ALL)
-//	public Company seller;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL)
 	public Coupon coupon;
 	
 	public Date date;
@@ -52,10 +53,12 @@ public class TransactionCP extends Model{
 	
 
 	/* constructor */
-	public TransactionCP(String payment_id, double money_amount, String token,
+	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,
 			User buyer, Coupon coupon) {
 		this.payment_id = payment_id;
-		this.money_amount = money_amount;
+		this.couponPrice = couponPrice;
+		this.quantity = quantity;
+		this.totalPrice = totalPrice;
 		this.token = token;
 		this.buyer = buyer;
 		//this.seller = seller;
@@ -73,10 +76,10 @@ public class TransactionCP extends Model{
 	 * @param coupon Coupon
 	 * @return id of the created transaction (long)
 	 */
-	public static long createTransaction(String payment_id, double money_amount, String token,
-			User buyer,  Coupon coupon) {
+	public static long createTransaction(String payment_id,double couponPrice,int quantity,
+			double totalPrice, String token, User buyer,  Coupon coupon) {
 		
-		TransactionCP transaction = new TransactionCP(payment_id, money_amount, token, buyer, coupon);
+		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, buyer, coupon);
 		transaction.save();
 		
 		return transaction.id;

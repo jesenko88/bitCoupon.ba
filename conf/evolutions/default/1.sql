@@ -69,7 +69,9 @@ create table reset_pasword (
 create table transaction_cp (
   id                        bigint not null,
   payment_id                varchar(255),
-  money_amount              double,
+  coupon_price              double,
+  quantity                  integer,
+  total_price               double,
   token                     varchar(255),
   buyer_id                  bigint,
   coupon_id                 bigint,
