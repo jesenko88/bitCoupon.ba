@@ -28,7 +28,6 @@ GET    /boughtCoupons                 controllers.UserController.showBoughtCoupo
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
 GET    /editUser/:email               controllers.UserController.adminEditUserView(email: String)
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
-POST   /userChangePass/:id            controllers.UserController.changePass(id: Long)
 GET    /newPassword/:id               controllers.UserController.newPassword(id: String)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
 GET    /sendRequest                   controllers.UserController.sendRequest(email: String)
@@ -46,7 +45,6 @@ POST   /updateCompany                 controllers.CompanyController.updateCompan
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
-POST   /companyChangePass/:id         controllers.CompanyController.changePass(id: Long)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
@@ -79,6 +77,9 @@ POST   /couponpurchase                controllers.PayPalController.purchaseProce
 GET    /couponsuccess                 controllers.PayPalController.couponSuccess()
 GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
+
+### SuperUser Controller
+POST   /changePass/:email             controllers.SuperUserController.changePass(email: String)
 
 GET    /test                          controllers.Application.test()
 # Map static resources from the /public folder to the /assets URL path

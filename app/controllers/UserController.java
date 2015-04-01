@@ -3,19 +3,10 @@ package controllers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-
-
-
-
 import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
 import helpers.FileUpload;
-
 import java.util.List;
-
-
-
-
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -407,48 +398,6 @@ public class UserController extends Controller {
 		}
 	}
 
-
-	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result changePass(long id) {
-		DynamicForm updateForm = Form.form().bindFromRequest();
-		if (updateForm.hasErrors()) {
-			return redirect("/updateUser ");
-		}		
-		String oldPass = updateForm.data().get("password");
-		String newPass = updateForm.data().get("newPassword");
-		String confPass = updateForm.data().get("confirmPassword");
-		User cUser = User.find(id);
-		cUser.updated = new Date();
-
-		/* if only one password field is filled out */
-		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
-				&& !oldPass.isEmpty()) {
-			flash("error", "If you want to change your password,"
-					+ " please fill out both fields");
-			return TODO;
-		}
-		/* if there was a input in password fields */
-		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
-			if (HashHelper.checkPass(oldPass, cUser.password) == false) {
-				flash("error", "You're old password is incorrect!");
-				return TODO;
-			}
-			if (newPass.length() < 6) {
-				flash("error", "The password must be at least 6 characters");
-				return TODO;
-			}
-			cUser.password = HashHelper.createPassword(newPass);
-		}
-		if (!newPass.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return TODO;
-		}
-		cUser.save();
-		flash("success", "Password changed!");
-		Logger.info(cUser.username + " is updated");
-		return ok(profile.render(cUser));
-
-	}	
 	/**
 	 * TODO finsih this method
 	 * @return

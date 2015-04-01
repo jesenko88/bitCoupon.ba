@@ -39,6 +39,7 @@ public class PayPalController extends Controller {
 	static PaymentExecution paymentExecution;
 	static Payment payment;
 	static double totalPrice;
+	static int quantity;
 	static String paymentID, token;
 
 
@@ -64,7 +65,7 @@ public class PayPalController extends Controller {
 			
 			DynamicForm buyForm = Form.form().bindFromRequest();		
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
-			int quantity = Integer.parseInt(buyForm.data().get("quantity"));
+			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			totalPrice = coupon.price * quantity;
 			
 			String totalPriceString = String.format("%1.2f",totalPrice);
@@ -190,7 +191,7 @@ public class PayPalController extends Controller {
 		
 		try {	
 			payment.execute(apiContext, paymentExecution);
-			TransactionCP.createTransaction( paymentID, totalPrice, token, currentUser, coupon);
+			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
 
 					
 		} catch (PayPalRESTException e) {
