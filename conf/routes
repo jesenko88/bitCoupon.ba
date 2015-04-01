@@ -11,7 +11,7 @@ GET    /logout                        controllers.Application.logout()
 GET    /loginToComplete               controllers.Application.loginToComplete()
 POST   /contact                       controllers.Application.sendMail()
 GET    /contact                       controllers.Application.contact()
-GET    /chooseRegistration            controllers.Application.chooseRegistration()
+
 
 GET    /signup                        controllers.UserController.signup()
 POST   /register                      controllers.UserController.register()
@@ -29,14 +29,13 @@ GET    /deletUser                     controllers.UserController.deleteUser(id: 
 GET    /editUser/:id                  controllers.UserController.adminEditUserView(id: Long)
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /changePass/:id                controllers.UserController.changePass(id: Long)
-GET    /changePass                    controllers.UserController.changePassView()
-GET    /inputEmail                    controllers.UserController.inputEmailView()
-POST   /sendRequest                   controllers.UserController.sendRequest()
+GET    /newPassword/:id               controllers.UserController.newPassword(id: String)
+POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
+GET    /sendRequest                   controllers.UserController.sendRequest(email: String)
 
 
 GET    /companySignup                 controllers.CompanyController.signupC()
 POST   /registerC                     controllers.CompanyController.registerC()
-GET    /companyProfile/@:name         controllers.CompanyController.companyProfilePage(name: String)
 POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
 POST   /userUpdatePhoto               controllers.CompanyController.updatePhoto(id: Long)	
 GET    /updateCompany                 controllers.CompanyController.companyUpdateView()
@@ -48,9 +47,6 @@ GET    /deletUser                     controllers.CompanyController.deleteCompan
 GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
 POST   /updateUser/:id                controllers.CompanyController.adminUpdateCompany(id: Long)
 POST   /changePassw/:id               controllers.CompanyController.changePass(id: Long)
-GET    /changePass                    controllers.CompanyController.changePassView()
-GET    /inputEmail                    controllers.CompanyController.inputEmailView()
-POST   /sendRequest                   controllers.CompanyController.sendRequest()
 GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()

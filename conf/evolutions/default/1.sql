@@ -59,6 +59,13 @@ create table photo (
   constraint pk_photo primary key (id))
 ;
 
+create table reset_pasword (
+  id                        varchar(255) not null,
+  user_email                varchar(255),
+  date                      timestamp,
+  constraint pk_reset_pasword primary key (id))
+;
+
 create table transaction_cp (
   id                        bigint not null,
   payment_id                varchar(255),
@@ -94,6 +101,8 @@ create sequence faq_seq;
 
 create sequence photo_seq;
 
+create sequence reset_pasword_seq;
+
 create sequence transaction_cp_seq;
 
 create sequence user_seq;
@@ -127,6 +136,8 @@ drop table if exists faq;
 
 drop table if exists photo;
 
+drop table if exists reset_pasword;
+
 drop table if exists transaction_cp;
 
 drop table if exists user;
@@ -144,6 +155,8 @@ drop sequence if exists email_verification_seq;
 drop sequence if exists faq_seq;
 
 drop sequence if exists photo_seq;
+
+drop sequence if exists reset_pasword_seq;
 
 drop sequence if exists transaction_cp_seq;
 

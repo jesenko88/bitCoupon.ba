@@ -64,9 +64,7 @@ public class Application extends Controller {
 		return ok(test.render(SuperUser.allSuperUsers()));
 	}
 
-	public static Result chooseRegistration() {
-		return ok(chooseRegistration.render());
-	}
+	
 
 	/**
 	 * Pulls the value from two login fields and verifies if the mail exists and

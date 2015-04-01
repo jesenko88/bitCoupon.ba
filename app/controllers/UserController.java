@@ -1,8 +1,8 @@
 package controllers;
 
 import java.io.File;
-
 import java.util.Date;
+
 
 
 import helpers.CurrentUserFilter;
@@ -10,6 +10,7 @@ import helpers.AdminFilter;
 import helpers.FileUpload;
 
 import java.util.List;
+
 
 
 import helpers.HashHelper;
@@ -40,7 +41,7 @@ public class UserController extends Controller {
 	 * @return Renders the registration view
 	 */
 	public static Result signup() {
-		return ok(signup.render("Username", "Email"));
+		return ok(signup.render());
 	}
 
 	/**
@@ -65,16 +66,16 @@ public class UserController extends Controller {
 
 		if (username.length() < 4 || username.equals("Username")) {
 			flash("error", "Usernam must be at least 4 chatacters");
-			return badRequest(signup.render(null, mail));
+			return badRequest(signup.render());
 		} else if (mail.equals("Email")) {
 			flash("error", "Email is required for registration !");
-			return badRequest(signup.render(username, null));
+			return badRequest(signup.render());
 		} else if (password.length() < 6) {
 			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render(username, mail));
+			return badRequest(signup.render());
 		} else if (!password.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render(username, mail));
+			return badRequest(signup.render());
 		}
 
 		/*
@@ -101,7 +102,7 @@ public class UserController extends Controller {
 		} else {
 			flash("error", "Username or email allready exists!");
 			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render(username, mail));
+			return badRequest(signup.render());
 		}
 
 	}
@@ -284,11 +285,14 @@ public class UserController extends Controller {
 	 */
 	public static Result profilePage(String username) {
 		User u = User.find(username);
-		if (!u.username.equals(session("name"))) {
-			return redirect("/");
+		Company c = Company.find(username);
+		
+		if (u != null) {
+			return ok(profile.render(u));
+		}else if(c != null){
+			return ok(profile.render(c));
 		}
-
-		return ok(profile.render(u));
+		return redirect("/");
 	}
 
 	/**
@@ -390,11 +394,6 @@ public class UserController extends Controller {
 		}
 	}
 
-	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result changePassView() {
-		User currentUser = User.find(session("name"));
-		return ok(changePassView.render(currentUser));
-	}
 
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result changePass(long id) {
@@ -413,69 +412,107 @@ public class UserController extends Controller {
 				&& !oldPass.isEmpty()) {
 			flash("error", "If you want to change your password,"
 					+ " please fill out both fields");
-			return badRequest(changePassView.render(cUser));
+			return TODO;
 		}
 		/* if there was a input in password fields */
 		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
 			if (HashHelper.checkPass(oldPass, cUser.password) == false) {
 				flash("error", "You're old password is incorrect!");
-				return badRequest(changePassView.render(cUser));
+				return TODO;
 			}
 			if (newPass.length() < 6) {
 				flash("error", "The password must be at least 6 characters");
-				return badRequest(changePassView.render(cUser));
+				return TODO;
 			}
 			cUser.password = HashHelper.createPassword(newPass);
 		}
 		if (!newPass.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(changePassView.render(cUser));
+			return TODO;
 		}
 		cUser.save();
 		flash("success", "Password changed!");
 		Logger.info(cUser.username + " is updated");
 		return ok(profile.render(cUser));
 
+	}	
+	/**
+	 * TODO finsih this method
+	 * @return
+	 */
+	public static Result newPassword(String id) {
+		String userEmail = ResetPasword.findByID(id);		
+		return ok(newPassword.render(id));
+	}
+	
+	/**
+	 * Method creating new password for user or company.
+	 * As parameter it takes id of ResetPasword object which
+	 * contains users email.
+	 * @param id
+	 * @return
+	 */
+	public static Result createNewPassword( String id){
+		ResetPasword rp = ResetPasword.find.byId(id);
+		String email = rp.userEmail;
+		User u = User.findByEmail(email);
+		Company c = Company.findByEmail(email);
+		DynamicForm df = Form.form().bindFromRequest();
+		
+		String newPassword = df.data().get("newPassword");
+		String confirmPassword = df.data().get("confirmPassword");
+		
+		//TODO CHECK IF PASSWORDS ARE EQUAL AND OTHER THINGS ABOUT PW
+		if(!newPassword.equals(confirmPassword)){
+			flash("error", "Failed to change pw, confirm passwords dont match");
+			return redirect("/newPassword/"+rp.id);
+		}
+		
+		
+		if(u != null){
+			u.password = HashHelper.createPassword(newPassword);
+			u.save();
+			rp.delete();
+		}else if(c != null){
+			c.password = HashHelper.createPassword(newPassword);
+			c.save();
+			rp.delete();
+		}
+		flash("success", "Password has been changed, please log in.");
+		return redirect("/");
 	}
 
-	public static Result inputEmailView() {
-		return ok(inputEmail.render());
-	}
-
-	public static Result newPassword() {
-		DynamicForm forma = Form.form().bindFromRequest();
-		if (forma.hasErrors()) {
-			return redirect("/inputEmail");
+	/**
+	 * TODO Method for sending reset password email.
+	 * @return
+	 */
+	public static Result sendRequest(String email) {
+		//DynamicForm forma = Form.form().bindFromRequest();
+		//String mail = forma.data().get("email");
+		User u = User.getUser(email);
+		Company c = Company.findByEmail(email);
+		SuperUser su;
+		
+		if (u == null && c == null) {
+			flash("error", "User with email you sent does not exist.");
+			return redirect("/loginpage");
 		}
-		String mail = forma.data().get("email");
-
-		if (mail.equals("Email")) {
-			flash("error", "Email is required for new password !");
-			return badRequest(inputEmail.render());
+		
+		if(u == null){
+			su = c;
+		}else{
+			su = u;
 		}
-		return ok(inputEmail.render());
-	}
-
-	public static Result sendRequest() {
-		DynamicForm forma = Form.form().bindFromRequest();
-		String mail = forma.data().get("email");
-		User u = User.getUser(mail);
-		if (mail.equals("Email")) {
-			flash("error", "Email is required for new password !");
-			return badRequest(inputEmail.render());
-		}
-		if (User.getUser(mail) == null) {
-			flash("error", "You are not registered!");
-			return badRequest(inputEmail.render());
-		}
-		String verificationEmail = EmailVerification.addNewRecord(u.id);
-		MailHelper.send(mail,
+		
+		
+		String verificationEmail = ResetPasword.createRequest(su.email);
+		MailHelper.send(email,
 				"Click on the link below to set a new password <br>"
-						+ "http://" + PATH + "/setNewPassView/"
+						+ "http://" + PATH + "/newPassword/"
 						+ verificationEmail);
 		flash("success", "Request for password has been sent on this email: "
-				+ mail);
-		return ok(inputEmail.render());
+				+ email);
+		return  redirect("/");
 	}
 	
 	

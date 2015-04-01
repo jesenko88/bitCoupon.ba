@@ -30,7 +30,7 @@ public static final String PATH = "localhost:9000";
 	 * @return Renders the registration view
 	 */
 	public static Result signupC() {
-		return ok(companySignup.render("Name", "Email"));
+		return ok(signup.render());
 	}
 
 	/**
@@ -56,16 +56,16 @@ public static final String PATH = "localhost:9000";
 
 		if (name.length() < 4 || name.equals("Name")) {
 			flash("error", "Name must be at least 4 chatacters");
-			return badRequest(companySignup.render(null, mail));
+			return badRequest(signup.render());
 		} else if (mail.equals("Email")) {
 			flash("error", "Email is required for registration !");
-			return badRequest(companySignup.render(name, null));
+			return badRequest(signup.render());
 		} else if (password.length() < 6) {
 			flash("error", "Password must be at least 6 characters!");
-			return badRequest(companySignup.render(name, mail));
+			return badRequest(signup.render());
 		} else if (!password.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(companySignup.render(name, mail));
+			return badRequest(signup.render());
 		}
 
 		else if (Company.verifyRegistration(name, mail) == true) {
@@ -79,12 +79,12 @@ public static final String PATH = "localhost:9000";
 							+ verificationEmail);
 			flash("success", "A verification mail has been sent to your email address!");
 			Logger.info("A verification mail has been sent to email address");
-			return ok(companySignup.render(name, mail));
+			return ok(signup.render());
 
 		} else {
 			flash("error", "Username or email allready exists!");
 			Logger.info("Username or email allready exists!");
-			return badRequest(companySignup.render(name, mail));
+			return badRequest(signup.render());
 		}
 	}
 	
@@ -243,7 +243,7 @@ public static final String PATH = "localhost:9000";
 			return redirect("/");
 		}
 
-		return ok(companyProfile.render(c)); 
+		return ok(profile.render(c)); 
 	}
 	
 	/**
@@ -336,19 +336,17 @@ public static final String PATH = "localhost:9000";
 		}
 	}	
 
-	//@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result changePassView() {
-		Company currentCompany = Company.find(session("name"));
-		return ok(changePassViewC.render(currentCompany));
-	}
-
+	/**
+	 * Method for changing password.
+	 * @param id
+	 * @return
+	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result changePass(long id) {
 		
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
-			return redirect("/updateUser ");
-		}
+			return redirect("/updateUser ");		}
 
 		String oldPass = updateForm.data().get("password");
 		String newPass = updateForm.data().get("newPassword");
@@ -361,71 +359,32 @@ public static final String PATH = "localhost:9000";
 				&& !oldPass.isEmpty()) {
 			flash("error", "If you want to change your password,"
 					+ " please fill out both fields");
-			return badRequest(changePassViewC.render(company));
+			return TODO;
 		}
 		/* if there was a input in password fields */
 		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
 			if (HashHelper.checkPass(oldPass, company.password) == false) {
 				flash("error", "You're old password is incorrect!");
-				return badRequest(changePassViewC.render(company));
+				return TODO;
 			}
 			if (newPass.length() < 6) {
 				flash("error", "The password must be at least 6 characters");
-				return badRequest(changePassViewC.render(company));
+				return TODO;
 			}
 			company.password = HashHelper.createPassword(newPass);
 		}
 		if (!newPass.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(changePassViewC.render(company));
+			return TODO;
 		}
 		
 		company.save();
 		flash("success", "Password changed!");
 		Logger.info(company.name + " is updated");
-		return ok(companyProfile.render(company));
+		return ok(profile.render(company));
 
 	}
 
-	public static Result inputEmailView() {
-		return ok(inputEmail.render());
-	}
-
-	public static Result newPassword() {
-		DynamicForm forma = Form.form().bindFromRequest();
-		if (forma.hasErrors()) {
-			return redirect("/inputEmail");
-		}
-		String mail = forma.data().get("email");
-
-		if (mail.equals("Email")) {
-			flash("error", "Email is required for new password !");
-			return badRequest(inputEmail.render());
-		}
-		return ok(inputEmail.render());
-	}
-
-	public static Result sendRequest() {
-		DynamicForm forma = Form.form().bindFromRequest();
-		String mail = forma.data().get("email");
-		Company u = Company.findByEmail(mail);
-		if (mail.equals("Email")) {
-			flash("error", "Email is required for new password !");
-			return badRequest(inputEmail.render());
-		}
-		if (Company.findByEmail(mail) == null) {
-			flash("error", "You are not registered!");
-			return badRequest(inputEmail.render());
-		}
-		String verificationEmail = EmailVerification.addNewRecord(u.id);
-		MailHelper.send(mail,
-				"Click on the link below to set a new password <br>"
-						+ "http://" + PATH + "/setNewPassView/"
-						+ verificationEmail);
-		flash("success", "Request for password has been sent on this email: "
-				+ mail);
-		return ok(inputEmail.render());
-	}
 	
 	
 	
