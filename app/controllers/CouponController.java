@@ -254,7 +254,7 @@ public class CouponController extends Controller {
 			return TODO;
 		}
 		User current = Sesija.getCurrentUser(ctx());
-		return ok(index.render(current, sorted));
+		return ok(index.render(current, sorted, Category.all()));
 	}
 	
 
@@ -493,9 +493,11 @@ public class CouponController extends Controller {
 	}
 	
 	/**
-	 * 
-	 * @param ids
-	 * @return
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is in category that user chose
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
 	 */
 	public static Result filterCategory(String ids){
 		Logger.debug("Ids: "+ids);
@@ -520,16 +522,20 @@ public class CouponController extends Controller {
 				list.add(coupon);
 			}
 		}
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
 		
-		List<Category> categorys = Category.all();
-		return ok(index.render(null, list));
+		return ok(index.render(null, list, Category.all()));
 		
 	}
-	
 	/**
-	 * 
-	 * @param ids
-	 * @return
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is between prices that User chose
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
 	 */
 	public static Result filterPrice(String ids){
 		Logger.debug("Ids: "+ids);
@@ -554,7 +560,7 @@ public class CouponController extends Controller {
 		double endPrice   = Double.parseDouble( df.data().get("end_price"));
 		if(startPrice > endPrice){
 			flash("error", "Please input correct values");
-			return ok(index.render(null, Coupon.all()));
+			return ok(index.render(null, Coupon.all(), Category.all()));
 		}
 		
 		
@@ -564,15 +570,22 @@ public class CouponController extends Controller {
 			}
 		}
 		
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
+		
 		List<Category> categorys = Category.all();
-		return ok(index.render(null, list));
+		return ok(index.render(null, list, Category.all()));
 
 	}
 	
 	/**
-	 * 
-	 * @param ids
-	 * @return
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is before the date that user chosed 
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
 	 */
 	public static Result filterDate(String ids){
 		Logger.debug("Ids: "+ids);
@@ -588,7 +601,6 @@ public class CouponController extends Controller {
 			coupons.add(currentCoupon);
 		}
 		
-		DynamicForm df = Form.form().bindFromRequest();
 		List<Coupon> list = new ArrayList<Coupon>(); 
 		
 		
@@ -600,21 +612,24 @@ public class CouponController extends Controller {
 		if (date.before(current)) {
 			Logger.info("entered a invalid date");
 			flash("error", "Enter a valid expiration date");
-			return badRequest(index.render(null, list));
+			return badRequest(index.render(null, list, Category.all()));
 		
 		}
 		
 		
 		for(Coupon coupon : coupons){
 			Date couponDate = coupon.dateExpire;
-		
 			if (couponDate.before(date)) {
 				list.add(coupon);
-			}
+			}	
 		}
 		
-		List<Category> categorys = Category.all();
-		return ok(index.render(null, list));
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
+		
+		return ok(index.render(null, list, Category.all()));
 	
 	}
 }

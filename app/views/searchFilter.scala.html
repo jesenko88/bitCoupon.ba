@@ -12,11 +12,24 @@
          <!--header-middle-->
          <div class="container">
             <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            
+            <div class="logo pull-right">
+           		<div class="search_box">
+            		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
+  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+                                  <script type="text/javascript">
+									function showDiv(toggle){
+									document.getElementById(toggle).style.display = 'block';
+									}
+									</script>
+            	</div>
+            </div>
             <div class="logo pull-right">
                <div class="search_box">
                   <form action="/search" method="GET">
                      <input id="q" name="q" type="text" placeholder="Search" />
                   </form>
+                  
                </div>
             </div>
          </div>
@@ -33,8 +46,8 @@
       <!-- SANELA PART -->
       
       
-      <div class="row">
- 		 <div class="col-md-12" style="margin-bottom: 20px">
+      <div class="row" id="toggle" style="display:none">
+ 		 <div class="col-md-12" style="margin: 20px 0" >
       
       
          <div class="col-sm-6">

@@ -1,4 +1,4 @@
-@(user: User)(coupons: List[Coupon])
+@(user: User)(coupons: List[Coupon])(categorys: List[Category])
 @import helper._
 @main("Welcome to bitCoupon") {
 @*	
@@ -13,12 +13,21 @@
          <div class="container">
             <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
             <div class="logo pull-right">
+           		<div class="search_box">
+            		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
+  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+                                  <script type="text/javascript">
+									function showDiv(toggle){
+									document.getElementById(toggle).style.display = 'block';
+									}
+									</script>
+            	</div>
+            </div>
+            <div class="logo pull-right">
                <div class="search_box">
                   <form action="/search" method="GET">
-                  	
                      <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>               
-                  
+                  </form>
                   
                </div>
             </div>
@@ -28,23 +37,68 @@
       </div>
       </div>	
    </header>
+   
+   
    <div class="container">
    <div class="features_items">
       <!--features_items-->
+      
+      
+      
+      
+      
+      <!-- SANELA PART -->
+      
+      
+      <div class="row" id="toggle" style="display:none">
+ 		 <div class="col-md-12" style="margin: 20px 0" >
+      
+      
+         <div class="col-sm-6">
+            <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
+               <select id="category" name="category" required>
+                  <option value="" style="display:none">Select category</option>
+                  @for(category <- categorys) {
+                  <option>@category.name</option>
+                  }
+               </select>
+               <input type="submit" class="btn btn-success"> 
+            </form>
+            <form action="@routes.CouponController.filterPrice(Coupon.commaSeparatedIds(coupons))" method="POST">
+               <input type="number" name="start_price" id="start_price" min="1" step="any" placeholder="Price"/>
+               <input type="number" name="end_price" id="end_price" min="1" step="any" placeholder="Price"/>
+               <input type="submit" class="btn btn-success"> 
+            </form>
+            <form action="@routes.CouponController.filterDate(Coupon.commaSeparatedIds(coupons))" method="POST">
+               @*	<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
+               *@	<input type="date" id="datepicker" name="dateExpire">
+               <input type="submit" class="btn btn-success"> 
+            </form>
+            </div>
+            <div class="col-sm-6">
+            <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
+               <select id="orderby" name="orderby" required>
+                  <option value="" style="display:none">Order by: </option>
+                  <option>Category</option>
+                  <option >Price</option>
+                  <option>Date</option>
+               </select>
+               <input type="radio" id="method" name="method" value="ascending" checked>Ascending
+               <input type="radio" id="method" name="method" value="descending">Descending
+               <input type="submit" class="btn btn-success">                  
+            </form>
+         </div>
+      </div>
+      </div>
+      
+      
+      
+      
+      
+      
       <h2 class="title text-center">Available Coupons</h2>
        <div class="col-sm-4">
-   <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
-         <select id="orderby" name="orderby" required>
-			<option value="" style="display:none">Order by: </option>							
-			<option>Category</option>
-			<option >Price</option>
-			<option>Date</option>
-		</select>
-		<input type="radio" id="method" name="method" value="ascending" checked>Ascending
-		<input type="radio" id="method" name="method" value="descending">Descending
-		 
-		<input type="submit" class="btn btn-success">                  
-  </form>
+   
    </div>
    </div>
    

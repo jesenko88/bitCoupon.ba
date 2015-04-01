@@ -56,10 +56,10 @@ public class Application extends Controller {
 	public static Result index() {
 		name = session("name");
 		if (name == null) {
-			return ok(index.render(null, Coupon.all()));
+			return ok(index.render(null, Coupon.all(), Category.all()));
 		} 
 		User currentUser = User.find(name);
-		return ok(index.render(currentUser, Coupon.all()));
+		return ok(index.render(currentUser, Coupon.all(), Category.all()));
 		
 	}
 
@@ -98,7 +98,7 @@ public class Application extends Controller {
 			session("name", cc.username);
 			Logger.info(cc.username + " logged in");
 			flash("success","You are logged in as: " + mail);
-			return ok(index.render(cc, Coupon.all()));
+			return ok(index.render(cc, Coupon.all(), Category.all()));
 		}
 		Logger.info("User tried to login with invalid email or password");
 		flash("error","Incorrect email or password!");

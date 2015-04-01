@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import models.Category;
 import models.Coupon;
 import models.User;
 import play.Logger;
@@ -118,7 +119,7 @@ public class PayPalController extends Controller {
 			
 			flash("error", "Something went wrong, please try again later");
 			User currentUser = User.find(session("name"));
-			return ok(index.render(currentUser, Coupon.all()));
+			return ok(index.render(currentUser, Coupon.all(), Category.all()));
 			
 			
 		} catch (PayPalRESTException e){
@@ -127,7 +128,7 @@ public class PayPalController extends Controller {
 		
 		flash("error", "Something went wrong, please try again later");
 		User currentUser = User.find(session("name"));
-		return ok(index.render(currentUser, Coupon.all()));
+		return ok(index.render(currentUser, Coupon.all(), Category.all()));
 	}
 	
 	/**
@@ -197,7 +198,7 @@ public class PayPalController extends Controller {
 		Logger.info(session("name") + " approved transaction: //TODO");
 		flash("success","Transaction complete");
 		User currentUser = User.find(session("name"));
-		return ok(index.render(currentUser, Coupon.all()));
+		return ok(index.render(currentUser, Coupon.all(), Category.all()));
 	}
 	
 }
