@@ -50,6 +50,7 @@ public class Coupon extends Model {
 	@ManyToOne
 	public Category category;
 
+	@Column(columnDefinition = "TEXT")
 	public String description;
 
 	public String remark;

@@ -29,7 +29,7 @@ create table coupon (
   expired_at                timestamp,
   picture                   varchar(255),
   category_id               bigint,
-  description               varchar(255),
+  description               TEXT,
   remark                    varchar(255),
   seller_id                 bigint,
   min_order                 integer,
