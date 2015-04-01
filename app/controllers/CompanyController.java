@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import views.html.coupon.*;
 import views.html.company.*;
 import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
-
 import helpers.FileUpload;
 import helpers.HashHelper;
 import helpers.MailHelper;
@@ -27,12 +27,6 @@ public class CompanyController extends Controller {
 public static final String PATH = "localhost:9000"; 
 	static Form<Company> companyForm = new Form<Company>(Company.class);
 
-	/**
-	 * @return Renders the registration view
-	 */
-	public static Result signupC() {
-		return ok(signup.render());
-	}
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -219,13 +213,18 @@ public static final String PATH = "localhost:9000";
 	 */
 	public static Result searchCompanies(String qU) {
 		List<Company> companies = Company.getFind().where().ilike("username", "%" + qU + "%").findList();
-
+		List<User> allUsers = User.all();
+		List<SuperUser> merged = new ArrayList<SuperUser>();
+		
+		merged.addAll(allUsers);
+		merged.addAll(companies);
+		
 		if (companies.isEmpty()) {
-			flash("error", "No such user");
-			return badRequest(companyList.render(null, Company.all())); 
+			flash("error", "No such company");
+			return badRequest(userList.render(merged)); 
 		}
 
-		return ok(companyList.render(null, companies));
+		return ok(userList.render(merged));
 	}
 
 	/**
@@ -243,16 +242,7 @@ public static final String PATH = "localhost:9000";
 		return ok(profile.render(c)); 
 	}
 	
-	/**
-	 * Renders the user list view. Lists all user from the database
-	 *
-	 * @return Result
-	 */
-	@Security.Authenticated(AdminFilter.class)
-	public static Result listCompanies() {
-		return ok(companyList.render(session("name"), Company.all()));
-	}
-
+	
 	/**
 	 * Delete user by id. Delete is possible only for own deletion, or if it's
 	 * done by Admin.

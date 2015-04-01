@@ -1,7 +1,9 @@
 package controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+
 
 
 
@@ -10,6 +12,7 @@ import helpers.AdminFilter;
 import helpers.FileUpload;
 
 import java.util.List;
+
 
 
 
@@ -274,13 +277,17 @@ public class UserController extends Controller {
 	public static Result searchUsers(String qU) {
 		List<User> users = User.getFind().where()
 				.ilike("username", "%" + qU + "%").findList();
-
+		List<Company> allCompanies = Company.all();
+		List<SuperUser> merged = new ArrayList<SuperUser>();
+		merged.addAll(users);
+		merged.addAll(allCompanies);
+		
 		if (users.isEmpty()) {
 			flash("error", "No such user");
 			return badRequest(userList.render( SuperUser.allSuperUsers()));
 		}
 
-		return ok(userList.render(SuperUser.allSuperUsers()));
+		return ok(userList.render(merged));
 	}
 
 	/**
