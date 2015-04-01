@@ -6,6 +6,7 @@ import java.util.List;
 
 import views.html.*;
 import views.html.user.*;
+import views.html.admin.users.*;
 import views.html.coupon.*;
 import views.html.company.*;
 import helpers.AdminFilter;
@@ -164,8 +165,8 @@ public static final String PATH = "localhost:9000";
 		}
 		List<User> adminList = User.findAdmins(true);
 		Company companyToUpdate = Company.findById(id);
-		return ok(adminEditCompany
-				.render(session("name"), companyToUpdate));
+		return ok(adminEditUser
+				.render(companyToUpdate, adminList));
 	}
 
 	/**
@@ -178,10 +179,6 @@ public static final String PATH = "localhost:9000";
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateCompany(long id) {
 		List<User> adminList = User.findAdmins(true);
-
-		if (Sesija.adminCheck(ctx()) != true) {
-			return redirect("/");
-		}
 
 		if (companyForm.hasErrors()) {
 			return redirect("/@editUser/:" + id); // provjeriti
@@ -200,14 +197,14 @@ public static final String PATH = "localhost:9000";
 		 * intact
 		 */
 
-		if (newPass.length() > 0) {
+		if (newPass.length() > 5) {
 			company.password = HashHelper.createPassword(newPass);
 		}
 		company.updated = new Date();
 		company.save();
 		flash("success", "Company " + company.name + " updated!");
 		Logger.info(session("name") + " updated company: " + company.name);
-		return ok(adminEditCompany.render(session("name"), company));
+		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
 	
@@ -265,14 +262,12 @@ public static final String PATH = "localhost:9000";
 	 * @return Result renders the same view
 	 */
 	@Security.Authenticated(AdminFilter.class)
-	public static Result deleteCompany(Long id) {
+	public static Result deleteCompany(long id) {
 		List<User> adminList = User.findAdmins(true);
-		Company currentCompany = Sesija.getCurrentCompany(ctx());
-
-		if (currentCompany.id == id || Sesija.adminCheck(ctx())) {
-			Company.delete(id);
-		}
-		return ok(companyList.render(session("name"), Company.all()));
+		Company currentCompany = Company.findById(id);		
+		Company.delete(id);
+		
+		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 	
 	/**

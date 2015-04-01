@@ -182,15 +182,25 @@ public class UserController extends Controller {
 	 * @return Result render adminEditUser
 	 */
 	@Security.Authenticated(AdminFilter.class)
-	public static Result adminEditUserView(long id) {
+	public static Result adminEditUserView(String email) {
 
-		if (Sesija.adminCheck(ctx()) != true) {
-			return redirect("/");
-		}
 		List<User> adminList = User.findAdmins(true);
-		User userToUpdate = User.find(id);
-		return ok(adminEditUser
-				.render(session("name"), userToUpdate, adminList));
+		
+		User userToUpdate = User.findByEmail(email);
+		Company companyToUpdate = Company.findByEmail(email);
+		
+		if(userToUpdate != null){
+			Logger.debug("In user edit");
+			return ok(adminEditUser
+					.render(userToUpdate, adminList));
+		}else if(companyToUpdate != null){
+			Logger.debug("In company edit");
+			return ok(adminEditUser
+					.render(companyToUpdate, adminList));
+		}else{
+			return TODO;
+		}
+		
 	}
 
 	/**
@@ -203,10 +213,6 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateUser(long id) {
 		List<User> adminList = User.findAdmins(true);
-
-		if (Sesija.adminCheck(ctx()) != true) {
-			return redirect("/");
-		}
 
 		if (userForm.hasErrors()) {
 			return redirect("/@editUser/:" + id); // provjeriti
@@ -226,7 +232,7 @@ public class UserController extends Controller {
 		 * intact
 		 */
 
-		if (newPass.length() > 0) {
+		if (newPass.length() > 5) {
 			cUser.password = HashHelper.createPassword(newPass);
 		}
 		if (!User.isLastAdmin(cUser)) {
@@ -236,7 +242,7 @@ public class UserController extends Controller {
 		cUser.save();
 		flash("success", "User " + cUser.username + " updated!");
 		Logger.info(session("name") + " updated user: " + cUser.username);
-		return ok(adminEditUser.render(session("name"), cUser, adminList));
+		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
 	/*
@@ -271,10 +277,10 @@ public class UserController extends Controller {
 
 		if (users.isEmpty()) {
 			flash("error", "No such user");
-			return badRequest(userList.render(null, User.all()));
+			return badRequest(userList.render( SuperUser.allSuperUsers()));
 		}
 
-		return ok(userList.render(null, users));
+		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
 	/**
@@ -303,7 +309,7 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
 
-		return ok(userList.render(session("name"), User.all()));
+		return ok(userList.render( SuperUser.allSuperUsers()));
 	}
 
 	/**
@@ -321,7 +327,7 @@ public class UserController extends Controller {
 
 		if (adminList.size() == 1 && id == currentUser.id) {
 			flash("error", "You are the last admin!");
-			return ok(userList.render(session("name"), User.all()));
+			return ok(userList.render(SuperUser.allSuperUsers()));
 		}
 
 		if (currentUser.id == id || Sesija.adminCheck(ctx())) {
@@ -330,7 +336,7 @@ public class UserController extends Controller {
 				return redirect("/signup ");
 			}
 		}
-		return ok(userList.render(session("name"), User.all()));
+		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
 	/**
