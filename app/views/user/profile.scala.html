@@ -102,7 +102,7 @@
             @if(superUser.getCompany().logo == null){
             <img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
             }else{
-            <img src='@routes.Assets.at(superUser.getCompany().logo)' class="avatar-profile"/>
+            <img src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
             }
          </div>
       </div>

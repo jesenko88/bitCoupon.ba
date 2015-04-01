@@ -35,13 +35,13 @@ GET    /sendRequest                   controllers.UserController.sendRequest(ema
 
 
 
-POST   /registerC                     controllers.CompanyController.registerC()
-POST   /userUpdatePhoto               controllers.CompanyController.updatePhoto(id: Long)	
+POST   /companyUpdatePhoto            controllers.CompanyController.updatePhoto(id: Long)	
 GET    /verifyEmail/:id               controllers.CompanyController.verifyEmail(id: String)
 GET    /verifyEmailUpdate/:username   controllers.CompanyController.verifyEmailUpdate(username: String)
 GET    /searchUsers                   controllers.CompanyController.searchCompanies(qU: String)
 GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 ######## WORKING ROUTES FOR COMPANY GO BELOW HERE ######
+POST   /registerC                     controllers.CompanyController.registerC()
 POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)

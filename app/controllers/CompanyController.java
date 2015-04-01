@@ -302,7 +302,7 @@ public static final String PATH = "localhost:9000";
 
 	public static Result updatePhoto(long companyId) {
 		Company c = Company.findById(companyId);
-		String subFolder = "user_profile" + File.separator + "user_" + companyId;
+		String subFolder = "company_profile" + File.separator + "company_" + companyId;
 		boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
 				+ subFolder).isDirectory();
 		if (checkIfDirectoryExists) {
@@ -312,7 +312,7 @@ public static final String PATH = "localhost:9000";
 			c.save();
 			return redirect("/profile/@" + c.name);
 		} else {
-			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
+			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdirs();
 			String assetsPath = FileUpload.imageUpload(subFolder);
 			Logger.debug(assetsPath);
 			c.logo = assetsPath;
