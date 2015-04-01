@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import models.Company;
 import models.Coupon;
 import models.TransactionCP;
 import models.User;
@@ -33,6 +34,7 @@ import com.paypal.base.rest.PayPalRESTException;
 public class PayPalController extends Controller {
 	
 	static User currentUser = User.find(session("name"));
+	static Company company = Company.find(session("name"));
 	static Coupon coupon;
 	static List<String> details;
 	static APIContext apiContext;
@@ -179,7 +181,7 @@ public class PayPalController extends Controller {
 	 */
 	public static Result couponFail(){
 		flash("error","Transaction canceled");
-		return ok(coupontemplate.render(currentUser, coupon));
+		return ok(coupontemplate.render(company, coupon));
 	}
 	
 	/**

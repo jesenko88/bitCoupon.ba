@@ -62,8 +62,8 @@ public class CouponController extends Controller {
 	 */
 	public static Result showCoupon(long id) {
 		Coupon current = Coupon.find(id);
-		User cUser = User.find(session("name"));
-		return ok(coupontemplate.render(cUser, current));
+		Company company = Company.find(session("name"));
+		return ok(coupontemplate.render(company, current));
 	
 	}
 
@@ -179,7 +179,7 @@ public class CouponController extends Controller {
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();
 		
 		coupon.minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());
-		
+		coupon.status = true;
 		/* file upload only if its changed */
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
@@ -351,6 +351,8 @@ public class CouponController extends Controller {
 		String remark = couponForm.bindFromRequest().field("remark").value();
 
 		int minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());
+		boolean status = true;
+
 		Company company = Company.find(session("name"));
 		/*
 		 * Managing file upload.
@@ -359,14 +361,14 @@ public class CouponController extends Controller {
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
 			long id = Coupon.createCoupon(name, price, date, assetsPath, category,
-					description, remark, minOrder, company);
+					description, remark, minOrder, company, status);
 			Logger.info(session("name") + " created coupon " + id);
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		} else {
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date, FileUpload.DEFAULT_IMAGE,
-					category, description, remark, minOrder, company);
+					category, description, remark, minOrder, company, status);
 			Logger.info(session("name") + " created coupon " + id + " without image");
 			return redirect("/couponPanel");
 		}

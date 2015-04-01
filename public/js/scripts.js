@@ -22,3 +22,9 @@ $(document).ready(function() {
 			$('#someId').show();
 	})
 });
+
+$(document).ready(function() {
+	$('#forgotPass').click(function(e) {
+			$('#inputEmailForm').show();
+	})
+});

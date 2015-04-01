@@ -61,6 +61,8 @@ public class Coupon extends Model {
 	public List<TransactionCP> buyers;
 
 	public int minOrder;
+	
+    public boolean status;
 	/*
 	 * public String code;
 	 * 
@@ -106,7 +108,7 @@ public class Coupon extends Model {
 		 */
 	}
 	public Coupon(String name, double price, Date dateExpire, String picture,
-			Category category, String description, String remark, int minOrder, Company seller) {
+			Category category, String description, String remark, int minOrder, Company seller, boolean status) {
 
 		this.name = name;
 		this.price = price;
@@ -118,6 +120,7 @@ public class Coupon extends Model {
 		this.remark = remark;
 		this.minOrder = minOrder;
 		this.seller = seller;
+		this.status = status;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -143,11 +146,11 @@ public class Coupon extends Model {
 	 * Method with minimum order variable.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder, Company seller) {
+			String picture, Category category, String description, String remark, int minOrder, Company seller, boolean status) {
 
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder, seller);
+				category, description, remark, minOrder, seller, status);
 		newCoupon.save();
 		return newCoupon.id;
 	}
@@ -483,7 +486,7 @@ public class Coupon extends Model {
 	 * @return List of Coupons
 	 */
 	public static List<Coupon> ownedCoupons(long companyID) {
-		
+
 		return find.where().eq("seller_id", companyID).findList();
 	}
 
