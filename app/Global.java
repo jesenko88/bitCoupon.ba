@@ -5,6 +5,7 @@ import java.util.Date;
 
 import helpers.HashHelper;
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
@@ -42,6 +43,12 @@ public class Global extends GlobalSettings {
 		Category food = null;
 		Category travel = null;
 		Category sport = null;
+		Company bitCamp = null;
+		
+		if ( !Company.exists("BitCamp")){
+			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), "/");
+			bitCamp.save();
+		}
 		
 		if(Category.exists("Food") == false){
 			food = new Category("Food"); 
@@ -61,7 +68,7 @@ public class Global extends GlobalSettings {
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
-					remarkCoupon1);
+					remarkCoupon1, 5, bitCamp);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
 			Coupon.createCoupon(
@@ -70,7 +77,7 @@ public class Global extends GlobalSettings {
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
-					remarkCoupon2);
+					remarkCoupon2, 5, bitCamp);
 		}
 		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -88,7 +95,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3);
+					remarkCoupon3, 5, bitCamp);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {

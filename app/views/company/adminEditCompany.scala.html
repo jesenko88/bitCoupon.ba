@@ -1,0 +1,93 @@
+@(name: String)(company: Company)
+
+@import helper._
+
+@main("User Panel") {
+
+<body>
+		<header id="header"><!--header-->
+		
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-bottom"><!--header-bottom-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="@routes.UserController.listUsers">Company panel</a></li>
+								<li><a href="/allCoupons">Coupons panel</a></li>
+								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
+								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
+								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</div>
+		</header>
+	</section>
+	
+
+	
+	<div class="container">
+					
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Edit Company</h2>
+						<div class="col-sm-6 col-sm-offset-1">
+						
+						<h5>Edit company: @company.name</h5>
+					
+					<div class="signup-form"><!--sign up form-->
+						<form action="@routes.CompanyController.adminUpdateCompany(company.id)" method ="POST" >
+						
+													
+							<input type="text" name="username" id="username" placeholder="Username" value=@company.name required/>
+							<input type="text" name="email" id="email" placeholder=Email value=@company.email required/>
+							<input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
+					    				<br>
+					    				<br>
+							<button type="submit" class="btn btn-default">Update company</button>
+								<br>
+					    				<br>
+					    				<br>
+			
+						</form>
+					</div><!--/sign up form-->
+					
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+							</div>
+						</div>
+					</div>
+	<p></p>
+										<p></p>
+											<p></p>
+	</body>
+		
+	
+
+	
+}
+

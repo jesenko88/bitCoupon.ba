@@ -6,3 +6,19 @@ $(document).ready(function() {
 			$('#newCategory').hide();
 	})
 });
+
+$(document).ready(function() {
+	$('#companySignup').click(function(e) {
+			$('#companyRegistration').show();
+
+			$('#someId').hide();
+	})
+});
+
+$(document).ready(function() {
+	$('#signup').click(function(e) {
+			$('#companyRegistration').hide();
+
+			$('#someId').show();
+	})
+});

@@ -187,10 +187,10 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result approveTransaction(){
-		//TODO add real seller
+		
 		try {	
 			payment.execute(apiContext, paymentExecution);
-			TransactionCP.createTransaction( paymentID, totalPrice, token, currentUser, null, coupon);
+			TransactionCP.createTransaction( paymentID, totalPrice, token, currentUser, coupon);
 
 					
 		} catch (PayPalRESTException e) {

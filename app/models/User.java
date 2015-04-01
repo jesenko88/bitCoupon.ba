@@ -24,19 +24,10 @@ import play.db.ebean.Model;
  */
 
 @Entity
-public class User extends Model {
-
-	@Id
-	public long id;
-
+public class User extends SuperUser {
+	
 	@Required
 	public String username;
-
-	@Email
-	public String email;
-
-	@Required
-	public String password;
 
 	public boolean isAdmin;
 	
@@ -49,18 +40,12 @@ public class User extends Model {
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
 	public List<TransactionCP> bought_coupons;
 	
-	@OneToMany(mappedBy="seller", cascade=CascadeType.ALL)
-	public List<TransactionCP> sold_coupons;
-
-
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
 	public User(String username, String email, String password, boolean isAdmin) {
-
-		this.username = username;
-		this.email = email;
-		this.password = password;
+		super(email, password);
+		this.username = username;		
 		this.created = new Date();
 		this.isAdmin = isAdmin;
 	}
@@ -235,5 +220,10 @@ public class User extends Model {
 	public static void setFind(Finder<Long, User> find) {
 		User.find = find;
 	}
+	
+	public static User findByEmail(String email){
+		return find.where().eq("email", email).findUnique();
+	}
+
 	
 }

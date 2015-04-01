@@ -20,8 +20,10 @@ import org.h2.util.StringUtils;
 import com.google.common.io.Files;
 
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.Photo;
+import models.SuperUser;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -39,6 +41,8 @@ public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
+	
+
 	
 	/**
 	 * 
@@ -60,6 +64,7 @@ public class CouponController extends Controller {
 		Coupon current = Coupon.find(id);
 		User cUser = User.find(session("name"));
 		return ok(coupontemplate.render(cUser, current));
+	
 	}
 
 	/**
@@ -346,6 +351,7 @@ public class CouponController extends Controller {
 		String remark = couponForm.bindFromRequest().field("remark").value();
 
 		int minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());
+		Company company = Company.find(session("name"));
 		/*
 		 * Managing file upload.
 		 */
@@ -353,14 +359,14 @@ public class CouponController extends Controller {
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
 			long id = Coupon.createCoupon(name, price, date, assetsPath, category,
-					description, remark, minOrder);
+					description, remark, minOrder, company);
 			Logger.info(session("name") + " created coupon " + id);
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		} else {
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date, FileUpload.DEFAULT_IMAGE,
-					category, description, remark, minOrder);
+					category, description, remark, minOrder, company);
 			Logger.info(session("name") + " created coupon " + id + " without image");
 			return redirect("/couponPanel");
 		}

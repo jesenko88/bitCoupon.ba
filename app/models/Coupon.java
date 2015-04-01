@@ -54,8 +54,8 @@ public class Coupon extends Model {
 
 	public String remark;
 	
-	//@OneToOne
-	public User seller;
+	@ManyToOne
+	public Company seller;
 	
 	@OneToMany(mappedBy="coupon", cascade=CascadeType.ALL)
 	public List<TransactionCP> buyers;
@@ -106,7 +106,7 @@ public class Coupon extends Model {
 		 */
 	}
 	public Coupon(String name, double price, Date dateExpire, String picture,
-			Category category, String description, String remark, int minOrder) {
+			Category category, String description, String remark, int minOrder, Company seller) {
 
 		this.name = name;
 		this.price = price;
@@ -117,6 +117,7 @@ public class Coupon extends Model {
 		this.description = description;
 		this.remark = remark;
 		this.minOrder = minOrder;
+		this.seller = seller;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -142,11 +143,11 @@ public class Coupon extends Model {
 	 * Method with minimum order variable.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder) {
+			String picture, Category category, String description, String remark, int minOrder, Company seller) {
 
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder);
+				category, description, remark, minOrder, seller);
 		newCoupon.save();
 		return newCoupon.id;
 	}
@@ -474,5 +475,16 @@ public class Coupon extends Model {
 	 * 
 	 * } if (oldCoupon.isEmpty()){ return null; } } return oldCoupon;
 	 */
+	
+	
+	/**
+	 * Return all coupons owned by a company
+	 * @param id of the company
+	 * @return List of Coupons
+	 */
+	public static List<Coupon> ownedCoupons(long companyID) {
+		
+		return find.where().eq("seller_id", companyID).findList();
+	}
 
 }

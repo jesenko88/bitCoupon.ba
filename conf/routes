@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
 POST   /login                         controllers.Application.login()
@@ -10,6 +11,7 @@ GET    /logout                        controllers.Application.logout()
 GET    /loginToComplete               controllers.Application.loginToComplete()
 POST   /contact                       controllers.Application.sendMail()
 GET    /contact                       controllers.Application.contact()
+
 
 GET    /signup                        controllers.UserController.signup()
 POST   /register                      controllers.UserController.register()
@@ -23,18 +25,28 @@ GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id:
 GET    /verifyEmailUpdate/:username   controllers.UserController.verifyEmailUpdate(username: String)
 GET    /searchUsers                   controllers.UserController.searchUsers(qU: String)
 GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
-
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
-GET    /editUser/:id                  controllers.UserController.adminEditUserView(id: Long)
+GET    /editUser/:email               controllers.UserController.adminEditUserView(email: String)
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
-POST   /changePass/:id                controllers.UserController.changePass(id: Long)
-GET    /changePass                    controllers.UserController.changePassView()
+POST   /userChangePass/:id            controllers.UserController.changePass(id: Long)
+GET    /newPassword/:id               controllers.UserController.newPassword(id: String)
+POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
+GET    /sendRequest                   controllers.UserController.sendRequest(email: String)
 
-GET    /inputEmail                    controllers.UserController.inputEmailView()
-POST   /sendRequest                   controllers.UserController.sendRequest()
 
-GET    /setNewPassView/:id            controllers.UserController.setNewPassView(id: String)
-POST   /setNewPassword                controllers.UserController.setNewPassword(id: String)
+
+GET    /searchCompanies               controllers.CompanyController.searchCompanies(qU: String)
+GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
+######## WORKING ROUTES FOR COMPANY GO BELOW HERE ######
+GET    /verifyEmail/:id               controllers.CompanyController.verifyEmail(id: String)
+POST   /companyUpdatePhoto            controllers.CompanyController.updatePhoto(id: Long)	
+GET    /verifyEmailUpdate/:username   controllers.CompanyController.verifyEmailUpdate(username: String)
+POST   /registerC                     controllers.CompanyController.registerC()
+POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
+GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
+GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
+POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
+POST   /companyChangePass/:id         controllers.CompanyController.changePass(id: Long)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
@@ -48,15 +60,12 @@ GET    /search                        controllers.CouponController.search(q: Str
 GET    /allCoupons                    controllers.CouponController.listCoupons()
 POST   /orderby                       controllers.CouponController.sort(ids: String)
 
-
-
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()
 GET    /faq                           controllers.FAQController.showFAQ()
 POST   /editFAQ                       controllers.FAQController.updateFAQ(id: Integer)
 GET    /editFAQ/@:id                  controllers.FAQController.editFAQView(id: Integer)
 GET    /deleteFAQ                     controllers.FAQController.deleteFAQ(id: Integer)
-
 
 GET    /categoryPanel                 controllers.CategoryController.addCategoryView()
 GET    /categoryList                  controllers.CategoryController.listCategories()
@@ -71,6 +80,7 @@ GET    /couponsuccess                 controllers.PayPalController.couponSuccess
 GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
 
+GET    /test                          controllers.Application.test()
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
 GET    /webjars/*file                 controllers.WebJarAssets.at(file)
