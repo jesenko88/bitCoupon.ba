@@ -473,14 +473,7 @@ public class CouponController extends Controller {
 		
 	}
 	
-	/**
-	 * Returns all cupons to view couponsAll
-	 * @return
-	 */
-	@Security.Authenticated(AdminFilter.class)
-	public static Result listCoupons() {
-		return ok(couponsAll.render(session("name"), Coupon.all()));
-	}
+	
 
 	/**
 	 * Returns all searched coupons on view searchFilter
@@ -632,4 +625,32 @@ public class CouponController extends Controller {
 		return ok(index.render(null, list, Category.all()));
 	
 	}
+	
+	/**
+	 * Returns all non expired coupons to view couponsAll
+	 * @return list of non expired coupons
+	 */
+	@Security.Authenticated(AdminFilter.class)
+	public static Result listCoupons() {
+		Date current = new Date();
+		List<Coupon> coupons = Coupon.all();
+		List<Coupon> noExpireList = new ArrayList<Coupon>();
+		
+		for(Coupon coupon : coupons){
+			Date couponDate = coupon.dateExpire;
+			if (couponDate.after(current)) {
+				noExpireList.add(coupon);
+			}	
+		}
+		
+		if(noExpireList.isEmpty()){
+			flash("error", "All coupons had expired");
+			return ok(couponsAll.render(null, Coupon.all()));
+		}
+		
+		return ok(couponsAll.render(session("name"), noExpireList));
+	}
+	
+	
+	
 }

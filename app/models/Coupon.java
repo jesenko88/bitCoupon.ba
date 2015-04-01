@@ -431,15 +431,5 @@ public class Coupon extends Model {
 		return sb.toString();
 	}
 
-	/*
-	 * public static List<Coupon> listByDate(){ List<Coupon> oldCoupon = new
-	 * ArrayList<Coupon>(); List<Coupon> allCoupon = Coupon.all();
-	 * 
-	 * for(Coupon cp: allCoupon){ Date today = new Date(); Date expire =
-	 * cp.dateExpire; if(today.before(expire)){ oldCoupon.add(cp); }
-	 * 
-	 * 
-	 * } if (oldCoupon.isEmpty()){ return null; } } return oldCoupon;
-	 */
-
+	
 }
