@@ -206,10 +206,10 @@ public class CouponController extends Controller {
 		if (coupons.isEmpty()) {
 			flash("error", "No such coupon");
 			User u = User.find(session("name"));
-			return badRequest(index.render(u, Coupon.all()));
+			return badRequest(searchFilter.render(Coupon.all(), Category.all()));
 		}
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
-		return ok(index.render(null, coupons));
+		return ok(searchFilter.render(coupons, Category.all()));
 	}
 	
 	/**
@@ -261,7 +261,7 @@ public class CouponController extends Controller {
 			return TODO;
 		}
 		User current = Sesija.getCurrentUser(ctx());
-		return ok(index.render(current, sorted));
+		return ok(index.render(current, sorted, Category.all()));
 	}
 	
 
@@ -483,11 +483,183 @@ public class CouponController extends Controller {
 	}
 	
 	
+
+	/**
+	 * Returns all searched coupons on view searchFilter
+	 * @return
+	 */
+	public static Result searchPage() {
+		List<Coupon> coupons = Coupon.all();
+		List<Category> categorys = Category.all();
+		return ok(searchFilter.render(coupons, categorys));
+	}
+	
+	/**
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is in category that user chose
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
+	 */
+	public static Result filterCategory(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		String categoryChosed = df.data().get("category");
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		for(Coupon coupon : coupons){
+			if (coupon.category.name.equalsIgnoreCase(categoryChosed)){
+				list.add(coupon);
+			}
+		}
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
+		
+		return ok(index.render(null, list, Category.all()));
+		
+	}
+	/**
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is between prices that User chose
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
+	 */
+	public static Result filterPrice(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		
+		// PRICE Filter
+		double startPrice =Double.parseDouble( df.data().get("start_price"));
+		double endPrice   = Double.parseDouble( df.data().get("end_price"));
+		if(startPrice > endPrice){
+			flash("error", "Please input correct values");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
+		
+		
+		for(Coupon coupon : coupons){
+			if (coupon.price >= startPrice && coupon.price <= endPrice){
+				list.add(coupon);
+			}
+		}
+		
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
+		
+		List<Category> categorys = Category.all();
+		return ok(index.render(null, list, Category.all()));
+
+	}
+	
+	/**
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is before the date that user chosed 
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
+	 */
+	public static Result filterDate(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		
+		// Date Filter
+		Date date = couponForm.bindFromRequest().get().dateExpire;
+		Date current = new Date();
+		
+		
+		if (date.before(current)) {
+			Logger.info("entered a invalid date");
+			flash("error", "Enter a valid expiration date");
+			return badRequest(index.render(null, list, Category.all()));
+		
+		}
+		
+		
+		for(Coupon coupon : coupons){
+			Date couponDate = coupon.dateExpire;
+			if (couponDate.before(date)) {
+				list.add(coupon);
+			}	
+		}
+		
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(null, Coupon.all(), Category.all()));
+		}
+		
+		return ok(index.render(null, list, Category.all()));
+	
+	}
+	
+	/**
+	 * Returns all non expired coupons to view couponsAll
+	 * @return list of non expired coupons
+	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCoupons() {
-
-		return ok(couponsAll.render(session("name"), Coupon.all()));
+		Date current = new Date();
+		List<Coupon> coupons = Coupon.all();
+		List<Coupon> noExpireList = new ArrayList<Coupon>();
+		
+		for(Coupon coupon : coupons){
+			Date couponDate = coupon.dateExpire;
+			if (couponDate.after(current)) {
+				noExpireList.add(coupon);
+			}	
+		}
+		
+		if(noExpireList.isEmpty()){
+			flash("error", "All coupons had expired");
+			return ok(couponsAll.render(null, Coupon.all()));
+		}
+		
+		return ok(couponsAll.render(session("name"), noExpireList));
 	}
-
-
+	
+	
+	
 }

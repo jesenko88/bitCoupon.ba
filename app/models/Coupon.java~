@@ -466,7 +466,7 @@ public class Coupon extends Model {
 		return sb.toString();
 	}
 
-
+<<<<<<< HEAD
 	/*
 	 * public static List<Coupon> listByDate(){ List<Coupon> oldCoupon = new
 	 * ArrayList<Coupon>(); List<Coupon> allCoupon = Coupon.all();
@@ -489,5 +489,7 @@ public class Coupon extends Model {
 		return find.where().eq("seller_id", companyID).findList();
 	}
 
-
+=======
+	
+>>>>>>> SearchPart
 }

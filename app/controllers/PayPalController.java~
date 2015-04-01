@@ -203,10 +203,13 @@ public class PayPalController extends Controller {
 		}
 		Logger.info(session("name") + " approved transaction: //TODO");
 		flash("success","Transaction complete");
-
+<<<<<<< HEAD
+		
+		return ok(index.render(currentUser, Coupon.all()));
+=======
 		User currentUser = User.find(session("name"));
 		return ok(index.render(currentUser, Coupon.all(), Category.all()));
-
+>>>>>>> SearchPart
 	}
 	
 }

@@ -53,10 +53,23 @@ public class Application extends Controller {
 	public static Result index() {
 		name = session("name");
 		if (name == null) {
+<<<<<<< HEAD
+			return ok(index.render(null, Coupon.all()));
+		}
+		User currentUser = User.find(name);
+		return ok(index.render(currentUser, Coupon.all()));
+
+	}
+	
+	public static Result test(){
+		return ok(test.render(SuperUser.allSuperUsers()));
+=======
 			return ok(index.render(null, Coupon.all(), Category.all()));
 		} 
 		User currentUser = User.find(name);
 		return ok(index.render(currentUser, Coupon.all(), Category.all()));
+		
+>>>>>>> SearchPart
 	}
 
 	
