@@ -53,14 +53,14 @@ public class SuperUserController extends Controller {
 		User user;
 		Company company;
 		if (superUser.isUser()) {
-			user = (User) superUser;
+			user = superUser.getUser();
 			user.updated = new Date();
 			user.save();
 			flash("success", "Password changed!");
 			Logger.info(user.username + " is updated");
 			return ok(profile.render(user));
 		}
-		company = (Company) superUser;
+		company = superUser.getCompany();
 		company.updated = new Date();
 		company.save();
 		flash("success", "Password changed!");
