@@ -112,11 +112,13 @@ public class PayPalController extends Controller {
 			payment.setRedirectUrls(redirectUrls);
 			
 			Payment createdPayment = payment.create(apiContext);
+			System.out.println(createdPayment.toJSON());
 			
 			Iterator<Links> itr = createdPayment.getLinks().iterator();
 			while(itr.hasNext()){
 				Links link = itr.next();
 				if (link.getRel().equals("approval_url"))
+					
 					return redirect(link.getHref());
 			}
 			
@@ -195,6 +197,7 @@ public class PayPalController extends Controller {
 		
 		try {	
 			payment.execute(apiContext, paymentExecution);
+			
 			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
 
 					

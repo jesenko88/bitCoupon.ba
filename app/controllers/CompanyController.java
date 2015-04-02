@@ -160,7 +160,6 @@ public static final String PATH = "localhost:9000";
 		 * if admin doesn't explicitly change the users password, it stays
 		 * intact
 		 */
-
 		if (newPass.length() > 5) {
 			company.password = HashHelper.createPassword(newPass);
 		}
@@ -171,23 +170,6 @@ public static final String PATH = "localhost:9000";
 		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
-		
-
-	/**
-	 * Renders the profile page view
-	 * 
-	 * @param username
-	 * @return Result
-	 */
-	public static Result companyProfilePage(String name) {
-		Company c = Company.find(name);
-		if (!c.name.equals(session("name"))) {
-			return redirect("/");
-		}
-
-		return ok(profile.render(c)); 
-	}
-	
 	
 	/**
 	 * Delete user by id. Delete is possible only for own deletion, or if it's
@@ -199,53 +181,21 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteCompany(long id) {
-		List<User> adminList = User.findAdmins(true);
-		Company currentCompany = Company.findById(id);		
-		Company.delete(id);
-		
+		Company currentCompany = Company.findById(id);
+		if ( currentCompany == null){
+			flash("error", "Company with id: " + id + " doesnt exists!");
+			return badRequest(userList.render(SuperUser.allSuperUsers()));
+		}
+		Company.delete(id);	
 		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 	
+
 	/**
-	 * Compare if the verification period is expired and send verification mail
-	 * to user e-mail adress
-	 * 
-	 * @param id
-	 *            - verification mail
-	 * @return redirect to the login view
+	 * Upload company profile photo
+	 * @param id of the company long
+	 * @return 
 	 */
-	public static Result verifyEmail(String id) {
-		EmailVerification recordToUpdate = EmailVerification.find(id);
-		String message = "";
-		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
-			EmailVerification.updateRecord(recordToUpdate);
-			flash("success", "Your e-mail is now verified. To login click on the button below");
-			Logger.info("e-mail is now verified");
-			message = " ";
-		} else {
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-			Logger.info("Verification period is expired");
-			message = " ";
-		}
-		return ok(verifyEmail.render(message));
-	}
-
-	@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result verifyEmailUpdate(String id) {
-		Company c = Company.find(session("name"));
-		EmailVerification recordToUpdate = EmailVerification.find(id);
-		String message = "";
-		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
-			EmailVerification.updateRecord(recordToUpdate);
-		flash("success", "Your profile is updated. To go to the profile page click on the button below");
-			message = " ";
-		} else {
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-			message = " ";
-		}
-		return ok(verifyEmailUpdate.render(message, c.name));
-	}
-
 	public static Result updatePhoto(long companyId) {
 		Company c = Company.findById(companyId);
 		String subFolder = "company_profile" + File.separator + "company_" + companyId;

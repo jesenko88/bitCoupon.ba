@@ -14,11 +14,11 @@
             <li><a href="/signup" class="active"><i  class="glyphicon glyphicon-user"></i> Registration</a></li>
             } else {
             @if(superUser.isUser()) {
-              <li><a href="@routes.UserController.profilePage(superUser.getUser().username)" method="GET" class="active"> @superUser.getUser().username </a></li>
+              <li><a href="@routes.SuperUserController.profilePage(superUser.getUser().username)" method="GET" class="active"> @superUser.getUser().username </a></li>
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu<strong class="caret"></strong></a>
                <ul class="dropdown-menu">
-                  <li><a href="@routes.UserController.userUpdateView">Edit profile</a>
+                  <li><a href="@routes.SuperUserController.userUpdateView">Edit profile</a>
                      @if(Sesija.adminCheck(ctx()) == true) {
                   <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">Admin Panel</a></li>
                      }                      
@@ -29,11 +29,11 @@
             </li>
             }
              @if(superUser.isCompany()) {
-              <li><a href="@routes.UserController.profilePage(superUser.getCompany().name)" method="GET" class="active"> @superUser.getCompany().name </a></li>
+              <li><a href="@routes.SuperUserController.profilePage(superUser.getCompany().name)" method="GET" class="active"> @superUser.getCompany().name </a></li>
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu<strong class="caret"></strong></a>
                <ul class="dropdown-menu">
-                  <li><a href="@routes.UserController.userUpdateView">Edit profile</a>              
+                  <li><a href="@routes.SuperUserController.userUpdateView">Edit profile</a>              
                   <li class="divider">
                   </li>
                   <li><a href="/logout" class="active"><i></i> Logout</a></li>
