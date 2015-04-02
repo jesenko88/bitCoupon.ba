@@ -108,7 +108,7 @@ public class Coupon extends Model {
 		 */
 	}
 	public Coupon(String name, double price, Date dateExpire, String picture,
-			Category category, String description, String remark, int minOrder, Company seller, boolean status) {
+			Category category, String description, String remark, int minOrder, Company seller) {
 
 		this.name = name;
 		this.price = price;
@@ -120,7 +120,7 @@ public class Coupon extends Model {
 		this.remark = remark;
 		this.minOrder = minOrder;
 		this.seller = seller;
-		this.status = status;
+		this.status = false;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -146,11 +146,25 @@ public class Coupon extends Model {
 	 * Method with minimum order variable.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
+			String picture, Category category, String description, String remark, int minOrder, Company seller) {
+
+		// Logger.debug(category.name);
+		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
+				category, description, remark, minOrder, seller);
+		newCoupon.save();
+		return newCoupon.id;
+	}
+	
+	/**
+	 * Method with status variable for global coupons.
+	 */
+	public static long createCoupon(String name, double price, Date dateExpire,
 			String picture, Category category, String description, String remark, int minOrder, Company seller, boolean status) {
 
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder, seller, status);
+				category, description, remark, minOrder, seller);
+		newCoupon.status = true;
 		newCoupon.save();
 		return newCoupon.id;
 	}

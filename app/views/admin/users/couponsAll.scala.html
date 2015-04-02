@@ -1,5 +1,4 @@
-@(username: String)(coupons: List[Coupon])
-  @import helper._
+@(username: String)(coupons: List[Coupon] = Coupon.approvedCoupons())
 
 @if(Sesija.getCurrentUser( ctx() ) != null ){
 @main("Coupon List") {
