@@ -458,6 +458,10 @@ public class Coupon extends Model {
 	 * @return
 	 */
 	public static String commaSeparatedIds(List<Coupon> coupons) {
+		if(coupons.size() < 1){
+			return null;
+		}
+		
 		StringBuilder sb = new StringBuilder();
 		for (Coupon c : coupons) {
 			sb.append(c.id).append(",");
@@ -488,6 +492,15 @@ public class Coupon extends Model {
 		
 		return find.where().eq("seller_id", companyID).findList();
 	}
-
+	
+	/**
+	 * Method checking if this coupon expired.
+	 * Returning true if it expired and false if it is not expired.
+	 * @return
+	 */
+	public  boolean checkIfExpired(){
+		Date now = new Date();
+		return dateExpire.before(now);
+	}
 
 }

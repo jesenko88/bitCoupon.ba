@@ -50,9 +50,10 @@
 
     <body>
 
-		@navbar()
+		@navbarT()
 		
 		@if(flash.get("success")){
+		<br>
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -66,6 +67,7 @@
 	}
 	
 		@if(flash.get("info")){
+			<br>
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -79,6 +81,7 @@
 	}
 	
 	@if(flash.get("warning")){
+		<br>
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -93,6 +96,7 @@
 
 
 	@if(flash.get("error")){
+		<br>
 		<div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">

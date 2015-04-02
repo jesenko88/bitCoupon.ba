@@ -23,7 +23,6 @@ GET    /updateUser                    controllers.UserController.userUpdateView(
 GET    /userPanel                     controllers.UserController.listUsers()
 GET    /verifyEmail/:id               controllers.UserController.verifyEmail(id: String)
 GET    /verifyEmailUpdate/:username   controllers.UserController.verifyEmailUpdate(username: String)
-GET    /searchUsers                   controllers.UserController.searchUsers(qU: String)
 GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
 GET    /editUser/:email               controllers.UserController.adminEditUserView(email: String)
@@ -34,7 +33,7 @@ GET    /sendRequest                   controllers.UserController.sendRequest(ema
 
 
 
-GET    /searchCompanies               controllers.CompanyController.searchCompanies(qU: String)
+
 GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 ######## WORKING ROUTES FOR COMPANY GO BELOW HERE ######
 GET    /verifyEmail/:id               controllers.CompanyController.verifyEmail(id: String)
@@ -57,11 +56,11 @@ GET    /editCoupon/:id                controllers.CouponController.editCoupon(id
 GET    /search                        controllers.CouponController.search(q: String)
 GET    /allCoupons                    controllers.CouponController.listCoupons()
 
-POST    /orderby                      controllers.CouponController.sort(ids: String)
-GET		/searchFilter				controllers.CouponController.searchPage()
-POST    /filterCategory               controllers.CouponController.filterCategory(ids: String)
-POST	/filterPrice				controllers.CouponController.filterPrice(ids: String)
-POST	/filterDate					controllers.CouponController.filterDate(ids: String)
+POST   /orderby                       controllers.CouponController.sort(ids: String)
+GET    /searchFilter                  controllers.CouponController.searchPage()
+POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
+POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
+POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
 
 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
@@ -86,6 +85,7 @@ GET    /approveTransaction            controllers.PayPalController.approveTransa
 
 ### SuperUser Controller
 POST   /changePass/:email             controllers.SuperUserController.changePass(email: String)
+GET    /searchUsers                   controllers.SuperUserController.searchUsers(qU: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
