@@ -490,4 +490,14 @@ public class Coupon extends Model {
 		return find.where().eq("seller_id", companyID).findList();
 	}
 
+	
+	
+	public static List<Coupon> approvedCoupons() {
+		return find.where().eq("status", true).findList();
+	}
+	
+	public static List<Coupon> nonApprovedCoupons() {
+		return find.where().eq("status", false).findList();
+	}
+	
 }

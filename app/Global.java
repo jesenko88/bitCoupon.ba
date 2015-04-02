@@ -68,7 +68,7 @@ public class Global extends GlobalSettings {
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
-					remarkCoupon1, 5, bitCamp);
+					remarkCoupon1, 5, bitCamp, true);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
 			Coupon.createCoupon(
@@ -77,7 +77,7 @@ public class Global extends GlobalSettings {
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
-					remarkCoupon2, 5, bitCamp);
+					remarkCoupon2, 5, bitCamp, true);
 		}
 		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -95,7 +95,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3, 5, bitCamp);
+					remarkCoupon3, 5, bitCamp, true);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {

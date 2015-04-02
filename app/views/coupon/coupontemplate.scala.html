@@ -98,6 +98,11 @@
 							     <a href='@routes.CouponController.deleteCoupon(coupon.id)' onclick="return confirm('Are you sure you want to delete this coupon?');"
 							   	class="btn btn-fefault cart">Delete coupon</a>
 								}
+								@if(Sesija.adminCheck(ctx()) == true) {
+								@if(coupon.status == false){
+									<a href="@routes.CouponController.approveCoupon(coupon.id)" class="btn btn-default add-to-cart">Approve Coupon</a>	
+										}
+									}
 							<label class="pull-left" >Minimum coupons to be sold:
 							<span><textarea disabled rows="1">@coupon.minOrder</textarea></span>
 							 </label>	

@@ -7,10 +7,13 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.mvc.*;
 import views.html.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import helpers.MailHelper;
 import models.User;
 import play.Logger;
@@ -28,13 +31,14 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import models.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Application extends Controller {
 
 	static String loginMsg = "Login to your account";
 	static String name = null;
-
+	
 	public static class Contact {
 
 		@Required
@@ -53,10 +57,10 @@ public class Application extends Controller {
 	public static Result index() {
 		name = session("name");
 		if (name == null) {
-			return ok(index.render(null, Coupon.all()));
+			return ok(index.render(null, Coupon.approvedCoupons()));
 		}
 		User currentUser = User.find(name);
-		return ok(index.render(currentUser, Coupon.all()));
+		return ok(index.render(currentUser, Coupon.approvedCoupons()));
 
 	}
 	
@@ -103,7 +107,7 @@ public class Application extends Controller {
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.username + " logged in");
 			flash("success","You are logged in as: " + mail);
-			return ok(index.render(cc, Coupon.all()));
+			return ok(index.render(cc, Coupon.approvedCoupons()));
 		}
 		if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);
@@ -112,7 +116,7 @@ public class Application extends Controller {
 			session("email", cc.email);
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.name + " logged in");
-			return ok(indexC.render(cc, Coupon.all()));
+			return ok(indexC.render(cc, Coupon.approvedCoupons()));
 		}
 		
 		flash("error", "Invalid email or password");
