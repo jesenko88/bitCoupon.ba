@@ -195,7 +195,14 @@ public class CouponController extends Controller {
 
 		coupon.minOrder = Integer.valueOf(couponForm.bindFromRequest()
 				.field("minOrder").value());
-		coupon.status = true;
+		boolean status;
+
+		if (Sesija.adminCheck(ctx()) == true) {
+			status = true;
+		} else {
+			status = false;
+		}
+
 		/* file upload only if its changed */
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
