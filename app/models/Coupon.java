@@ -98,7 +98,8 @@ public class Coupon extends Model {
 		this.picture = picture;
 		this.category = category;
 		this.description = description;
-		this.remark = remark;
+		this.remark = remark;		
+		
 		/*
 		 * this.code = code; this.lastMinute = lastMinute; this.duration =
 		 * duration; this.specialPrice = specialPrice; this.viewCount =
@@ -149,7 +150,7 @@ public class Coupon extends Model {
 	public static long createCoupon(String name, double price, Date dateExpire,
 			String picture, Category category, String description, String remark, int minOrder, Company seller) {
 
-		// Logger.debug(category.name);
+		// Logger.debug(category.name);	
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, seller);
 		newCoupon.save();

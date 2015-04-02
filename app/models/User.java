@@ -37,6 +37,10 @@ public class User extends SuperUser {
 	
 	public String profilePicture;
 	
+
+	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
+	public List<Coupon> coupons;
+	
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
 	public List<TransactionCP> bought_coupons;
 	

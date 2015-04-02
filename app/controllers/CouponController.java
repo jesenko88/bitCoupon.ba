@@ -390,7 +390,11 @@ public class CouponController extends Controller {
 			status = false;
 		}
 
+		//In case admin posted coupon.
 		Company company = Company.find(session("name"));
+		if(company == null){
+			company = CompanyController.COMPANY_ADMIN;
+		}
 		/*
 		 * Managing file upload.
 		 */
