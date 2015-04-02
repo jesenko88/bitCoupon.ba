@@ -17,9 +17,7 @@ public class CurrentCompanyFilter extends Security.Authenticator {
 		if(!ctx.session().containsKey("email"))
 			return null;
 		String email = ctx.session().get("email");
-		Logger.debug("Email: " +email);
 		Company c = Company.findByEmail(email);
-		Logger.debug("Company: " +c.id);
 		if (c != null)
 			return c.name;
 		return null;

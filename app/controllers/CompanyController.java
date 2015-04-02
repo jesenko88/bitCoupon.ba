@@ -83,18 +83,6 @@ public static final String PATH = "localhost:9000";
 		}
 	}
 	
-	
-
-	/**
-	 * Method sends the current user to the userUpdate() method
-	 * 
-	 * @return Renders the user update view for editing profile
-	 */
-	//@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result companyUpdateView() {   
-		Company currentCompany = Company.find(session("name"));
-		return ok(userUpdate.render(currentCompany));
-	}
 
 	/**
 	 * Update user by getting the values from the form in the userUpdate view.
@@ -139,29 +127,11 @@ public static final String PATH = "localhost:9000";
 		company.save();
 		flash("success", "Profile updated!");
 		Logger.info(company.name + " is updated");
+		session("name", company.name); 
 		return ok(userUpdate.render(company));
 
 	}
 
-	/**
-	 * Receives a user id, initializes the user, and renders the adminEditUser
-	 * passing the user to the view
-	 * 
-	 * @param id
-	 *            of the User (long)
-	 * @return Result render adminEditUser
-	 */
-	@Security.Authenticated(AdminFilter.class)
-	public static Result adminEditCompanyView(long id) {
-
-		if (Sesija.adminCheck(ctx()) != true) {
-			return redirect("/");
-		}
-		List<User> adminList = User.findAdmins(true);
-		Company companyToUpdate = Company.findById(id);
-		return ok(adminEditUser
-				.render(companyToUpdate, adminList));
-	}
 
 	/**
 	 * Updates the user from the Admin control.
@@ -297,12 +267,9 @@ public static final String PATH = "localhost:9000";
 		}
 	}	
 
-	//TODO security
+	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result companyPanel(long id) {
 		Company company = Company.findById(id);
-		if (!company.name.equals(session("name"))) {
-			return redirect("/");
-		}
 		return ok(companyPanel.render(company, Coupon.ownedCoupons(company.id) ) );
 
 	}

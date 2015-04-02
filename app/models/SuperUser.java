@@ -49,7 +49,6 @@ public abstract class SuperUser extends Model {
 
 	public User getUser() {
 		User u = (User) this;
-		Logger.debug("User: " + u.username);
 		return u;
 	}
 

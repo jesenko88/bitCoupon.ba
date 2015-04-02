@@ -31,12 +31,6 @@ public class UserController extends Controller {
 
 	static Form<User> userForm = new Form<User>(User.class);
 
-	/**
-	 * @return Renders the registration view
-	 */
-	public static Result signup() {
-		return ok(signup.render());
-	}
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -112,7 +106,6 @@ public class UserController extends Controller {
 		Company currentCompany = Company.find(session("name"));
 		
 		if(currentUser == null){
-			Logger.debug("RENDERING COMPANY");
 			return ok(userUpdate.render(currentCompany));
 		}else if(currentCompany == null){
 			return ok(userUpdate.render(currentUser));
@@ -163,6 +156,7 @@ public class UserController extends Controller {
 		cUser.save();
 		flash("success", "Profile updated!");
 		Logger.info(cUser.username + " is updated");
+		session("name", cUser.username); 
 		return ok(userUpdate.render(cUser));
 
 	}

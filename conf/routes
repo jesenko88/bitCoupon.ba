@@ -11,9 +11,9 @@ GET    /logout                        controllers.Application.logout()
 GET    /loginToComplete               controllers.Application.loginToComplete()
 POST   /contact                       controllers.Application.sendMail()
 GET    /contact                       controllers.Application.contact()
+GET    /signup                        controllers.Application.signup()
 
 
-GET    /signup                        controllers.UserController.signup()
 POST   /register                      controllers.UserController.register()
 GET    /control-panel/user/:id        controllers.UserController.controlPanel(id: Long)
 GET    /profile/@:username            controllers.UserController.profilePage(username: String)
@@ -34,15 +34,14 @@ GET    /sendRequest                   controllers.UserController.sendRequest(ema
 
 
 
-GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 ######## WORKING ROUTES FOR COMPANY GO BELOW HERE ######
+GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 GET    /verifyEmail/:id               controllers.CompanyController.verifyEmail(id: String)
 POST   /companyUpdatePhoto            controllers.CompanyController.updatePhoto(id: Long)	
 GET    /verifyEmailUpdate/:username   controllers.CompanyController.verifyEmailUpdate(username: String)
 POST   /registerC                     controllers.CompanyController.registerC()
 POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
-GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
