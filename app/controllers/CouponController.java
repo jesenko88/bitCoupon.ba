@@ -2,6 +2,7 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,6 +49,7 @@ public class CouponController extends Controller {
 	 * 
 	 * @return renders the view for coupon add form
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
 		List<Category> categories = Category.all();
 		return ok(couponPanel.render(session("name"), categories));
@@ -74,6 +76,7 @@ public class CouponController extends Controller {
 	 *            - Coupon id (long)
 	 * @return redirect to index after delete
 	 */
+	//TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		Coupon c = Coupon.find(id);
 		List<Photo> photos = Photo.photosByCoupon(c);
@@ -97,6 +100,7 @@ public class CouponController extends Controller {
 	 *            long
 	 * @return Result render couponView
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result editCoupon(long id) {
 		Coupon coupon = Coupon.find(id);
 		List<Category> categories = Category.all();
@@ -113,6 +117,7 @@ public class CouponController extends Controller {
 	 *            long
 	 * @return Result render the coupon update view
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result updateCoupon(long id) {
 
 		Coupon coupon = Coupon.find(id);
@@ -285,9 +290,7 @@ public class CouponController extends Controller {
 	 * @return redirect to create coupon view
 	 * @throws ParseException
 	 */
-		
-	
-	
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
 
 		if (couponForm.hasErrors()) {
@@ -383,6 +386,7 @@ public class CouponController extends Controller {
 	 *            - id of coupon we're adding photos add.
 	 * @return
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result galleryUpload(long couponId) {
 		/*
 		 * Save path where our photos are going to be saved. Each coupon gets

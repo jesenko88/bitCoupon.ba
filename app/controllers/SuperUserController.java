@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import models.*;
+import helpers.*;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -20,7 +21,7 @@ import views.html.admin.users.*;
 
 public class SuperUserController extends Controller {
 
-	// @Security.Authenticated(CurrentUserFilter.class)
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result changePass(String email) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
@@ -82,6 +83,7 @@ public class SuperUserController extends Controller {
 	 *         view for search result
 	 *
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result searchUsers(String qU) {
 		List<User> users = User.getFind().where()
 				.ilike("username", "%" + qU + "%").findList();
@@ -104,7 +106,7 @@ public class SuperUserController extends Controller {
 	 * 
 	 * @return Renders the user update view for editing profile
 	 */
-	//@Security.Authenticated(CurrentUserFilter.class)
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result userUpdateView() {
 		User currentUser = User.find(session("name"));
 		Company currentCompany = Company.find(session("name"));
@@ -155,6 +157,7 @@ public class SuperUserController extends Controller {
 	 * @param username
 	 * @return Result
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result profilePage(String username) {
 		User u = User.find(username);
 		Company c = Company.find(username);
@@ -197,7 +200,7 @@ public class SuperUserController extends Controller {
 	 * @param id
 	 * @return
 	 */
-	@Security.Authenticated(CurrentCompanyFilter.class)
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result verifyEmailUpdate(String id) {
 		Company c = Company.find(session("name"));
 		EmailVerification recordToUpdate = EmailVerification.find(id);
@@ -232,6 +235,7 @@ public class SuperUserController extends Controller {
 	 * TODO Method for sending reset password email.
 	 * @return
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result sendRequest(String email) {
 		User user = User.getUser(email);
 		Company company = Company.findByEmail(email);
