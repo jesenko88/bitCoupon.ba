@@ -201,31 +201,7 @@ public static final String PATH = "localhost:9000";
 		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
-	
-	/**
-	 * Search method for users. If search is unsuccessful a flash message is
-	 * sent
-	 * 
-	 * @param string
-	 * @return renders index with matching coupons //TODO render a different
-	 *         view for search result
-	 *
-	 */
-	public static Result searchCompanies(String qU) {
-		List<Company> companies = Company.getFind().where().ilike("username", "%" + qU + "%").findList();
-		List<User> allUsers = User.all();
-		List<SuperUser> merged = new ArrayList<SuperUser>();
 		
-		merged.addAll(allUsers);
-		merged.addAll(companies);
-		
-		if (companies.isEmpty()) {
-			flash("error", "No such company");
-			return badRequest(userList.render(merged)); 
-		}
-
-		return ok(userList.render(merged));
-	}
 
 	/**
 	 * Renders the profile page view

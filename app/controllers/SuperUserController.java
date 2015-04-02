@@ -2,7 +2,11 @@ package controllers;
 
 import helpers.CurrentUserFilter;
 import helpers.HashHelper;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import models.Company;
 import models.SuperUser;
 import models.User;
@@ -13,6 +17,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.user.*;
+import views.html.admin.users.*;
 
 public class SuperUserController extends Controller {
 
@@ -67,6 +72,31 @@ public class SuperUserController extends Controller {
 		Logger.info(company.name + " is updated");
 		return ok(profile.render(company));
 
+	}
+	
+	/**
+	 * Search method for users. If search is unsuccessful a flash message is
+	 * sent
+	 * 
+	 * @param string
+	 * @return renders index with matching coupons //TODO render a different
+	 *         view for search result
+	 *
+	 */
+	public static Result searchUsers(String qU) {
+		List<User> users = User.getFind().where()
+				.ilike("username", "%" + qU + "%").findList();
+		List<Company> allCompanies = Company.getFind().where().ilike("name", "%" +qU +"%").findList();
+		List<SuperUser> merged = new ArrayList<SuperUser>();
+		merged.addAll(users);
+		merged.addAll(allCompanies);
+		
+		if (merged.isEmpty()) {
+			flash("error", "No such user or company");
+			return badRequest(userList.render( SuperUser.allSuperUsers()));
+		}
+
+		return ok(userList.render(merged));
 	}
 
 }

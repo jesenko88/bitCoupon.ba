@@ -256,30 +256,7 @@ public class UserController extends Controller {
 
 	}
 
-	/**
-	 * Search method for users. If search is unsuccessful a flash message is
-	 * sent
-	 * 
-	 * @param string
-	 * @return renders index with matching coupons //TODO render a different
-	 *         view for search result
-	 *
-	 */
-	public static Result searchUsers(String qU) {
-		List<User> users = User.getFind().where()
-				.ilike("username", "%" + qU + "%").findList();
-		List<Company> allCompanies = Company.all();
-		List<SuperUser> merged = new ArrayList<SuperUser>();
-		merged.addAll(users);
-		merged.addAll(allCompanies);
-		
-		if (merged.isEmpty()) {
-			flash("error", "No such user or company");
-			return badRequest(userList.render( SuperUser.allSuperUsers()));
-		}
-
-		return ok(userList.render(merged));
-	}
+	
 
 	/**
 	 * Renders the profile page view
