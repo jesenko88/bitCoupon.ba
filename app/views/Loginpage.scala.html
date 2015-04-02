@@ -29,14 +29,33 @@
    <div class="signup-form">
       <!--sign up form-->
       <h2>@info</h2>
+      <script type="text/javascript">
+function showDiv(toggle){
+document.getElementById(toggle).style.display = 'block';
+}
+</script>
+      
       <form action="@routes.Application.login" method="POST">
          <input type="text" id="email" name="email" placeholder="Email" />
          <input type="password" id="password" name="password" placeholder="Password" />
-         <button type="submit" id="submit">Login</button>							
+         <button type="submit" id="submit" style="display:inline-block">Login</button>
+               <button type="button" name="answer" onclick="showDiv('toggle')" style=" border: none; display:inline-block; float:right ">Forgot password?</button>
+         							
       </form>
+      
+      
    </div>
-   <a href="" class="active">Forgot password?</a>
-   <div class="col-sm-6 col-sm-offset-1">
+   
+
+</script>
+
+
+   
+   
+   
+   
+  </div>
+   <div id="toggle" style="display:none" class="col-sm-4 col-sm-offset-1">
       <div class="signup-form">
          <!--sign up form-->
          <h2>@info</h2>
