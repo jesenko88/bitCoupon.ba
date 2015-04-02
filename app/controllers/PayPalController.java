@@ -124,7 +124,7 @@ public class PayPalController extends Controller {
 			
 			flash("error", "Something went wrong, please try again later");
 			User currentUser = User.find(session("name"));
-			return ok(index.render(currentUser, Coupon.all(), Category.all()));
+			return ok(index.render(Coupon.all(), Category.all()));
 			
 			
 		} catch (PayPalRESTException e){
@@ -134,7 +134,7 @@ public class PayPalController extends Controller {
 		flash("error", "Something went wrong, please try again later");
 
 		User currentUser = User.find(session("name"));
-		return ok(index.render(currentUser, Coupon.all(), Category.all()));
+		return ok(index.render( Coupon.all(), Category.all()));
 
 	}
 	
@@ -205,7 +205,7 @@ public class PayPalController extends Controller {
 		flash("success","Transaction complete");
 
 		User currentUser = User.find(session("name"));
-		return ok(index.render(currentUser, Coupon.all(), Category.all()));
+		return ok(index.render( Coupon.all(), Category.all()));
 
 	}
 	

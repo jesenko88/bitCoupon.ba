@@ -53,10 +53,10 @@ public class Application extends Controller {
 	public static Result index() {
 		name = session("name");
 		if (name == null) {
-			return ok(index.render(null, Coupon.all(), Category.all()));
+			return ok(index.render(Coupon.all(), Category.all()));
 		} 
 		User currentUser = User.find(name);
-		return ok(index.render(currentUser, Coupon.all(), Category.all()));
+		return ok(index.render(Coupon.all(), Category.all()));
 	}
 
 	
@@ -98,7 +98,7 @@ public class Application extends Controller {
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.username + " logged in");
 			flash("success","You are logged in as: " + mail);
-			return ok(index.render(cc, Coupon.all(), Category.all()));
+			return ok(index.render( Coupon.all(), Category.all()));
 		}
 		if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);

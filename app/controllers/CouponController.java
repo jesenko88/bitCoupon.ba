@@ -261,7 +261,7 @@ public class CouponController extends Controller {
 			return TODO;
 		}
 		User current = Sesija.getCurrentUser(ctx());
-		return ok(index.render(current, sorted, Category.all()));
+		return ok(index.render(sorted, Category.all()));
 	}
 	
 
@@ -526,10 +526,10 @@ public class CouponController extends Controller {
 		}
 		if(list.isEmpty()){
 			flash("error", "No new result");
-			return ok(index.render(null, Coupon.all(), Category.all()));
+			return ok(index.render(Coupon.all(), Category.all()));
 		}
 		
-		return ok(index.render(null, list, Category.all()));
+		return ok(index.render(list, Category.all()));
 		
 	}
 	/**
@@ -558,11 +558,22 @@ public class CouponController extends Controller {
 		
 		
 		// PRICE Filter
-		double startPrice =Double.parseDouble( df.data().get("start_price"));
-		double endPrice   = Double.parseDouble( df.data().get("end_price"));
+		String startP = df.data().get("start_price");
+		String endP = df.data().get("end_price");		
+		double startPrice = 0;
+		double endPrice = Double.MAX_VALUE;
+		
+		//In case one of price bind from request are null.
+		if(!startP.isEmpty()){
+			startPrice = Double.valueOf(startP);
+		}
+		if(!endP.isEmpty()){
+			endPrice = Double.valueOf(endP);
+		}
+		
 		if(startPrice > endPrice){
 			flash("error", "Please input correct values");
-			return ok(index.render(null, Coupon.all(), Category.all()));
+			return ok(index.render(Coupon.all(), Category.all()));
 		}
 		
 		
@@ -574,11 +585,11 @@ public class CouponController extends Controller {
 		
 		if(list.isEmpty()){
 			flash("error", "No new result");
-			return ok(index.render(null, Coupon.all(), Category.all()));
+			return ok(index.render( Coupon.all(), Category.all()));
 		}
 		
 		List<Category> categorys = Category.all();
-		return ok(index.render(null, list, Category.all()));
+		return ok(index.render( list, Category.all()));
 
 	}
 	
@@ -610,12 +621,15 @@ public class CouponController extends Controller {
 		Date date = couponForm.bindFromRequest().get().dateExpire;
 		Date current = new Date();
 		
+		if(date == null){
+			flash("error", "Enter a valid expiration date");
+			return badRequest(index.render( list, Category.all()));	
+		}
 		
 		if (date.before(current)) {
 			Logger.info("entered a invalid date");
 			flash("error", "Enter a valid expiration date");
-			return badRequest(index.render(null, list, Category.all()));
-		
+			return badRequest(index.render( list, Category.all()));		
 		}
 		
 		
@@ -628,10 +642,10 @@ public class CouponController extends Controller {
 		
 		if(list.isEmpty()){
 			flash("error", "No new result");
-			return ok(index.render(null, Coupon.all(), Category.all()));
+			return ok(index.render( Coupon.all(), Category.all()));
 		}
 		
-		return ok(index.render(null, list, Category.all()));
+		return ok(index.render( list, Category.all()));
 	
 	}
 	

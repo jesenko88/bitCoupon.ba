@@ -458,6 +458,10 @@ public class Coupon extends Model {
 	 * @return
 	 */
 	public static String commaSeparatedIds(List<Coupon> coupons) {
+		if(coupons.size() < 1){
+			return null;
+		}
+		
 		StringBuilder sb = new StringBuilder();
 		for (Coupon c : coupons) {
 			sb.append(c.id).append(",");
