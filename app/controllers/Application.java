@@ -94,7 +94,7 @@ public class Application extends Controller {
 			User cc = User.getUser(mail);
 			session().clear();
 			session("name", cc.username);
-			session("email", cc.email);												
+			session("email", cc.email);	
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.username + " logged in");
 			flash("success","You are logged in as: " + mail);
@@ -104,7 +104,7 @@ public class Application extends Controller {
 			Company cc = Company.findByEmail(mail);
 			session().clear();
 			session("name", cc.name);
-			session("email", cc.email);											
+			session("email", cc.email);	
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.name + " logged in");
 			return ok(indexC.render(cc, Coupon.all()));

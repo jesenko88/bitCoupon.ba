@@ -93,6 +93,7 @@ public static final String PATH = "localhost:9000";
 	 * @return Result renders the update view with info messages according to
 	 *         update success or fail
 	 */
+	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updateCompany(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
@@ -196,6 +197,7 @@ public static final String PATH = "localhost:9000";
 	 * @param id of the company long
 	 * @return 
 	 */
+	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updatePhoto(long companyId) {
 		Company c = Company.findById(companyId);
 		String subFolder = "company_profile" + File.separator + "company_" + companyId;

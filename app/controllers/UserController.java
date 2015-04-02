@@ -2,9 +2,13 @@ package controllers;
 
 import java.io.File;
 import java.util.Date;
+
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.SuperUserFilter;
+
 import java.util.List;
+import helpers.*;
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -102,6 +106,7 @@ public class UserController extends Controller {
 	 * @return Result renders the update view with info messages according to
 	 *         update success or fail
 	 */
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updateUser(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
@@ -241,6 +246,7 @@ public class UserController extends Controller {
 	 * @param id of the user long
 	 * @return 
 	 */
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updatePhoto(long userId) {
 		User u = User.find(userId);
 		String subFolder = "user_profile" + File.separator + "user_" + userId;
@@ -269,6 +275,7 @@ public class UserController extends Controller {
 	 * @param id
 	 * @return
 	 */
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result createNewPassword( String id){
 		ResetPasword rp = ResetPasword.find.byId(id);
 		String email = rp.userEmail;
@@ -304,6 +311,7 @@ public class UserController extends Controller {
 	 * @param id of the buyer
 	 * @return
 	 */
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result showBoughtCoupons(long userId) {
 		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
 		return ok(boughtCoupons.render(session("name"), transactions));
