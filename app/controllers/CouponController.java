@@ -658,7 +658,7 @@ public class CouponController extends Controller {
 		Date current = new Date();
 		List<Coupon> coupons = Coupon.all();
 		List<Coupon> noExpireList = new ArrayList<Coupon>();
-		
+		/*
 		for(Coupon coupon : coupons){
 			Date couponDate = coupon.dateExpire;
 			if (couponDate.after(current)) {
@@ -670,8 +670,8 @@ public class CouponController extends Controller {
 			flash("error", "All coupons had expired");
 			return ok(couponsAll.render(null, Coupon.all()));
 		}
-		
-		return ok(couponsAll.render(session("name"), noExpireList));
+		*/
+		return ok(couponsAll.render(session("name"), coupons));
 	}
 	
 	
