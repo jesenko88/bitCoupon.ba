@@ -112,7 +112,6 @@ public class PayPalController extends Controller {
 			payment.setRedirectUrls(redirectUrls);
 			
 			Payment createdPayment = payment.create(apiContext);
-			System.out.println(createdPayment.toJSON());
 			
 			Iterator<Links> itr = createdPayment.getLinks().iterator();
 			while(itr.hasNext()){
