@@ -273,8 +273,8 @@ public class UserController extends Controller {
 		merged.addAll(users);
 		merged.addAll(allCompanies);
 		
-		if (users.isEmpty()) {
-			flash("error", "No such user");
+		if (merged.isEmpty()) {
+			flash("error", "No such user or company");
 			return badRequest(userList.render( SuperUser.allSuperUsers()));
 		}
 
