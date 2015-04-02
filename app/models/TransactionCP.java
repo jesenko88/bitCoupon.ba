@@ -102,7 +102,7 @@ public class TransactionCP extends Model{
 	 */
 	public static List<Coupon> allBoughtCoupons(long id) {
 		List<TransactionCP> ids = find.where().eq("buyer_id", id).findList();
-		List<Coupon> coupons = new ArrayList<>();
+		List<Coupon> coupons = new ArrayList<Coupon>();
 		for ( TransactionCP tsc : ids) {
 			coupons.add(Coupon.find(tsc.coupon.id));
 		}
