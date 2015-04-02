@@ -83,18 +83,6 @@ public static final String PATH = "localhost:9000";
 		}
 	}
 	
-	
-
-	/**
-	 * Method sends the current user to the userUpdate() method
-	 * 
-	 * @return Renders the user update view for editing profile
-	 */
-	//@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result companyUpdateView() {   
-		Company currentCompany = Company.find(session("name"));
-		return ok(userUpdate.render(currentCompany));
-	}
 
 	/**
 	 * Update user by getting the values from the form in the userUpdate view.
@@ -105,6 +93,7 @@ public static final String PATH = "localhost:9000";
 	 * @return Result renders the update view with info messages according to
 	 *         update success or fail
 	 */
+	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updateCompany(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
@@ -139,29 +128,11 @@ public static final String PATH = "localhost:9000";
 		company.save();
 		flash("success", "Profile updated!");
 		Logger.info(company.name + " is updated");
+		session("name", company.name); 
 		return ok(userUpdate.render(company));
 
 	}
 
-	/**
-	 * Receives a user id, initializes the user, and renders the adminEditUser
-	 * passing the user to the view
-	 * 
-	 * @param id
-	 *            of the User (long)
-	 * @return Result render adminEditUser
-	 */
-	@Security.Authenticated(AdminFilter.class)
-	public static Result adminEditCompanyView(long id) {
-
-		if (Sesija.adminCheck(ctx()) != true) {
-			return redirect("/");
-		}
-		List<User> adminList = User.findAdmins(true);
-		Company companyToUpdate = Company.findById(id);
-		return ok(adminEditUser
-				.render(companyToUpdate, adminList));
-	}
 
 	/**
 	 * Updates the user from the Admin control.
@@ -190,7 +161,6 @@ public static final String PATH = "localhost:9000";
 		 * if admin doesn't explicitly change the users password, it stays
 		 * intact
 		 */
-
 		if (newPass.length() > 5) {
 			company.password = HashHelper.createPassword(newPass);
 		}
@@ -203,47 +173,6 @@ public static final String PATH = "localhost:9000";
 
 	
 	/**
-	 * Search method for users. If search is unsuccessful a flash message is
-	 * sent
-	 * 
-	 * @param string
-	 * @return renders index with matching coupons //TODO render a different
-	 *         view for search result
-	 *
-	 */
-	public static Result searchCompanies(String qU) {
-		List<Company> companies = Company.getFind().where().ilike("username", "%" + qU + "%").findList();
-		List<User> allUsers = User.all();
-		List<SuperUser> merged = new ArrayList<SuperUser>();
-		
-		merged.addAll(allUsers);
-		merged.addAll(companies);
-		
-		if (companies.isEmpty()) {
-			flash("error", "No such company");
-			return badRequest(userList.render(merged)); 
-		}
-
-		return ok(userList.render(merged));
-	}
-
-	/**
-	 * Renders the profile page view
-	 * 
-	 * @param username
-	 * @return Result
-	 */
-	public static Result companyProfilePage(String name) {
-		Company c = Company.find(name);
-		if (!c.name.equals(session("name"))) {
-			return redirect("/");
-		}
-
-		return ok(profile.render(c)); 
-	}
-	
-	
-	/**
 	 * Delete user by id. Delete is possible only for own deletion, or if it's
 	 * done by Admin.
 	 * 
@@ -253,53 +182,22 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteCompany(long id) {
-		List<User> adminList = User.findAdmins(true);
-		Company currentCompany = Company.findById(id);		
-		Company.delete(id);
-		
+		Company currentCompany = Company.findById(id);
+		if ( currentCompany == null){
+			flash("error", "Company with id: " + id + " doesnt exists!");
+			return badRequest(userList.render(SuperUser.allSuperUsers()));
+		}
+		Company.delete(id);	
 		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 	
+
 	/**
-	 * Compare if the verification period is expired and send verification mail
-	 * to user e-mail adress
-	 * 
-	 * @param id
-	 *            - verification mail
-	 * @return redirect to the login view
+	 * Upload company profile photo
+	 * @param id of the company long
+	 * @return 
 	 */
-	public static Result verifyEmail(String id) {
-		EmailVerification recordToUpdate = EmailVerification.find(id);
-		String message = "";
-		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
-			EmailVerification.updateRecord(recordToUpdate);
-			flash("success", "Your e-mail is now verified. To login click on the button below");
-			Logger.info("e-mail is now verified");
-			message = " ";
-		} else {
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-			Logger.info("Verification period is expired");
-			message = " ";
-		}
-		return ok(verifyEmail.render(message));
-	}
-
 	@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result verifyEmailUpdate(String id) {
-		Company c = Company.find(session("name"));
-		EmailVerification recordToUpdate = EmailVerification.find(id);
-		String message = "";
-		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
-			EmailVerification.updateRecord(recordToUpdate);
-		flash("success", "Your profile is updated. To go to the profile page click on the button below");
-			message = " ";
-		} else {
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-			message = " ";
-		}
-		return ok(verifyEmailUpdate.render(message, c.name));
-	}
-
 	public static Result updatePhoto(long companyId) {
 		Company c = Company.findById(companyId);
 		String subFolder = "company_profile" + File.separator + "company_" + companyId;
@@ -321,64 +219,9 @@ public static final String PATH = "localhost:9000";
 		}
 	}	
 
-	/**
-	 * Method for changing password.
-	 * @param id
-	 * @return
-	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
-	public static Result changePass(long id) {
-		
-		DynamicForm updateForm = Form.form().bindFromRequest();
-		if (updateForm.hasErrors()) {
-			return redirect("/updateUser ");		}
-
-		String oldPass = updateForm.data().get("password");
-		String newPass = updateForm.data().get("newPassword");
-		String confPass = updateForm.data().get("confirmPassword");
-		Company company = Company.findById(id);
-		company.updated = new Date();
-				
-		/* if only one password field is filled out */
-		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
-				&& !oldPass.isEmpty()) {
-			flash("error", "If you want to change your password,"
-					+ " please fill out both fields");
-			return TODO;
-		}
-		/* if there was a input in password fields */
-		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
-			if (HashHelper.checkPass(oldPass, company.password) == false) {
-				flash("error", "You're old password is incorrect!");
-				return TODO;
-			}
-			if (newPass.length() < 6) {
-				flash("error", "The password must be at least 6 characters");
-				return TODO;
-			}
-			company.password = HashHelper.createPassword(newPass);
-		}
-		if (!newPass.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return TODO;
-		}
-		
-		company.save();
-		flash("success", "Password changed!");
-		Logger.info(company.name + " is updated");
-		return ok(profile.render(company));
-
-	}
-
-	
-	
-	
-	//TODO security
 	public static Result companyPanel(long id) {
 		Company company = Company.findById(id);
-		if (!company.name.equals(session("name"))) {
-			return redirect("/");
-		}
 		return ok(companyPanel.render(company, Coupon.ownedCoupons(company.id) ) );
 
 	}

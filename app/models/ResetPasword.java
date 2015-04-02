@@ -37,7 +37,13 @@ public class ResetPasword extends Model {
 	
 	public static String findByID(String id){
 		Logger.debug(id);
-		return find.byId(id).userEmail;
+		String str = "";
+		try{
+			str = find.byId(id).userEmail;
+		} catch(Exception e){
+			return null;
+		}
+		return str;
 	}
 }
 

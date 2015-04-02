@@ -54,7 +54,7 @@
                      <h5>Change Password</h5>
                      <div class="signup-form">
                         <!--sign up form-->
-                        <form action="@routes.UserController.changePass(superUser.id)" method ="POST" >
+                        <form action="@routes.SuperUserController.changePass(superUser.email)" method ="POST" >
                            <input type="password" name="password" id="password" placeholder="Old password" value="" />
                            <input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
                            <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>
@@ -76,8 +76,9 @@
                   <div class="signup-form">
                      <!--sign up form-->
                      <form action="@routes.CompanyController.updateCompany(superUser.getCompany().id)" method ="POST" >
-                        <input type="text" name="username" id="username" placeholder="Username" value="@superUser.getCompany().name" required/>
+                        <input type="text" name="name" id="name" placeholder="Company name" value="@superUser.getCompany().name" required/>
                         <input type="text" name="email" id="email" placeholder=Email value="@superUser.getCompany().email" required/>
+                        <input type="text" name="logo" id="logo" placeholder="Logo" value="@superUser.getCompany().logo" required/>
                         <button type="submit" class="btn btn-fefault cart" style="margin-left:0px;" >Update user</button>			
                      </form>
                   </div>
@@ -100,7 +101,7 @@
                   <h5>Change Password</h5>
                   <div class="signup-form">
                      <!--sign up form-->
-                     <form action="@routes.CompanyController.changePass(superUser.getCompany().id)" method ="POST" >
+                     <form action="@routes.SuperUserController.changePass(superUser.email)" method ="POST" >
                         <input type="password" name="password" id="password" placeholder="Old password" value="" />
                         <input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
                         <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>

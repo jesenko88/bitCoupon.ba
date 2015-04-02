@@ -2,6 +2,7 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -46,6 +47,7 @@ public class CouponController extends Controller {
 	 * 
 	 * @return renders the view for coupon add form
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
 		List<Category> categories = Category.all();
 		return ok(couponPanel.render(session("name"), categories));
@@ -72,6 +74,7 @@ public class CouponController extends Controller {
 	 *            - Coupon id (long)
 	 * @return redirect to index after delete
 	 */
+	//TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		Coupon c = Coupon.find(id);
 		List<Photo> photos = Photo.photosByCoupon(c);
@@ -95,6 +98,7 @@ public class CouponController extends Controller {
 	 *            long
 	 * @return Result render couponView
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result editCoupon(long id) {
 		Coupon coupon = Coupon.find(id);
 		List<Category> categories = Category.all();
@@ -112,7 +116,8 @@ public class CouponController extends Controller {
 			Coupon c = Coupon.find(id);
 			c.status = true;
 			c.save();
-			return ok(couponPanel.render(session("name"), Category.all()));
+			flash("succes", "Coupon " +c.name +" has been approved");
+			return ok(couponsAll.render( Coupon.approvedCoupons(), Coupon.nonApprovedCoupons()));
 		}
 
 	/**
@@ -124,6 +129,7 @@ public class CouponController extends Controller {
 	 *            long
 	 * @return Result render the coupon update view
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result updateCoupon(long id) {
 
 		Coupon coupon = Coupon.find(id);
@@ -194,8 +200,7 @@ public class CouponController extends Controller {
 		coupon.remark = couponForm.bindFromRequest().field("remark").value();
 
 		coupon.minOrder = Integer.valueOf(couponForm.bindFromRequest()
-				.field("minOrder").value());
-		coupon.status = true;
+				.field("minOrder").value());		
 		/* file upload only if its changed */
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
@@ -219,16 +224,24 @@ public class CouponController extends Controller {
 	 *
 	 */
 	public static Result search(String q) {
-		List<Coupon> coupons = Coupon.find.where().ilike("name", "%" + q + "%")
+		List<Coupon> all = Coupon.find.where().ilike("name", "%" + q + "%")
 				.findList();
-
+		//Getting only activated coupons from search result.
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(Coupon coupon: all){
+			if(coupon.status){
+				coupons.add(coupon);
+			}
+		}
+		
 		if (coupons.isEmpty()) {
 			flash("error", "No such coupon");
 			User u = User.find(session("name"));
-			return badRequest(index.render(u, Coupon.approvedCoupons()));
+			return badRequest(searchFilter.render(Coupon.approvedCoupons()
+													, Category.all()));
 		}
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
-		return ok(index.render(null, coupons));
+		return ok(searchFilter.render(coupons, Category.all()));
 	}
 
 	/**
@@ -280,7 +293,7 @@ public class CouponController extends Controller {
 			return TODO;
 		}
 		User current = Sesija.getCurrentUser(ctx());
-		return ok(index.render(current, sorted));
+		return ok(index.render(sorted, Category.all()));
 	}
 
 	public static boolean isExpired(long id) {
@@ -302,6 +315,8 @@ public class CouponController extends Controller {
 	 * @throws ParseException
 	 */
 
+
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
 
 		if (couponForm.hasErrors()) {
@@ -391,7 +406,7 @@ public class CouponController extends Controller {
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date,
 					FileUpload.DEFAULT_IMAGE, category, description, remark,
-					minOrder, company, status);
+					minOrder, company);
 			Logger.info(session("name") + " created coupon " + id
 					+ " without image");
 			return redirect("/couponPanel");
@@ -409,6 +424,7 @@ public class CouponController extends Controller {
 	 *            - id of coupon we're adding photos add.
 	 * @return
 	 */
+	@Security.Authenticated(SuperUserFilter.class)
 	public static Result galleryUpload(long couponId) {
 		/*
 		 * Save path where our photos are going to be saved. Each coupon gets
@@ -510,10 +526,198 @@ public class CouponController extends Controller {
 
 	}
 
-	@Security.Authenticated(AdminFilter.class)
-	public static Result listCoupons() {
-
-		return ok(couponsAll.render(session("name"), Coupon.all()));
+	/**
+	 * Returns all searched coupons on view searchFilter
+	 * @return
+	 */
+	public static Result searchPage() {
+		List<Coupon> coupons = Coupon.all();
+		List<Category> categorys = Category.all();
+		return ok(searchFilter.render(coupons, categorys));
 	}
+	
+	/**
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is in category that user chose
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
+	 */
+	public static Result filterCategory(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		String categoryChosed = df.data().get("category");
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		for(Coupon coupon : coupons){
+			if (coupon.category.name.equalsIgnoreCase(categoryChosed)){
+				list.add(coupon);
+			}
+		}
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render(Coupon.all(), Category.all()));
+		}
+		
+		return ok(index.render(list, Category.all()));
+		
+	}
+	/**
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is between prices that User chose
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
+	 */
+	public static Result filterPrice(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		DynamicForm df = Form.form().bindFromRequest();
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		
+		// PRICE Filter
+		String startP = df.data().get("start_price");
+		String endP = df.data().get("end_price");		
+		double startPrice = 0;
+		double endPrice = Double.MAX_VALUE;
+		
+		//In case one of price bind from request are null.
+		if(!startP.isEmpty()){
+			startPrice = Double.valueOf(startP);
+		}
+		if(!endP.isEmpty()){
+			endPrice = Double.valueOf(endP);
+		}
+		
+		if(startPrice > endPrice){
+			flash("error", "Please input correct values");
+			return ok(index.render(Coupon.all(), Category.all()));
+		}
+		
+		
+		for(Coupon coupon : coupons){
+			if (coupon.price >= startPrice && coupon.price <= endPrice){
+				list.add(coupon);
+			}
+		}
+		
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render( Coupon.all(), Category.all()));
+		}
+		
+		List<Category> categorys = Category.all();
+		return ok(index.render( list, Category.all()));
+
+
+	}
+	
+	/**
+	 * This methode get string, and convert string to list of Coupons,
+	 * Then check if any of coupons is before the date that user chosed 
+	 * and return new list of coupons 
+	 * @param ids (list of ids that user searched)
+	 * @return new filtered  list of coupons 
+	 */
+	public static Result filterDate(String ids){
+		Logger.debug("Ids: "+ids);
+		/*
+		 * Getting all ids of coupons and adding them to list
+		 * we are going to sort.
+		 */
+		String[] couponIds = ids.split(",");		
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for(String id: couponIds){
+			long currentID = Long.valueOf(id);
+			Coupon currentCoupon = Coupon.find(currentID);			
+			coupons.add(currentCoupon);
+		}
+		
+		List<Coupon> list = new ArrayList<Coupon>(); 
+		
+		
+		// Date Filter
+		Date date = couponForm.bindFromRequest().get().dateExpire;
+		Date current = new Date();
+		
+		if(date == null){
+			flash("error", "Enter a valid expiration date");
+			return badRequest(index.render( list, Category.all()));	
+		}
+		
+		if (date.before(current)) {
+			Logger.info("entered a invalid date");
+			flash("error", "Enter a valid expiration date");
+			return badRequest(index.render( list, Category.all()));		
+		}
+		
+		
+		for(Coupon coupon : coupons){
+			Date couponDate = coupon.dateExpire;
+			if (couponDate.before(date)) {
+				list.add(coupon);
+			}	
+		}
+		
+		if(list.isEmpty()){
+			flash("error", "No new result");
+			return ok(index.render( Coupon.all(), Category.all()));
+		}
+		
+		return ok(index.render( list, Category.all()));
+	
+	}
+	
+	/**
+	 * Returns all non expired coupons to view couponsAll
+	 * @return list of non expired coupons
+	 */
+	@Security.Authenticated(AdminFilter.class)
+	public static Result listCoupons() {	
+		List<Coupon> approvedCoupons = Coupon.approvedCoupons();
+		List<Coupon> nonApprovedCoupons = Coupon.nonApprovedCoupons();
+		
+		/*
+		for(Coupon coupon : coupons){
+			Date couponDate = coupon.dateExpire;
+			if (couponDate.after(current)) {
+				noExpireList.add(coupon);
+			}	
+		}
+		
+		if(noExpireList.isEmpty()){
+			flash("error", "All coupons had expired");
+			return ok(couponsAll.render(null, Coupon.all()));
+		}
+		*/
+		return ok(couponsAll.render( approvedCoupons, nonApprovedCoupons));
+	}
+	
+	
+	
 
 }

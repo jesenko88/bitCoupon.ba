@@ -1,5 +1,6 @@
 package controllers;
 import models.Company;
+import models.SuperUser;
 import models.User;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -55,7 +56,6 @@ public class Sesija extends Security.Authenticator {
 	 * @return true or false
 	 */
 	public static boolean adminCheck(Context ctx) {
-
 		if (getCurrentUser(ctx) == null)
 			return false;
 		return getCurrentUser(ctx).isAdmin;
@@ -85,6 +85,21 @@ public class Sesija extends Security.Authenticator {
 			return c.name;
 		}
 		return null;
+	}
+	
+	
+	public static SuperUser getCurrent(Context ctx){
+		Company c = getCurrentCompany(ctx);
+		User u = getCurrentUser(ctx);
+		
+		if(u != null){
+			return u;
+		}else if( c != null){
+			return  c;
+		}else{
+			return null;
+		}
+		
 	}
 	
 	/**

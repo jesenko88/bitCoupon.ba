@@ -1,0 +1,150 @@
+
+	 @Test
+	 APPROVED TRANSACTION TEST	
+ 
+		URL: BitCoupon (localhost:9000)
+		
+		1. Login as:
+		    Email:    jesenko.gavric@bitcamp.ba
+		    Password: johndoe
+		   
+		2. Click on 'View Coupon'  "Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass"
+		
+		3. Enter the amount of coupons: 2
+		   Click on 'PayPal Checkout' button
+---------------------------------------------------------------------------------------------------	   
+		redirected to:
+		URL: https://www.sandbox.paypal.com/ba/cgi-bin/merchantpaymentweb?....
+		
+		Desription provided in order summary: 
+		
+		Coupon: Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass 
+		Price: 20.0 
+		Quantity: 2 
+		Total: 40.00
+---------------------------------------------------------------------------------------------------	
+		1. Chose: Pay with my PayPal account   
+		2. Login as:
+		     Email:     jesenko.gavric-buyer@bitcamp.ba
+		     Password:  banana88
+		3. Click on 'Continue'
+---------------------------------------------------------------------------------------------------
+		redirected to BitCoupon :
+		URL: http://localhost:9000/couponsuccess?paymentId=""&token=""&PayerID=""
+		Flash message appeared: "Approve Transaction"
+		Details provided:
+		Quantity: 2
+		Total price: 40.00
+		Coupon details (name, price, description..)
+---------------------------------------------------------------------------------------------------
+		1. Click on 'Submit'
+---------------------------------------------------------------------------------------------------
+		redirected to BitCoupon index page
+		URL: http://localhost:9000/approveTransaction?
+		
+		Flash message "Transaction complete' appeared
+---------------------------------------------------------------------------------------------------
+	    Data stored in Transaction_CP entity:
+	    
+	    ID: 			1
+	 	PAYMENT_ID:		PAY-984466769S439712CKUOYESI	
+	 	COUPON_PRICE: 	20.0	
+	 	QUANTITY: 		2	
+	 	TOTAL_PRICE:	40.0	
+	 	TOKEN: 			EC-2R266147F1318311J	
+	 	BUYER_ID: 		2	
+	 	COUPON_ID: 	    3	
+	 	DATE:			2015-04-02 20:01:55.61
+
+
+
+
+
+ 	@Test
+	CANCELED TRANSACTION ON PAYPAL PAGE
+	 
+		URL: BitCoupon (localhost:9000)
+		
+		1. Login as:
+		    Email:    jesenko.gavric@bitcamp.ba
+		    Password: johndoe
+		   
+		2. Click on 'View Coupon'  "Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass"
+		
+		3. Enter the amount of coupons: 5
+		   Click on 'PayPal Checkout' button
+---------------------------------------------------------------------------------------------------	   
+		redirected to:
+		URL: https://www.sandbox.paypal.com/ba/cgi-bin/merchantpaymentweb?....
+		
+		Desription provided in order summary: 
+		
+		Coupon: Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass 
+		Price: 20.0 
+		Quantity: 5 
+		Total: 100.00
+---------------------------------------------------------------------------------------------------	
+		1. Chose: Pay with my PayPal account   
+		2. Login as:
+		     Email:     jesenko.gavric-buyer@bitcamp.ba
+		     Password:  banana88
+		3. Click on 'Cancel and return to test facilitator's Test Store'
+---------------------------------------------------------------------------------------------------
+		redirected to BitCoupon :
+		http://localhost:9000/couponfail?token=""
+		Flash message appeared: "Transaction canceled"
+		
+		Again on the Coupon template page and have the option to choose quantity
+		and checkout with PayPal again
+---------------------------------------------------------------------------------------------------
+	    Data stored in Transaction_CP entity: none
+    
+    
+    @Test
+	CANCELED TRANSACTION ON BitCoupon ApproveTransaction page	
+	 
+		URL: BitCoupon (localhost:9000)
+		
+		1. Login as:
+		    Email:    jesenko.gavric@bitcamp.ba
+		    Password: johndoe
+		   
+		2. Click on 'View Coupon'  "Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass"
+		
+		3. Enter the amount of coupons: 5
+		   Click on 'PayPal Checkout' button
+---------------------------------------------------------------------------------------------------	   
+		redirected to:
+		URL: https://www.sandbox.paypal.com/ba/cgi-bin/merchantpaymentweb?....
+		
+		Desription provided in order summary: 
+		
+		Coupon: Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass 
+		Price: 20.0 
+		Quantity: 3 
+		Total: 60.00
+---------------------------------------------------------------------------------------------------	
+		1. Chose: Pay with my PayPal account   
+		2. Login as:
+		     Email:     jesenko.gavric-buyer@bitcamp.ba
+		     Password:  banana88
+		3. Click on 'Continue'
+---------------------------------------------------------------------------------------------------
+		redirected to BitCoupon :
+		URL: http://localhost:9000/couponsuccess?paymentId=""&token=""&PayerID=""
+		Flash message appeared: "Approve Transaction"
+		Details provided:
+		Quantity: 3
+		Total price: 60.00
+		Coupon details (name, price, description..)
+---------------------------------------------------------------------------------------------------
+		1. Click on 'Cancel Transaction'
+---------------------------------------------------------------------------------------------------
+		redirected to BitCoupon index page
+		URL: http://localhost:9000/?
+		
+---------------------------------------------------------------------------------------------------
+	    Data stored in Transaction_CP entity: none
+
+	
+	

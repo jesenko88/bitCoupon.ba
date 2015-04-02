@@ -1,31 +1,28 @@
 package helpers;
 
 import models.Company;
+import models.SuperUser;
 import play.Logger;
 import play.mvc.Result;
-import play.mvc.Security;
 import play.mvc.Http.Context;
+import play.mvc.Security;
 
-/**
- * This class is a controller filter and ensures that only
- * a logged in company can perform certain actions.
- *
- */
-public class CurrentCompanyFilter extends Security.Authenticator {
-
+public class SuperUserFilter extends Security.Authenticator{
+	
+	
 	public String getUsername(Context ctx) {
 		if(!ctx.session().containsKey("email"))
 			return null;
 		String email = ctx.session().get("email");
-		Company c = Company.findByEmail(email);
-		if (c != null)
-			return c.name;
+		SuperUser currentUser = SuperUser.getSuperUser(email);
+		if (currentUser != null)
+			return currentUser.email;
 		return null;
 	}
 
 	@Override
 	public Result onUnauthorized(Context ctx) {
-		Logger.error("Login To Complete, only companies here.");
+		Logger.error("You dont have access to this page");
 		return redirect("/loginToComplete");
 	}
 
