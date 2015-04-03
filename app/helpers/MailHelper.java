@@ -25,7 +25,7 @@ public class MailHelper {
 						email, message));
 		MailerPlugin.send(mail);
 
-	}
+	}	
 	
 	
 	/**
@@ -71,5 +71,21 @@ public class MailHelper {
 		MailerPlugin.send(mail);
 
 	}
+	
+	public static void sendNewsletter(List<String> emails, String subject, String message) {
+
+		Email mail = new Email();
+		mail.setSubject(subject);
+		mail.setFrom("bitCoupon.ba <bit.play.test@gmail.com>");
+		mail.addTo("bitCoupon.ba Contact <bit.play.test@gmail.com>");
+		
+		for(String email: emails){
+			mail.addTo(email);
+		}		
+		mail.setBodyHtml(message);
+		MailerPlugin.send(mail);
+
+	}	
+	
 	
 }
