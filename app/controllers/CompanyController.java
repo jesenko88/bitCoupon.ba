@@ -26,7 +26,7 @@ import play.mvc.Security;
 public class CompanyController extends Controller {
 public static final String PATH = "localhost:9000"; 
 	static Form<Company> companyForm = new Form<Company>(Company.class);
-
+	public static final Company COMPANY_ADMIN = Company.findById(1);
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new

@@ -62,6 +62,8 @@ public class Coupon extends Model {
 	public List<TransactionCP> buyers;
 
 	public int minOrder;
+	
+    public boolean status;
 	/*
 	 * public String code;
 	 * 
@@ -96,7 +98,8 @@ public class Coupon extends Model {
 		this.picture = picture;
 		this.category = category;
 		this.description = description;
-		this.remark = remark;
+		this.remark = remark;		
+		
 		/*
 		 * this.code = code; this.lastMinute = lastMinute; this.duration =
 		 * duration; this.specialPrice = specialPrice; this.viewCount =
@@ -119,6 +122,7 @@ public class Coupon extends Model {
 		this.remark = remark;
 		this.minOrder = minOrder;
 		this.seller = seller;
+		this.status = false;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -146,9 +150,23 @@ public class Coupon extends Model {
 	public static long createCoupon(String name, double price, Date dateExpire,
 			String picture, Category category, String description, String remark, int minOrder, Company seller) {
 
+		// Logger.debug(category.name);	
+		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
+				category, description, remark, minOrder, seller);
+		newCoupon.save();
+		return newCoupon.id;
+	}
+	
+	/**
+	 * Method with status variable for global coupons.
+	 */
+	public static long createCoupon(String name, double price, Date dateExpire,
+			String picture, Category category, String description, String remark, int minOrder, Company seller, boolean status) {
+
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, seller);
+		newCoupon.status = true;
 		newCoupon.save();
 		return newCoupon.id;
 	}
@@ -489,7 +507,7 @@ public class Coupon extends Model {
 	 * @return List of Coupons
 	 */
 	public static List<Coupon> ownedCoupons(long companyID) {
-		
+
 		return find.where().eq("seller_id", companyID).findList();
 	}
 	
@@ -503,4 +521,28 @@ public class Coupon extends Model {
 		return dateExpire.before(now);
 	}
 
+	
+	
+	public static List<Coupon> approvedCoupons() {
+		List<Coupon> all = find.all();
+		List<Coupon> approved = new ArrayList<Coupon>();
+		for(Coupon coupon: all){
+			if(coupon.status){
+				approved.add(coupon);
+			}
+		}
+		return approved;
+	}
+	
+	public static List<Coupon> nonApprovedCoupons() {
+		List<Coupon> all = find.all();
+		List<Coupon> nonApproved = new ArrayList<Coupon>();
+		for(Coupon coupon: all){
+			if(!coupon.status){
+				nonApproved.add(coupon);
+			}
+		}
+		return nonApproved;
+	}
+	
 }

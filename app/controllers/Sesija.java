@@ -56,7 +56,6 @@ public class Sesija extends Security.Authenticator {
 	 * @return true or false
 	 */
 	public static boolean adminCheck(Context ctx) {
-
 		if (getCurrentUser(ctx) == null)
 			return false;
 		return getCurrentUser(ctx).isAdmin;

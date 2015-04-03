@@ -51,6 +51,7 @@ POST   /deletephoto                   controllers.CouponController.deletePhoto(i
 GET    /coupon/:id                    controllers.CouponController.showCoupon(id: Long)
 GET    /deleteCoupon/:id              controllers.CouponController.deleteCoupon(id :Long)
 POST   /editCoupon/:id                controllers.CouponController.updateCoupon(id: Long)
+GET    /approveCoupon/:id             controllers.CouponController.approveCoupon(id: Long)
 GET    /editCoupon/:id                controllers.CouponController.editCoupon(id: Long)
 GET    /search                        controllers.CouponController.search(q: String)
 GET    /allCoupons                    controllers.CouponController.listCoupons()

@@ -1,5 +1,5 @@
-@(username: String)(coupons: List[Coupon])
-@import helper._
+@(coupons: List[Coupon], nonApprovedCoupons: List[Coupon])
+
 @if(Sesija.getCurrentUser( ctx() ) != null ){
 @main("Coupon List") {
 <div class="header-middle">
@@ -129,8 +129,7 @@
                </tr>
             </thead>
             <tbody>
-               @for(coupon <- coupons){
-               @if(coupon.checkIfExpired()){
+               @for(coupon <- nonApprovedCoupons){               
                <tr>
                   <td> @coupon.name </td>
                   <td> @coupon.price </td>
@@ -138,8 +137,9 @@
                   <td> @coupon.seller.id </td>
                   <td> <a href="@routes.CouponController.editCoupon(coupon.id)" class="btn btn-default" >Edit</a></td>
                   <td> <a href="@routes.CouponController.deleteCoupon(coupon.id)" onclick="return confirm('Are you sure you want to delete this company?');"class="btn btn-danger">Delete</a></td>
+                  <td> <a href="@routes.CouponController.approveCoupon(coupon.id)" class="btn btn-success" >Approve</a></td>
                </tr>
-               }
+               
                }
             </tbody>
          </table>

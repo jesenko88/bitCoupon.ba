@@ -6,6 +6,7 @@ import helpers.FileUpload;
 import java.util.List;
 
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.User;
 import play.Logger;

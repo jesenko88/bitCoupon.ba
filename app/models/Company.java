@@ -32,18 +32,18 @@ public class Company  extends SuperUser{
 	public Date updated;
 	
 	public String logo;
+	
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
 //	@OneToMany(mappedBy="seller", cascade=CascadeType.ALL)
-//	public List<TransactionCP> sold_coupons;
-	
-	
+//	public List<TransactionCP> sold_coupons;	
 	
 	static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
 				Company.class);
 	
+		
 	/**
 	 * Constructor for company.
 	 * @param name Name of company

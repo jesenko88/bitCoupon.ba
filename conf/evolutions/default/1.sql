@@ -33,6 +33,7 @@ create table coupon (
   remark                    varchar(255),
   seller_id                 bigint,
   min_order                 integer,
+  status                    boolean,
   constraint pk_coupon primary key (id))
 ;
 
