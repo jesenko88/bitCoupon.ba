@@ -28,6 +28,9 @@ public class SubscribeController extends Controller {
 		return ok(Newsletter.render(Coupon.approvedCoupons()));
 	}
 	
+	public static Result subscribers() {
+		return ok(subscribers.render(Subscriber.find.all()));
+	}
 	
 	/**
 	 * Method which creates newsletter from form.
@@ -74,11 +77,12 @@ public class SubscribeController extends Controller {
 	 */	
 	public static Result subscribe(String email){
 		String refererUrl = request().getHeader("referer");
-
+		String method = request().method();
+		Logger.debug("Metoda " +method);
 		User u = User.findByEmail(email);
 		if(Subscriber.isSubscribed(email)){
-			flash("warning", "That email is already subscribed");
-			return redirect(refererUrl);
+			flash("warning", "That email is already subscribed");			
+			return redirect("/");
 		}
 			
 		if(u != null){
@@ -107,6 +111,13 @@ public class SubscribeController extends Controller {
 		flash("warning", "This email is not in subscribe list.");
 		return redirect("/");
 	}	
+	
+	public static Result deleteSubscriber(long id){
+		Subscriber s = Subscriber.find.byId(id);
+		Subscriber.unsubscribe(s);
+		flash("success", "Subscriber has been removed");
+		return redirect("/subscribers");
+	}
 	
 	/**
 	 * Method for checking if string is number.
