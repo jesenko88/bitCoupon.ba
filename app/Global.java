@@ -43,7 +43,13 @@ public class Global extends GlobalSettings {
 		Category food = null;
 		Category travel = null;
 		Category sport = null;
+		Company admin = null;
 		Company bitCamp = null;
+		
+		if ( !Company.exists("Admin")){
+			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), "/");
+			bitCamp.save();
+		}
 		
 		if ( !Company.exists("BitCamp")){
 			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), "/");

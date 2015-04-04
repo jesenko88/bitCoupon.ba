@@ -36,7 +36,7 @@
                      <label> Price: </label>
                      <input type="number" name="price" id="price" min="1" step="any" value="@coupon.getPriceString()" required/>
                      <p> Expiration date: @coupon.dateExpire </p>
-                     <input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" value=@coupon.dateExpire />
+                    <input type="date" id="datepicker" name="dateExpire">
                      <label> Update coupon photo? </label>
                      <input type="file" name="picture" id="picture" placeholder="Choose your photo" />
                      <label> Category </label>

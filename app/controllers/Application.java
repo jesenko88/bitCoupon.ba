@@ -57,15 +57,11 @@ public class Application extends Controller {
 	public static Result index() {
 		name = session("name");
 		if (name == null) {
-			return ok(index.render(null, Coupon.approvedCoupons()));
-		}
+			return ok(index.render(Coupon.approvedCoupons(), Category.all()));
+		} 
 		User currentUser = User.find(name);
-		return ok(index.render(currentUser, Coupon.approvedCoupons()));
+		return ok(index.render(Coupon.approvedCoupons(), Category.all()));
 
-	}
-	
-	public static Result test(){
-		return ok(test.render(SuperUser.allSuperUsers()));
 	}
 
 	
@@ -103,17 +99,18 @@ public class Application extends Controller {
 			User cc = User.getUser(mail);
 			session().clear();
 			session("name", cc.username);
-			session("email", cc.email);
+			session("email", cc.email);	
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.username + " logged in");
 			flash("success","You are logged in as: " + mail);
-			return ok(index.render(cc, Coupon.approvedCoupons()));
+			return ok(index.render(Coupon.approvedCoupons(), Category.all()));
+
 		}
 		if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);
 			session().clear();
 			session("name", cc.name);
-			session("email", cc.email);
+			session("email", cc.email);	
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.name + " logged in");
 			return ok(indexC.render(cc, Coupon.approvedCoupons()));
@@ -243,6 +240,13 @@ public class Application extends Controller {
 					}
 				});
 		return holder;
+	}
+	
+	/**
+	 * @return Renders the registration view
+	 */
+	public static Result signup() {
+		return ok(signup.render());
 	}
 
 }

@@ -7,7 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import models.Company;
+import models.Category;
 import models.Coupon;
 import models.TransactionCP;
 import models.User;
@@ -41,6 +43,7 @@ public class PayPalController extends Controller {
 	static PaymentExecution paymentExecution;
 	static Payment payment;
 	static double totalPrice;
+	static int quantity;
 	static String paymentID, token;
 
 
@@ -66,7 +69,7 @@ public class PayPalController extends Controller {
 			
 			DynamicForm buyForm = Form.form().bindFromRequest();		
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
-			int quantity = Integer.parseInt(buyForm.data().get("quantity"));
+			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			totalPrice = coupon.price * quantity;
 			
 			String totalPriceString = String.format("%1.2f",totalPrice);
@@ -117,6 +120,7 @@ public class PayPalController extends Controller {
 			while(itr.hasNext()){
 				Links link = itr.next();
 				if (link.getRel().equals("approval_url"))
+					
 					return redirect(link.getHref());
 			}
 			
@@ -124,7 +128,7 @@ public class PayPalController extends Controller {
 			
 			flash("error", "Something went wrong, please try again later");
 			User currentUser = User.find(session("name"));
-			return ok(index.render(currentUser, Coupon.all()));
+			return ok(index.render(Coupon.all(), Category.all()));
 			
 			
 		} catch (PayPalRESTException e){
@@ -132,7 +136,10 @@ public class PayPalController extends Controller {
 		}
 		
 		flash("error", "Something went wrong, please try again later");
-		return ok(index.render(currentUser, Coupon.all()));
+
+		User currentUser = User.find(session("name"));
+		return ok(index.render( Coupon.all(), Category.all()));
+
 	}
 	
 	/**
@@ -192,7 +199,8 @@ public class PayPalController extends Controller {
 		
 		try {	
 			payment.execute(apiContext, paymentExecution);
-			TransactionCP.createTransaction( paymentID, totalPrice, token, currentUser, coupon);
+			
+			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
 
 					
 		} catch (PayPalRESTException e) {
@@ -200,8 +208,10 @@ public class PayPalController extends Controller {
 		}
 		Logger.info(session("name") + " approved transaction: //TODO");
 		flash("success","Transaction complete");
-		
-		return ok(index.render(currentUser, Coupon.all()));
+
+		User currentUser = User.find(session("name"));
+		return ok(index.render( Coupon.all(), Category.all()));
+
 	}
 	
 }

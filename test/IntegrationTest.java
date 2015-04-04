@@ -32,58 +32,8 @@ public class IntegrationTest {
 				});
 	}
 
-	/**
-	 * Test for User registration
-	 */
-	@Test
-	public void testRegistration() {
-		running(testServer(3333, fakeApplication(inMemoryDatabase())),
-				HTMLUNIT, new Callback<TestBrowser>() {
-					public void invoke(TestBrowser browser) {
-
-						browser.goTo("http://localhost:3333/signup");
-						browser.fill("#username").with("tester");
-						browser.fill("#email").with("tester@mail.com");
-						browser.fill("#password").with("123456");
-						browser.fill("#confirmPassword").with("123456");
-						browser.submit("#submit");
-						assertThat(browser.pageSource()).contains("Registration");
-						assertThat(browser.pageSource()).contains("Login");
-						assertThat(browser.pageSource()).contains("A verification mail has been sent to your email address");
-
-					}
-				});
-	}
-
-	/**
-	 * Test for User login
-	 */
-	@Test
-	public void testLogin() {
-		running(testServer(3333, fakeApplication(inMemoryDatabase())),
-				HTMLUNIT, new Callback<TestBrowser>() {
-					public void invoke(TestBrowser browser) {
-						// User.createUser("tester", "tester@mail.com",
-						// "123456");
-
-						User.createUser("tester", "tester@bitcamp.ba",
-								HashHelper.createPassword("123456"), true);
-						EmailVerification setVerified = new EmailVerification(3, true);
-						setVerified.save();
-
-						browser.goTo("http://localhost:3333/loginpage");
-						browser.fill("#email").with("tester@bitcamp.ba");
-						browser.fill("#password").with("123456");
-						browser.submit("#submit");
-						assertThat(browser.pageSource()).contains("tester");
-						assertThat(browser.pageSource()).contains("Home");
-						assertThat(browser.pageSource()).contains("Available Coupons");
-
-					}
-				});
-
-	}
-
+	
+	
 	/**
 	 * Tests showing coupon which is made in this test
 	 */
@@ -146,122 +96,137 @@ public class IntegrationTest {
 
 	}
 	
-	/**
-	 * Testing if user (non-admin) can accesse to admin panel
-	 */
 	@Test
-	public void testSecurityAdmin() {
-		running(testServer(3333, fakeApplication(inMemoryDatabase())),
-				HTMLUNIT, new Callback<TestBrowser>() {
-					public void invoke(TestBrowser browser) {
-						User.createUser("tester", "tester@bitcamp.ba",
-								HashHelper.createPassword("123456"), false);
-						EmailVerification setVerified = new EmailVerification(3, true);
-						setVerified.save();
-
-						browser.goTo("http://localhost:3333/loginpage");
-						browser.fill("#email").with("tester@bitcamp.ba");
-						browser.fill("#password").with("123456");
-						browser.submit("#submit");
-						
-						browser.goTo("http://localhost:3333/control-panel/user/2");
-						assertThat(browser.pageSource().contains(":( Login to complete this action"));
-
-					
-					}
-					});
-
-		}
+    public void testSearch() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.fill("#q").with("neum");
+                assertThat(browser.pageSource()).contains("Dvije noći za dvoje u Hotelu Sunce Neum");
+            }
+        });
+    }
 	
-	/**
-	 * Test if admin can access the loginpage
-	 */
-	@Test
-	public void testSecurityAdmin2() {
-		running(testServer(3333, fakeApplication(inMemoryDatabase())),
-				HTMLUNIT, new Callback<TestBrowser>() {
-					public void invoke(TestBrowser browser) {
-						
-
-						browser.goTo("http://localhost:3333/loginpage");
-						browser.fill("#email").with("bitcoupon@gmail.com");
-						browser.fill("#password").with("bitadmin");
-						browser.submit("#submit");
-						
-						browser.goTo("http://localhost:3333//userPanel");
-						assertThat(browser.pageSource().contains("List of Users"));
-
-					
-					}
-					});
-
-		}
 	
-	/**
-	 * Test if admin can access the couponePanel
-	 */
+	//  -------------------------------SANELA----------------------------------------------
 	@Test
-	public void testSecurityAdmin3() {
-		running(testServer(3333, fakeApplication(inMemoryDatabase())),
-				HTMLUNIT, new Callback<TestBrowser>() {
-					public void invoke(TestBrowser browser) {
-						
-
-						browser.goTo("http://localhost:3333/loginpage");
-						browser.fill("#email").with("admin@mail.com");
-						browser.fill("#password").with("bitadmin");
-						browser.submit("#submit");
-						
-						browser.goTo("http://localhost:3333//couponPanel");
-						assertThat(browser.pageSource().contains("COUPON CREATION"));
-
-					
-					}
-					});
-
-		}
-
-	/*
-	 * 
-	 * @Test for search user
-	 */
+    public void testFilterPrice() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.fill("#start_price").with("1");
+                browser.fill("#end_price").with("21");
+                browser.submit("#priceSubmit");
+                assertThat(browser.pageSource()).doesNotContain("Dvije noći za dvoje u Hotelu Sunce Neum");
+                assertThat(browser.pageSource()).contains("Only 20.00 KM");  //<<<
+            }
+        });
+    }
+	
+//	@Test
+//    public void testFilterPrice2() {
+//        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+//            public void invoke(TestBrowser browser) {
+//                browser.goTo("http://localhost:3333");
+//                browser.fill("#start_price").with("1");
+//                browser.fill("#end_price").with("21");
+//                browser.submit("#priceSubmit");
+//                assertThat(browser.pageSource()).contains("Only 20.00 KM");
+//            }
+//        });
+//    }
 	
 	@Test
-	public void testSearchUser() {
-		running(testServer(3333, fakeApplication(inMemoryDatabase())),
-				HTMLUNIT, new Callback <TestBrowser>() {
-					public void invoke(TestBrowser browser) {
-						
-						browser.goTo("http://localhost:3333/loginpage");
-						browser.fill("#email").with("bitcoupon@gmail.com");
-						browser.fill("#password").with("bitadmin");
-						browser.submit("#submit");
-						browser.goTo("http://localhost:3333/userPanel");
-						browser.fill("#qU").with("bitadmin");
-						assertThat(browser.pageSource()).contains("John");
+    public void testFilterDate() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.fill("#datepicker").with("02052015");
+                browser.submit("#datepicker");
+                assertThat(browser.pageSource()).doesNotContain("Dvije noći za dvoje u Hotelu Sunce Neum");
+            }
+        });
+    }
 	
-						
-					}
-					});
+	@Test
+    public void testFilterCategory() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.click("#category");
+                browser.click("#category1");
+                browser.submit("#categorySubmit");
+                assertThat(browser.pageSource()).doesNotContain("Dvije noći za dvoje u Hotelu Sunce Neum");
+                assertThat(browser.pageSource()).doesNotContain("Only 20.00 KM"); //<<<<
+            }
+        });
+    }
+	
+//	@Test
+//    public void testFilterCategory2() {
+//        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+//            public void invoke(TestBrowser browser) {
+//                browser.goTo("http://localhost:3333");
+//                browser.click("#category");
+//                browser.click("#category1");
+//                browser.submit("#categorySubmit");
+//                assertThat(browser.pageSource()).doesNotContain("Only 20.00 KM");
+//            }
+//        });
+//    }
+	
+	@Test
+    public void testSortCategory1() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.click("#orderby");
+                browser.click("#categorySort");
+                browser.submit("#sortSubmit");
+                assertThat(browser.pageSource()).contains("Only 20.00 KM");
+            }
+        });
+    }
+	
+	@Test
+    public void testSortPrice() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.click("#orderby");
+                browser.click("#priceSort");
+                browser.submit("#sortSubmit");
+                assertThat(browser.pageSource()).contains("Only 20.00 KM");
+            }
+        });
+    }
+	
+
+	@Test
+    public void testSortDate() {
+        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                browser.click("#orderby");
+                browser.click("#dateSort");
+                browser.submit("#sortSubmit");
+                assertThat(browser.pageSource()).contains("Only 20.00 KM");
+            }
+        });
+    }
+	
+	
+	@Test
+	public void testExpiredCoupon() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333/coupon/2");
+                assertThat(browser.pageSource()).contains("Coupon has expired");
+                assertThat(browser.pageSource()).doesNotContain("Enter the amount of coupons");
+            }
+        });
 		
 	}
 	
-	/**
-	 * 
-	 *  @Test for coupon search
-	 */
 	
-		@Test
-	    public void testSearch() {
-	        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
-	            public void invoke(TestBrowser browser) {
-	                browser.goTo("http://localhost:3333");
-	                browser.fill("#q").with("neum");
-	                assertThat(browser.pageSource()).contains("Dvije noći za dvoje u Hotelu Sunce Neum");
-	            }
-	        });
-	    }
-
-						
-
 }

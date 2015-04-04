@@ -29,7 +29,7 @@ public class Category extends Model{
 	public List<Coupon> coupons;
     
     
-    static Finder<Long, Category> find = new Finder<Long, Category>(Long.class,
+    public static Finder<Long, Category> find = new Finder<Long, Category>(Long.class,
 			Category.class);
     
     /* constructors*/

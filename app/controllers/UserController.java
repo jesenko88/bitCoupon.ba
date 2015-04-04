@@ -1,21 +1,14 @@
 package controllers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 
-
-
-
-import helpers.CurrentUserFilter;
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.SuperUserFilter;
 
 import java.util.List;
-
-
-
-
+import helpers.*;
 import helpers.HashHelper;
 import helpers.MailHelper;
 import play.*;
@@ -26,7 +19,6 @@ import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
 import views.html.coupon.*;
-import views.html.company.*;
 import models.*;
 
 
@@ -40,12 +32,6 @@ public class UserController extends Controller {
 
 	static Form<User> userForm = new Form<User>(User.class);
 
-	/**
-	 * @return Renders the registration view
-	 */
-	public static Result signup() {
-		return ok(signup.render());
-	}
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -110,25 +96,6 @@ public class UserController extends Controller {
 
 	}
 
-	/**
-	 * Method sends the current user to the userUpdate() method
-	 * 
-	 * @return Renders the user update view for editing profile
-	 */
-	//@Security.Authenticated(CurrentUserFilter.class)
-	public static Result userUpdateView() {
-		User currentUser = User.find(session("name"));
-		Company currentCompany = Company.find(session("name"));
-		
-		if(currentUser == null){
-			Logger.debug("RENDERING COMPANY");
-			return ok(userUpdate.render(currentCompany));
-		}else if(currentCompany == null){
-			return ok(userUpdate.render(currentUser));
-		}else{
-			return TODO;
-		}
-	}
 
 	/**
 	 * Update user by getting the values from the form in the userUpdate view.
@@ -139,6 +106,7 @@ public class UserController extends Controller {
 	 * @return Result renders the update view with info messages according to
 	 *         update success or fail
 	 */
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updateUser(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
@@ -172,38 +140,9 @@ public class UserController extends Controller {
 		cUser.save();
 		flash("success", "Profile updated!");
 		Logger.info(cUser.username + " is updated");
+		session("name", cUser.username); 
 		return ok(userUpdate.render(cUser));
 
-	}
-
-	/**
-	 * Receives a user id, initializes the user, and renders the adminEditUser
-	 * passing the user to the view
-	 * 
-	 * @param id
-	 *            of the User (long)
-	 * @return Result render adminEditUser
-	 */
-	@Security.Authenticated(AdminFilter.class)
-	public static Result adminEditUserView(String email) {
-
-		List<User> adminList = User.findAdmins(true);
-		
-		User userToUpdate = User.findByEmail(email);
-		Company companyToUpdate = Company.findByEmail(email);
-		
-		if(userToUpdate != null){
-			Logger.debug("In user edit");
-			return ok(adminEditUser
-					.render(userToUpdate, adminList));
-		}else if(companyToUpdate != null){
-			Logger.debug("In company edit");
-			return ok(adminEditUser
-					.render(companyToUpdate, adminList));
-		}else{
-			return TODO;
-		}
-		
 	}
 
 	/**
@@ -234,7 +173,6 @@ public class UserController extends Controller {
 		 * if admin doesn't explicitly change the users password, it stays
 		 * intact
 		 */
-
 		if (newPass.length() > 5) {
 			cUser.password = HashHelper.createPassword(newPass);
 		}
@@ -248,14 +186,13 @@ public class UserController extends Controller {
 		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
-	/*
-	 * 
-	 * 
-	 * 
+	/**
+	 * Renders the admin panel view
+	 * @param id of the current user
+	 * @return
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result controlPanel(long id) {
-
 		User u = User.find(id);
 		if (!u.username.equals(session("name"))) {
 			return redirect("/");
@@ -263,49 +200,6 @@ public class UserController extends Controller {
 
 		return ok(adminPanel.render(u, null));
 
-	}
-
-	/**
-	 * Search method for users. If search is unsuccessful a flash message is
-	 * sent
-	 * 
-	 * @param string
-	 * @return renders index with matching coupons //TODO render a different
-	 *         view for search result
-	 *
-	 */
-	public static Result searchUsers(String qU) {
-		List<User> users = User.getFind().where()
-				.ilike("username", "%" + qU + "%").findList();
-		List<Company> allCompanies = Company.all();
-		List<SuperUser> merged = new ArrayList<SuperUser>();
-		merged.addAll(users);
-		merged.addAll(allCompanies);
-		
-		if (users.isEmpty()) {
-			flash("error", "No such user");
-			return badRequest(userList.render( SuperUser.allSuperUsers()));
-		}
-
-		return ok(userList.render(merged));
-	}
-
-	/**
-	 * Renders the profile page view
-	 * 
-	 * @param username
-	 * @return Result
-	 */
-	public static Result profilePage(String username) {
-		User u = User.find(username);
-		Company c = Company.find(username);
-		
-		if (u != null) {
-			return ok(profile.render(u));
-		}else if(c != null){
-			return ok(profile.render(c));
-		}
-		return redirect("/");
 	}
 
 	/**
@@ -328,64 +222,31 @@ public class UserController extends Controller {
 	 * @return Result renders the same view
 	 */
 	@Security.Authenticated(AdminFilter.class)
-	public static Result deleteUser(Long id) {
+	public static Result deleteUser(long id) {
 		List<User> adminList = User.findAdmins(true);
 		User currentUser = Sesija.getCurrentUser(ctx());
-
+		
 		if (adminList.size() == 1 && id == currentUser.id) {
 			flash("error", "You are the last admin!");
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		}
-
 		if (currentUser.id == id || Sesija.adminCheck(ctx())) {
 			User.delete(id);
 			if (currentUser.id == id) {
+				session().clear();
 				return redirect("/signup ");
 			}
 		}
 		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
+
 	/**
-	 * Compare if the verification period is expired and send verification mail
-	 * to user e-mail adress
-	 * 
-	 * @param id
-	 *            - verification mail
-	 * @return redirect to the login view
+	 * Upload user profile photo
+	 * @param id of the user long
+	 * @return 
 	 */
-	public static Result verifyEmail(String id) {
-		EmailVerification recordToUpdate = EmailVerification.find(id);
-		String message = "";
-		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
-			EmailVerification.updateRecord(recordToUpdate);
-			flash("success", "Your e-mail is now verified. To login click on the button below");
-			Logger.info("e-mail is now verified");
-			message = " ";
-		} else {
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-			Logger.info("Verification period is expired");
-			message = " ";
-		}
-		return ok(verifyEmail.render(message));
-	}
-
 	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result verifyEmailUpdate(String id) {
-		User u = User.find(session("name"));
-		EmailVerification recordToUpdate = EmailVerification.find(id);
-		String message = "";
-		if (recordToUpdate.createdOn.compareTo(new Date()) < 0) {
-			EmailVerification.updateRecord(recordToUpdate);
-		flash("success", "Your profile is updated. To go to the profile page click on the button below");
-			message = " ";
-		} else {
-			flash("error", "Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'");
-			message = " ";
-		}
-		return ok(verifyEmailUpdate.render(message, u.username));
-	}
-
 	public static Result updatePhoto(long userId) {
 		User u = User.find(userId);
 		String subFolder = "user_profile" + File.separator + "user_" + userId;
@@ -406,57 +267,6 @@ public class UserController extends Controller {
 			return redirect("/profile/@" + u.username);
 		}
 	}
-
-
-	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result changePass(long id) {
-		DynamicForm updateForm = Form.form().bindFromRequest();
-		if (updateForm.hasErrors()) {
-			return redirect("/updateUser ");
-		}		
-		String oldPass = updateForm.data().get("password");
-		String newPass = updateForm.data().get("newPassword");
-		String confPass = updateForm.data().get("confirmPassword");
-		User cUser = User.find(id);
-		cUser.updated = new Date();
-
-		/* if only one password field is filled out */
-		if (oldPass.isEmpty() && !newPass.isEmpty() || newPass.isEmpty()
-				&& !oldPass.isEmpty()) {
-			flash("error", "If you want to change your password,"
-					+ " please fill out both fields");
-			return TODO;
-		}
-		/* if there was a input in password fields */
-		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
-			if (HashHelper.checkPass(oldPass, cUser.password) == false) {
-				flash("error", "You're old password is incorrect!");
-				return TODO;
-			}
-			if (newPass.length() < 6) {
-				flash("error", "The password must be at least 6 characters");
-				return TODO;
-			}
-			cUser.password = HashHelper.createPassword(newPass);
-		}
-		if (!newPass.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return TODO;
-		}
-		cUser.save();
-		flash("success", "Password changed!");
-		Logger.info(cUser.username + " is updated");
-		return ok(profile.render(cUser));
-
-	}	
-	/**
-	 * TODO finsih this method
-	 * @return
-	 */
-	public static Result newPassword(String id) {
-		String userEmail = ResetPasword.findByID(id);		
-		return ok(newPassword.render(id));
-	}
 	
 	/**
 	 * Method creating new password for user or company.
@@ -465,6 +275,7 @@ public class UserController extends Controller {
 	 * @param id
 	 * @return
 	 */
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result createNewPassword( String id){
 		ResetPasword rp = ResetPasword.find.byId(id);
 		String email = rp.userEmail;
@@ -494,44 +305,14 @@ public class UserController extends Controller {
 		flash("success", "Password has been changed, please log in.");
 		return redirect("/");
 	}
-
+	
 	/**
-	 * TODO Method for sending reset password email.
+	 * Return a list of bought coupons
+	 * @param id of the buyer
 	 * @return
 	 */
-	public static Result sendRequest(String email) {
-		//DynamicForm forma = Form.form().bindFromRequest();
-		//String mail = forma.data().get("email");
-		User u = User.getUser(email);
-		Company c = Company.findByEmail(email);
-		SuperUser su;
-		
-		if (u == null && c == null) {
-			flash("error", "User with email you sent does not exist.");
-			return redirect("/loginpage");
-		}
-		
-		if(u == null){
-			su = c;
-		}else{
-			su = u;
-		}
-		
-		
-		String verificationEmail = ResetPasword.createRequest(su.email);
-		MailHelper.send(email,
-				"Click on the link below to set a new password <br>"
-						+ "http://" + PATH + "/newPassword/"
-						+ verificationEmail);
-		flash("success", "Request for password has been sent on this email: "
-				+ email);
-		return  redirect("/");
-	}
-	
-	
-	
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result showBoughtCoupons(long userId) {
-		//List<Coupon> boughtCouponsList = TransactionCP.allBoughtCoupons(userId);
 		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
 		return ok(boughtCoupons.render(session("name"), transactions));
 		
