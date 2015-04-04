@@ -8,12 +8,16 @@ import helpers.FileUpload;
 import helpers.SuperUserFilter;
 
 import java.util.List;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import helpers.*;
-import helpers.HashHelper;
-import helpers.MailHelper;
 import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 import views.html.user.*;
@@ -210,7 +214,19 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
 
-		return ok(userList.render( SuperUser.allSuperUsers()));
+		if( request().accepts("text/html")) {
+				return ok(userList.render( SuperUser.allSuperUsers()));			
+		} else {
+				ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);	
+				List<SuperUser> users = SuperUser.allSuperUsers();		
+			    for(SuperUser c : users){
+			       ObjectNode sUser = Json.newObject();
+			       sUser.put("id", c.id);
+			       sUser.put("email", c.email);
+			       arrayNode.add(sUser);
+			    }
+			    return ok(arrayNode);
+		 }
 	}
 
 	/**
