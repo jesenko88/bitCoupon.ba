@@ -41,7 +41,7 @@
                      <div class="searchform">
                      @if(Sesija.getCurrentUser(ctx()) != null){
                        @if(Subscriber.isSubscribed(Sesija.getCurrentUser(ctx()))){
-                       		<form action="@routes.SubscribeController.unsubscribe(Subscriber.getToken(Sesija.getCurrentUser(ctx())))" )>
+                       		<form action="@routes.SubscribeController.unsubscribe(Subscriber.getToken(Sesija.getCurrentUser(ctx()).email))" )>
                        			 <button type="submit" class="btn btn-default">Unsubscribe</button>
                        		</form>
                        }else{                       

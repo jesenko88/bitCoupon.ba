@@ -98,8 +98,7 @@ public class SubscribeController extends Controller {
 		
 		Subscriber.unsubscribe(s);
 		flash("success", "You have been unsubscribed.");
-		String refererUrl = request().getHeader("referer");
-		return redirect(refererUrl);
+		return redirect("/");
 	}
 	
 	

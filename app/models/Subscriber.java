@@ -115,8 +115,8 @@ public class Subscriber extends Model{
 	 * @param u
 	 * @return
 	 */
-	public static String getToken(User u){
-		Subscriber s = find.where().eq("subscriber", u).findUnique();
+	public static String getToken(String email){
+		Subscriber s = find.where().eq("email", email).findUnique();
 		Logger.debug(s.token);
 		return s.token;
 	}

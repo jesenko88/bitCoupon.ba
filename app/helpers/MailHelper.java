@@ -12,13 +12,19 @@ import java.util.Scanner;
 
 
 
+
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 
 
+
+
+import controllers.UserController;
 import models.Coupon;
+import models.Subscriber;
 import models.User;
 import play.Logger;
 import play.libs.mailer.Email;
@@ -102,11 +108,7 @@ public class MailHelper {
 		Email mail = new Email();
 		mail.setSubject(subject);
 		mail.setFrom("bitCoupon.ba <bit.play.test@gmail.com>");
-		mail.addTo("bitCoupon.ba Contact <bit.play.test@gmail.com>");
-		
-		for(String email: emails){
-			mail.addTo(email);
-		}	
+		mail.addTo("bitCoupon.ba Contact <bit.play.test@gmail.com>");		
 		
 		//READING HTML FROM FILE
 		String message = "";
@@ -122,11 +124,17 @@ public class MailHelper {
 			sc.close();
 		}			
 
-		String preparedHTML = getPreparedHTML(message, coupons);		
-		
-	
-		mail.setBodyHtml(preparedHTML);
-		MailerPlugin.send(mail);
+		for(String email: emails){
+			Document preparedHTML = getPreparedHTML(message, coupons);		
+			mail.addTo(email);
+			Element unsubscribe = preparedHTML.getElementById("unsubscribe");
+			String token = Subscriber.getToken(email);
+			unsubscribe.attr("href",UserController.PATH +"/unsubscribe/" +token);
+			
+			Logger.debug(unsubscribe.toString());
+			mail.setBodyHtml(preparedHTML.toString());
+			MailerPlugin.send(mail);			
+		}	
 
 	}	
 	
@@ -136,7 +144,7 @@ public class MailHelper {
 	 * @param coupons
 	 * @return
 	 */
-	private static String getPreparedHTML(String html, List<Coupon> coupons){
+	private static Document getPreparedHTML(String html, List<Coupon> coupons){
 		Document doc =  Jsoup.parse(html);
 		
 		Element couponOneName = doc.getElementById("Cp1-name");
@@ -154,7 +162,7 @@ public class MailHelper {
 		Element couponThreePrice = doc.getElementById("Cp3-price");
 		couponThreePrice.appendText(coupons.get(2).price +"€");
 		
-		return doc.toString();
+		return doc;
 	}
 	
 	
