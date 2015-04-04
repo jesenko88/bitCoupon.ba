@@ -46,19 +46,7 @@ public class Subscriber extends Model{
 		s.delete();
 	}
 	
-	/**
-	 * Method creates HTML page for email newsletter.
-	 * @param listOfCoupons
-	 * @return
-	 */
-	public static String getPreparedHTMLContent(String listOfCoupons){
-		
-		StringBuilder sb = new StringBuilder();
-		
-		
-		
-		return null;
-	}
+
 
 	public static List<String> getAllSubscribers() {
 		List<Subscriber> allSubscribers = find.all();

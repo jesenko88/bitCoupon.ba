@@ -34,7 +34,8 @@ GET    /boughtCoupons                 controllers.UserController.showBoughtCoupo
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
-
+GET    /newsletter                    controllers.SubscribeController.newsletterPanel()
+POST   /newsletter                    controllers.SubscribeController.sendNewsletters()
 # Company controller 
 GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 POST   /companyUpdatePhoto            controllers.CompanyController.updatePhoto(id: Long)	

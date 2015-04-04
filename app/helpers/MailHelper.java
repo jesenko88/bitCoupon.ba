@@ -1,8 +1,13 @@
 package helpers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Scanner;
 
+import models.Coupon;
 import models.User;
+import play.Logger;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerPlugin;
 
@@ -69,10 +74,10 @@ public class MailHelper {
 						+ "</html>",
 						email, name, phone, message));
 		MailerPlugin.send(mail);
-
+		
 	}
 	
-	public static void sendNewsletter(List<String> emails, String subject, String message) {
+	public static void sendNewsletter(List<String> emails, String subject, List<Coupon> coupons) {
 
 		Email mail = new Email();
 		mail.setSubject(subject);
@@ -81,7 +86,27 @@ public class MailHelper {
 		
 		for(String email: emails){
 			mail.addTo(email);
-		}		
+		}	
+		
+		//READING HTML FROM FILE
+		String message = "";
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File("./public/mailer.html"));			
+			while(sc.hasNext()){
+				message += sc.next();
+			}
+		} catch (FileNotFoundException e) {
+			Logger.error("COULD'T READ EMAIL FILE");
+		}finally{
+			sc.close();
+		}
+		message.replace("@1",coupons.get(0).picture);
+		message.replace("@2",coupons.get(1).picture);
+		message.replace("@3",coupons.get(2).picture);
+		Logger.debug(message);
+		
+		
 		mail.setBodyHtml(message);
 		MailerPlugin.send(mail);
 

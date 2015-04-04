@@ -9,6 +9,7 @@ import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
+import models.Subscriber;
 import models.User;
 import play.Application;
 import play.GlobalSettings;
@@ -116,6 +117,14 @@ public class Global extends GlobalSettings {
 					HashHelper.createPassword("johndoe"), false);
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();
+		}
+		if (User.check("vedad.zornic@bitcamp.ba") == false) {
+			User.createUser("Vedad", "vedad.zornic@bitcamp.ba",
+					HashHelper.createPassword("johndoe"), false);
+			EmailVerification setVerified = new EmailVerification(2, true);
+			setVerified.save();
+			Subscriber sb = new Subscriber(User.findByEmail("vedad.zornic@bitcamp.ba"));
+			sb.save();
 		}
 		
 		
