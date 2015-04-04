@@ -108,9 +108,8 @@ public class SuperUserController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result userUpdateView() {
-		User currentUser = User.find(session("name"));
-		Company currentCompany = Company.find(session("name"));
-		
+		User currentUser = User.findByEmail(session("email"));
+		Company currentCompany = Company.findByEmail(session("email"));
 		if(currentUser == null){
 			return ok(userUpdate.render(currentCompany));
 		}else if(currentCompany == null){
