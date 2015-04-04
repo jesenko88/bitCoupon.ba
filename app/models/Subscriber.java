@@ -24,8 +24,7 @@ public class Subscriber extends Model{
 	public String token;
 	
 	@OneToOne
-	public User subscriber;
-	
+	public User subscriber;	
 	
 	public String email;	
 	
@@ -91,7 +90,7 @@ public class Subscriber extends Model{
 		List<Subscriber> allSubscribers = find.all();
 		List<String> allEmails = new ArrayList<String>();
 		for(Subscriber s: allSubscribers){
-			allEmails.add(s.subscriber.email);
+			allEmails.add(s.email);
 		}
 		return allEmails;
 	}

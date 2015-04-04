@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Scanner;
 
+
 import models.Coupon;
 import models.User;
 import play.Logger;
@@ -78,7 +79,9 @@ public class MailHelper {
 	}
 	
 	public static void sendNewsletter(List<String> emails, String subject, List<Coupon> coupons) {
-
+		
+		copyImages(coupons);
+		
 		Email mail = new Email();
 		mail.setSubject(subject);
 		mail.setFrom("bitCoupon.ba <bit.play.test@gmail.com>");
@@ -92,7 +95,7 @@ public class MailHelper {
 		String message = "";
 		Scanner sc = null;
 		try {
-			sc = new Scanner(new File("./public/mailer.html"));			
+			sc = new Scanner(new File("./public/Email/index.html"));			
 			while(sc.hasNextLine()){
 				message +=sc.nextLine();
 			}
@@ -100,17 +103,24 @@ public class MailHelper {
 			Logger.error("COULD'T READ EMAIL FILE");
 		}finally{
 			sc.close();
-		}
-		message.replaceAll("@1",coupons.get(0).picture);
-		message.replaceAll("@2",coupons.get(1).picture);
-		message.replaceAll("@3",coupons.get(2).picture);
-		Logger.debug(message);
+		}	
 		
-		mail.setBodyText(message);
+		message.replace("CouponOneName", coupons.get(0).name);
+		
+		Logger.debug(message);
 		mail.setBodyHtml(message);
 		MailerPlugin.send(mail);
 
 	}	
 	
+	public static void copyImages(List<Coupon> coupons) {
+		String photoOne = "./public/" +coupons.get(0).picture;
+		String photoTwo = "./public/" +coupons.get(1).picture;
+		String photoThree = "./public/" +coupons.get(2).picture;
+		
+		FileUpload.CopyFile(photoOne, "./public/Email/img/twocolimg1.png");
+		FileUpload.CopyFile(photoTwo, "./public/Email/img/twocolimg2.png");
+		FileUpload.CopyFile(photoThree, "./public/Email/img/twocolimg3.png");
+	}
 	
 }
