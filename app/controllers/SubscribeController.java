@@ -61,9 +61,7 @@ public class SubscribeController extends Controller {
 				coupons.add(cp);								
 			}
 		}					
-		MailHelper.sendNewsletter(subscribers,
-			subject, 
-				coupons);
+		MailHelper.sendNewsletter(subscribers,subject, coupons);
 		String refererUrl = request().getHeader("referer");
 		return redirect(refererUrl);		
 	}
@@ -75,7 +73,14 @@ public class SubscribeController extends Controller {
 	 * @return
 	 */	
 	public static Result subscribe(String email){
+		String refererUrl = request().getHeader("referer");
+
 		User u = User.findByEmail(email);
+		if(Subscriber.isSubscribed(email)){
+			flash("warning", "That email is already subscribed");
+			return redirect(refererUrl);
+		}
+			
 		if(u != null){
 			Subscriber.subscribe(u);
 			Logger.debug("User " +u.email +" subscribed.");
@@ -83,7 +88,6 @@ public class SubscribeController extends Controller {
 			Logger.debug("Visitor with email "+email +" subscribed.");
 			Subscriber.subscribe(email);
 		}
-		String refererUrl = request().getHeader("referer");
 		return redirect(refererUrl);
 	}
 	
@@ -95,13 +99,14 @@ public class SubscribeController extends Controller {
 	 */
 	public static Result unsubscribe(String token){
 		Subscriber s = Subscriber.findByToken(token);
-		
-		Subscriber.unsubscribe(s);
-		flash("success", "You have been unsubscribed.");
+		if(s != null){
+			Subscriber.unsubscribe(s);
+			flash("success", "You have been unsubscribed.");
+			return redirect("/");
+		}
+		flash("warning", "This email is not in subscribe list.");
 		return redirect("/");
-	}
-	
-	
+	}	
 	
 	/**
 	 * Method for checking if string is number.

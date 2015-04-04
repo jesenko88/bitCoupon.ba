@@ -98,6 +98,9 @@ public class MailHelper {
 	
 	/**
 	 *Helper which sends newsletter email. 
+	 *Each email gets different template.
+	 *Method reads HTML from Email/index.html folder and use Jsoup libraries
+	 *for parsing HTML.
 	 * @param emails
 	 * @param subject
 	 * @param coupons
@@ -122,9 +125,9 @@ public class MailHelper {
 			Logger.error("COULD'T READ EMAIL FILE");
 		}finally{
 			sc.close();
-		}			
-		Document preparedHTML;		
-
+		}
+		
+		Document preparedHTML;
 		for(String email: emails){
 			mail.addTo(email);
 			preparedHTML = getPreparedHTML(email, message, coupons);
@@ -135,14 +138,19 @@ public class MailHelper {
 	}	
 	
 	/**
-	 * Method gets html template, and puts coupons info in it.
+	 * Method gets html template, email and list of coupons.
+	 * For each email it generates different HTML. 
+	 * TODO less hardcode.
 	 * @param html
 	 * @param coupons
 	 * @return
 	 */
 	private static Document getPreparedHTML(String email,String html, List<Coupon> coupons){
-		Document doc =  Jsoup.parse(html);
 		
+		//Parsing html document and adding coupon names
+		//and prices into html.
+		//At this point its hardcoded and MUST BE changed.
+		Document doc =  Jsoup.parse(html);
 		Element couponOneName = doc.getElementById("Cp1-name");
 		couponOneName.appendText(coupons.get(0).name);		
 		Element couponOnePrice = doc.getElementById("Cp1-price");
@@ -165,14 +173,13 @@ public class MailHelper {
 		unsubscribe.attr("href", unsubscribePath);
 		
 		
-		Logger.debug(unsubscribe.toString());
-		
 		return doc;
 	}
 	
 	
 	/**
-	 * Make copies of images for email newsletter.
+	 * Method takes pictures from coupons and add them
+	 * into img folder for email template.
 	 * TODO: Less hardcode
 	 * @param coupons
 	 */

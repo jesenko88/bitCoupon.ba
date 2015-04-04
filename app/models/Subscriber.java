@@ -110,6 +110,16 @@ public class Subscriber extends Model{
 		}
 		 return null;
 	}
+	
+	/**
+	 * Gets subscriber by email.
+	 * @param email
+	 * @return
+	 */
+	public static Subscriber findByEmail(String email){
+		Subscriber temp = find.where().eq("email", email).findUnique();
+		return temp;
+	}
 	/**
 	 * Get token from User ( if subscribed)
 	 * @param u
@@ -128,6 +138,16 @@ public class Subscriber extends Model{
 	 */
 	public static boolean isSubscribed(User u){
 		Subscriber current = find.where().eq("subscriber", u).findUnique();
+		return current != null;
+	}
+	/**
+	 * Check if user is subscribed.
+	 * @param u
+	 * @return
+	 */
+	
+	public static boolean isSubscribed(String email){
+		Subscriber current = find.where().eq("email", email).findUnique();
 		return current != null;
 	}
 	
