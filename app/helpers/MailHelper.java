@@ -93,8 +93,8 @@ public class MailHelper {
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new File("./public/mailer.html"));			
-			while(sc.hasNext()){
-				message += sc.next();
+			while(sc.hasNextLine()){
+				message +=sc.nextLine();
 			}
 		} catch (FileNotFoundException e) {
 			Logger.error("COULD'T READ EMAIL FILE");
@@ -106,7 +106,7 @@ public class MailHelper {
 		message.replace("@3",coupons.get(2).picture);
 		Logger.debug(message);
 		
-		
+		mail.setBodyText(message);
 		mail.setBodyHtml(message);
 		MailerPlugin.send(mail);
 
