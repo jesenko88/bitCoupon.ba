@@ -37,23 +37,23 @@ public class SuperUserController extends Controller {
 				&& !oldPass.isEmpty()) {
 			flash("error", "If you want to change your password,"
 					+ " please fill out both fields");
-			return TODO;
+			return badRequest(userUpdate.render(superUser));
 		}
 		/* if there was a input in password fields */
 		if (!oldPass.isEmpty() && !newPass.isEmpty()) {
 			if (HashHelper.checkPass(oldPass, superUser.password) == false) {
 				flash("error", "You're old password is incorrect!");
-				return TODO;
+				return badRequest(userUpdate.render(superUser));
 			}
 			if (newPass.length() < 6) {
 				flash("error", "The password must be at least 6 characters");
-				return TODO;
+				return badRequest(userUpdate.render(superUser));
 			}
 			superUser.password = HashHelper.createPassword(newPass);
 		}
 		if (!newPass.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return TODO;
+			return badRequest(userUpdate.render(superUser));
 		}
 		User user;
 		Company company;
