@@ -379,8 +379,12 @@ public static final String PATH = "localhost:9000";
 		if (!company.name.equals(session("name"))) {
 			return redirect("/");
 		}
+		if(Coupon.ownedCoupons(company.id).size() == 0) {
+			flash("info", "You have no coupons");
+		return badRequest(profile.render(company));
+		}
+			//return badRequest(noCoupons.render(company.name));
 		return ok(companyPanel.render(company, Coupon.ownedCoupons(company.id) ) );
-
 	}
 
 }

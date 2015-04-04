@@ -47,6 +47,7 @@ GET    /deletCompany                  controllers.CompanyController.deleteCompan
 GET    /editUser/:id                  controllers.CompanyController.adminEditCompanyView(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
 POST   /companyChangePass/:id         controllers.CompanyController.changePass(id: Long)
+GET    /noCoupons                     controllers.CompanyController.companyPanel(id: Long)
 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
 POST   /addCoupon                     controllers.CouponController.addCoupon()
