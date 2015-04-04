@@ -101,9 +101,9 @@ public class MailHelper {
 		}finally{
 			sc.close();
 		}
-		message.replace("@1",coupons.get(0).picture);
-		message.replace("@2",coupons.get(1).picture);
-		message.replace("@3",coupons.get(2).picture);
+		message.replaceAll("@1",coupons.get(0).picture);
+		message.replaceAll("@2",coupons.get(1).picture);
+		message.replaceAll("@3",coupons.get(2).picture);
 		Logger.debug(message);
 		
 		mail.setBodyText(message);

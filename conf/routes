@@ -36,6 +36,8 @@ POST   /updateUser/:id                controllers.UserController.adminUpdateUser
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
 GET    /newsletter                    controllers.SubscribeController.newsletterPanel()
 POST   /newsletter                    controllers.SubscribeController.sendNewsletters()
+GET    /subscribe            controllers.SubscribeController.subscribe(email: String)		
+GET   /unsubscribe/:token            controllers.SubscribeController.unsubscribe(token: String)
 # Company controller 
 GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 POST   /companyUpdatePhoto            controllers.CompanyController.updatePhoto(id: Long)	

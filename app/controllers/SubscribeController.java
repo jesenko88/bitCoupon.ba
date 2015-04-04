@@ -11,6 +11,7 @@ import java.util.Set;
 
 import models.Coupon;
 import models.Subscriber;
+import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -46,8 +47,8 @@ public class SubscribeController extends Controller {
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		
 		//If checked coupons are more then 3, returning back.
-		if(formResult.size() > 4){
-			flash("error", "Max number of coupons for newsletter is 3");
+		if(formResult.size() != 4){
+			flash("warning", "Number of selected coupons must be exactly 3.");
 			return redirect("/newsletter");
 		}
 		
@@ -59,23 +60,56 @@ public class SubscribeController extends Controller {
 				Coupon cp = Coupon.find(Long.valueOf(current));
 				coupons.add(cp);								
 			}
-		}
-		String commaSeparatedIds = Coupon.commaSeparatedIds(coupons);			
+		}					
 		MailHelper.sendNewsletter(subscribers,
 			subject, 
 				coupons);
-	
-		
-		
-		return TODO;		
+		String refererUrl = request().getHeader("referer");
+		return redirect(refererUrl);		
 	}
+
+	/**
+	 * Method for subscribing already registred user
+	 * or non registred visitor of our site.
+	 * @param email
+	 * @return
+	 */	
+	public static Result subscribe(String email){
+		User u = User.findByEmail(email);
+		if(u != null){
+			Subscriber.subscribe(u);
+			Logger.debug("User " +u.email +" subscribed.");
+		}else{
+			Logger.debug("Visitor with email "+email +" subscribed.");
+			Subscriber.subscribe(email);
+		}
+		String refererUrl = request().getHeader("referer");
+		return redirect(refererUrl);
+	}
+	
+	/**
+	 * Method for unsubscribing user.
+	 * For security reason it uses unique token.
+	 * @param token
+	 * @return
+	 */
+	public static Result unsubscribe(String token){
+		Subscriber s = Subscriber.findByToken(token);
+		
+		Subscriber.unsubscribe(s);
+		flash("success", "You have been unsubscribed.");
+		String refererUrl = request().getHeader("referer");
+		return redirect(refererUrl);
+	}
+	
+	
 	
 	/**
 	 * Method for checking if string is number.
 	 * @param number
 	 * @return
 	 */
-	public static boolean isNumber(String number){
+	private static boolean isNumber(String number){
 		try{
 			Long.parseLong(number);
 			return true;

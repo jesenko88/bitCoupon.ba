@@ -1,70 +1,76 @@
-<footer id="footer"><!--Footer-->
-		
-		
-		<div class="footer-widget">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="single-widget">
-							<h2>Facebook</h2>
-							<ul class="nav nav-pills nav-stacked">
-								<div class="fb-page" data-href="https://www.facebook.com/bitcamp.ba" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"></div>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-2">
-						<div class="single-widget">
-							<h2>Coupon Categories</h2>
-							<ul class="nav nav-pills nav-stacked">
-								  @for(category <- Category.all()){
-	        		
-	        	 <li>	<a href="@routes.CategoryController.categoryView(category.name)" class="@category.name">
-	        	   <span class="transition"> @category.name </i>  </span></a>   </li>
-
-	       		}
-							</ul>
-						</div>
-					</div>
-		
-					<div class="col-sm-3">
-						<div class="single-widget">
-							<h2>About BitCoupon</h2>
-							<address>
-	    					<p>Project BITCoupon mirror site of eKupon</p>
-							<p>Building B, IUS</p>
-							<p>Ilidza</p>
-							<p>Bosnia and Herzegovina</p>
-	    				</address>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="single-widget">
-						<h2>Search</h2>
-							   <div class="logo pull-left">
-               					<div class="searchform">
-                 				 <form action="/search" method="GET">
-                     			<input id="q" name="q" type="text" placeholder="Search for Coupons" />
-                     			  <button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
-                				  </form>
-                				
-     
+<footer id="footer">
+   <!--Footer-->
+   <div class="footer-widget">
+      <div class="container">
+         <div class="row">
+            <div class="col-sm-4">
+               <div class="single-widget">
+                  <h2>Facebook</h2>
+                  <ul class="nav nav-pills nav-stacked">
+                     <div class="fb-page" data-href="https://www.facebook.com/bitcamp.ba" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"></div>
+                  </ul>
                </div>
             </div>
-						</div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-		
-		<div class="footer-bottom">
-			<div class="container">
-				<div class="row">
-					<p class="pull-left">Copyright © BITCoupon 2015. All right reserved.</p>
-					<p class="pull-right">Designed by BITCoupon Team</p>
-				</div>
-			</div>
-		</div>
-		
-	</footer>
-          
+            <div class="col-sm-2">
+               <div class="single-widget">
+                  <h2>Coupon Categories</h2>
+                  <ul class="nav nav-pills nav-stacked">
+                     @for(category <- Category.all()){
+                     <li>	<a href="@routes.CategoryController.categoryView(category.name)" class="@category.name">
+                        <span class="transition"> @category.name </i>  </span></a>   
+                     </li>
+                     }
+                  </ul>
+               </div>
+            </div>
+            <div class="col-sm-3">
+               <div class="single-widget">
+                  <h2>About BitCoupon</h2>
+                  <address>
+                     <p>Project BITCoupon mirror site of eKupon</p>
+                     <p>Building B, IUS</p>
+                     <p>Ilidza</p>
+                     <p>Bosnia and Herzegovina</p>
+                  </address>
+               </div>
+            </div>
+            <div class="col-sm-3">
+               <div class="single-widget">
+                  <h2>Subscribe</h2>
+                  <div class="logo pull-left">
+                     <div class="searchform">
+                     @if(Sesija.getCurrentUser(ctx()) != null){
+                       @if(Subscriber.isSubscribed(Sesija.getCurrentUser(ctx()))){
+                       		<form action="@routes.SubscribeController.unsubscribe(Subscriber.getToken(Sesija.getCurrentUser(ctx())))" )>
+                       			 <button type="submit" class="btn btn-default">Unsubscribe</button>
+                       		</form>
+                       }else{                       
+                           <form action="/subscribe">
+                       			 <input type ="hidden" id = "email" name ="email" value="@Sesija.getCurrentUser(ctx()).email">
+                       			 <button type="submit" class="btn btn-default">Subscribe</button>
+                       		</form>
+						}
+                     
+                     }else{
+                    	 <form action="/subscribe" method="GET">
+                           <input id="email" name="email" type="text" placeholder="Enter your email" />
+                           <button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
+                        </form>
+                     }
+                     
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="footer-bottom">
+      <div class="container">
+         <div class="row">
+            <p class="pull-left">Copyright © BITCoupon 2015. All right reserved.</p>
+            <p class="pull-right">Designed by BITCoupon Team</p>
+         </div>
+      </div>
+   </div>
+</footer>

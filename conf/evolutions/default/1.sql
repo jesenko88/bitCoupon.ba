@@ -69,8 +69,9 @@ create table reset_pasword (
 
 create table subscriber (
   id                        bigint not null,
+  token                     varchar(255),
   subscriber_id             bigint,
-  newsletter                varchar(255),
+  email                     varchar(255),
   constraint pk_subscriber primary key (id))
 ;
 
