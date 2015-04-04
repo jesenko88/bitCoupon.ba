@@ -217,15 +217,7 @@ public class UserController extends Controller {
 		if( request().accepts("text/html")) {
 				return ok(userList.render( SuperUser.allSuperUsers()));			
 		} else {
-				ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);	
-				List<SuperUser> users = SuperUser.allSuperUsers();		
-			    for(SuperUser c : users){
-			       ObjectNode sUser = Json.newObject();
-			       sUser.put("id", c.id);
-			       sUser.put("email", c.email);
-			       arrayNode.add(sUser);
-			    }
-			    return ok(arrayNode);
+				return ok(JSonHelper.allSuperUsers() );
 		 }
 	}
 
