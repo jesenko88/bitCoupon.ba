@@ -123,15 +123,11 @@ public class MailHelper {
 		}finally{
 			sc.close();
 		}			
+		Document preparedHTML;		
 
 		for(String email: emails){
-			Document preparedHTML = getPreparedHTML(message, coupons);		
 			mail.addTo(email);
-			Element unsubscribe = preparedHTML.getElementById("unsubscribe");
-			String token = Subscriber.getToken(email);
-			unsubscribe.attr("href",UserController.PATH +"/unsubscribe/" +token);
-			
-			Logger.debug(unsubscribe.toString());
+			preparedHTML = getPreparedHTML(email, message, coupons);
 			mail.setBodyHtml(preparedHTML.toString());
 			MailerPlugin.send(mail);			
 		}	
@@ -144,7 +140,7 @@ public class MailHelper {
 	 * @param coupons
 	 * @return
 	 */
-	private static Document getPreparedHTML(String html, List<Coupon> coupons){
+	private static Document getPreparedHTML(String email,String html, List<Coupon> coupons){
 		Document doc =  Jsoup.parse(html);
 		
 		Element couponOneName = doc.getElementById("Cp1-name");
@@ -161,6 +157,15 @@ public class MailHelper {
 		couponThreeName.appendText(coupons.get(2).name);		
 		Element couponThreePrice = doc.getElementById("Cp3-price");
 		couponThreePrice.appendText(coupons.get(2).price +"€");
+		
+		Element unsubscribe = doc.getElementById("unsubscribe");
+		String token = Subscriber.getToken(email);
+		String unsubscribePath = "http://localhost:9000" +"/unsubscribe/" +token;
+		Logger.debug(unsubscribePath);
+		unsubscribe.attr("href", unsubscribePath);
+		
+		
+		Logger.debug(unsubscribe.toString());
 		
 		return doc;
 	}
