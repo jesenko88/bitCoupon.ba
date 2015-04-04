@@ -35,8 +35,8 @@ GET    /deletUser                     controllers.UserController.deleteUser(id: 
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
 
-GET 	/subscribers				controllers.SubscribeController.subscribers()
-GET	/deleteSubscriber			controllers.SubscribeController.deleteSubscriber(id: Long)
+GET    /subscribers                   controllers.SubscribeController.subscribers()
+GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)
 GET    /newsletter                    controllers.SubscribeController.newsletterPanel()
 POST   /newsletter                    controllers.SubscribeController.sendNewsletters()
 GET    /subscribe                     controllers.SubscribeController.subscribe(email: String)		
