@@ -1,7 +1,11 @@
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import helpers.HashHelper;
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
@@ -39,6 +43,18 @@ public class Global extends GlobalSettings {
 		Category food = null;
 		Category travel = null;
 		Category sport = null;
+		Company admin = null;
+		Company bitCamp = null;
+		
+		if ( !Company.exists("Admin")){
+			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), "/");
+			bitCamp.save();
+		}
+		
+		if ( !Company.exists("BitCamp")){
+			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), "/");
+			bitCamp.save();
+		}
 		
 		if(Category.exists("Food") == false){
 			food = new Category("Food"); 
@@ -54,29 +70,38 @@ public class Global extends GlobalSettings {
 		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
-			Coupon.createCoupon(nameCoupon1, 80, null,
+			Coupon.createCoupon(nameCoupon1, 80, new Date(),
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
-					remarkCoupon1);
+					remarkCoupon1, 5, bitCamp, true);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
 			Coupon.createCoupon(
 					nameCoupon2,
 					40,
-					null,
+					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
-					remarkCoupon2);
+					remarkCoupon2, 5, bitCamp, true);
 		}
+		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "01/01/2051";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 			Coupon.createCoupon(
 					nameCoupon3,
 					20,
-					null,
+					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3);
+					remarkCoupon3, 5, bitCamp, true);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {

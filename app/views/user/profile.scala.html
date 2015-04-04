@@ -1,70 +1,122 @@
-@(user: User)
-
+@(superUser: SuperUser)
 @import helper._
-
 @main("User Panel") {
-
 <body>
-		<header id="header"><!--header-->
-		
-		
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
-	</section>
-	
-	<div class="container">
-					
-					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center"> Profile page here </h2>
-						<div class="col-sm-6 col-sm-offset-1">
-						
-
-					
-
-				</div>
-			</div>
-			<div class="userInforamtion">
-			
-			<div class="profilePicture">
-			@if(user.profilePicture == null){
-				<img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
-			}else{
-				<img src='@routes.Assets.at(user.profilePicture)' class="avatar-profile"/>
-			}
-			
-			</div>
-			
-			
-			</div>
-			<div class="rightBox">
-			<ul>
-  				<li>Name: @user.username</li>
-  				<li>Email: @user.email</li>
-  				<li>Date create: @user.created</li>
-			</ul>
-
-			</div>
-		</div>
-	</section><!--/form-->
-							</div>
-						</div>
-					</div>
-		<br>
-		<br>
-		<br>
-	</body>
-		
-	
-
-	
+   <header id="header">
+      <!--header-->
+      <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <div class="row">
+            <div class="col-sm-4">
+               <div class="logo pull-left">
+                  <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+               </div>
+            </div>
+         </div>
+      </div>
+      @if(superUser.isUser()){
+      <div class="header-bottom">
+         <!--header-bottom-->
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-9">
+                  <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     </button>
+                  </div>
+                  <div class="mainmenu pull-left">
+                     <ul class="nav navbar-nav collapse navbar-collapse">
+                        <li><a href="@routes.UserController.showBoughtCoupons(superUser.id)">My Coupons</a></li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </header>
+   <div class="container">
+      <div class="features_items">
+         <!--features_items-->
+         <h2 class="title text-center"> Profile page here </h2>
+         <div class="col-sm-6 col-sm-offset-1">
+         </div>
+      </div>
+      <div class="userInforamtion">
+         <div class="profilePicture">
+            @if(superUser.getUser().profilePicture == null){
+            <img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+            }else{
+            <img src='@routes.Assets.at(superUser.getUser().profilePicture)' class="avatar-profile"/>
+            }
+         </div>
+      </div>
+      <div class="rightBox">
+         <ul>
+            <li>Name: @superUser.getUser().username</li>
+            <li>Email: @superUser.getUser().email</li>
+            <li>Date create: @superUser.getUser().created</li>
+         </ul>
+      </div>
+   </div>
+   }
+   @if(superUser.isCompany()){
+   <div class="header-bottom">
+      <!--header-bottom-->
+      <div class="container">
+         <div class="row">
+            <div class="col-sm-9">
+               <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  </button>
+               </div>
+               <div class="mainmenu pull-left">
+                  <ul class="nav navbar-nav collapse navbar-collapse">
+                     <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
+                     <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   </header>
+   </section>
+   <div class="container">
+      <div class="features_items">
+         <!--features_items-->
+         <h2 class="title text-center"> Profile page here </h2>
+         <div class="col-sm-6 col-sm-offset-1">
+         </div>
+      </div>
+      <div class="userInforamtion">
+         <div class="profilePicture">
+            @if(superUser.getCompany().logo == null){
+            <img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+            }else{
+            <img src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
+            }
+         </div>
+      </div>
+      <div class="rightBox">
+         <ul>
+            <li>Name: @superUser.getCompany().name</li>
+            <li>Email: @superUser.getCompany().email</li>
+            <li>Date create: @superUser.getCompany().created</li>
+         </ul>
+      </div>
+   </div>
+   }
+   <br>
+   <br>
+   <br>
+</body>
 }
-

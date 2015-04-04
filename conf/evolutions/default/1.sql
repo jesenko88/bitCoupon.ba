@@ -10,6 +10,17 @@ create table category (
   constraint pk_category primary key (id))
 ;
 
+create table company (
+  id                        bigint not null,
+  email                     varchar(255),
+  password                  varchar(255),
+  name                      varchar(255),
+  created                   timestamp,
+  updated                   timestamp,
+  logo                      varchar(255),
+  constraint pk_company primary key (id))
+;
+
 create table coupon (
   id                        bigint not null,
   name                      varchar(255),
@@ -18,8 +29,11 @@ create table coupon (
   expired_at                timestamp,
   picture                   varchar(255),
   category_id               bigint,
-  description               varchar(255),
+  description               TEXT,
   remark                    varchar(255),
+  seller_id                 bigint,
+  min_order                 integer,
+  status                    boolean,
   constraint pk_coupon primary key (id))
 ;
 
@@ -46,16 +60,31 @@ create table photo (
   constraint pk_photo primary key (id))
 ;
 
-create table transactions (
+create table reset_pasword (
+  id                        varchar(255) not null,
+  user_email                varchar(255),
+  date                      timestamp,
+  constraint pk_reset_pasword primary key (id))
+;
+
+create table transaction_cp (
   id                        bigint not null,
-  constraint pk_transactions primary key (id))
+  payment_id                varchar(255),
+  coupon_price              double,
+  quantity                  integer,
+  total_price               double,
+  token                     varchar(255),
+  buyer_id                  bigint,
+  coupon_id                 bigint,
+  date                      timestamp,
+  constraint pk_transaction_cp primary key (id))
 ;
 
 create table user (
   id                        bigint not null,
-  username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
+  username                  varchar(255),
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,
@@ -65,6 +94,8 @@ create table user (
 
 create sequence category_seq;
 
+create sequence company_seq;
+
 create sequence coupon_seq;
 
 create sequence email_verification_seq;
@@ -73,14 +104,22 @@ create sequence faq_seq;
 
 create sequence photo_seq;
 
-create sequence transactions_seq;
+create sequence reset_pasword_seq;
+
+create sequence transaction_cp_seq;
 
 create sequence user_seq;
 
 alter table coupon add constraint fk_coupon_category_1 foreign key (category_id) references category (id) on delete restrict on update restrict;
 create index ix_coupon_category_1 on coupon (category_id);
-alter table photo add constraint fk_photo_coupon_2 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_photo_coupon_2 on photo (coupon_id);
+alter table coupon add constraint fk_coupon_seller_2 foreign key (seller_id) references company (id) on delete restrict on update restrict;
+create index ix_coupon_seller_2 on coupon (seller_id);
+alter table photo add constraint fk_photo_coupon_3 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_photo_coupon_3 on photo (coupon_id);
+alter table transaction_cp add constraint fk_transaction_cp_buyer_4 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_buyer_4 on transaction_cp (buyer_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_5 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_5 on transaction_cp (coupon_id);
 
 
 
@@ -90,6 +129,8 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists category;
 
+drop table if exists company;
+
 drop table if exists coupon;
 
 drop table if exists email_verification;
@@ -98,13 +139,17 @@ drop table if exists faq;
 
 drop table if exists photo;
 
-drop table if exists transactions;
+drop table if exists reset_pasword;
+
+drop table if exists transaction_cp;
 
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists category_seq;
+
+drop sequence if exists company_seq;
 
 drop sequence if exists coupon_seq;
 
@@ -114,7 +159,9 @@ drop sequence if exists faq_seq;
 
 drop sequence if exists photo_seq;
 
-drop sequence if exists transactions_seq;
+drop sequence if exists reset_pasword_seq;
+
+drop sequence if exists transaction_cp_seq;
 
 drop sequence if exists user_seq;
 

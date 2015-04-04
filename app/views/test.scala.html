@@ -1,0 +1,9 @@
+@(superUsers: List[SuperUser])
+
+@for(user <- superUsers){
+	@if(user.isUser()){
+		<h3> @user.getUser().username </h3>		
+	}else{
+		
+	}
+}
