@@ -2,6 +2,7 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.JSonHelper;
 
 import java.util.List;
 
@@ -52,8 +53,11 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCategories(){
-		
-		return ok(CategoriesList.render(session("name"), Category.all()));
+		if (request().accepts("text/html")) {
+			return ok(CategoriesList.render(session("name"), Category.all()));
+		} else {
+			return ok(JSonHelper.categoryListToJSon( Category.all() ));
+		}
 	}
 	
 	/**

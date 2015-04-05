@@ -213,11 +213,11 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
-
+		/* content negotiation */
 		if( request().accepts("text/html")) {
 				return ok(userList.render( SuperUser.allSuperUsers()));			
 		} else {
-				return ok(JSonHelper.allSuperUsers() );
+				return ok(JSonHelper.superUserListToJson(SuperUser.allSuperUsers()));
 		 }
 	}
 
@@ -322,7 +322,11 @@ public class UserController extends Controller {
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result showBoughtCoupons(long userId) {
 		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
+		if (request().accepts("text/html")) {
 		return ok(boughtCoupons.render(session("name"), transactions));
+		} else {
+			return ok(JSonHelper.transactionListToJSon(transactions));
+		}
 		
 	}
 	

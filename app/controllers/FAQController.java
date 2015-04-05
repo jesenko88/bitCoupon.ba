@@ -1,6 +1,7 @@
 package controllers;
 
 import helpers.AdminFilter;
+import helpers.JSonHelper;
 import models.FAQ;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -21,8 +22,11 @@ public class FAQController extends Controller{
 	 * @return
 	 */
 	public static Result showFAQ(){
-		
-		return ok(FAQview.render(session("name"), FAQ.all()));
+		if (request().accepts("html/text")) {
+			return ok(FAQview.render(session("name"), FAQ.all()));
+		} else {
+			return ok(JSonHelper.faqListToJSon( FAQ.all()) );
+		}
 	}
 	
 	/**

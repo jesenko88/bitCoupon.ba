@@ -10,11 +10,17 @@ import java.util.Stack;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.libs.Json;
 
 /**
  * 
@@ -25,7 +31,7 @@ import play.db.ebean.Model;
 
 @Entity
 public class User extends SuperUser {
-	
+
 	@Required
 	public String username;
 
@@ -85,7 +91,22 @@ public class User extends SuperUser {
 		List<User> users = find.findList();
 		return users;
 	}
-
+	
+	//TODO
+	/*
+	 *  
+	 */
+	public static ArrayNode allAsJson() {
+		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
+		List<User> users = all();
+		for (User u : users) {
+			ObjectNode userNode = Json.newObject();
+			userNode.put("username", u.username);
+			userNode.put("isAdmin", u.isAdmin);
+			userNode.put("created", u.created.toString()); // ?
+		}
+		return arrayNode;
+	}
 	
 	
 	public void setAdmin(boolean isAdmin){
@@ -154,6 +175,21 @@ public class User extends SuperUser {
 		}
 		return emails;
 	}
+	
+	/**
+	 * Returns all admin email's as Json
+	 * @return ArrayNode
+	 */
+	public static ArrayNode allAdminMailsJSon(){	
+		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
+		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
+		for(User u: userList){
+			ObjectNode mailAd = Json.newObject();
+			mailAd.put("email", u.email);
+			arrayNode.add(mailAd);
+		}
+		return arrayNode;
+	}
 
 	/*
 	 * Return user by mail
@@ -162,6 +198,19 @@ public class User extends SuperUser {
 		User user = getFind().where().eq("email", mail).findUnique();
 
 		return user;
+	}
+	
+	public static ObjectNode getUserJson(String mail) {
+		User user = getFind().where().eq("email", mail).findUnique();
+		ObjectNode userJson = Json.newObject();
+		userJson.put("username", user.username);
+		userJson.put("email", user.email);
+		userJson.put("isAdmin", user.isAdmin);
+		userJson.put("created", user.created.toString()); // ?????
+		userJson.put("updated", user.updated.toString()); // ?????
+		userJson.put("profilePicture", user.profilePicture);
+
+		return userJson;
 	}
 	
 	/*
