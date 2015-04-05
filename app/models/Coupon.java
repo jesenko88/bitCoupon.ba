@@ -63,6 +63,10 @@ public class Coupon extends Model {
 
 	public int minOrder;
 	
+	public int maxOrder;
+	
+	public Date usage;
+	
     public boolean status;
 	/*
 	 * public String code;
@@ -77,10 +81,8 @@ public class Coupon extends Model {
 	 * 
 	 * public boolean specialOffer;
 	 * 
-	 * public long multiOffer_id;
-	 * 
-	 * public boolean status;
-	 * 
+	 * public long multiOffer_id
+	 *  
 	 * public long company_id;
 	 * 
 	 * public long comment_user_id;
@@ -110,7 +112,7 @@ public class Coupon extends Model {
 		 */
 	}
 	public Coupon(String name, double price, Date dateExpire, String picture,
-			Category category, String description, String remark, int minOrder, Company seller) {
+			Category category, String description, String remark, int minOrder, int maxOrder,Date usage, Company seller) {
 
 		this.name = name;
 		this.price = price;
@@ -121,6 +123,8 @@ public class Coupon extends Model {
 		this.description = description;
 		this.remark = remark;
 		this.minOrder = minOrder;
+		this.maxOrder = maxOrder;
+		this.usage = usage;
 		this.seller = seller;
 		this.status = false;
 	}
@@ -148,11 +152,11 @@ public class Coupon extends Model {
 	 * Method with minimum order variable.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder, Company seller) {
+			String picture, Category category, String description, String remark, int minOrder,int maxOrder, Date usage, Company seller) {
 
 		// Logger.debug(category.name);	
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder, seller);
+				category, description, remark, minOrder, maxOrder, usage, seller);
 		newCoupon.save();
 		return newCoupon.id;
 	}
@@ -161,11 +165,11 @@ public class Coupon extends Model {
 	 * Method with status variable for global coupons.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder, Company seller, boolean status) {
+			String picture, Category category, String description, String remark, int minOrder, int maxOrder, Date usage, Company seller, boolean status) {
 
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder, seller);
+				category, description, remark, minOrder, maxOrder, usage, seller);
 		newCoupon.status = true;
 		newCoupon.save();
 		return newCoupon.id;

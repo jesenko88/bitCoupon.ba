@@ -58,6 +58,9 @@
                <form action="@routes.CompanyController.registerC" method ="POST" >
                   <input type="text" id="name" name="name"  onClick="this.select()"  placeholder="Company name" required/>	<br>
                   <input type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
+                  <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Company adress" required/>	<br>
+                  <input type="text" id="city" name="city" onClick="this.select()"  placeholder="City" required/>	<br>
+                  <input type="text" id="contact" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>	<br>
                   <input type="text" id="logo" name="logo" onClick="this.select()" placeholder="Logo" required/> <br>
                   <input type="password" id="password" name="password" onClick="this.select()" placeholder="Password must be 6 characters including uppercase letter and numbers" pattern="(?=^.{6,16}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required/> <br>
                   <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>

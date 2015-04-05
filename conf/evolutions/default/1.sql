@@ -18,6 +18,9 @@ create table company (
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
+  adress                    varchar(255),
+  city                      varchar(255),
+  contact                   varchar(255),
   constraint pk_company primary key (id))
 ;
 
@@ -33,6 +36,8 @@ create table coupon (
   remark                    varchar(255),
   seller_id                 bigint,
   min_order                 integer,
+  max_order                 integer,
+  usage                     timestamp,
   status                    boolean,
   constraint pk_coupon primary key (id))
 ;

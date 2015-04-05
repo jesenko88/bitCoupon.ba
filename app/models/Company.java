@@ -33,6 +33,12 @@ public class Company  extends SuperUser{
 	
 	public String logo;
 	
+	public String adress;
+	
+	public String city;
+	
+	public String contact;
+	
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -52,17 +58,20 @@ public class Company  extends SuperUser{
 	 * @param created date when its created
 	 * @param logo logo, picture path.
 	 */
-	public Company(String name, String email, String password, Date created, String logo){
+	public Company(String name, String email, String password, Date created, String logo, String adress, String city, String contact){
 		super(email,password);
 		this.name = name;
 		this.created = created;
 		this.logo = logo;
+		this.adress = adress;
+		this.city = city;
+		this.contact = contact;
 	
 	}
 	
-	public static long createCompany(String name, String email, String password, String logo){
+	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
 		Date now = new Date();
-		Company c = new Company(name, email, password, now, logo);
+		Company c = new Company(name, email, password, now, logo, adress, city, contact);
 		c.save();
 		return c.id;
 	
