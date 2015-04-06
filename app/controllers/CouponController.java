@@ -226,6 +226,11 @@ public class CouponController extends Controller {
 	public static Result search(String q) {
 		List<Coupon> all = Coupon.find.where().ilike("name", "%" + q + "%")
 				.findList();
+		
+		List<Company> allCompany = Company.find.where().ilike("name", "%" + q + "%")
+				.findList();
+		
+		
 		//Getting only activated coupons from search result.
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		for(Coupon coupon: all){
@@ -234,14 +239,33 @@ public class CouponController extends Controller {
 			}
 		}
 		
-		if (coupons.isEmpty()) {
-			flash("error", "No such coupon");
-			User u = User.find(session("name"));
+		List<Company> companys = new ArrayList<Company>();
+		for(Company company: allCompany){
+			
+			companys.add(company);
+		
+	}
+	
+		
+		if (coupons.isEmpty() || companys.isEmpty() ) {
+			flash("error", "No resoult for this search");
+			if(coupons.isEmpty() && (!companys.isEmpty())){
+				return badRequest(searchFilter.render(Coupon.approvedCoupons()
+						, Category.all(), companys));
+			}
+			if((!coupons.isEmpty()) && companys.isEmpty()){
+				return badRequest(searchFilter.render(Coupon.approvedCoupons()
+						, Category.all(), Company.all()));
+			}
+			
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
-													, Category.all()));
+													, Category.all(), Company.all()));
 		}
+		
+		
+		
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
-		return ok(searchFilter.render(coupons, Category.all()));
+		return ok(searchFilter.render(coupons, Category.all(), companys));
 	}
 
 	/**
@@ -537,7 +561,7 @@ public class CouponController extends Controller {
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
 		List<Category> categorys = Category.all();
-		return ok(searchFilter.render(coupons, categorys));
+		return ok(searchFilter.render(coupons, categorys, Company.all()));
 	}
 	
 	/**

@@ -40,7 +40,7 @@ public class Company  extends SuperUser{
 //	@OneToMany(mappedBy="seller", cascade=CascadeType.ALL)
 //	public List<TransactionCP> sold_coupons;	
 	
-	static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
+	public static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
 				Company.class);
 	
 		

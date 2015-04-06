@@ -1,4 +1,4 @@
-@(coupons: List[Coupon])(categorys: List[Category])
+@(coupons: List[Coupon])(categorys: List[Category])(companys: List[Company])
 @import helper._
 @main("SearchFilter") {
 @*	
@@ -110,8 +110,38 @@
                   </div>
                </div>
             </div>
-         </div>
+         </div>ja sam 
       </div>
       }
+      
+      @for(company <- companys){
+      	 <div class="col-sm-4">
+         <div class="logo pull-left">
+            <div class="product-image-wrapper">
+               <div class="single-products">
+                  <div class="productinfo text-center">
+                     <img src="@routes.Assets.at("images/home/No-Logo.png")" alt="" />
+                     <p>@company.name</p>
+                 <!--    <a href="/company/@company.id" class="btn btn-default add-to-cart">View Company</a> -->
+                  </div>
+                  <div class="product-overlay">
+                     <div class="overlay-content">
+                        <p>@company.name</p>
+                     <a href="/company/@company.id" class="btn btn-default add-to-cart">View Company</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      	
+      	
+      	
+      	
+      	
+ 
+      }
+      
+      
    </div>
    }
