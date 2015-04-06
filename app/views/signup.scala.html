@@ -32,10 +32,10 @@
                <form action="@routes.UserController.register" method ="POST" >
                   <input type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
                   <input type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	<br>
-                  <input type="date" id="datepicker" name="dob"  onClick="this.select()"  placeholder="Date of birth" required/>	<br>
-                  <input type="radio" id="gender" name="gender" value="male" required/> Male	<br> 
-                  <input type="radio" id="gender" name="gender" value="female" required/> Female	<br>                                    
-                  <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>	<br>                
+                  <input type="date" id="datepicker" name="dob"  onClick="this.select()"  placeholder="Date of birth" required/>
+                  <input type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" required/>Male 
+                  <input type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female                                   
+                  <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/><br>                
                   <input type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
                   <input type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
                   <input type="password" id="password" name="password" onClick="this.select()" placeholder="Password must be 6 characters including uppercase letter and numbers" pattern="(?=^.{6,16}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required/> <br>
