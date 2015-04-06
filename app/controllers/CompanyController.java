@@ -227,8 +227,16 @@ public static final String PATH = "localhost:9000";
 
 	}
 
-	
-	
+	/**
+	 * 
+	 */
+	public static Result showCompanyProfile(long id) {
+		Company current = Company.findById(id);
+	//	Company company = Company.find(session("name"));
+		List<Coupon> coupons = current.coupons;
+		return ok(companyProfile.render( current, coupons));
+
+	}
 
 	
 }
