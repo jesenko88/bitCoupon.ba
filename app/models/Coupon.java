@@ -152,7 +152,7 @@ public class Coupon extends Model {
 	 * Method with minimum order variable.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder,int maxOrder, Date usage, Company seller) {
+			String picture, Category category, String description, String remark, int minOrder,int maxOrder, Date usage, Company seller, User buyer) {
 
 		// Logger.debug(category.name);	
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,

@@ -33,10 +33,6 @@ public class Company  extends SuperUser{
 	
 	public String logo;
 	
-	public String adress;
-	
-	public String city;
-	
 	public String contact;
 	
 
@@ -59,12 +55,10 @@ public class Company  extends SuperUser{
 	 * @param logo logo, picture path.
 	 */
 	public Company(String name, String email, String password, Date created, String logo, String adress, String city, String contact){
-		super(email,password);
+		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
 		this.logo = logo;
-		this.adress = adress;
-		this.city = city;
 		this.contact = contact;
 	
 	}

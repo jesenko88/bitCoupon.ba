@@ -108,14 +108,14 @@ public class Global extends GlobalSettings {
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {
-			User.createUser("Admin", "bitcoupon@gmail.com",
+			User.createUser("Admin","",new Date(), "","","", "bitcoupon@gmail.com",
 					HashHelper.createPassword("bitadmin"), true);
 			EmailVerification setVerified = new EmailVerification(1, true);
 			setVerified.save();
 		}
 		
 		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
-			User.createUser("John", "jesenko.gavric@bitcamp.ba",
+			User.createUser("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false);
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();

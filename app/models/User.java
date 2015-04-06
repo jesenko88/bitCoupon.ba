@@ -28,6 +28,13 @@ public class User extends SuperUser {
 	
 	@Required
 	public String username;
+	
+	@Required
+	public String surname;
+
+	public Date dob;
+	
+	public String gender;
 
 	public boolean isAdmin;
 	
@@ -47,9 +54,12 @@ public class User extends SuperUser {
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
-	public User(String username, String email, String password, boolean isAdmin) {
-		super(email, password);
-		this.username = username;		
+	public User(String username, String surname, Date dob, String gender, String adress, String city, String email, String password, boolean isAdmin) {
+		super(email, password, adress, city);
+		this.username = username;	
+		this.surname = surname;
+		this.dob = dob;
+		this.gender = gender;
 		this.created = new Date();
 		this.isAdmin = isAdmin;
 	}
@@ -65,9 +75,9 @@ public class User extends SuperUser {
 	 *            String
 	 * @return the id of the new user (long)
 	 */
-	public static long createUser(String username, String email,
+	public static long createUser(String username, String surname, Date dob, String gender, String adress, String city, String email,
 			String password, boolean isAdmin) {
-		User newUser = new User(username, email, password, isAdmin);
+		User newUser = new User(username, surname, dob, gender, adress, city, email, password, isAdmin);
 		newUser.save();
 		return newUser.id;
 	}

@@ -414,8 +414,7 @@ public class CouponController extends Controller {
 		} else {
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date,
-					FileUpload.DEFAULT_IMAGE, category, description, remark,
-					minOrder, maxOrder, usage, company);
+					FileUpload.DEFAULT_IMAGE,category, description, remark, minOrder, maxOrder, usage, company, status);
 			Logger.info(session("name") + " created coupon " + id
 					+ " without image");
 			return redirect("/couponPanel");
