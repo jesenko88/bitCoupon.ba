@@ -5,7 +5,7 @@
 <h2>@message @name</h2>
 <h4>Home: </h4>
 *@
-<body>
+
    <header id="header">
       <!--header-->
       <div class="col-sm-12">
@@ -42,18 +42,11 @@
    <div class="container">
    <div class="features_items">
       <!--features_items-->
-      
-      
-      
-      
-      
+ 
       <!-- SANELA PART -->
-      
-      
+
       <div class="row" id="toggle" style="display:none">
  		 <div class="col-md-12" style="margin: 20px 0" >
-      
-      
          <div class="col-sm-6">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
@@ -89,16 +82,9 @@
             </form>
          </div>
       </div>
-      </div>
-      
-      
-      
-      
-      
-      
+      </div>   
       <h2 class="title text-center">Available Coupons</h2>
-       <div class="col-sm-4">
-   
+      <div class="col-sm-4">
    </div>
    </div>
    
@@ -129,5 +115,4 @@
       }			
    </div>
    </ul>
-</body>
 }

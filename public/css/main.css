@@ -410,6 +410,7 @@ ul.sub-menu {
 
 #footer {
   background: #F0F0E9;
+  margin-top: 202px;
 }
 
 
@@ -2713,8 +2714,8 @@ h2.title {
     /* [disabled]border-top-color: #A93F89;
     */
   margin: 0px;
-  top: 300px;
-  left: -100px;
+  top: 200px;
+  left: -110px;
   position: absolute;
   z-index: 200;
 }
