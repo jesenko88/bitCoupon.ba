@@ -1539,7 +1539,7 @@ h2.title {
   background: #F0F0E9;
   border: medium none;
   color: #696763;
-  display: block;
+  display: inline;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 300;
