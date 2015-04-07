@@ -37,7 +37,7 @@
                @for(coupon <- coupons){
                @if(coupon.checkIfExpired() == false){
                <tr>
-                  <td> @coupon.name </td>
+                  <td> <a href="@routes.CouponController.showCoupon(coupon.id)"> @coupon.name </a></td>
                   <td> @coupon.price </td>
                   <td> @coupon.category.name</td>
                   <td> @coupon.seller.id </td>
@@ -71,7 +71,7 @@
                @for(coupon <- coupons){
                @if(coupon.checkIfExpired()){
                <tr>
-                  <td> @coupon.name </td>
+                  <td> <a href="@routes.CouponController.showCoupon(coupon.id)">@coupon.name </a></td>
                   <td> @coupon.price </td>
                   <td> @coupon.category.name </td>
                   <td> @coupon.seller.id </td>
@@ -106,7 +106,7 @@
             <tbody>
                @for(coupon <- nonApprovedCoupons){               
                <tr>
-                  <td> @coupon.name </td>
+                  <td> <a href="@routes.CouponController.showCoupon(coupon.id)">@coupon.name </a></td>
                   <td> @coupon.price </td>
                   <td> @coupon.category.name </td>
                   <td> @coupon.seller.id </td>

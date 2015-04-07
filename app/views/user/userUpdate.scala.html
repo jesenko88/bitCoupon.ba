@@ -32,7 +32,8 @@
                         <form action="@routes.UserController.updateUser(superUser.getUser().id)" method ="POST" >
                            <input type="text" name="username" id="username" placeholder="Username" value="@superUser.getUser().username" required/>
                            <input type="text" id="surname" name="surname"  placeholder="Surname"  value=@superUser.getUser().surname required/>	<br>
-                           <input type="date" id="datepicker" name="dob"  placeholder="Date of birth" value=@superUser.getUser().dob required/>	<br>
+                           <input type="date" id="dob" name="dob"  placeholder="Date of birth" value=@superUser.getUser().dob required/>	<br>
+                            <span id="error" style="display:none; color:red"> You are underage of 18 </span>
            				   <input type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" required/>Male 
                		       <input type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female                                             
                            <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" value="@superUser.getUser().adress" required/>	<br>                

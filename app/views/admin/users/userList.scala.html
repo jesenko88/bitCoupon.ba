@@ -45,10 +45,11 @@
                   @for(user <- users){
                  	@if(user.isUser()){
 	                  <tr>
-	                     <td> @user.getUser().username </td>
-	                     <td> @user.getUser().email </td>
-	                     <td> @user.getUser().created </td>
-	                     <td> @user.getUser().updated </td>
+	                 
+	                     <td> <a href="@routes.SuperUserController.profilePage(user.getUser().username)">@user.getUser().username </a></td>
+	                     <td> <a href="@routes.SuperUserController.profilePage(user.getUser().username)"> @user.getUser().email </a></td>
+	                     <td> <a href="@routes.SuperUserController.profilePage(user.getUser().username)"> @user.getUser().created </a></td>
+	                     <td> <a href="@routes.SuperUserController.profilePage(user.getUser().username)">@user.getUser().updated </a></td>
 	                     <td> <a href="@routes.SuperUserController.adminEditUserView(user.email)" class="btn btn-default" >Edit</a></td>
 	                     <td> <a href="@routes.UserController.deleteUser(user.id)" onclick="return confirm('Are you sure you want to delete this user?');"class="btn btn-danger">Delete</a></td>
 	                  </tr>
@@ -80,10 +81,11 @@
                   @for(user <- users){
                  	@if(user.isCompany()){
 	                  <tr>
-	                     <td> @user.getCompany().name </td>
-	                     <td> @user.getCompany().email </td>
-	                     <td> @user.getCompany().created </td>
-	                     <td> @user.getCompany().updated </td>
+	                  
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().name</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().email</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().created</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().updated</a> </td>
 	                     <td> <a href="@routes.SuperUserController.adminEditUserView(user.email)" class="btn btn-default" >Edit</a></td>
 	                     <td> <a href="@routes.CompanyController.deleteCompany(user.id)" onclick="return confirm('Are you sure you want to delete this company?');"class="btn btn-danger">Delete</a></td>
 	                  </tr>

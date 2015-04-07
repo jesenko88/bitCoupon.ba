@@ -17,6 +17,7 @@ import helpers.HashHelper;
 import helpers.MailHelper;
 import models.*;
 import play.Logger;
+import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.db.ebean.Model.Finder;
@@ -25,7 +26,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 public class CompanyController extends Controller {
-public static final String PATH = "localhost:9000"; 
+    static String PATH = Play.application().configuration().getString("PATH");
 	static Form<Company> companyForm = new Form<Company>(Company.class);
 	public static final Company COMPANY_ADMIN = Company.findById(1);
 

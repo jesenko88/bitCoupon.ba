@@ -120,7 +120,7 @@
             <li>Company adress: @superUser.getCompany().adress</li>
             <li>City: @superUser.getCompany().city</li>
             <li>Company contact: @superUser.getCompany().contact</li>
-            <li>Number of added coupons: <a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>
+            <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>
             <a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">
          </ul>
       </div>
