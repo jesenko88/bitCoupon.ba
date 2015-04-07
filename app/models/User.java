@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import javax.persistence.*;
 
+import controllers.UserController;
 import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;
@@ -43,7 +44,6 @@ public class User extends SuperUser {
 	public Date updated;
 	
 	public String profilePicture;
-	
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;

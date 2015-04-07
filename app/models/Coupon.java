@@ -515,6 +515,10 @@ public class Coupon extends Model {
 		return find.where().eq("seller_id", companyID).findList();
 	}
 	
+	public static List<Coupon> userBoughtCoupons(long userId) {
+		return find.where().eq("buyer_id", userId).findList();
+	}
+	
 	/**
 	 * Method checking if this coupon expired.
 	 * Returning true if it expired and false if it is not expired.

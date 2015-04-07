@@ -35,7 +35,6 @@ public class Company  extends SuperUser{
 	
 	public String contact;
 	
-
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
@@ -59,8 +58,7 @@ public class Company  extends SuperUser{
 		this.name = name;
 		this.created = created;
 		this.logo = logo;
-		this.contact = contact;
-	
+		this.contact = contact;	
 	}
 	
 	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
