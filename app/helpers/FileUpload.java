@@ -122,6 +122,25 @@ public class FileUpload extends Controller{
 	}
 	
 	/**
+	 * Method which copies file. Uses 2 string paths.
+	 * First from which path we copy and second to which file we copy.
+	 * @param f1 file from we copy
+	 * @param f2 file where we copy
+	 * @return
+	 */
+	public static boolean CopyFile(String f1, String f2){
+		File from = new File(f1);
+		File to = new File(f2);
+		try {
+			Files.copy(from, to);
+			return true;
+		} catch (IOException e) {
+			Logger.warn("Coping of file failed");
+			return false;
+		}
+	}
+	
+	/**
 	 * Method returning extension of file.
 	 * @param filePart
 	 * @return
