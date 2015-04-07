@@ -32,10 +32,16 @@ public abstract class SuperUser extends Model {
 	@Required
 	public String password;
 	
+	public String adress;
+	
+	public String city;
+	
 
-	public SuperUser(String email, String password) {
+	public SuperUser(String email, String password, String adress, String city) {
 		this.email = email;
 		this.password = password;
+		this.adress = adress;
+		this.city = city;
 	}
 
 	public static List<SuperUser> allSuperUsers() {

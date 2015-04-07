@@ -10,12 +10,15 @@ import java.util.Stack;
 
 import javax.persistence.*;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+=======
 import controllers.UserController;
+>>>>>>> 9e82a838a91df9ae08a6d9030fd1307b191339b8
 import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;

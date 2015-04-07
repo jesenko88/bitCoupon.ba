@@ -14,10 +14,13 @@ create table company (
   id                        bigint not null,
   email                     varchar(255),
   password                  varchar(255),
+  adress                    varchar(255),
+  city                      varchar(255),
   name                      varchar(255),
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
+  contact                   varchar(255),
   constraint pk_company primary key (id))
 ;
 
@@ -33,6 +36,8 @@ create table coupon (
   remark                    varchar(255),
   seller_id                 bigint,
   min_order                 integer,
+  max_order                 integer,
+  usage                     timestamp,
   status                    boolean,
   constraint pk_coupon primary key (id))
 ;
@@ -67,6 +72,14 @@ create table reset_pasword (
   constraint pk_reset_pasword primary key (id))
 ;
 
+create table subscriber (
+  id                        bigint not null,
+  token                     varchar(255),
+  subscriber_id             bigint,
+  email                     varchar(255),
+  constraint pk_subscriber primary key (id))
+;
+
 create table transaction_cp (
   id                        bigint not null,
   payment_id                varchar(255),
@@ -84,7 +97,12 @@ create table user (
   id                        bigint not null,
   email                     varchar(255),
   password                  varchar(255),
+  adress                    varchar(255),
+  city                      varchar(255),
   username                  varchar(255),
+  surname                   varchar(255),
+  dob                       timestamp,
+  gender                    varchar(255),
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,
@@ -106,6 +124,8 @@ create sequence photo_seq;
 
 create sequence reset_pasword_seq;
 
+create sequence subscriber_seq;
+
 create sequence transaction_cp_seq;
 
 create sequence user_seq;
@@ -116,10 +136,12 @@ alter table coupon add constraint fk_coupon_seller_2 foreign key (seller_id) ref
 create index ix_coupon_seller_2 on coupon (seller_id);
 alter table photo add constraint fk_photo_coupon_3 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
 create index ix_photo_coupon_3 on photo (coupon_id);
-alter table transaction_cp add constraint fk_transaction_cp_buyer_4 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
-create index ix_transaction_cp_buyer_4 on transaction_cp (buyer_id);
-alter table transaction_cp add constraint fk_transaction_cp_coupon_5 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_transaction_cp_coupon_5 on transaction_cp (coupon_id);
+alter table subscriber add constraint fk_subscriber_subscriber_4 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
+create index ix_subscriber_subscriber_4 on subscriber (subscriber_id);
+alter table transaction_cp add constraint fk_transaction_cp_buyer_5 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_buyer_5 on transaction_cp (buyer_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_6 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_6 on transaction_cp (coupon_id);
 
 
 
@@ -141,6 +163,8 @@ drop table if exists photo;
 
 drop table if exists reset_pasword;
 
+drop table if exists subscriber;
+
 drop table if exists transaction_cp;
 
 drop table if exists user;
@@ -160,6 +184,8 @@ drop sequence if exists faq_seq;
 drop sequence if exists photo_seq;
 
 drop sequence if exists reset_pasword_seq;
+
+drop sequence if exists subscriber_seq;
 
 drop sequence if exists transaction_cp_seq;
 
