@@ -24,6 +24,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  //TODO complete this helper after the used models are finished
 
 public class JSonHelper {
+	
+	
+	public static final String SUPERUSER_USER = "user";
+	public static final String SUPERUSER_COMPANY = "company";
 
 	/**
 	 * Method receives a list of SuperUser-s and converts it to a
@@ -37,6 +41,11 @@ public class JSonHelper {
 			ObjectNode superUserNode = Json.newObject();
 			superUserNode.put("id", curUser.id); 
 			superUserNode.put("email", curUser.email);
+			if (curUser instanceof User){
+				superUserNode.put("type", SUPERUSER_USER);
+			} else{
+				superUserNode.put("type", SUPERUSER_COMPANY);
+			}
 			arrayNode.add(superUserNode);
 		}
 		return arrayNode;
