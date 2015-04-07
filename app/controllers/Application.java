@@ -170,9 +170,10 @@ public class Application extends Controller {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Promise<Result> sendMail() {
 		final DynamicForm temp = DynamicForm.form().bindFromRequest();
-
+		try{		
 		Promise<Result> holder = WS
 				.url("https://www.google.com/recaptcha/api/siteverify")
 				.setContentType("application/x-www-form-urlencoded")
@@ -240,6 +241,10 @@ public class Application extends Controller {
 					}
 				});
 		return holder;
+		}catch(Exception e){
+			flash("error", "There was error with sending email. ");
+			return (Promise<Result>) redirect("/contact");
+		}
 	}
 	
 	/**

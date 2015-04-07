@@ -37,54 +37,58 @@ public static final String PATH = "localhost:9000";
 	 *         repeatedly if any error occurs
 	 */
 	public static Result registerC() {
-
-		if (companyForm.hasErrors()) {
-			return redirect("/companySignup");
-		}
-
-		String name = companyForm.bindFromRequest().get().name;
-		String mail = companyForm.bindFromRequest().get().email;
-		String logo = companyForm.bindFromRequest().get().logo;
-		String password = companyForm.bindFromRequest().get().password;
-		String hashPass = HashHelper.createPassword(password);
-		String confPass = companyForm.bindFromRequest().field("confirmPassword")
-				.value();
-		String adress = companyForm.bindFromRequest().get().adress;
-		String city = companyForm.bindFromRequest().get().city;
-		String contact = companyForm.bindFromRequest().get().contact;
-
-
-		if (name.length() < 4 || name.equals("Name")) {
-			flash("error", "Name must be at least 4 chatacters");
-			return badRequest(signup.render());
-		} else if (mail.equals("Email")) {
-			flash("error", "Email is required for registration !");
-			return badRequest(signup.render());
-		} else if (password.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render());
-		} else if (!password.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render());
-		}
-
-		else if (Company.verifyRegistration(name, mail) == true) {
-
-			long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact);
-			String verificationEmail = EmailVerification.addNewRecord(id);
-
-			MailHelper.send(mail,
-					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://" + PATH + "/verifyEmail/"
-							+ verificationEmail);
-			flash("success", "A verification mail has been sent to your email address!");
-			Logger.info("A verification mail has been sent to email address");
-			return ok(signup.render());
-
-		} else {
-			flash("error", "Username or email allready exists!");
-			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render());
+		try{
+			if (companyForm.hasErrors()) {
+				return redirect("/companySignup");
+			}
+			String name = companyForm.bindFromRequest().get().name;
+			String mail = companyForm.bindFromRequest().get().email;
+			String logo = companyForm.bindFromRequest().get().logo;
+			String password = companyForm.bindFromRequest().get().password;
+			String hashPass = HashHelper.createPassword(password);
+			String confPass = companyForm.bindFromRequest().field("confirmPassword")
+					.value();
+			String adress = companyForm.bindFromRequest().get().adress;
+			String city = companyForm.bindFromRequest().get().city;
+			String contact = companyForm.bindFromRequest().get().contact;
+			
+			
+			if (name.length() < 4 || name.equals("Name")) {
+				flash("error", "Name must be at least 4 chatacters");
+				return badRequest(signup.render());
+			} else if (mail.equals("Email")) {
+				flash("error", "Email is required for registration !");
+				return badRequest(signup.render());
+			} else if (password.length() < 6) {
+				flash("error", "Password must be at least 6 characters!");
+				return badRequest(signup.render());
+			} else if (!password.equals(confPass)) {
+				flash("error", "Passwords don't match, try again ");
+				return badRequest(signup.render());
+			}
+			
+			else if (Company.verifyRegistration(name, mail) == true) {
+				
+				long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact);
+				String verificationEmail = EmailVerification.addNewRecord(id);
+				
+				MailHelper.send(mail,
+						"Click on the link below to verify your e-mail adress <br>"
+								+ "http://" + PATH + "/verifyEmail/"
+								+ verificationEmail);
+				flash("success", "A verification mail has been sent to your email address!");
+				Logger.info("A verification mail has been sent to email address");
+				return ok(signup.render());
+				
+			} else {
+				flash("error", "Username or email allready exists!");
+				Logger.info("Username or email allready exists!");
+				return badRequest(signup.render());
+			}			
+		}catch(Exception e){
+			flash("Error occured. If you are admin, please check logs.");
+			Logger.error("Error at registration: " +e.getMessage());
+			return redirect("companySignup");
 		}
 	}
 	
@@ -100,41 +104,47 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updateCompany(long id) {
-		DynamicForm updateForm = Form.form().bindFromRequest();
-		if (updateForm.hasErrors()) {
-			return redirect("/updateCompany");
-		}
-
-		String name = updateForm.data().get("name");
-		String email = updateForm.data().get("email");
-		String logo = updateForm.data().get("logo");
-		String oldPass = updateForm.data().get("password");
-		String newPass = updateForm.data().get("newPassword");
-
-		Company company = Company.findById(id);
-		company.name = name;
-		// cUser.email = email;
-		company.updated = new Date();
-
-		if (!company.email.equals(email)) {
-			String verificationEmail = EmailVerification.addNewRecord(company.id);
-			MailHelper.send(email,
-					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://"+ PATH + "/verifyEmailUpdate/"
-							+ verificationEmail);
+		try{
+			DynamicForm updateForm = Form.form().bindFromRequest();
+			if (updateForm.hasErrors()) {
+				return redirect("/updateCompany");
+			}
+			
+			String name = updateForm.data().get("name");
+			String email = updateForm.data().get("email");
+			String logo = updateForm.data().get("logo");
+			String oldPass = updateForm.data().get("password");
+			String newPass = updateForm.data().get("newPassword");
+			
+			Company company = Company.findById(id);
+			company.name = name;
+			// cUser.email = email;
+			company.updated = new Date();
+			
+			if (!company.email.equals(email)) {
+				String verificationEmail = EmailVerification.addNewRecord(company.id);
+				MailHelper.send(email,
+						"Click on the link below to verify your e-mail adress <br>"
+								+ "http://"+ PATH + "/verifyEmailUpdate/"
+								+ verificationEmail);
+				company.email = email;
+				company.save();
+				flash("success",
+						"A new verification email has been sent to this e-mail: "
+								+ email);
+				return ok(userUpdate.render(company));
+			}
 			company.email = email;
 			company.save();
-			flash("success",
-					"A new verification email has been sent to this e-mail: "
-							+ email);
-			return ok(userUpdate.render(company));
+			flash("success", "Profile updated!");
+			Logger.info(company.name + " is updated");
+			session("name", company.name); 
+			return ok(userUpdate.render(company));			
+		}catch(Exception e){
+			flash("error","Error while updateing company. If you're admin please check logs.");
+			Logger.error("Error at company update: " +e.getMessage());
+			return redirect("updateCompany");
 		}
-		company.email = email;
-		company.save();
-		flash("success", "Profile updated!");
-		Logger.info(company.name + " is updated");
-		session("name", company.name); 
-		return ok(userUpdate.render(company));
 
 	}
 
@@ -148,32 +158,37 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateCompany(long id) {
-		List<User> adminList = User.findAdmins(true);
-
-		if (companyForm.hasErrors()) {
-			return redirect("/@editUser/:" + id); // provjeriti
+		try{
+			List<User> adminList = User.findAdmins(true);
+			if (companyForm.hasErrors()) {
+				return redirect("/@editUser/:" + id); // provjeriti
+			}
+			
+			String name = companyForm.bindFromRequest().field("name").value();
+			String email = companyForm.bindFromRequest().field("email").value();
+			String newPass = companyForm.bindFromRequest().field("newPassword")
+					.value();
+			
+			Company company = Company.findById(id);
+			company.name = name;
+			company.email = email;
+			/*
+			 * if admin doesn't explicitly change the users password, it stays
+			 * intact
+			 */
+			if (newPass.length() > 5) {
+				company.password = HashHelper.createPassword(newPass);
+			}
+			company.updated = new Date();
+			company.save();
+			flash("success", "Company " + company.name + " updated!");
+			Logger.info(session("name") + " updated company: " + company.name);
+			return ok(userList.render(SuperUser.allSuperUsers()));
+		}catch(Exception e){
+			flash("Error occured while updating company, please check your logs.");
+			Logger.error("Error at updateing company: " +e.getMessage());
+			return redirect("/@editUser" +id);
 		}
-
-		String name = companyForm.bindFromRequest().field("name").value();
-		String email = companyForm.bindFromRequest().field("email").value();
-		String newPass = companyForm.bindFromRequest().field("newPassword")
-				.value();
-
-		Company company = Company.findById(id);
-		company.name = name;
-		company.email = email;
-		/*
-		 * if admin doesn't explicitly change the users password, it stays
-		 * intact
-		 */
-		if (newPass.length() > 5) {
-			company.password = HashHelper.createPassword(newPass);
-		}
-		company.updated = new Date();
-		company.save();
-		flash("success", "Company " + company.name + " updated!");
-		Logger.info(session("name") + " updated company: " + company.name);
-		return ok(userList.render(SuperUser.allSuperUsers()));
 	}
 
 	
@@ -187,14 +202,20 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteCompany(long id) {
-		Company currentCompany = Company.findById(id);
-		if ( currentCompany == null){
-			flash("error", "Company with id: " + id + " doesnt exists!");
-			return badRequest(userList.render(SuperUser.allSuperUsers()));
+		try{
+			Company currentCompany = Company.findById(id);
+			if ( currentCompany == null){
+				flash("error", "Company with id: " + id + " doesnt exists!");
+				return badRequest(userList.render(SuperUser.allSuperUsers()));
+			}
+			Company.delete(id);	
+			return ok(userList.render(SuperUser.allSuperUsers()));
+		}catch(Exception e){
+			flash("error", "Error occured while deleting company. Please check your logs.");
+			Logger.error("Error at delete company: " +e.getMessage());
+			return redirect("/");
+		}			
 		}
-		Company.delete(id);	
-		return ok(userList.render(SuperUser.allSuperUsers()));
-	}
 	
 
 	/**
@@ -204,23 +225,29 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updatePhoto(long companyId) {
-		Company c = Company.findById(companyId);
-		String subFolder = "company_profile" + File.separator + "company_" + companyId;
-		boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
-				+ subFolder).isDirectory();
-		if (checkIfDirectoryExists) {
-			String assetsPath = FileUpload.imageUpload(subFolder);
-			Logger.debug(assetsPath);
-			c.logo = assetsPath;
-			c.save();
-			return redirect("/profile/@" + c.name);
-		} else {
-			new File(FileUpload.IMAGES_FOLDER + subFolder).mkdirs();
-			String assetsPath = FileUpload.imageUpload(subFolder);
-			Logger.debug(assetsPath);
-			c.logo = assetsPath;
-			c.save();
-			return redirect("/profile/@" + c.name);
+		try{
+			Company c = Company.findById(companyId);
+			String subFolder = "company_profile" + File.separator + "company_" + companyId;
+			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
+					+ subFolder).isDirectory();
+			if (checkIfDirectoryExists) {
+				String assetsPath = FileUpload.imageUpload(subFolder);
+				Logger.debug(assetsPath);
+				c.logo = assetsPath;
+				c.save();
+				return redirect("/profile/@" + c.name);
+			} else {
+				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdirs();
+				String assetsPath = FileUpload.imageUpload(subFolder);
+				Logger.debug(assetsPath);
+				c.logo = assetsPath;
+				c.save();
+				return redirect("/profile/@" + c.name);
+			}			
+		}catch(Exception e){
+			flash("error", "Error occured while uploading photo. If you're admin please check logs.");
+			Logger.error("Error at update photo: " +e.getMessage());
+			return redirect("/");
 		}
 	}	
 

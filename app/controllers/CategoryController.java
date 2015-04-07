@@ -62,39 +62,44 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategory() {
-
-		if (categoryForm.hasErrors()) {
+		try{			
+			if (categoryForm.hasErrors()) {
+				return redirect("/categoryPanel");
+			}
+			
+			String name = categoryForm.bindFromRequest().field("name").value();
+			if (name.length() < 4) {
+				Logger.info(session("name") + " entered a short category name");
+				flash("error","Name must be at least 4 characters");
+				return ok(categoryPanel.render(session("name")));
+				
+			}
+			if(name.length() > 20){
+				Logger.info(session("name") + " entered a too long category name");
+				flash("error","Name must be max 120 characters long");
+				return ok(categoryPanel.render(session("name")));
+			}
+			if(Category.exists(name)){
+				Logger.info(session("name") + " tried to add a existing category. (" + name +")");
+				flash("error","Category already exists");
+				return ok(categoryPanel.render(session("name")));
+			}
+			/* If no picture is added, a default image is used*/
+			String picture = FileUpload.imageUpload("category-photos");		
+			if(picture != null){
+				Category.createCategory(name, picture);
+			}else {
+				Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
+			}
+			
+			Logger.info(session("name") + " created a new category: \"" + name + "\"");
+			flash("success","Category " + "\""+ name + "\"" + " added");
+			return ok(categoryPanel.render( session("name")));
+		}catch(Exception e){
+			flash("error", "Error occured while adding new category. Please check logs");
+			Logger.error("Error in add category: " +e.getMessage());
 			return redirect("/categoryPanel");
 		}
-
-		String name = categoryForm.bindFromRequest().field("name").value();
-		if (name.length() < 4) {
-			Logger.info(session("name") + " entered a short category name");
-			flash("error","Name must be at least 4 characters");
-			return ok(categoryPanel.render(session("name")));
-
-		}
-		if(name.length() > 20){
-			Logger.info(session("name") + " entered a too long category name");
-			flash("error","Name must be max 120 characters long");
-			return ok(categoryPanel.render(session("name")));
-		}
-		if(Category.exists(name)){
-			Logger.info(session("name") + " tried to add a existing category. (" + name +")");
-			flash("error","Category already exists");
-			return ok(categoryPanel.render(session("name")));
-		}
-		/* If no picture is added, a default image is used*/
-		String picture = FileUpload.imageUpload("category-photos");		
-		if(picture != null){
-			Category.createCategory(name, picture);
-		}else {
-			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
-		}
-	
-		Logger.info(session("name") + " created a new category: \"" + name + "\"");
-		flash("success","Category " + "\""+ name + "\"" + " added");
-		return ok(categoryPanel.render( session("name")));
 	}
 	
 	/**
@@ -105,18 +110,25 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteCategory(long id) {
-		Category c = Category.find(id);
-		List<Coupon> cpns = c.coupons;
-		for(Coupon cp : cpns){
-			cp.category = null;
-			cp.save();
+		try{			
+			Category c = Category.find(id);
+			List<Coupon> cpns = c.coupons;
+			for(Coupon cp : cpns){
+				cp.category = null;
+				cp.save();
+			}
+			c.coupons = null;
+			c.save();
+			Logger.info(session("name") + " deleted category: \"" + c.name + "\"");
+			Category.delete(id);
+			return ok(CategoriesList.render(session("name"), Category.all()));
+		}catch(Exception e){
+			flash("error", "Error occured while deleting category. Please check logs");
+			Logger.error("Error while deleting category: " +e.getMessage());
+			return redirect("/");
+			
 		}
-		c.coupons = null;
-		c.save();
-		Logger.info(session("name") + " deleted category: \"" + c.name + "\"");
-		Category.delete(id);
-		return ok(CategoriesList.render(session("name"), Category.all()));
-	}
+		}
 	
 	/**
 	 * Shows the edit category view 
@@ -138,40 +150,45 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result updateCategory(long id) {
-
-		Category category = Category.find(id);
-		
-		if (categoryForm.hasErrors()) {
-			return redirect("/editCategory");
-		}
-		
-		String name = categoryForm.bindFromRequest().field("name").value();
-		
-		if (name.length() < 4) {		
-			flash("error","Name must be at least 4 characters");
-			return ok(editCategory.render(session("name"), category));
-		}
-		
-		if(name.length() > 20){
+		try{
+			Category category = Category.find(id);
 			
-			flash("error","Name must be max 120 characters long");
-			return ok(editCategory.render(session("name"), category));
-		}		
-		category.name = name;
-		
-		String picture = FileUpload.imageUpload("category-photos");		
-		
-		
-		if(picture != null){
+			if (categoryForm.hasErrors()) {
+				return redirect("/editCategory");
+			}
+			
+			String name = categoryForm.bindFromRequest().field("name").value();
+			
+			if (name.length() < 4) {		
+				flash("error","Name must be at least 4 characters");
+				return ok(editCategory.render(session("name"), category));
+			}
+			
+			if(name.length() > 20){
+				
+				flash("error","Name must be max 120 characters long");
+				return ok(editCategory.render(session("name"), category));
+			}		
+			category.name = name;
+			
+			String picture = FileUpload.imageUpload("category-photos");		
+			
+			
+			if(picture != null){
 				category.picture = picture;
 			}
-
-		
-		category.save();
-		Logger.info(session("name") + " updated category \"" + category.name + "\"");
-		flash("success","Category " + "\""+ name + "\"" + " updated");
-		return ok(editCategory.render( session("name"), category));
-	}
+			
+			category.save();
+			Logger.info(session("name") + " updated category \"" + category.name + "\"");
+			flash("success","Category " + "\""+ name + "\"" + " updated");
+			return ok(editCategory.render( session("name"), category));
+		}catch(Exception e){
+			flash("error", "Error occured while updateing category. Please check your logs");
+			Logger.error("Error while updateing category: " +e.getMessage());
+			return redirect("/editCategory");			
+		}
+			
+		}
 	
 }
 

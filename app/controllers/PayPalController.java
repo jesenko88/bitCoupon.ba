@@ -126,20 +126,16 @@ public class PayPalController extends Controller {
 			
 			Logger.debug(createdPayment.toJSON());
 			
-			flash("error", "Something went wrong, please try again later");
-			User currentUser = User.find(session("name"));
+			flash("error", "Something went wrong, please try again later");			
 			return ok(index.render(Coupon.all(), Category.all()));
 			
 			
-		} catch (PayPalRESTException e){
-			Logger.warn(e.getMessage());
+		} catch (PayPalRESTException e ){
+			flash("error", "Error occured while purchasing through paypal."
+					+ " If you're admin please check your logs");
+			Logger.error("Error at purchaseProcessing: " +e.getMessage());
+			return redirect("/");
 		}
-		
-		flash("error", "Something went wrong, please try again later");
-
-		User currentUser = User.find(session("name"));
-		return ok(index.render( Coupon.all(), Category.all()));
-
 	}
 	
 	/**
@@ -147,39 +143,37 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result couponSuccess(){
-		
-		DynamicForm paypalReturn = Form.form().bindFromRequest();
-		
 		//paymentID;
-		String payerID;
-		
-		
-		paymentID = paypalReturn.get("paymentId");
-		payerID = paypalReturn.get("PayerID");
-		token = paypalReturn.get("token");
-	try{
-		String accessToken = new OAuthTokenCredential(
-				"AXefj_ltBrqquxwtgvio9GBcfFMxFDh7GP8FTfXi489Vt0xCL7OmnKq6IRyXISYVKD98bVutaHBMwN9h",
-				"EPlX3tMGxjQYv0Wf2de9c-QeMlc8PT22jqWDAnexpFTbk1WJNlOgvS2ZQXfhrlQ_7DCbPYl1ElEDYDH9")
-				.getAccessToken();
-		
-		Map<String, String> sdkConfig = new HashMap<String, String>();
-		sdkConfig.put("mode", "sandbox");		
-		apiContext = new APIContext(accessToken);
-		apiContext.setConfigurationMap(sdkConfig);
-		
-		payment = Payment.get(accessToken, paymentID);
-		
-		paymentExecution = new PaymentExecution();
-		paymentExecution.setPayerId(payerID);
-		
-//		Payment newPayment = payment.execute(apiContext, paymentExecution);
-		
-	} catch(Exception e){
-		Logger.debug(e.getMessage());
-	}
-		flash("info","Approve transaction");
-		return ok(couponResult.render(currentUser, coupon, details));
+		String payerID;		
+		try{
+			DynamicForm paypalReturn = Form.form().bindFromRequest();			
+			paymentID = paypalReturn.get("paymentId");
+			payerID = paypalReturn.get("PayerID");
+			token = paypalReturn.get("token");
+			
+			String accessToken = new OAuthTokenCredential(
+					"AXefj_ltBrqquxwtgvio9GBcfFMxFDh7GP8FTfXi489Vt0xCL7OmnKq6IRyXISYVKD98bVutaHBMwN9h",
+					"EPlX3tMGxjQYv0Wf2de9c-QeMlc8PT22jqWDAnexpFTbk1WJNlOgvS2ZQXfhrlQ_7DCbPYl1ElEDYDH9")
+					.getAccessToken();
+			
+			Map<String, String> sdkConfig = new HashMap<String, String>();
+			sdkConfig.put("mode", "sandbox");		
+			apiContext = new APIContext(accessToken);
+			apiContext.setConfigurationMap(sdkConfig);
+			
+			payment = Payment.get(accessToken, paymentID);
+			
+			paymentExecution = new PaymentExecution();
+			paymentExecution.setPayerId(payerID);
+			
+	//		Payment newPayment = payment.execute(apiContext, paymentExecution);
+			flash("info","please approve transaction");
+			return ok(couponResult.render(currentUser, coupon, details));		
+		} catch(Exception e){
+			flash("error", "Error occoured. If you're admin please check your logs.");
+			Logger.debug("Error at couponSucess: " +e.getMessage());
+			return redirect("/");
+		}
 	}
 	
 	/**
@@ -202,16 +196,15 @@ public class PayPalController extends Controller {
 			
 			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
 
-					
+			Logger.info(session("name") + " approved transaction: //TODO");
+			flash("success","Transaction complete");
+			return ok(index.render( Coupon.all(), Category.all()));
+
 		} catch (PayPalRESTException e) {
-			Logger.debug(e.getMessage());
+			flash("error", "Error occured while approving transaction. "
+					+ "If you're admin please check your logs.");
+			Logger.debug("Error at approveTransaction: " +e.getMessage());
+			return redirect("/");
 		}
-		Logger.info(session("name") + " approved transaction: //TODO");
-		flash("success","Transaction complete");
-
-		User currentUser = User.find(session("name"));
-		return ok(index.render( Coupon.all(), Category.all()));
-
-	}
-	
+	}	
 }
