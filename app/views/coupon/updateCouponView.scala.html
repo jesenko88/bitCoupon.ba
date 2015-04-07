@@ -33,6 +33,8 @@
                   <form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" enctype="multipart/form-data">
                      <label> Title: </label>
                      <input type="text" name="name" id="name" placeholder="Title" minlength="4" maxlength="70" value="@coupon.name" required/>
+                     <label> Published by: </label>
+                     <input type="text" name="seller" id="seller" placeholder="Company name" minlength="4" maxlength="70" value="@coupon.seller.name" required/>
                      <label> Price: </label>
                      <input type="number" name="price" id="price" min="1" step="any" value="@coupon.getPriceString()" required/>
                      <p> Expiration date: @coupon.dateExpire </p>
@@ -52,6 +54,9 @@
                      <p></p>
                      <textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> "@coupon.remark" </textarea>
                      <input type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" value="@coupon.minOrder"required/>
+                     <input type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" value="@coupon.maxOrder"required/>
+                      <p> Usage date: @coupon.usage </p>
+                    <input type="date" id="datepicker" name="usage">                     
                      <button type="submit" class="btn btn-default">Update Coupon</button>
                      <p></p>
                      <p></p>

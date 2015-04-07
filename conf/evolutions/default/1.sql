@@ -14,10 +14,13 @@ create table company (
   id                        bigint not null,
   email                     varchar(255),
   password                  varchar(255),
+  adress                    varchar(255),
+  city                      varchar(255),
   name                      varchar(255),
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
+  contact                   varchar(255),
   constraint pk_company primary key (id))
 ;
 
@@ -33,6 +36,8 @@ create table coupon (
   remark                    varchar(255),
   seller_id                 bigint,
   min_order                 integer,
+  max_order                 integer,
+  usage                     timestamp,
   status                    boolean,
   constraint pk_coupon primary key (id))
 ;
@@ -92,7 +97,12 @@ create table user (
   id                        bigint not null,
   email                     varchar(255),
   password                  varchar(255),
+  adress                    varchar(255),
+  city                      varchar(255),
   username                  varchar(255),
+  surname                   varchar(255),
+  dob                       timestamp,
+  gender                    varchar(255),
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,

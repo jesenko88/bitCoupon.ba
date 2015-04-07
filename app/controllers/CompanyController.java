@@ -49,6 +49,10 @@ public static final String PATH = "localhost:9000";
 		String hashPass = HashHelper.createPassword(password);
 		String confPass = companyForm.bindFromRequest().field("confirmPassword")
 				.value();
+		String adress = companyForm.bindFromRequest().get().adress;
+		String city = companyForm.bindFromRequest().get().city;
+		String contact = companyForm.bindFromRequest().get().contact;
+
 
 		if (name.length() < 4 || name.equals("Name")) {
 			flash("error", "Name must be at least 4 chatacters");
@@ -66,7 +70,7 @@ public static final String PATH = "localhost:9000";
 
 		else if (Company.verifyRegistration(name, mail) == true) {
 
-			long id = Company.createCompany(name, mail, hashPass, logo);
+			long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact);
 			String verificationEmail = EmailVerification.addNewRecord(id);
 
 			MailHelper.send(mail,
@@ -224,7 +228,6 @@ public static final String PATH = "localhost:9000";
 	public static Result companyPanel(long id) {
 		Company company = Company.findById(id);
 		return ok(companyPanel.render(company, Coupon.ownedCoupons(company.id) ) );
-
 	}
 
 	/**
