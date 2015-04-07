@@ -4,60 +4,35 @@
 
 @main("Edit FAQ") {
 
-<body>
 <header id="header"><!--header-->
-	<div class="header-middle"><!--header-middle-->
-		<div class="container">
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
 			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-			<div class="logo pull-right">
-				<div class="search_box">
+				<div class="logo pull-right">
+					<div class="search_box">
 					<form action="/search" method="GET">
-							<input id="q" name="q" type="text" placeholder="Search" />
+					<input id="q" name="q" type="text" placeholder="Search" />
 					</form>
-				</div>
-			</div>	
+					</div>
 				</div>	
-				<div class="row">
-			</div>
+			</div>		
 		</div>
-	</div>	
-
-	
-
-	<div class="container">
-					
-					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center"> Edit FAQ</h2>
-						<div class="col-sm-6 col-sm-offset-1">
-						
-						
-					
-					<div class="signup-form"><!--sign up form-->
-						<form action="@routes.FAQController.updateFAQ(faq.id)" method ="POST" >
+	</header>
+<div class="container">
+	<div class="features_items"><!--features_items-->
+		<h2 class="title text-center"> Edit FAQ</h2>
+		<div class="col-sm-6 col-sm-offset-1">
+			<div class="signup-form"><!--sign up form-->
+				<form action="@routes.FAQController.updateFAQ(faq.id)" method ="POST" >
 							<input type="text" name="question" id="question" value= "@faq.question" />
 							<textarea name="answer" id="answer" rows="6"> @faq.answer </textarea>
 							<button type="submit" class="btn btn-default">Update</button>
-								<p></p>
-									<p></p>
-										<p></p>
-											<p></p>
+
 						</form>
 					</div><!--/sign up form-->
-				
 				</div>
 			</div>
 		</div>
-	</section><!--/form-->
-							</div>
-						</div>
-					</div>
-	<p></p>
-										<p></p>
-											<p></p>
-	</body>
-		
-	
-
 	
 }
 

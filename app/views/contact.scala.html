@@ -3,29 +3,23 @@
 @import helper._
 
 @main("Contact") {
-	
 	<head>
 		<script src='https://www.google.com/recaptcha/api.js'></script>
 	</head>
-<header id="header"><!--header-->
+	<header id="header"><!--header-->
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
 			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
 				<div class="logo pull-right">
-			<div class="search_box">
-							<form action="/search" method="GET">
-							<input id="q" name="q" type="text" placeholder="Search" />
-							</form>
-							</div>
-								</div>	
-								</div>		
-			
-							
-				<div class="row">
-						</div>
-				</div>
-			</div>	
-		</header>
+					<div class="search_box">
+					<form action="/search" method="GET">
+					<input id="q" name="q" type="text" placeholder="Search" />
+					</form>
+					</div>
+				</div>	
+			</div>		
+		</div>
+	</header>
 		<div class="container">
 					
 					<div class="features_items"><!--features_items-->
@@ -44,7 +38,7 @@
 							class='@("error-input".when(contactForm("name").hasErrors)) form-control' 
 							value='@contactForm("name").value' required/> 
 							
-							<label for="email">Email adress:</label>
+							<label for="email">Email:</label>
 							<input type="email" name="email" id="email" placeholder="youremail@@mail.com"
 							class='@("error-input".when(contactForm("email").hasErrors)) form-control' 
       						value='@contactForm("email").value'  required/>
