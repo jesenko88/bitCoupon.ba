@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import helpers.JSonHelper;
 import helpers.MailHelper;
 import models.User;
 import play.Logger;
@@ -31,6 +32,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import models.*;
+import controllersJSON.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -76,7 +78,11 @@ public class Application extends Controller {
 	 */
 	public static Result login() {
 		Form<Login> login = new Form<Login>(Login.class);
-
+		
+		if (request().accepts("application/json")) {
+			
+			return ApplicationJSON.loginJSON();
+		}
 		if (login.hasGlobalErrors()) {
 			Logger.info("Login global error");
 			flash("error","Login failed");
@@ -91,10 +97,7 @@ public class Application extends Controller {
 			Logger.info("Invalid login form, mail empty or short password");
 			flash("error","Password incorrect");
 			return badRequest(Loginpage.render(" "));
-
-
 		}
-		Logger.debug("Mail: " + mail + " Pass: " + password);
 		if (User.verifyLogin(mail, password) == true) {
 			User cc = User.getUser(mail);
 			session().clear();

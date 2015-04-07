@@ -29,6 +29,43 @@ public class JSonHelper {
 	public static final String SUPERUSER_USER = "user";
 	public static final String SUPERUSER_COMPANY = "company";
 
+	
+	
+	public static ObjectNode userToJSon(User u) {
+		
+		ObjectNode userNode = Json.newObject();
+		userNode.put("id", u.id);
+		userNode.put("username", u.username);
+		userNode.put("surname", u.surname);
+		userNode.put("email", u.email);
+		userNode.put("adress", u.adress);
+		userNode.put("city", u.city);
+//		userNode.put("dob", u.dob.toString());
+//		userNode.put("gender", u.gender);
+//		userNode.put("isAdmin", u.isAdmin);
+//		userNode.put("profilePicture", u.profilePicture);
+//		userNode.put("created", u.created.toString());
+//		userNode.put("updated", u.updated.toString());
+		return userNode;
+	}
+	
+	
+	public static ObjectNode companyToJSon(Company company) {
+		
+		ObjectNode companyNode = Json.newObject();
+		companyNode.put("id", company.id);
+		companyNode.put("name", company.name);
+		companyNode.put("email", company.email);
+		companyNode.put("adress", company.adress);
+		companyNode.put("city", company.city);
+		companyNode.put("contact", company.contact);
+//		userNode.put("logo", company.logo);
+//		userNode.put("created", company.created.toString());
+//		userNode.put("updated", company());
+		return companyNode;
+	}
+	
+	
 	/**
 	 * Method receives a list of SuperUser-s and converts it to a
 	 * arrayNode. 
