@@ -2618,7 +2618,6 @@ h2.title {
 
 
 
-
 @charset"utf-8";
 
 
@@ -2636,6 +2635,17 @@ h2.title {
     font-style: normal;
 }
 
+.spaceDiv_bottom{
+	margin-bottom: 30px; 
+}
+
+.spaceDiv_left{
+	margin-left: 30px; 
+}
+
+.spaceDiv_top{
+	margin-top: 30px; 
+}
 .top-offer {
     padding: 7px;
     position: relative;

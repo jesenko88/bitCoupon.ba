@@ -19,6 +19,7 @@ import models.*;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.db.ebean.Model.Finder;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -226,4 +227,16 @@ public static final String PATH = "localhost:9000";
 
 	}
 
+	/**
+	 * 
+	 */
+	public static Result showCompanyProfile(long id) {
+		Company current = Company.findById(id);
+	//	Company company = Company.find(session("name"));
+		List<Coupon> coupons = current.coupons;
+		return ok(companyProfile.render( current, coupons));
+
+	}
+
+	
 }
