@@ -1,5 +1,6 @@
 package controllers;
 
+import helpers.AdminFilter;
 import helpers.MailHelper;
 
 import java.util.ArrayList;
@@ -23,11 +24,12 @@ import views.html.helper.checkbox;
 
 public class SubscribeController extends Controller {
 	
-	
+	@Security.Authenticated(AdminFilter.class)
 	public static Result newsletterPanel(){
 		return ok(Newsletter.render(Coupon.approvedCoupons()));
 	}
 	
+	@Security.Authenticated(AdminFilter.class)
 	public static Result subscribers() {
 		return ok(subscribers.render(Subscriber.find.all()));
 	}
@@ -39,6 +41,7 @@ public class SubscribeController extends Controller {
 	 * TODO make better solution for getting selected checkboxes.
 	 * @return
 	 */
+	@Security.Authenticated(AdminFilter.class)
 	public static Result sendNewsletters(){
 		List<String> subscribers = Subscriber.getAllSubscribers();
 		
