@@ -58,8 +58,7 @@ public class Application extends Controller {
 		name = session("name");
 		if (name == null) {
 			return ok(index.render(Coupon.approvedCoupons(), Category.all()));
-		} 
-		User currentUser = User.find(name);
+		} 	
 		return ok(index.render(Coupon.approvedCoupons(), Category.all()));
 
 	}
@@ -170,10 +169,8 @@ public class Application extends Controller {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Promise<Result> sendMail() {
-		final DynamicForm temp = DynamicForm.form().bindFromRequest();
-		try{		
+		final DynamicForm temp = DynamicForm.form().bindFromRequest();			
 		Promise<Result> holder = WS
 				.url("https://www.google.com/recaptcha/api/siteverify")
 				.setContentType("application/x-www-form-urlencoded")
@@ -241,10 +238,7 @@ public class Application extends Controller {
 					}
 				});
 		return holder;
-		}catch(Exception e){
-			flash("error", "There was error with sending email. ");
-			return (Promise<Result>) redirect("/contact");
-		}
+		
 	}
 	
 	/**

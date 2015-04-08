@@ -84,7 +84,10 @@ public class User extends SuperUser {
 
 	/* Return all users */
 	public static List<User> all() {
-		return getFind().all();
+		List<User> all = getFind().all();
+		if(all == null)
+			all = new ArrayList<User>();
+		return all;
 	}
 	
 	/**

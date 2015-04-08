@@ -5,6 +5,7 @@ import helpers.CurrentUserFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,6 +86,8 @@ public class Company  extends SuperUser{
 	
 	public static List<Company> all(){
 		List<Company> all = find.all();
+		if(all == null)
+			all = new ArrayList<Company>();
 		return all;
 	}
 	

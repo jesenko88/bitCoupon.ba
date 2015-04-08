@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -71,11 +72,14 @@ public class Category extends Model{
     }
     
     /**
-     * 
+     * In case list is null, returning empty array list.
      * @return all categories as List<Category>
      */
     public static List<Category>all(){
-    	return find.all();
+    	List<Category> all = find.all(); 
+    	if(all == null)
+    		all = new ArrayList<Category>();
+    	return all;
     }
     
     /**

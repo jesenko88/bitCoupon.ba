@@ -158,8 +158,7 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateCompany(long id) {
-		try{
-			List<User> adminList = User.findAdmins(true);
+		try{		
 			if (companyForm.hasErrors()) {
 				return redirect("/@editUser/:" + id); // provjeriti
 			}
