@@ -4,68 +4,61 @@
 @import java.math.BigInteger; var i=0
 
 @main("Company profile") {
-
-<body>
-	<header id="header"><!--header-->
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-				
-					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-						</div>
-					</div>
-				
-			</div>
-		</div>
-	</header>
-
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</header>
 <div class="container">
-	<h2 class="title text-center">Company name: @company.name</h2>
-	
-	<div class="col-sm-12 spaceDiv_bottom ">
-		<div class="col-sm-4">
-		<div class="productinfo">
-		
-	 		<img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
-		</div>
-		</div>
-		<div class="col-sm-6 spaceDiv_left">
-		<div>
-		<p>Neke informacije o kompaniji koje treba ubaciti</p>
-		</div>
-	</div>
-	</div>
-	
-	<h2 class="title text-center">Company coupons:</h2>
-	
-      @for(coupon <- coupons){
+   <h2 class="title text-center">Company name: @company.name</h2>
+   <div class="col-sm-12 spaceDiv_bottom ">
       <div class="col-sm-4">
-         <div class="logo pull-left">
-            <div class="product-image-wrapper">
-               <div class="single-products">
-                  <div class="productinfo text-center">
-                     <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+         <div class="productinfo">
+            <img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
+         </div>
+      </div>
+      <div class="col-sm-6 spaceDiv_left">
+         <div>
+            <p>Neke informacije o kompaniji koje treba ubaciti</p>
+         </div>
+      </div>
+   </div>
+   <h2 class="title text-center">Company coupons:</h2>
+   @for(coupon <- coupons){
+   <div class="col-sm-4">
+      <div class="logo pull-left">
+         <div class="product-image-wrapper">
+            <div class="single-products">
+               <div class="productinfo text-center">
+                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+                  <h2>Only @coupon.getPriceString() KM</h2>
+                  <p>@coupon.name</p>
+                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+               </div>
+               <div class="product-overlay">
+                  <div class="overlay-content">
                      <h2>Only @coupon.getPriceString() KM</h2>
                      <p>@coupon.name</p>
+                     <p>@coupon.getExpiration()</p>
                      <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-                  </div>
-                  <div class="product-overlay">
-                     <div class="overlay-content">
-                        <h2>Only @coupon.getPriceString() KM</h2>
-                        <p>@coupon.name</p>
-                        <p>@coupon.getExpiration()</p>
-                        <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-                     </div>
                   </div>
                </div>
             </div>
-         </div> 
+         </div>
       </div>
-      }
-    </div>
-</body>
-
-	
+   </div>
+   }
+</div>
 }
 	
