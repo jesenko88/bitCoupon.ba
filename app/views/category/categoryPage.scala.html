@@ -18,19 +18,12 @@
          </div>
       </div>
    </div>
-   @_adminNavbar()
 </header>
 <div class="container">
 <div class="features_items">
 <!--features_items-->
 <h2 class="title text-center">@categoryName</h2>
 <div class="containter" id="categories">
-   <ul>
-      <div class="container">
-         @for(category <- Category.all()){
-         <a href="@routes.CategoryController.categoryView(category.name)">@category.name</a>
-         }
-   </ul>
    </div>
 </div>
 <div class="container">
@@ -55,5 +48,6 @@
       </div>
    </div>
    }			
-</div>}
+</div>
+}
 
