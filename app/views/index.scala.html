@@ -32,7 +32,7 @@
    <!-- SANELA PART -->
    <div class="row" id="toggle" style="display:none">
       <div class="col-md-12" style="margin: 20px 0" >
-         <div class="col-sm-6">
+         <div class="col-sm-5">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
                   <option value="" style="display:none">Select category</option>
@@ -40,20 +40,20 @@
                   <option>@category.name</option>
                   }
                </select>
-               <input type="submit" class="btn btn-success"> 
+               <input type="submit" class="btn btn-fefault cart"> 
             </form>
             <form action="@routes.CouponController.filterPrice(Coupon.commaSeparatedIds(coupons))" method="POST">
                <input type="number" name="start_price" id="start_price" min="1" step="any" placeholder="Price"/>
                <input type="number" name="end_price" id="end_price" min="1" step="any" placeholder="Price"/>
-               <input type="submit" class="btn btn-success"> 
+               <input type="submit" class="btn btn-fefault cart"> 
             </form>
             <form action="@routes.CouponController.filterDate(Coupon.commaSeparatedIds(coupons))" method="POST">
                @*	<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
                *@	<input type="date" id="datepicker" name="dateExpire">
-               <input type="submit" class="btn btn-success"> 
+               <input type="submit" class="btn btn-fefault cart"> 
             </form>
          </div>
-         <div class="col-sm-6">
+         <div class="col-sm-5">
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
                   <option value="" style="display:none">Order by: </option>
@@ -63,19 +63,18 @@
                </select>
                <input type="radio" id="method" name="method" value="ascending" checked>Ascending
                <input type="radio" id="method" name="method" value="descending">Descending
-               <input type="submit" class="btn btn-success">                  
+               <input type="submit" class="btn btn-fefault cart">                  
             </form>
          </div>
       </div>
    </div>
-   <h2 class="title text-center">Available Coupons</h2>
-   <div class="col-sm-4">
    </div>
-</div>
-<div class="container">
+   </div>
+   <div class="container">
+   <h2 class="title text-center">Available Coupons</h2>
+	<div class="container">
    @for(coupon <- coupons){
    <div class="col-sm-4">
-      <div class="logo pull-left">
          <div class="product-image-wrapper">
             <div class="single-products">
                <div class="productinfo text-center">
@@ -95,8 +94,8 @@
             </div>
          </div>
       </div>
-   </div>
+
    }			
-</div>
+ </div>
 
 }

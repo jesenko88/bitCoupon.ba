@@ -46,7 +46,7 @@
  		 <div class="col-md-12" style="margin: 20px 0" >
       
       
-         <div class="col-sm-6">
+         <div class="col-sm-5">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
                   <option value="" style="display:none">Select category</option>
@@ -67,7 +67,8 @@
                <input type="submit" class="btn btn-fefault cart"> 
             </form>
             </div>
-            <div class="col-sm-6">
+            <br>
+            <div class="col-sm-5">
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
                   <option value="" style="display:none">Order by: </option>
