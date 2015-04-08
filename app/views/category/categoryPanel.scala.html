@@ -1,8 +1,8 @@
 @(name: String)
 
-@import helper._
+@import views.html.admin.users._
 
-@main("User Panel") {
+@main("Category Panel") {
 	<body>
 		<header id="header"><!--header-->
 	
@@ -17,28 +17,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="header-bottom"><!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="/">Home</a></li>
-								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
-								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
-								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
-								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
-							</ul>
-						</div>
-						
+			@_adminNavbar()
 					</div>
 				</div>
 			</div>
