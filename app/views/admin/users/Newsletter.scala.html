@@ -1,51 +1,41 @@
 @(coupons: List[Coupon])
 @main("Newsletter") {
-<body>
-   <header id="header">
-      <!--header-->
-      <div class="header-middle">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-            <div class="logo pull-right">
-               <div class="search_box">
-                  <form action="/search" method="GET">
-                     <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>
-               </div>
-            </div>
-         </div>
-         <div class="row">
-         </div>
-      </div>
-      </div>	
-   </header>
-   
-   	@_adminNavbar()
-   <div class="container">
-      <div class="features_items">
-         <!--features_items-->
-         <h2 class="title text-center"> Create newsletter</h2>
-         <h6 class="title text-center"> Please select 3 coupons</h6>
-         <div class="col-sm-6 col-sm-offset-1">
-            <div class="signup-form">
-               <!--newsletter form-->
-               <form action="@routes.SubscribeController.sendNewsletters" method ="POST" >                 
-                  <input type="text" name="subject" id="subject" placeholder="Subject here" required/>
-                 @for(coupon <- coupons){
-                  <h5> @coupon.name </h5>
-                  <input type="checkbox" name="@coupon.id" id="@coupon.id" > 
-                 }
-                  <button type="submit" class="btn btn-default">SEND NEWSLETTER</button>
-                  
+ <header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
                </form>
             </div>
-            <!--/sign up form-->
          </div>
       </div>
    </div>
-   <p></p>
-   <p></p>
-   <p></p>
-</body>
+   @_adminNavbar()
+</header>
+<div class="container">
+   <div class="features_items">
+      <!--features_items-->
+      <h2 class="title text-center"> Create newsletter</h2>
+      <h6 class="title text-center"> Please select 3 coupons</h6>
+      <div class="col-sm-6 col-sm-offset-1">
+         <div class="signup-form">
+            <!--newsletter form-->
+            <form action="@routes.SubscribeController.sendNewsletters" method ="POST" >
+               <input type="text" name="subject" id="subject" placeholder="Subject here" required/>
+               @for(coupon <- coupons){
+               <h5> @coupon.name </h5>
+               <input type="checkbox" name="@coupon.id" id="@coupon.id" > 
+               }
+               <button type="submit" class="btn btn-default">SEND NEWSLETTER</button>
+            </form>
+         </div>
+         <!--/sign up form-->
+      </div>
+   </div>
+</div>
 }
