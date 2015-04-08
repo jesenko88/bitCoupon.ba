@@ -246,12 +246,12 @@ public class CouponController extends Controller {
 		
 		if (coupons.isEmpty() || companys.isEmpty() ) {
 			if(coupons.isEmpty() && (!companys.isEmpty())){
-				return badRequest(searchFilter.render(Coupon.approvedCoupons()
-						, Category.all(), companys));
+				return badRequest(searchFilter.render(coupons, 
+						Category.all(), companys));
 			}
 			if((!coupons.isEmpty()) && companys.isEmpty()){
 				return badRequest(searchFilter.render(coupons
-						, Category.all(), Company.all()));
+						, Category.all(), companys));
 			}
 			flash("error", "No resoult for this search");
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
