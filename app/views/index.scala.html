@@ -1,52 +1,37 @@
 @(coupons: List[Coupon])(categorys: List[Category])
 @import helper._
 @main("Welcome to bitCoupon") {
-@*	
-<h2>@message @name</h2>
-<h4>Home: </h4>
-*@
-
-   <header id="header">
-      <!--header-->
-      <div class="col-sm-12">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-            <div class="logo pull-right">
-           		<div class="search_box">
-            		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
-  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
-                                  <script type="text/javascript">
-									function showDiv(toggle){
-									document.getElementById(toggle).style.display = 'block';
-									}
-									</script>
-            	</div>
-            </div>
-            <div class="logo pull-right">
-               <div class="search_box">
-                  <form action="/search" method="GET">
-                     <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>
-                  
-               </div>
+ <header id="header">
+   <div class="col-sm-12">
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
+                  font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+               <script type="text/javascript">
+                  function showDiv(toggle){
+                  document.getElementById(toggle).style.display = 'block';
+                  }
+               </script>
             </div>
          </div>
-         <div class="row">
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
+            </div>
          </div>
       </div>
-      </div>	
-   </header>
-   
-   
-   <div class="container">
-   <div class="features_items">
-      <!--features_items-->
- 
-      <!-- SANELA PART -->
-
-      <div class="row" id="toggle" style="display:none">
- 		 <div class="col-md-12" style="margin: 20px 0" >
+   </div>
+</header>
+<div class="container">
+<div class="features_items">
+   <!--features_items-->
+   <!-- SANELA PART -->
+   <div class="row" id="toggle" style="display:none">
+      <div class="col-md-12" style="margin: 20px 0" >
          <div class="col-sm-6">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
@@ -67,8 +52,8 @@
                *@	<input type="date" id="datepicker" name="dateExpire">
                <input type="submit" class="btn btn-success"> 
             </form>
-            </div>
-            <div class="col-sm-6">
+         </div>
+         <div class="col-sm-6">
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
                   <option value="" style="display:none">Order by: </option>
@@ -82,37 +67,36 @@
             </form>
          </div>
       </div>
-      </div>   
-      <h2 class="title text-center">Available Coupons</h2>
-      <div class="col-sm-4">
    </div>
+   <h2 class="title text-center">Available Coupons</h2>
+   <div class="col-sm-4">
    </div>
-   
-   <div class="container">
-      @for(coupon <- coupons){
-      <div class="col-sm-4">
-         <div class="logo pull-left">
-            <div class="product-image-wrapper">
-               <div class="single-products">
-                  <div class="productinfo text-center">
-                     <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+</div>
+<div class="container">
+   @for(coupon <- coupons){
+   <div class="col-sm-4">
+      <div class="logo pull-left">
+         <div class="product-image-wrapper">
+            <div class="single-products">
+               <div class="productinfo text-center">
+                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+                  <h2>Only @coupon.getPriceString() KM</h2>
+                  <p>@coupon.name</p>
+                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+               </div>
+               <div class="product-overlay">
+                  <div class="overlay-content">
                      <h2>Only @coupon.getPriceString() KM</h2>
                      <p>@coupon.name</p>
+                     <p>@coupon.getExpiration()</p>
                      <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-                  </div>
-                  <div class="product-overlay">
-                     <div class="overlay-content">
-                        <h2>Only @coupon.getPriceString() KM</h2>
-                        <p>@coupon.name</p>
-                        <p>@coupon.getExpiration()</p>
-                        <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-                     </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      }			
    </div>
-   </ul>
+   }			
+</div>
+
 }
