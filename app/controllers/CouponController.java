@@ -247,12 +247,12 @@ public class CouponController extends Controller {
 		
 		if (coupons.isEmpty() || companys.isEmpty() ) {
 			if(coupons.isEmpty() && (!companys.isEmpty())){
-				return badRequest(searchFilter.render(Coupon.approvedCoupons()
-						, Category.all(), companys));
+				return badRequest(searchFilter.render(coupons, 
+						Category.all(), companys));
 			}
 			if((!coupons.isEmpty()) && companys.isEmpty()){
 				return badRequest(searchFilter.render(coupons
-						, Category.all(), Company.all()));
+						, Category.all(), companys));
 			}
 			flash("error", "No resoult for this search");
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
@@ -431,9 +431,11 @@ public class CouponController extends Controller {
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		} else {
+			//In case user didn't upload photo of coupon
+			//we add default photo of this category for this coupon.
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date,
-					FileUpload.DEFAULT_IMAGE,category, description, remark, minOrder, maxOrder, usage, company, status);
+					category.picture,category, description, remark, minOrder, maxOrder, usage, company, status);
 			Logger.info(session("name") + " created coupon " + id
 					+ " without image");
 			return redirect("/couponPanel");

@@ -15,7 +15,7 @@ import play.Application;
 import play.GlobalSettings;
 
 public class Global extends GlobalSettings {
-	String nameCoupon1 = "Dvije noći za dvoje u Hotelu Sunce Neum";
+	String nameCoupon1 = "Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
 	String remarkCoupon1 = "Jedna osoba može kupiti maksimalno četiri kupona za ovu ponudu. Kuponi se mogu spajati.";
 	String adress = "Zmaja od Bosne 33.";
 	String city = "Sarajevo";
