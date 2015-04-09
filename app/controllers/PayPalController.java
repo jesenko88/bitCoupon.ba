@@ -131,9 +131,6 @@ public class PayPalController extends Controller {
 			Logger.error("Error at purchaseProcessing: " +e.getMessage());
 			return redirect("/");
 		}		
-		flash("error", "Something went wrong, please try again later");
-		User currentUser = User.find(session("name"));
-		return ok(index.render( Coupon.all(), Category.all()));
 	}
 	
 	/**
