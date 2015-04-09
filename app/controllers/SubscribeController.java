@@ -31,7 +31,13 @@ public class SubscribeController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result newsletterPanel() {
-		return ok(Newsletter.render(Coupon.approvedCoupons()));
+		List<Coupon> coupons = Coupon.approvedCoupons();
+		if(coupons == null){
+			flash("error", "Error has occured. Please try again.");
+			Logger.error("List is empty at newsletterPanel.");
+			return redirect("/");
+		}
+		return ok(Newsletter.render(coupons));
 
 	}
 
@@ -42,7 +48,11 @@ public class SubscribeController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result subscribers() {
-		return ok(subscribers.render(Subscriber.find.all()));
+		List<Subscriber> allSubscribers = Subscriber.find.all();
+		if(allSubscribers == null)
+			allSubscribers = new ArrayList<Subscriber>();
+		
+		return ok(subscribers.render(allSubscribers));
 	}
 
 	/**

@@ -56,10 +56,18 @@ public class Application extends Controller {
 	 */
 	public static Result index() {
 		name = session("name");
+		List<Coupon> approvedCoupons = Coupon.approvedCoupons();
+		List<Category> categories = Category.all();
+		
+		//Handling exceptions
+		if(approvedCoupons == null || categories == null){
+			flash("warning", "Ooops error occured.");
+			return redirect("/");
+		}		
 		if (name == null) {
-			return ok(index.render(Coupon.approvedCoupons(), Category.all()));
+			return ok(index.render( approvedCoupons, categories ));
 		} 	
-		return ok(index.render(Coupon.approvedCoupons(), Category.all()));
+		return ok(index.render( approvedCoupons, categories ));
 
 	}
 
@@ -75,49 +83,49 @@ public class Application extends Controller {
 	 */
 	public static Result login() {
 		Form<Login> login = new Form<Login>(Login.class);
-
 		if (login.hasGlobalErrors()) {
 			Logger.info("Login global error");
-			flash("error","Login failed");
-
+			flash("error","Login failed");				
 			return badRequest(Loginpage.render(" "));
+		}			
+		try{
+			String mail = login.bindFromRequest().get().email;
+			String password = login.bindFromRequest().get().password;
+			
+			if (mail.isEmpty() || password.length() < 6) {
+				Logger.info("Invalid login form, mail empty or short password");
+				flash("error","Password incorrect");
+				return badRequest(Loginpage.render(" "));				
+				
+			}		
+			if (User.verifyLogin(mail, password) == true) {
+				User cc = User.getUser(mail);
+				session().clear();
+				session("name", cc.username);
+				session("email", cc.email);	
+				flash("success", "You are logged in as: " + mail);
+				Logger.info(cc.username + " logged in");
+				flash("success","You are logged in as: " + mail);
+				return ok(index.render(Coupon.approvedCoupons(), Category.all()));
+				
+			}
+			if (Company.verifyLogin(mail, password) == true) {
+				Company cc = Company.findByEmail(mail);
+				session().clear();
+				session("name", cc.name);
+				session("email", cc.email);	
+				flash("success", "You are logged in as: " + mail);
+				Logger.info(cc.name + " logged in");
+				return ok(indexC.render(cc, Coupon.approvedCoupons()));
+			}			
+			flash("error", "Invalid email or password");
+			Logger.info("User tried to login with invalid email or password");
+			return badRequest(Loginpage.render(" "));			
+		}catch(Exception e){
+			flash("error","Ooops. Error occured, please try again later.");
+			Logger.error("Error has occured at login: " +e.getMessage(), e);
+			return redirect("/");
 		}
-
-		String mail = login.bindFromRequest().get().email;
-		String password = login.bindFromRequest().get().password;
-
-		if (mail.isEmpty() || password.length() < 6) {
-			Logger.info("Invalid login form, mail empty or short password");
-			flash("error","Password incorrect");
-			return badRequest(Loginpage.render(" "));
-
-
-		}
-		Logger.debug("Mail: " + mail + " Pass: " + password);
-		if (User.verifyLogin(mail, password) == true) {
-			User cc = User.getUser(mail);
-			session().clear();
-			session("name", cc.username);
-			session("email", cc.email);	
-			flash("success", "You are logged in as: " + mail);
-			Logger.info(cc.username + " logged in");
-			flash("success","You are logged in as: " + mail);
-			return ok(index.render(Coupon.approvedCoupons(), Category.all()));
-
-		}
-		if (Company.verifyLogin(mail, password) == true) {
-			Company cc = Company.findByEmail(mail);
-			session().clear();
-			session("name", cc.name);
-			session("email", cc.email);	
-			flash("success", "You are logged in as: " + mail);
-			Logger.info(cc.name + " logged in");
-			return ok(indexC.render(cc, Coupon.approvedCoupons()));
-		}
-		
-		flash("error", "Invalid email or password");
-		Logger.info("User tried to login with invalid email or password");
-		return badRequest(Loginpage.render(" "));
 	}
 
 	/**
@@ -134,7 +142,13 @@ public class Application extends Controller {
 	 * @return redirects to index
 	 */
 	public static Result logout() {
-		Logger.info(session("name") + " has logged out");
+		String name = session("name");
+		//Handling exceptions
+		if(name == null){
+			flash("Ooops. Error has occured.");
+			return redirect("/");
+		}
+		Logger.info(name + " has logged out");
 		session().clear();
 		flash("success","You are logged out!");
 		return redirect("/");

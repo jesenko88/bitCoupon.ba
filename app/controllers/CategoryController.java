@@ -30,9 +30,14 @@ public class CategoryController extends Controller {
 	 * @return renders category view
 	 */
 	public static Result categoryView(String categoryName) {
-
-		return ok(categoryPage.render(User.find(session("name")),
-				Coupon.listByCategory(categoryName), categoryName));
+		User user = User.find(session("name"));
+		List<Coupon> byCategory = Coupon.listByCategory(categoryName);
+		//Exception handling.
+		if(byCategory == null || categoryName == null){
+			flash("error", "Error has occured, please try again alter.");
+			return redirect("/");
+		}		
+		return ok(categoryPage.render(user, byCategory, categoryName));
 	}
 
 	/**
@@ -42,8 +47,13 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategoryView() {
-
-		return ok(categoryPanel.render(session("name")));
+		String name = session("name");
+		//Exception handling.
+		if(name == null){
+			flash("error", "Error has occured, please try again.");
+			return redirect("/");
+		}
+		return ok(categoryPanel.render(name));
 	}
 
 	/**
@@ -53,8 +63,14 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCategories() {
-
-		return ok(CategoriesList.render(session("name"), Category.all()));
+		String name = session("name");
+		List<Category> allCategories = Category.all();
+		//Exception handling.
+		if(name == null || allCategories == null){
+			flash("error", "Ooops, error has occured. Please try again.");
+			return redirect("/");
+		}
+		return ok(CategoriesList.render(name, allCategories ));
 	}
 
 	/**
@@ -64,41 +80,47 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategory() {
-
 		if (categoryForm.hasErrors()) {
+			flash("error", "Error in form.");
 			return redirect("/categoryPanel");
 		}
-
-		String name = categoryForm.bindFromRequest().field("name").value();
-		if (name.length() < 4) {
-			Logger.info(session("name") + " entered a short category name");
-			flash("error", "Name must be at least 4 characters");
-			return ok(categoryPanel.render(session("name")));
-
+		//Exception handling.
+		try{
+			String name = categoryForm.bindFromRequest().field("name").value();
+			if (name.length() < 4) {
+				Logger.info(session("name") + " entered a short category name");
+				flash("error", "Name must be at least 4 characters");
+				return ok(categoryPanel.render(session("name")));
+				
+			}
+			if (name.length() > 20) {
+				Logger.info(session("name") + " entered a too long category name");
+				flash("error", "Name must be max 120 characters long");
+				return ok(categoryPanel.render(session("name")));
+			}
+			if (Category.exists(name)) {
+				Logger.info(session("name")
+						+ " tried to add a existing category. (" + name + ")");
+				flash("error", "Category already exists");
+				return ok(categoryPanel.render(session("name")));
+			}
+			/* If no picture is added, a default image is used */
+			String picture = FileUpload.imageUpload("category-photos");
+			if (picture != null) {
+				Category.createCategory(name, picture);
+			} else {
+				Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
+			}
+			
+			Logger.info(session("name") + " created a new category: \"" + name
+					+ "\"");
+			flash("success", "Category " + "\"" + name + "\"" + " added");
+			return ok(categoryPanel.render(session("name")));			
+		}catch(Exception e){
+			flash("error", "Error has occured. Please try again later.");
+			Logger.error("Error at addCategory: " +e.getMessage(), e);
+			return redirect("/");
 		}
-		if (name.length() > 20) {
-			Logger.info(session("name") + " entered a too long category name");
-			flash("error", "Name must be max 120 characters long");
-			return ok(categoryPanel.render(session("name")));
-		}
-		if (Category.exists(name)) {
-			Logger.info(session("name")
-					+ " tried to add a existing category. (" + name + ")");
-			flash("error", "Category already exists");
-			return ok(categoryPanel.render(session("name")));
-		}
-		/* If no picture is added, a default image is used */
-		String picture = FileUpload.imageUpload("category-photos");
-		if (picture != null) {
-			Category.createCategory(name, picture);
-		} else {
-			Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
-		}
-
-		Logger.info(session("name") + " created a new category: \"" + name
-				+ "\"");
-		flash("success", "Category " + "\"" + name + "\"" + " added");
-		return ok(categoryPanel.render(session("name")));
 
 	}
 
@@ -144,8 +166,14 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result editCategoryView(String name) {
+		String username = session("name");
 		Category category = Category.findByName(name);
-		return ok(editCategory.render(session("name"), category));
+		//Exception handling.
+		if(username == null || category == null || name == null){
+			flash("Ooops, error occured. Please try again later.");
+			return redirect("/");
+		}
+		return ok(editCategory.render(name, category));
 	}
 
 	/**
@@ -157,37 +185,42 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result updateCategory(long id) {
-
-		Category category = Category.find(id);
-
-		if (categoryForm.hasErrors()) {
-			return redirect("/editCategory");
+		try{
+			Category category = Category.find(id);
+			
+			if (categoryForm.hasErrors()) {
+				return redirect("/editCategory");
+			}
+			
+			String name = categoryForm.bindFromRequest().field("name").value();
+			
+			if (name.length() < 4) {
+				flash("error", "Name must be at least 4 characters");
+				return ok(editCategory.render(session("name"), category));
+			}
+			
+			if (name.length() > 20) {
+				flash("error", "Name must be max 120 characters long");
+				return ok(editCategory.render(session("name"), category));
+			}
+			
+			category.name = name;
+			String picture = FileUpload.imageUpload("category-photos");
+			
+			if (picture != null) {
+				category.picture = picture;
+			}
+			
+			category.save();
+			Logger.info(session("name") + " updated category \"" + category.name
+					+ "\"");
+			flash("success", "Category " + "\"" + name + "\"" + " updated");
+			return ok(editCategory.render(session("name"), category));			
+		}catch(Exception e){
+			flash("Error has occured, please try again later.");
+			Logger.error("Error at updateCategory: " +e.getMessage(), e);
+			return redirect("/");
 		}
-
-		String name = categoryForm.bindFromRequest().field("name").value();
-
-		if (name.length() < 4) {
-			flash("error", "Name must be at least 4 characters");
-			return ok(editCategory.render(session("name"), category));
-		}
-
-		if (name.length() > 20) {
-			flash("error", "Name must be max 120 characters long");
-			return ok(editCategory.render(session("name"), category));
-		}
-		
-		category.name = name;
-		String picture = FileUpload.imageUpload("category-photos");
-
-		if (picture != null) {
-			category.picture = picture;
-		}
-
-		category.save();
-		Logger.info(session("name") + " updated category \"" + category.name
-				+ "\"");
-		flash("success", "Category " + "\"" + name + "\"" + " updated");
-		return ok(editCategory.render(session("name"), category));
 
 	}
 

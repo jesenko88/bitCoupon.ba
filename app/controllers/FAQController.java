@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import helpers.AdminFilter;
 import models.FAQ;
 import play.data.DynamicForm;
@@ -19,7 +21,10 @@ public class FAQController extends Controller {
 	 * @return
 	 */
 	public static Result showFAQ() {
-		return ok(FAQview.render(session("name"), FAQ.all()));
+		String name = session("name");
+		List<FAQ> all = FAQ.all();
+		
+		return ok(FAQview.render(name ,all ));
 	}
 
 	/**
@@ -81,7 +86,12 @@ public class FAQController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result editFAQView(int id) {
 		FAQ question = FAQ.find(id);
-		return ok(EditFAQ.render(session("name"), question));
+		String name = session("name");
+		if(name == null || question == null){
+			flash("error", "Ooops, error occured. Please try again later.");
+			return redirect("/");
+		}
+		return ok(EditFAQ.render(name, question));
 	}
 
 	/**

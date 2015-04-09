@@ -37,10 +37,12 @@ public static final String PATH = "localhost:9000";
 	 *         repeatedly if any error occurs
 	 */
 	public static Result registerC() {
+		if (companyForm.hasErrors()) {
+			flash("error", "Error has occured at registration form.");
+			return redirect("/companySignup");
+		}
+		//Exception handling.
 		try{
-			if (companyForm.hasErrors()) {
-				return redirect("/companySignup");
-			}
 			String name = companyForm.bindFromRequest().get().name;
 			String mail = companyForm.bindFromRequest().get().email;
 			String logo = companyForm.bindFromRequest().get().logo;
@@ -104,11 +106,12 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updateCompany(long id) {
+		DynamicForm updateForm = Form.form().bindFromRequest();
+		if (updateForm.hasErrors()) {
+			flash("error", "Ooops, error has occured. Please try again later.");
+			return redirect("/updateCompany");
+		}
 		try{
-			DynamicForm updateForm = Form.form().bindFromRequest();
-			if (updateForm.hasErrors()) {
-				return redirect("/updateCompany");
-			}
 			
 			String name = updateForm.data().get("name");
 			String email = updateForm.data().get("email");
@@ -158,11 +161,11 @@ public static final String PATH = "localhost:9000";
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateCompany(long id) {
-		try{		
-			if (companyForm.hasErrors()) {
-				return redirect("/@editUser/:" + id); // provjeriti
-			}
-			
+		if (companyForm.hasErrors()) {
+			flash("error", "Oops, error has occured. Please try again later.");
+			return redirect("/@editUser/:" + id); // provjeriti
+		}
+		try{			
 			String name = companyForm.bindFromRequest().field("name").value();
 			String email = companyForm.bindFromRequest().field("email").value();
 			String newPass = companyForm.bindFromRequest().field("newPassword")
@@ -253,7 +256,13 @@ public static final String PATH = "localhost:9000";
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result companyPanel(long id) {
 		Company company = Company.findById(id);
-		return ok(companyPanel.render(company, Coupon.ownedCoupons(company.id) ) );
+		List<Coupon> ownedCoupons = Coupon.ownedCoupons(company.id);
+		//Exception handling.
+		if(company == null || ownedCoupons == null){
+			flash("error", "Ooops, error has occured. Please try again later.");
+			return redirect("/");
+		}
+		return ok(companyPanel.render(company, ownedCoupons ) );
 	}
 
 	/**
@@ -261,8 +270,12 @@ public static final String PATH = "localhost:9000";
 	 */
 	public static Result showCompanyProfile(long id) {
 		Company current = Company.findById(id);
-	//	Company company = Company.find(session("name"));
 		List<Coupon> coupons = current.coupons;
+		//Exception handling.
+		if(current == null || coupons == null){
+			flash("error", "Ooops, error has occured. Please try again later.");
+			return redirect("/");
+		}
 		return ok(companyProfile.render( current, coupons));
 
 	}

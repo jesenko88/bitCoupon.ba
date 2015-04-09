@@ -46,7 +46,13 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
 		List<Category> categories = Category.all();
-		return ok(couponPanel.render(session("name"), categories));
+		String name = session("name");
+		//Exception handling.
+		if(categories == null || name == null){
+			flash("error", "Ooops, error has occured. Please try again later.");
+			return redirect("/");
+		}
+		return ok(couponPanel.render(name, categories));
 	}
 
 	/**
@@ -59,6 +65,11 @@ public class CouponController extends Controller {
 	public static Result showCoupon(long id) {
 		Coupon current = Coupon.find(id);
 		Company company = Company.find(session("name"));
+		//Exception handling.
+		if(current == null ){
+			flash("error", "Ooops, error has occured.");
+			return redirect("/");
+		}
 		return ok(coupontemplate.render(company, current));
 
 	}
@@ -104,8 +115,18 @@ public class CouponController extends Controller {
 	public static Result editCoupon(long id) {
 		Coupon coupon = Coupon.find(id);
 		List<Category> categories = Category.all();
-		return ok(updateCouponView.render(session("name"), coupon, categories,
-				Photo.photosByCoupon(coupon)));
+		String name = session("name");
+		//Exception handling.
+		if(coupon == null || categories == null || name == null){
+			flash("error", "Oops, error has occured. Please try again later");
+			return redirect("/");
+		}
+		List<Photo> photosByCoupon = Photo.photosByCoupon(coupon);
+		if(photosByCoupon == null){
+			flash("error", "Ooops, error has occured. Please try again later.");
+			return redirect("/");
+		}
+		return ok(updateCouponView.render(name, coupon, categories, photosByCoupon));
 
 	}
 
@@ -396,7 +417,7 @@ public class CouponController extends Controller {
 				return badRequest(couponPanel.render(session("name"),
 						categories));
 			}
-
+			
 			/* date */
 			Date current = new Date();
 			Date date = couponForm.bindFromRequest().get().dateExpire;
@@ -460,10 +481,10 @@ public class CouponController extends Controller {
 				flash("success", "Coupon successfuly created.");
 				return redirect("/couponPanel");
 			} else {
-				flash("success", "Coupon created without image");
 				long id = Coupon.createCoupon(name, price, date,
 						FileUpload.DEFAULT_IMAGE, category, description,
 						remark, minOrder, maxOrder, usage, company, status);
+				flash("success", "Coupon created without image");
 				Logger.info(session("name") + " created coupon " + id
 						+ " without image");
 				return redirect("/couponPanel");
@@ -577,7 +598,7 @@ public class CouponController extends Controller {
 	 * @return returns to editCoupon view.
 	 */
 	@Security.Authenticated(AdminFilter.class)
-	public static Result deletePhoto(int id) {
+	public static Result deletePhoto(int id) {		
 		try {
 			Photo temp = Photo.find(id);
 			Coupon cp = temp.coupon;
@@ -604,8 +625,14 @@ public class CouponController extends Controller {
 	 */
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
-		List<Category> categorys = Category.all();
-		return ok(searchFilter.render(coupons, categorys, Company.all()));
+		List<Category> categories = Category.all();
+		List<Company> companies = Company.all();
+		//Handling exceptions.
+		if(coupons == null || categories == null || companies == null){
+			flash("error", "Ooops, error has occured. Plealse try again later.");
+			return redirect("/");
+		}
+		return ok(searchFilter.render(coupons, categories, companies));
 
 	}
 
@@ -791,17 +818,14 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listCoupons() {
-
 		List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 		List<Coupon> nonApprovedCoupons = Coupon.nonApprovedCoupons();
-		/*
-		 * for(Coupon coupon : coupons){ Date couponDate = coupon.dateExpire; if
-		 * (couponDate.after(current)) { noExpireList.add(coupon); } }
-		 * 
-		 * if(noExpireList.isEmpty()){ flash("error",
-		 * "All coupons had expired"); return ok(couponsAll.render(null,
-		 * Coupon.all())); }
-		 */
+		//Handling  case lists are null.
+		if(approvedCoupons == null)
+			approvedCoupons = new ArrayList<Coupon>();
+		if(nonApprovedCoupons == null)
+			nonApprovedCoupons = new ArrayList<Coupon>();
+		
 		return ok(couponsAll.render(approvedCoupons, nonApprovedCoupons));
 
 	}
