@@ -318,11 +318,7 @@ public class CouponController extends Controller {
 		Date current = new Date();
 		Date expDate = Coupon.find(id).dateExpire;
 
-		if (expDate.after(current)) {
-			return true;
-		} else {
-			return false;
-		}
+		return current.after(expDate);
 	}
 
 	/**
