@@ -49,8 +49,10 @@ POST   /updateCompany                 controllers.CompanyController.updateCompan
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
+
 GET    /searchCompany                 controllers.CompanyController.searchCompanyView()
 GET    /searchCompanyS                controllers.CompanyController.searchCompany(qc: String)
+
 
 
 # Coupon controller 
