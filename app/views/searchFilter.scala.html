@@ -1,4 +1,4 @@
-@(coupons: List[Coupon])(categorys: List[Category])(companys: List[Company])
+@(coupons: List[Coupon])(categorys: List[Category])
 @import helper._
 @main("SearchFilter") {
 @*	
@@ -15,6 +15,8 @@
            		<div class="search_box">
             		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
   							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+  					<button type="button" class="btn-btn default"name="answer"  style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
+                  			font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px"><a href="/searchCompany">Search company</a></button>
                                   <script type="text/javascript">
 									function showDiv(toggle){
 									document.getElementById(toggle).style.display = 'block';
@@ -117,32 +119,7 @@
       }
       </div>
       
-   <div class="container">
-      
-      @for(company <- companys){
-      	 <div class="col-sm-4">
-         <div class="logo pull-left">
-            <div class="product-image-wrapper">
-               <div class="single-products">
-                  <div class="productinfo text-center">
-                     <img src="@routes.Assets.at("images/home/No-Logo.jpg")" alt="" />
-                     <h2>@company.name</h2>
-                    <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
-                  </div>
-                  <div class="product-overlay">
-                     <div class="overlay-content">
-                        <p>@company.name</p>
-                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-    
-      	
-      }
-     </div> 
+  
       
    </div>
    }

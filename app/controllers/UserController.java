@@ -48,6 +48,10 @@ public class UserController extends Controller {
 	 *         repeatedly if any error occurs
 	 */
 	public static Result register() {
+		
+		if (request().accepts("application/json")){
+			return JSonOperator.register();
+		}
 
 		if (userForm.hasErrors()) {
 			return redirect("/signup ");

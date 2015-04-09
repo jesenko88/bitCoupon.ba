@@ -77,12 +77,12 @@ public class Application extends Controller {
 	 *         login page with a warning message.
 	 */
 	public static Result login() {
-		Form<Login> login = new Form<Login>(Login.class);
 
 		if (request().accepts("application/json")) {
-
-			return ApplicationJSON.loginJSON();
+			return JSonOperator.login();
 		}
+
+		Form<Login> login = new Form<Login>(Login.class);
 		if (login.hasGlobalErrors()) {
 			Logger.info("Login global error");
 			flash("error", "Login failed");
@@ -122,6 +122,7 @@ public class Application extends Controller {
 		flash("error", "Invalid email or password");
 		Logger.info("User tried to login with invalid email or password");
 		return badRequest(Loginpage.render(" "));
+
 	}
 
 	/**

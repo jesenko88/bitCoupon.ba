@@ -3,68 +3,56 @@
 @import helper._
 
 @main("Welcome to bitCoupon") {
-
-<body>
-   <header id="header">
-      <!--header-->
-      <div class="col-sm-12">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-            <div class="logo pull-right">
-               <div class="search_box">
-                  <form action="/search" method="GET">
-                     <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>               
-                  
-                  
-                  
-               </div>
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
             </div>
          </div>
-         <div class="row">
-         </div>
       </div>
-      </div>	
-   </header>
-   <div class="container">
-   <div class="features_items">
-      <!--features_items-->
-      <h2 class="title text-center">My Coupons</h2>
-       <div class="col-sm-4">
-   		<form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
+   </div>
+</header>
+<div class="container">
+<div class="features_items">
+   <!--features_items-->
+   <h2 class="title text-center">My Coupons</h2>
+   <div class="col-sm-4">
+      <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
          <select id="orderby" name="orderby" required>
-			<option value="" style="display:none">Order by: </option>							
-			<option>Category</option>
-			<option >Price</option>
-			<option>Date</option>
-		</select>
-		<input type="radio" id="method" name="method" value="ascending" checked>Ascending
-		<input type="radio" id="method" name="method" value="descending">Descending
-		 
-		<input type="submit" class="btn btn-success">                  
-  </form>
+            <option value="" style="display:none">Order by: </option>
+            <option>Category</option>
+            <option >Price</option>
+            <option>Date</option>
+         </select>
+         <input type="radio" id="method" name="method" value="ascending" checked>Ascending
+         <input type="radio" id="method" name="method" value="descending">Descending
+         <input type="submit" class="btn btn-success">                  
+      </form>
    </div>
-   </div>
-   
-   <div class="container">
-      @for(coupon <- coupons){
-      <div class="col-sm-4">
-         <div class="logo pull-left">
-            <div class="product-image-wrapper">
-               <div class="single-products">
-                  <div class="productinfo text-center">
-                     <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-                     <h2>Only @coupon.getPriceString() KM</h2>
-                     <p>@coupon.name</p>
-                     <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-                  </div>
+</div>
+<div class="container">
+   @for(coupon <- coupons){
+   <div class="col-sm-4">
+      <div class="logo pull-left">
+         <div class="product-image-wrapper">
+            <div class="single-products">
+               <div class="productinfo text-center">
+                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+                  <h2>Only @coupon.getPriceString() KM</h2>
+                  <p>@coupon.name</p>
+                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
                </div>
             </div>
          </div>
       </div>
-      }			
    </div>
-   </ul>
-</body>
+   }			
+</div>
 }
