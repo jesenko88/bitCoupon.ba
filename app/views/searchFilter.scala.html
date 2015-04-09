@@ -1,4 +1,4 @@
-@(coupons: List[Coupon])(categorys: List[Category])(companys: List[Company])
+@(coupons: List[Coupon])(categorys: List[Category])
 @import helper._
 @main("SearchFilter") {
 @*	
@@ -15,6 +15,8 @@
            		<div class="search_box">
             		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
   							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+  					<button type="button" class="btn-btn default"name="answer"  style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
+                  			font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px"><a href="/searchCompany">Search company</a></button>
                                   <script type="text/javascript">
 									function showDiv(toggle){
 									document.getElementById(toggle).style.display = 'block';
@@ -46,7 +48,7 @@
  		 <div class="col-md-12" style="margin: 20px 0" >
       
       
-         <div class="col-sm-6">
+         <div class="col-sm-5">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
                   <option value="" style="display:none">Select category</option>
@@ -67,7 +69,8 @@
                <input type="submit" class="btn btn-fefault cart"> 
             </form>
             </div>
-            <div class="col-sm-6">
+            <br>
+            <div class="col-sm-5">
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
                   <option value="" style="display:none">Order by: </option>
@@ -82,10 +85,15 @@
          </div>
       </div>
       </div>
-      <h2 class="title text-center">Search Result</h2>
+      
+      
    </div>
+ <h2 class="title text-center">Search Result</h2>
+   
+     
    <div class="container">
       @for(coupon <- coupons){
+      	
       <div class="col-sm-4">
          <div class="logo pull-left">
             <div class="product-image-wrapper">
@@ -111,33 +119,7 @@
       }
       </div>
       
-   <div class="container">
-            <h2 class="title text-center">Companys</h2>
-      
-      @for(company <- companys){
-      	 <div class="col-sm-4">
-         <div class="logo pull-left">
-            <div class="product-image-wrapper">
-               <div class="single-products">
-                  <div class="productinfo text-center">
-                     <img src="@routes.Assets.at("images/home/No-Logo.jpg")" alt="" />
-                     <h2>@company.name</h2>
-                    <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
-                  </div>
-                  <div class="product-overlay">
-                     <div class="overlay-content">
-                        <p>@company.name</p>
-                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      </div>
-      	
-      }
-      
+  
       
    </div>
    }

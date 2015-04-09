@@ -23,17 +23,14 @@ import views.html.admin.users.*;
 import views.html.coupon.*;
 import models.*;
 
-
-
 public class UserController extends Controller {
-	public static final String PATH = "localhost:9000"; 
+	public static final String PATH = "localhost:9000";
 	/* TODO move all messages to conf */
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;
 
 	static Form<User> userForm = new Form<User>(User.class);
-
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -48,7 +45,7 @@ public class UserController extends Controller {
 			return redirect("/signup ");
 		}
 
-		try{
+		try {
 			String username = userForm.bindFromRequest().get().username;
 			String surname = userForm.bindFromRequest().get().surname;
 			Date dob = userForm.bindFromRequest().get().dob;
@@ -58,9 +55,9 @@ public class UserController extends Controller {
 			String mail = userForm.bindFromRequest().get().email;
 			String password = userForm.bindFromRequest().get().password;
 			String hashPass = HashHelper.createPassword(password);
-			String confPass = userForm.bindFromRequest().field("confirmPassword")
-					.value();
-			
+			String confPass = userForm.bindFromRequest()
+					.field("confirmPassword").value();
+
 			if (username.length() < 4 || username.equals("Username")) {
 				flash("error", "Usernam must be at least 4 chatacters");
 				return badRequest(signup.render());
@@ -74,40 +71,41 @@ public class UserController extends Controller {
 				flash("error", "Passwords don't match, try again ");
 				return badRequest(signup.render());
 			}
-			
+
 			/*
-			 * Creating new user if the username or mail is free for use, and there
-			 * are no errors
+			 * Creating new user if the username or mail is free for use, and
+			 * there are no errors
 			 */
 			else if (User.verifyRegistration(username, mail) == true) {
 				/*
 				 * session().clear(); session("name", username);
 				 */
-				
-				long id = User.createUser(username, surname, dob, gender, adress, city, mail, hashPass, false);
+
+				long id = User.createUser(username, surname, dob, gender,
+						adress, city, mail, hashPass, false);
 				String verificationEmail = EmailVerification.addNewRecord(id);
-				
+
 				MailHelper.send(mail,
 						"Click on the link below to verify your e-mail adress <br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success", "A verification mail has been sent to your email address!");
+				flash("success",
+						"A verification mail has been sent to your email address!");
 				Logger.info("A verification mail has been sent to email address");
 				return ok(Loginpage.render(" "));
-				
+
 			} else {
 				flash("error", "Username or email allready exists!");
 				Logger.info("Username or email allready exists!");
 				return badRequest(signup.render());
-			}			
-		}catch(Exception e){
+			}
+		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
-			Logger.error("Error at registration: " +e.getMessage(), e);
+			Logger.error("Error at registration: " + e.getMessage(), e);
 			return redirect("/");
 		}
 
 	}
-
 
 	/**
 	 * Update user by getting the values from the form in the userUpdate view.
@@ -116,7 +114,7 @@ public class UserController extends Controller {
 	 * @param useName
 	 *            received from the userUpdateView() method
 	 * @return Result renders the update view with info messages according to
-	 *         update success or fail 
+	 *         update success or fail
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updateUser(long id) {
@@ -124,7 +122,7 @@ public class UserController extends Controller {
 		if (updateForm.hasErrors()) {
 			return redirect("/updateUser ");
 		}
-		try{
+		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			String username = updateForm.data().get("username");
 			String surname = updateForm.data().get("surname");
@@ -141,7 +139,7 @@ public class UserController extends Controller {
 			String email = updateForm.data().get("email");
 			String oldPass = updateForm.data().get("password");
 			String newPass = updateForm.data().get("newPassword");
-			
+
 			User cUser = User.find(id);
 			cUser.username = username;
 			cUser.surname = surname;
@@ -151,9 +149,10 @@ public class UserController extends Controller {
 			cUser.city = city;
 			// cUser.email = email;
 			cUser.updated = new Date();
-			
+
 			if (!cUser.email.equals(email)) {
-				String verificationEmail = EmailVerification.addNewRecord(cUser.id);
+				String verificationEmail = EmailVerification
+						.addNewRecord(cUser.id);
 				MailHelper.send(email,
 						"Click on the link below to verify your e-mail adress <br>"
 								+ "http://" + PATH + "/verifyEmailUpdate/"
@@ -169,11 +168,11 @@ public class UserController extends Controller {
 			cUser.save();
 			flash("success", "Profile updated!");
 			Logger.info(cUser.username + " is updated");
-			session("name", cUser.username); 
-			return ok(userUpdate.render(cUser));			
-		}catch(Exception e){
+			session("name", cUser.username);
+			return ok(userUpdate.render(cUser));
+		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
-			Logger.error("Error at updateUser: " +e.getMessage(), e);
+			Logger.error("Error at updateUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
 
@@ -188,13 +187,15 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateUser(long id) {
-	
+
 		if (userForm.hasErrors()) {
 			return redirect("/@editUser/:" + id); // provjeriti
 		}
-		try{
-			String username = userForm.bindFromRequest().field("username").value();
-			String surname = userForm.bindFromRequest().field("surname").value();
+		try {
+			String username = userForm.bindFromRequest().field("username")
+					.value();
+			String surname = userForm.bindFromRequest().field("surname")
+					.value();
 			Date dob = userForm.bindFromRequest().get().dob;
 			String gender = userForm.bindFromRequest().field("gender").value();
 			String adress = userForm.bindFromRequest().field("adress").value();
@@ -203,7 +204,7 @@ public class UserController extends Controller {
 			String newPass = userForm.bindFromRequest().field("newPassword")
 					.value();
 			String admin = userForm.bindFromRequest().field("isAdmin").value();
-			
+
 			User cUser = User.find(id);
 			cUser.username = username;
 			cUser.surname = surname;
@@ -226,23 +227,25 @@ public class UserController extends Controller {
 			cUser.save();
 			flash("success", "User " + cUser.username + " updated!");
 			Logger.info(session("name") + " updated user: " + cUser.username);
-			return ok(userList.render(SuperUser.allSuperUsers()));			
-		}catch(Exception e){
+			return ok(userList.render(SuperUser.allSuperUsers()));
+		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
-			Logger.error("Error at adminUpdateUser: " +e.getMessage(), e);
+			Logger.error("Error at adminUpdateUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
 	}
 
 	/**
 	 * Renders the admin panel view
-	 * @param id of the current user
+	 * 
+	 * @param id
+	 *            of the current user
 	 * @return
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result controlPanel(long id) {
 		User u = User.find(id);
-		if(u == null){
+		if (u == null) {
 			flash("error", "Ooops, error occured. Please try again.");
 			return redirect("/");
 		}
@@ -262,11 +265,11 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
 		List<SuperUser> all = SuperUser.allSuperUsers();
-		if(all == null){
+		if (all == null) {
 			flash("error", "Ooops, error occured. Please try again.");
 			return redirect("/");
 		}
-		return ok(userList.render( all));
+		return ok(userList.render(all));
 	}
 
 	/**
@@ -279,6 +282,7 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteUser(long id) {
+
 		try{
 			List<User> adminList = User.findAdmins(true);
 			User currentUser = Sesija.getCurrentUser(ctx());
@@ -288,13 +292,16 @@ public class UserController extends Controller {
 				return ok(userList.render(SuperUser.allSuperUsers()));
 			}
 			if (currentUser.id == id || Sesija.adminCheck(ctx())) {
-				User.delete(id);
+				User u = User.find(id);			
+				Subscriber.unsubscribe(u);			
+				User.delete(u.id);			
+				
 				if (currentUser.id == id) {
 					session().clear();
 					return redirect("/signup ");
 				}
 			}
-			return ok(userList.render(SuperUser.allSuperUsers()));			
+			return ok(userList.render(SuperUser.allSuperUsers()));		
 		}catch(Exception e){
 			flash("error", "Ooops, error has occured. Please try again later.");
 			Logger.error("Error at deleteUser: " +e.getMessage(), e);
@@ -302,17 +309,19 @@ public class UserController extends Controller {
 		}
 	}
 
-
 	/**
 	 * Upload user profile photo
-	 * @param id of the user long
-	 * @return 
+	 * 
+	 * @param id
+	 *            of the user long
+	 * @return
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updatePhoto(long userId) {
-		try{
+		try {
 			User u = User.find(userId);
-			String subFolder = "user_profile" + File.separator + "user_" + userId;
+			String subFolder = "user_profile" + File.separator + "user_"
+					+ userId;
 			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
 					+ subFolder).isDirectory();
 			if (checkIfDirectoryExists) {
@@ -328,69 +337,71 @@ public class UserController extends Controller {
 				u.profilePicture = assetsPath;
 				u.save();
 				return redirect("/profile/@" + u.username);
-			}			
-		}catch(Exception e){
+			}
+		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
-			Logger.error("Error at updatePhoto: " +e.getMessage(), e);
+			Logger.error("Error at updatePhoto: " + e.getMessage(), e);
 			return redirect("/");
 		}
 	}
-	
+
 	/**
-	 * Method creating new password for user or company.
-	 * As parameter it takes id of ResetPasword object which
-	 * contains users email.
+	 * Method creating new password for user or company. As parameter it takes
+	 * id of ResetPasword object which contains users email.
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result createNewPassword( String id){
-		try{
+	public static Result createNewPassword(String id) {
+		try {
 			ResetPasword rp = ResetPasword.find.byId(id);
 			String email = rp.userEmail;
 			User u = User.findByEmail(email);
 			Company c = Company.findByEmail(email);
 			DynamicForm df = Form.form().bindFromRequest();
-			
+
 			String newPassword = df.data().get("newPassword");
 			String confirmPassword = df.data().get("confirmPassword");
-			
-			//TODO CHECK IF PASSWORDS ARE EQUAL AND OTHER THINGS ABOUT PW
-			if(!newPassword.equals(confirmPassword)){
-				flash("error", "Failed to change pw, confirm passwords dont match");
-				return redirect("/newPassword/"+rp.id);
+
+			// TODO CHECK IF PASSWORDS ARE EQUAL AND OTHER THINGS ABOUT PW
+			if (!newPassword.equals(confirmPassword)) {
+				flash("error",
+						"Failed to change pw, confirm passwords dont match");
+				return redirect("/newPassword/" + rp.id);
 			}
-			
-			
-			if(u != null){
+
+			if (u != null) {
 				u.password = HashHelper.createPassword(newPassword);
 				u.save();
 				rp.delete();
-			}else if(c != null){
+			} else if (c != null) {
 				c.password = HashHelper.createPassword(newPassword);
 				c.save();
 				rp.delete();
 			}
 			flash("success", "Password has been changed, please log in.");
-			return redirect("/");			
-		}catch(Exception e){
+			return redirect("/");
+		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
-			Logger.error("Error at createNewPassword: " +e.getMessage(), e);
+			Logger.error("Error at createNewPassword: " + e.getMessage(), e);
 			return redirect("/");
 		}
 	}
-	
+
 	/**
 	 * Return a list of bought coupons
-	 * @param id of the buyer
+	 * 
+	 * @param id
+	 *            of the buyer
 	 * @return
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result showBoughtCoupons(long userId) {
 		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
-		if(transactions == null){
+		if (transactions == null) {
 			transactions = new ArrayList<TransactionCP>();
 		}
-		return ok(boughtCoupons.render(session("name"), transactions));		
-	}	
+		return ok(boughtCoupons.render(session("name"), transactions));
+	}
 }

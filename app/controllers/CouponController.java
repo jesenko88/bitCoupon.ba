@@ -260,48 +260,27 @@ public class CouponController extends Controller {
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result
-	 *
 	 */
 	public static Result search(String q) {
-
 		List<Coupon> all = Coupon.find.where().ilike("name", "%" + q + "%")
 				.findList();
-
-		List<Company> allCompany = Company.find.where()
-				.ilike("name", "%" + q + "%").findList();
-
-		// Getting only activated coupons from search result.
+		//Getting only activated coupons from search result.
 		List<Coupon> coupons = new ArrayList<Coupon>();
-		for (Coupon coupon : all) {
-			if (coupon.status) {
+		for(Coupon coupon: all){
+			if(coupon.status){
 				coupons.add(coupon);
 			}
 		}
-
-		List<Company> companys = new ArrayList<Company>();
-		for (Company company : allCompany) {
-			companys.add(company);
+		
+		if (coupons.isEmpty()) {
+			flash("error", "No such coupon");
+			User u = User.find(session("name"));
+			return badRequest(searchFilter.render(Coupon.approvedCoupons()
+													, Category.all()));
 		}
-
-		if (coupons.isEmpty() || companys.isEmpty()) {
-			if (coupons.isEmpty() && (!companys.isEmpty())) {
-				return badRequest(searchFilter.render(Coupon.approvedCoupons(),
-						Category.all(), companys));
-			}
-			if ((!coupons.isEmpty()) && companys.isEmpty()) {
-				return badRequest(searchFilter.render(coupons, Category.all(),
-						Company.all()));
-			}
-			flash("error", "No resoult for this search");
-			return badRequest(searchFilter.render(Coupon.approvedCoupons(),
-					Category.all(), Company.all()));
-		}
-
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
-		return ok(searchFilter.render(coupons, Category.all(), companys));
-
+		return ok(searchFilter.render(coupons, Category.all()));
 	}
-
 	/**
 	 * Method for sorting coupon result. Can sort list of all coupons on index,
 	 * or just searched result of coupons.
@@ -365,11 +344,7 @@ public class CouponController extends Controller {
 		Date current = new Date();
 		Date expDate = Coupon.find(id).dateExpire;
 
-		if (expDate.after(current)) {
-			return true;
-		} else {
-			return false;
-		}
+		return current.after(expDate);
 	}
 
 	/**
@@ -381,41 +356,37 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
-		try {
-			if (couponForm.hasErrors()) {
-				Logger.debug("Error adding coupon");
-				return redirect("/couponPanel");
-			}
 
+		if (couponForm.hasErrors()) {
+			Logger.debug("Error adding coupon");
+			return redirect("/couponPanel");
+		}
+		try{
 			/* name */
 			String name = couponForm.bindFromRequest().field("name").value();
 			List<Category> categories = Category.all();
-
+			
 			if (name.length() < 4) {
 				Logger.info(session("name") + "entered a short coupon name");
 				flash("error", "Name must be 4 characters long");
-				return badRequest(couponPanel.render(session("name"),
-						categories));
-
+				return badRequest(couponPanel.render(session("name"), categories));
+				
 			}
 			if (name.length() > 70) {
 				Logger.info(session("name") + "entered a too long coupon name");
 				flash("error", "Name must be max 70 characters long");
-				return badRequest(couponPanel.render(session("name"),
-						categories));
+				return badRequest(couponPanel.render(session("name"), categories));
 			}
 			/* price */
 			String stringPrice = couponForm.bindFromRequest().field("price")
 					.value();
 			stringPrice = stringPrice.replace(",", ".");
 			double price = couponForm.bindFromRequest().get().price;
-
+			
 			if (price <= 0) {
-				Logger.info(session("name")
-						+ "entered a invalid price ( <= 0 )");
+				Logger.info(session("name") + "entered a invalid price ( <= 0 )");
 				flash("error", "Enter a valid price");
-				return badRequest(couponPanel.render(session("name"),
-						categories));
+				return badRequest(couponPanel.render(session("name"), categories));
 			}
 			
 			/* date */
@@ -424,14 +395,13 @@ public class CouponController extends Controller {
 			if (date.before(current)) {
 				Logger.info(session("name") + "entered a invalid date");
 				flash("error", "Enter a valid expiration date");
-				return badRequest(couponPanel.render(session("name"),
-						categories));
-
+				return badRequest(couponPanel.render(session("name"), categories));
+				
 			}
 			/* category */
 			Category category = null;
-			String newCategory = couponForm.bindFromRequest()
-					.field("newCategory").value();
+			String newCategory = couponForm.bindFromRequest().field("newCategory")
+					.value();
 			String categoryy = couponForm.bindFromRequest().field("category")
 					.value();
 			if (!categoryy.equals("New Category")) {
@@ -443,29 +413,30 @@ public class CouponController extends Controller {
 				}
 				category = Category.find(Category.createCategory(newCategory));
 			}
-			String description = couponForm.bindFromRequest()
-					.field("description").value();
-			String remark = couponForm.bindFromRequest().field("remark")
+			String description = couponForm.bindFromRequest().field("description")
 					.value();
-
+			String remark = couponForm.bindFromRequest().field("remark").value();
+			
 			int minOrder = Integer.valueOf(couponForm.bindFromRequest()
 					.field("minOrder").value());
-
-			int maxOrder = Integer.valueOf(couponForm.bindFromRequest()
-					.field("maxOrder").value());
+			
+			
+			int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
 			Date usage = couponForm.bindFromRequest().get().usage;
-
+			
+			
+			
 			boolean status;
-
+			
 			if (Sesija.adminCheck(ctx()) == true) {
 				status = true;
 			} else {
 				status = false;
 			}
-
-			// In case admin posted coupon.
+			
+			//In case admin posted coupon.
 			Company company = Company.find(session("name"));
-			if (company == null) {
+			if(company == null){
 				company = CompanyController.COMPANY_ADMIN;
 			}
 			/*
@@ -475,25 +446,26 @@ public class CouponController extends Controller {
 			String assetsPath = FileUpload.imageUpload("coupon_photos");
 			if (!StringUtils.isNullOrEmpty(assetsPath)) {
 				long id = Coupon.createCoupon(name, price, date, assetsPath,
-						category, description, remark, minOrder, maxOrder,
-						usage, company, status);
+						category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id);
 				flash("success", "Coupon successfuly created.");
 				return redirect("/couponPanel");
 			} else {
-				long id = Coupon.createCoupon(name, price, date,
-						FileUpload.DEFAULT_IMAGE, category, description,
-						remark, minOrder, maxOrder, usage, company, status);
+				//In case user didn't upload photo of coupon
+				//we add default photo of this category for this coupon.
 				flash("success", "Coupon created without image");
+				long id = Coupon.createCoupon(name, price, date,
+						category.picture,category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id
 						+ " without image");
 				return redirect("/couponPanel");
-			}
-		} catch (Exception e) {
+			}			
+		}catch(Exception e){
 			flash("error",
 					"Error occured while adding coupon. If you're admin please check logs.");
-			Logger.error("Error att addCoupon: " + e.getMessage());
+			Logger.error("Error att addCoupon: " + e.getMessage(), e);
 			return redirect("/couponPanel");
+
 		}
 	}
 
@@ -625,14 +597,13 @@ public class CouponController extends Controller {
 	 */
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
-		List<Category> categories = Category.all();
-		List<Company> companies = Company.all();
+		List<Category> categories = Category.all();		
 		//Handling exceptions.
-		if(coupons == null || categories == null || companies == null){
+		if(coupons == null || categories == null ){
 			flash("error", "Ooops, error has occured. Plealse try again later.");
 			return redirect("/");
 		}
-		return ok(searchFilter.render(coupons, categories, companies));
+		return ok(searchFilter.render(coupons, categories));
 
 	}
 

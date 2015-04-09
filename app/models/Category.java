@@ -24,6 +24,7 @@ public class Category extends Model{
 	@Required
 	public String name;
 	
+	//Default photo for this category coupons.
 	public String picture;	
 	
 	@OneToMany
