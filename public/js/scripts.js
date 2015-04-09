@@ -50,6 +50,14 @@ $('#dob').change(function(e){
 	}
 })
 
+$('#usage').change(function(e){
+	if(calculateUsageDate(new Date(this.value))){
+		$('#error1').show();
+	} else {
+		$('#error1').hide();
+	}
+})
+
 });
 
 function calculateDate(birth){
@@ -73,9 +81,6 @@ function calculateUsageDate(birth){
 	var age_day = today.getDate() - birth.getDate();
 	
 	var day = age + age_month + age_day;
-
-	if (day ) {
-	    age = parseInt(age) - 1;
-	}
-	return age >= 1;
+	
+	return day >= 1;
 }
