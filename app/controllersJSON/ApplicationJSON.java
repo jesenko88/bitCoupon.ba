@@ -1,11 +1,13 @@
 package controllersJSON;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import helpers.JSonHelper;
 import models.*;
 import play.Logger;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.*;
@@ -28,11 +30,15 @@ public class ApplicationJSON extends Controller {
 
 		if (mail.isEmpty() || password.length() < 6) {
 			Logger.info("Invalid login form, mail empty or short password");
-			return badRequest();
+			ObjectNode info = Json.newObject();
+			info.put("info", "Invalid login form, mail empty or short password");
+			return badRequest(info);
 		}
 		if (User.verifyLogin(mail, password) == true) {
 			User cc = User.getUser(mail);
 			Logger.info(cc.username + " logged in");
+			session("name", cc.username);
+			session("email", cc.email);
 			System.out.println("DEBUG ********** LOGIN ");
 			return ok(JSonHelper.couponListToJson(Coupon.approvedCoupons() ));
 		}
