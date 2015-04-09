@@ -186,19 +186,10 @@ public class PayPalController extends Controller {
 		try {	
 			payment.execute(apiContext, paymentExecution);			
 			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
-<<<<<<< HEAD
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
 			Coupon.updateCoupon(coupon);
 
-=======
-			coupon.maxOrder = coupon.maxOrder - quantity;
-			Coupon.updateCoupon(coupon);
-			System.out.println("DEBUGG*****MAXORDER*****" + coupon.maxOrder);
-			System.out.println("DEBUGG*****QUANTITY*****" + quantity);
-		
-					
->>>>>>> 9110157e4f8741c2a6c5419942f50d1d32a3d568
 		} catch (PayPalRESTException e) {
 			Logger.debug(e.getMessage());
 		}

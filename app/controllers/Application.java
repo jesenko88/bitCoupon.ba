@@ -78,51 +78,51 @@ public class Application extends Controller {
 	 */
 	public static Result login() {
 
-		if (request().accepts("application/json")) {
-			return JSonOperator.login();
-		}
-
-		Form<Login> login = new Form<Login>(Login.class);
-		if (login.hasGlobalErrors()) {
-			Logger.info("Login global error");
-			flash("error", "Login failed");
-
+		if (request().accepts("text/html")) {
+	
+			Form<Login> login = new Form<Login>(Login.class);
+			if (login.hasGlobalErrors()) {
+				Logger.info("Login global error");
+				flash("error", "Login failed");
+	
+				return badRequest(Loginpage.render(" "));
+			}
+	
+			String mail = login.bindFromRequest().get().email;
+			String password = login.bindFromRequest().get().password;
+	
+			if (mail.isEmpty() || password.length() < 6) {
+				Logger.info("Invalid login form, mail empty or short password");
+				flash("error", "Password incorrect");
+				return badRequest(Loginpage.render(" "));
+			}
+			if (User.verifyLogin(mail, password) == true) {
+				User cc = User.getUser(mail);
+				session().clear();
+				session("name", cc.username);
+				session("email", cc.email);
+				flash("success", "You are logged in as: " + mail);
+				Logger.info(cc.username + " logged in");
+				flash("success", "You are logged in as: " + mail);
+				return ok(index.render(Coupon.approvedCoupons(), Category.all()));
+	
+			}
+			if (Company.verifyLogin(mail, password) == true) {
+				Company cc = Company.findByEmail(mail);
+				session().clear();
+				session("name", cc.name);
+				session("email", cc.email);
+				flash("success", "You are logged in as: " + mail);
+				Logger.info(cc.name + " logged in");
+				return ok(indexC.render(cc, Coupon.approvedCoupons()));
+			}
+	
+			flash("error", "Invalid email or password");
+			Logger.info("User tried to login with invalid email or password");
 			return badRequest(Loginpage.render(" "));
 		}
-
-		String mail = login.bindFromRequest().get().email;
-		String password = login.bindFromRequest().get().password;
-
-		if (mail.isEmpty() || password.length() < 6) {
-			Logger.info("Invalid login form, mail empty or short password");
-			flash("error", "Password incorrect");
-			return badRequest(Loginpage.render(" "));
-		}
-		if (User.verifyLogin(mail, password) == true) {
-			User cc = User.getUser(mail);
-			session().clear();
-			session("name", cc.username);
-			session("email", cc.email);
-			flash("success", "You are logged in as: " + mail);
-			Logger.info(cc.username + " logged in");
-			flash("success", "You are logged in as: " + mail);
-			return ok(index.render(Coupon.approvedCoupons(), Category.all()));
-
-		}
-		if (Company.verifyLogin(mail, password) == true) {
-			Company cc = Company.findByEmail(mail);
-			session().clear();
-			session("name", cc.name);
-			session("email", cc.email);
-			flash("success", "You are logged in as: " + mail);
-			Logger.info(cc.name + " logged in");
-			return ok(indexC.render(cc, Coupon.approvedCoupons()));
-		}
-
-		flash("error", "Invalid email or password");
-		Logger.info("User tried to login with invalid email or password");
-		return badRequest(Loginpage.render(" "));
-
+		/* return JSon if request().accept() is not text/html */
+		return JSonOperator.login();
 	}
 
 	/**
