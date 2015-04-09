@@ -49,6 +49,7 @@
                      <textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>
                      <p></p>
                      <textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> "@coupon.remark" </textarea>
+                       <p></p>
                      <input type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" value="@coupon.minOrder"required/>
                      <input type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" value="@coupon.maxOrder"required/>
                      <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>
