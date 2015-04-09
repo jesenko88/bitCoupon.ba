@@ -41,6 +41,14 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#changePassButton').click(function(e) {
+		$('#changePassForm').show();
+})
+
+$('#changePassButton1').click(function(e) {
+		$('#changePassForm1').show();
+})
+
 });
 
 function calculateDate(birth){

@@ -58,8 +58,8 @@
                <div class="features_items">
                   <br>  <br>               
                   <div class="col-sm-6 col-sm-offset-1">
-                     <h5>Change Password</h5>
-                     <div class="signup-form">
+                  <button id="changePassButton1" type="submit" class="btn btn-fefault cart">Change password</button>
+                     <div id="changePassForm1" style="display:none;" class="signup-form">
                         <!--sign up form-->
                         <form action="@routes.SuperUserController.changePass(superUser.email)" method ="POST" >
                            <input type="password" name="password" id="password" placeholder="Old password" value="" />
@@ -110,8 +110,8 @@
             <div class="features_items">
                <br>  <br>               
                <div class="col-sm-6 col-sm-offset-1">
-                  <h5>Change Password</h5>
-                  <div class="signup-form">
+          <button id="changePassButton" type="submit" class="btn btn-fefault cart">Change password</button>
+                  <div id="changePassForm" style="display:none;" class="signup-form">
                      <!--sign up form-->
                      <form action="@routes.SuperUserController.changePass(superUser.email)" method ="POST" >
                         <input type="password" name="password" id="password" placeholder="Old password" value="" />

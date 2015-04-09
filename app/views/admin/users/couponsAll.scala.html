@@ -87,7 +87,11 @@
    
    <div id="coupons" class="col-sm-10">
       <div class="review-payment">
-         <h2>List of coupons waiting to be approved</h2>
+      @if(Coupon.nonApprovedCoupons().size() > 0) {
+         <h2><i class="newbadge">@Coupon.nonApprovedCoupons().size()</i> List of coupons waiting to be approved</h2>
+           } else {
+           <h2> List of coupons waiting to be approved</h2>
+           }         
       </div>
       <div class="table-responsive cart_info">
          <table class="table table-condensed">
