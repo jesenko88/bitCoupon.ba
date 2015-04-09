@@ -206,14 +206,12 @@ public class CouponController extends Controller {
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
 			coupon.picture = assetsPath;
 		}
-		boolean status;
 
-		if (Sesija.adminCheck(ctx()) == true) {
-			status = true;
+		if (Sesija.adminCheck(ctx())) {
+			coupon.status = true;
 		} else {
-			status = false;
+			coupon.status = false;
 		}
-		coupon.status = status;
 		
 		Coupon.updateCoupon(coupon);
 		Logger.info(session("name") + " updated coupon: " + coupon.id);
@@ -412,21 +410,17 @@ public class CouponController extends Controller {
 		int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
 		Date usage = couponForm.bindFromRequest().get().usage;
 
-		
-
-		boolean status;
-
-		if (Sesija.adminCheck(ctx()) == true) {
-			status = true;
-		} else {
-			status = false;
-		}
-
 		//In case admin posted coupon.
 		Company company = Company.find(session("name"));
 		if(company == null){
 			company = CompanyController.COMPANY_ADMIN;
 		}
+		
+		boolean status = false;
+		
+		if (Sesija.adminCheck(ctx()))
+			status = true;
+		
 		/*
 		 * Managing file upload.
 		 */

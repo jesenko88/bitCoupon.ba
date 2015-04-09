@@ -35,6 +35,8 @@ public class Company  extends SuperUser{
 	
 	public String contact;
 	
+	public boolean status;
+	
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
@@ -59,11 +61,14 @@ public class Company  extends SuperUser{
 		this.created = created;
 		this.logo = logo;
 		this.contact = contact;	
+		this.status = false;
+
 	}
 	
-	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
+	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact, boolean status){
 		Date now = new Date();
 		Company c = new Company(name, email, password, now, logo, adress, city, contact);
+		c.status = status;
 		c.save();
 		return c.id;
 	
@@ -159,5 +164,15 @@ public class Company  extends SuperUser{
 	public static boolean exists(String name) {
 		return getFind().where().eq("name", name).findUnique() != null;
 	}
+	
+	public static List<Company> approvedCompanies() {
+		return find.where().eq("status", true)
+				.findList();
+	}
+	
+	public static List<Company> nonApprovedCompanies() {
+		return find.where().eq("status", false).findList();
+	}
+	 
 
 }

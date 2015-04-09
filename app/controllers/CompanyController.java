@@ -71,7 +71,7 @@ public class CompanyController extends Controller {
 
 		else if (Company.verifyRegistration(name, mail) == true) {
 
-			long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact);
+			long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact, false);
 			String verificationEmail = EmailVerification.addNewRecord(id);
 
 			MailHelper.send(mail,
@@ -139,7 +139,14 @@ public class CompanyController extends Controller {
 
 	}
 
-
+	public static Result approveCompany(long id){
+		Company c = Company.findById(id);
+		c.status = true;
+		c.save();
+		flash("succes", "Company " +c.name +" has been approved");
+		return ok(couponsAll.render( Coupon.approvedCoupons(), Coupon.nonApprovedCoupons()));
+	}
+	
 	/**
 	 * Updates the user from the Admin control.
 	 * 
@@ -242,5 +249,4 @@ public class CompanyController extends Controller {
 
 	}
 
-	
 }

@@ -108,12 +108,19 @@ public class Application extends Controller {
 		}
 		if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);
+			if(cc.status == true){
 			session().clear();
 			session("name", cc.name);
 			session("email", cc.email);	
 			flash("success", "You are logged in as: " + mail);
 			Logger.info(cc.name + " logged in");
 			return ok(indexC.render(cc, Coupon.approvedCoupons()));
+			}
+			else {
+				flash("error", "You are not approved yet");
+				Logger.info("Non approved user tried to login");
+				return badRequest(Loginpage.render(" "));
+			}
 		}
 		
 		flash("error", "Invalid email or password");

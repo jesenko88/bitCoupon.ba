@@ -23,6 +23,15 @@ $(document).ready(function() {
 			$('#inputEmailForm').show();
 	})
 	
+	$('#changePassword').click(function(e) {
+			$('#passFormUser').show();
+	})
+	
+	
+	$('#changePassword1').click(function(e) {
+			$('#passFormCompany').show();
+	})
+	
 	$('#dob').change(function(e){
 		if(!calculateDate(new Date(this.value))){
 			$('#error').show();
@@ -41,10 +50,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	
-	
 });
-
 function calculateDate(birth){
 	var today = new Date();
 
@@ -57,3 +63,4 @@ function calculateDate(birth){
 	}
 	return age >= 18;
 }
+

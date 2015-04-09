@@ -170,7 +170,7 @@ public class Coupon extends Model {
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage, seller);
-		newCoupon.status = true;
+		newCoupon.status = status;
 		newCoupon.save();
 		return newCoupon.id;
 	}
@@ -532,25 +532,13 @@ public class Coupon extends Model {
 	
 	
 	public static List<Coupon> approvedCoupons() {
-		List<Coupon> all = find.all();
-		List<Coupon> approved = new ArrayList<Coupon>();
-		for(Coupon coupon: all){
-			if(coupon.status){
-				approved.add(coupon);
-			}
-		}
-		return approved;
+		return find.where().eq("status", true)
+				.findList();
 	}
 	
 	public static List<Coupon> nonApprovedCoupons() {
-		List<Coupon> all = find.all();
-		List<Coupon> nonApproved = new ArrayList<Coupon>();
-		for(Coupon coupon: all){
-			if(!coupon.status){
-				nonApproved.add(coupon);
-			}
-		}
-		return nonApproved;
+		return find.where().eq("status", false)
+				.findList();
 	}
 	
 }

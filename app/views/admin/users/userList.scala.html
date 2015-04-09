@@ -1,4 +1,4 @@
-@(users: List[SuperUser])
+@(users: List[SuperUser])(company: Company)
 
 @main("User List") {
 	
@@ -62,7 +62,7 @@
       
       <div class="col-sm-10">
          <div class="review-payment">
-            <h2>List of Companies</h2>
+            <h2>List of active Companies</h2>
          </div>
          <div class="table-responsive cart_info">
             <table class="table table-condensed">
@@ -78,24 +78,59 @@
                   </tr>
                </thead>
                <tbody>
-                  @for(user <- users){
-                 	@if(user.isCompany()){
+                  @for(company <- Company.approvedCompanies()){
+                 	
 	                  <tr>
 	                  
-	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().name</a> </td>
-	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().email</a> </td>
-	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().created</a> </td>
-	                     <td> <a href="@routes.CompanyController.showCompanyProfile(user.getCompany().id)">@user.getCompany().updated</a> </td>
-	                     <td> <a href="@routes.SuperUserController.adminEditUserView(user.email)" class="btn btn-default" >Edit</a></td>
-	                     <td> <a href="@routes.CompanyController.deleteCompany(user.id)" onclick="return confirm('Are you sure you want to delete this company?');"class="btn btn-danger">Delete</a></td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.name</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.email</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.created</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.updated</a> </td>
+	                     <td> <a href="@routes.SuperUserController.adminEditUserView(company.email)" class="btn btn-default" >Edit</a></td>
+	                     <td> <a href="@routes.CompanyController.deleteCompany(company.id)" onclick="return confirm('Are you sure you want to delete this company?');"class="btn btn-danger">Delete</a></td>	                  
 	                  </tr>
-                  	}
+                  	
                   }
                </tbody>
             </table>
          </div>
       </div>
-   </div>
+      <div class="col-sm-10">
+         <div class="review-payment">
+            <h2>List of companies waiting to be approved</h2>
+         </div>
+         <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+               <thead>
+                  <tr class="cart_menu">
+                     <td class="image">Name</td>
+                     <td class="description">Email</td>
+                     <td class="price">Registered</td>
+                     <td class="quantity">Updated</td>
+                     <td class="total">Edit Company</td>
+                     <td class="total">Delete Company</td>
+                     <td></td>
+                  </tr>
+               </thead>
+               <tbody>
+                  @for(company <- Company.nonApprovedCompanies()){
+	                  <tr>
+	                  
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.name</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.email</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.created</a> </td>
+	                     <td> <a href="@routes.CompanyController.showCompanyProfile(company.id)">@company.updated</a> </td>
+	                     <td> <a href="@routes.SuperUserController.adminEditUserView(company.email)" class="btn btn-default" >Edit</a></td>
+	                     <td> <a href="@routes.CompanyController.deleteCompany(company.id)" onclick="return confirm('Are you sure you want to delete this company?');"class="btn btn-danger">Delete</a></td>
+	                     <td> <a href="@routes.CompanyController.approveCompany(company.id)" class="btn btn-success" >Approve</a></td>
+	                  
+	                  </tr>
+                  	
+                  }
+               </tbody>
+            </table>
+         </div>
+      </div>
 </div>
 </div>
 </section><!--/form-->
