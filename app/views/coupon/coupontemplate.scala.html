@@ -65,17 +65,20 @@
                <span>
                <span> @coupon.getPriceString() KM</span>
                @if(Sesija.adminCheck(ctx()) == false || Sesija.companyCheck(ctx()) == false) {
-               @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder >= 0) {
+               @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
                <label>Enter the amount of coupons </label>
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
                   <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
-                  <input type="number" step="1" id="quantity" name="quantity" min="1" placeholder="0" required/>
+                  <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
                   <button type="submit" >
                   <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
                   </button>
                </form>
                }
-               @if(CouponController.isExpired(coupon.id)==true || coupon.maxOrder < 0) {
+                @if(coupon.maxOrder <= 0) {
+               <label><h3>Offer succeded </h3></label>
+               }
+               @if(CouponController.isExpired(coupon.id)==true) {
                <label>Coupon has expired </label>
                }
                }
