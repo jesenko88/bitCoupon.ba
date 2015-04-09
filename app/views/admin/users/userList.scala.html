@@ -2,20 +2,23 @@
 
 @main("User List") {
 	
-<div class="header-middle">
-   <!--header-middle-->
-   <div class="container">
-      <div class="row">
-         <div class="col-sm-4">
-            <div class="logo pull-left">
-               <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
             </div>
          </div>
       </div>
    </div>
-  	@_adminNavbar()
-   </header>
-   </section>
+   @_adminNavbar()
+</header>
    <div class='container'>
       <div class="logo pull-right">
          <div class="search_box">

@@ -263,7 +263,10 @@ public class UserController extends Controller {
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		}
 		if (currentUser.id == id || Sesija.adminCheck(ctx())) {
-			User.delete(id);
+			User u = User.find(id);			
+			Subscriber.unsubscribe(u);			
+			User.delete(u.id);			
+			
 			if (currentUser.id == id) {
 				session().clear();
 				return redirect("/signup ");

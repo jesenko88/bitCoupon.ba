@@ -230,15 +230,10 @@ public class CouponController extends Controller {
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result
-	 *
 	 */
 	public static Result search(String q) {
 		List<Coupon> all = Coupon.find.where().ilike("name", "%" + q + "%")
 				.findList();
-		
-		List<Company> allCompany = Company.find.where().ilike("name", "%" + q + "%")
-				.findList();
-		
 		//Getting only activated coupons from search result.
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		for(Coupon coupon: all){
@@ -247,30 +242,15 @@ public class CouponController extends Controller {
 			}
 		}
 		
-		List<Company> companys = new ArrayList<Company>();
-		for(Company company: allCompany){
-			companys.add(company);		
-	}
-	
-		
-		if (coupons.isEmpty() || companys.isEmpty() ) {
-			if(coupons.isEmpty() && (!companys.isEmpty())){
-				return badRequest(searchFilter.render(Coupon.approvedCoupons()
-						, Category.all(), companys));
-			}
-			if((!coupons.isEmpty()) && companys.isEmpty()){
-				return badRequest(searchFilter.render(coupons
-						, Category.all(), Company.all()));
-			}
-			flash("error", "No resoult for this search");
+		if (coupons.isEmpty()) {
+			flash("error", "No such coupon");
+			User u = User.find(session("name"));
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
-													, Category.all(), Company.all()));
+													, Category.all()));
 		}
-		
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
-		return ok(searchFilter.render(coupons, Category.all(), companys));
+		return ok(searchFilter.render(coupons, Category.all()));
 	}
-
 	/**
 	 * Method for sorting coupon result. Can sort list of all coupons on index,
 	 * or just searched result of coupons.
@@ -327,11 +307,7 @@ public class CouponController extends Controller {
 		Date current = new Date();
 		Date expDate = Coupon.find(id).dateExpire;
 
-		if (expDate.after(current)) {
-			return true;
-		} else {
-			return false;
-		}
+		return current.after(expDate);
 	}
 
 	/**
@@ -409,6 +385,7 @@ public class CouponController extends Controller {
 		int minOrder = Integer.valueOf(couponForm.bindFromRequest()
 				.field("minOrder").value());
 		
+		
 		int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
 		Date usage = couponForm.bindFromRequest().get().usage;
 
@@ -437,9 +414,11 @@ public class CouponController extends Controller {
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		} else {
+			//In case user didn't upload photo of coupon
+			//we add default photo of this category for this coupon.
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date,
-					FileUpload.DEFAULT_IMAGE,category, description, remark, minOrder, maxOrder, usage, company, status);
+					category.picture,category, description, remark, minOrder, maxOrder, usage, company, status);
 			Logger.info(session("name") + " created coupon " + id
 					+ " without image");
 			return redirect("/couponPanel");
@@ -566,7 +545,7 @@ public class CouponController extends Controller {
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
 		List<Category> categorys = Category.all();
-		return ok(searchFilter.render(coupons, categorys, Company.all()));
+		return ok(searchFilter.render(coupons, categorys));
 	}
 	
 	/**

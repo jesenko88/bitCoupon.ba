@@ -53,7 +53,7 @@ public class CompanyController extends Controller {
 		String adress = companyForm.bindFromRequest().get().adress;
 		String city = companyForm.bindFromRequest().get().city;
 		String contact = companyForm.bindFromRequest().get().contact;
-
+		
 
 		if (name.length() < 4 || name.equals("Name")) {
 			flash("error", "Name must be at least 4 chatacters");
@@ -242,5 +242,41 @@ public class CompanyController extends Controller {
 
 	}
 
+	
+	public static Result searchCompanyView() {
+		List<Company> companys = Company.all();
+		return ok(searchCompany.render(companys));
+	}
+	
+	
+	/**
+	 * Search method for coupons. If search is unsuccessful a flash message is
+	 * sent
+	 * 
+	 * @param string
+	 * @return renders index with matching coupons //TODO render a different
+	 *         view for search result
+	 *
+	 */
+	public static Result searchCompany(String qc) {
+		
+		List<Company> allCompany = Company.find.where().ilike("name", "%" + qc + "%")
+				.findList();
+		
+		//Getting only activated coupons from search result.
+		
+		List<Company> companys = new ArrayList<Company>();
+		for(Company company: allCompany){
+			companys.add(company);		
+		}
+	
+		if((companys.isEmpty())){
+			flash("error", "No resoult for this search");
+			return badRequest(searchCompany.render(companys));
+		}
+
+		Logger.info(session("name") + " searched for: \"" + qc + "\"");
+		return ok(searchCompany.render(companys));
+	}
 	
 }

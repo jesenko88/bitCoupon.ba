@@ -3,78 +3,51 @@
 @import helper._
 
 @main("Welcome to bitCoupon") {
-	
-	
-@*	<h2>@message @name</h2>
-    <h4>Home: </h4> *@
-<body>
-	<header id="header"><!--header-->
-	<div class="header-middle"><!--header-middle-->
-		<div class="container">
-			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-			<div class="logo pull-right">
-				<div class="search_box">
-					<form action="/search" method="GET">
-							<input id="q" name="q" type="text" placeholder="Search" />
-					</form>
-				</div>
-			</div>	
-				</div>	
-				<div class="row">
-			</div>
-		</div>
-	</div>	
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
 </header>
-		
-	</section>
-	
-	
-
-
-			<div class="container">
-					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">@categoryName</h2>
-				
-				
-			<div class="containter" id="categories">
-				<ul>
-				<div class="container">
-				
-	        	@for(category <- Category.all()){
-	        		
-	        		<a href="@routes.CategoryController.categoryView(category.name)">@category.name</a>
-	   
-	       		}
-	       		</ul>
-        </div>
-			
-			</div>	
-				
-			<div class="container">		
-				@for(coupon <- coupons){
-					
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-									<img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-										<h2>Only @coupon.getPriceString() KM</h2>
-										<p>@coupon.name</p>
-										<a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>Only @coupon.getPriceString() KM</h2>
-											<p>@coupon.name</p>
-											<a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-			}			
-			</div>	
-		</ul>
-</body>
+<div class="container">
+<div class="features_items">
+<!--features_items-->
+<h2 class="title text-center">@categoryName</h2>
+<div class="containter" id="categories">
+   </div>
+</div>
+<div class="container">
+   @for(coupon <- coupons){
+   <div class="col-sm-4">
+      <div class="product-image-wrapper">
+         <div class="single-products">
+            <div class="productinfo text-center">
+               <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+               <h2>Only @coupon.getPriceString() KM</h2>
+               <p>@coupon.name</p>
+               <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
+            </div>
+            <div class="product-overlay">
+               <div class="overlay-content">
+                  <h2>Only @coupon.getPriceString() KM</h2>
+                  <p>@coupon.name</p>
+                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   }			
+</div>
 }
 

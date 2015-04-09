@@ -1,7 +1,6 @@
 @(superUser: SuperUser)
 @import helper._
 @main("User Panel") {
-<body>
    <header id="header">
       <!--header-->
       <div class="header-middle">
@@ -99,16 +98,15 @@
    <div class="container">
       <div class="features_items">
          <!--features_items-->
-         <h2 class="title text-center"> Profile page here </h2>
-         <div class="col-sm-6 col-sm-offset-1">
-         </div>
-      </div>
+         <h2 class="title text-center"> Profile page</h2>
+         
+      
       <div class="userInforamtion">
          <div class="profilePicture">
             @if(superUser.getCompany().logo == null){
-            <img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+            <img style="width: 400px; height: 400px" src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
             }else{
-            <img src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
+            <img style="width: 400px; height: 400px" src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
             }
          </div>
       </div>
@@ -126,8 +124,4 @@
       </div>
    </div>
    }
-   <br>
-   <br>
-   <br>
-</body>
 }

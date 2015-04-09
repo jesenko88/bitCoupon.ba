@@ -1,22 +1,18 @@
 @(username: String)(coupon: Coupon)(categories: List[Category])(photos : List[Photo])
 @import helper._
 @main("Coupon Panel") {
-<body>
-   <header id="header">
-      <!--header-->
-      <div class="header-middle">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-            <div class="logo pull-right">
-               <div class="search_box">
-                  <form action="/search" method="GET">
-                     <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>
-               </div>
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
             </div>
-         </div>
-         <div class="row">
          </div>
       </div>
       </div>	
@@ -66,50 +62,32 @@
                   </form>
                </div>
             </div>
-           
-            <div class="col-sm-5">
-               <h4>Add photos to coupon gallery </h4>
-               <br>
-               <div class="signup-form">
-                  <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
-                     <input name="photo" type="file" multiple="multiple" max-uploads=3/>
-                     <button type="submit" class="btn btn-default">Submit</button>
-                  </form>
-               </div>
+         </div>
+         <div class="col-sm-5">
+            <h4>Add photos to coupon gallery </h4>
+            <br>
+            <div class="signup-form">
+               <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
+                  <input name="photo" type="file" multiple="multiple" max-uploads=3/>
+                  <button type="submit" class="btn btn-default">Submit</button>
+               </form>
             </div>
-            <!-- GALERY -->
-             <p>If you cannot see images, please refresh page. </p>
-	            <div class="col-sm-5">	           
-       	 			
-       	
-		           @if(Photo.photosByCoupon(coupon) != null){
-			          @for(photo <- photos){
-				        <form method="POST" action="@routes.CouponController.deletePhoto(photo.id)">
-				          
-				           <div class="uploadPicture">
-				            	<img alt="140x140" src="@routes.Assets.at(photo.path)" class="img-thumbnail" />
-				           	
-				            	<button type="submit"  class="btn btn-danger btn-sm">DELETE</button>
-				           </div>
-				       </form>
-				          }
-		           }
-		          	           	            
-	            </div>
-       	
-       <!--  Gallery  -->            
+         </div>
+         <!-- GALERY -->
+         <p>If you cannot see images, please refresh page. </p>
+         <div class="col-sm-5">
+            @if(Photo.photosByCoupon(coupon) != null){
+            @for(photo <- photos){
+            <form method="POST" action="@routes.CouponController.deletePhoto(photo.id)">
+               <div class="uploadPicture">
+                  <img alt="140x140" src="@routes.Assets.at(photo.path)" class="img-thumbnail" />
+                  <button type="submit"  class="btn btn-danger btn-sm">DELETE</button>
+               </div>
+            </form>
+            }
+            }
          </div>
       </div>
-      <!--/update Coupon form-->
    </div>
-   </div>
-   </div>
-   </section><!--/form-->
-   </div>
-   </div>
-   </div>
-   <p></p>
-   <p></p>
-   <p></p>
-</body>
+</div>
 }

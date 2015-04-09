@@ -15,19 +15,15 @@ import play.Application;
 import play.GlobalSettings;
 
 public class Global extends GlobalSettings {
-	String nameCoupon1 = "Dvije noći za dvoje u Hotelu Sunce Neum";
+	String nameCoupon1 = "Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
 	String remarkCoupon1 = "Jedna osoba može kupiti maksimalno četiri kupona za ovu ponudu. Kuponi se mogu spajati.";
 	String adress = "Zmaja od Bosne 33.";
 	String city = "Sarajevo";
 	String contact ="033/333-333";
-
-
 	String descriptionCoupon1 = "Poželjeli ste da udahnete miris mora i da na bar dva dana pobjegnete od svakodnevnice, da se opustite uz duge šetnje plažom? Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
 
 	String nameCoupon2 = "Mesec dana korištenja teretane + kardio program ! Posljednje pripreme pred ljeto!";
-
 	String remarkCoupon2 = "Ponudom se podrazumeva: Mjesec dana korištenja teretane + kardio program. Ponudom se podrazumijeva 12 termina. Ponuda je SAMO za NOVE članove. Možete kupiti najviše 1 kupon za sebe i više za druge – nove članove.";
-
 	String descriptionCoupon2 = "Još uvek nije kasno da se pokrenete i da svoje zdravlje shvatite kao najprimarniju stvar o kojoj treba da vodite računa.";
 
 	String nameCoupon3 = "Ručak ili večera za dvoje u prekrasnom restoranu hotela Brass ";
@@ -38,9 +34,37 @@ public class Global extends GlobalSettings {
 			+ "Upravo ovakav ambijent začinit će i uljepšati Vašu romantičnu večeru.";
 
 
+
+	String nameCoupon4 = "Nezaboravno putovanje u najljepše gradove Mediterana!";
+	String remarkCoupon4 = "Platite samo 355 KM za šestodnevno putovanje u italijansku Ligurijsku rivijeru i francusku Azurnu obalu";
+	String adress4 = "Grbavicka 33";
+	String city4 = "Sarajevo";
+	String contact4 ="033/444-444";
+	String descriptionCoupon4 = "Ovo putovanje objedinjuje italijansku Ligurijsku rivijeru i francusku Azurnu obalu, fantastične predjele i nevjerovatno lijepe gradove... Pružamo Vam priliku da uživate u mirisima lovora, maslina, mora, jasmina i parfema u vazduhu...";
+
+	String pic = "images/home/No-Logo.jpg";
+
+	String nameCoupon5 = "Uživajte u vrhunskim delicijama Pivnice Sarajevo uz ručak ili večeru za dvije osobe!";
+	String remarkCoupon5 = "Super cijena za ručak ili večeru za dvije osobe + dva pića po izboru u Pivnici Sarajevo";
+	String descriptionCoupon5 = "Ove sedmice iznenadite voljenu osobu, prijatelja ili prijateljicu, ručkom ili večerom u Pivnici Sarajevo. Odmorite se od svakodnevnog kuhanja i pripremanja istih jela i priuštite sebi i dragoj osobi uživanje u ukusnim delicijama i predivnom ambijentu Pivnice!";
+
+	String nameCoupon6 = "Rafting avantura na Neretvi uz licencirane skipere i čak 57% popusta!";
+	String remarkCoupon6 = "Platite 34 KM umjesto 80 KM za potpuno organiziranu turu raftinga na jednoj od najljepših rijeka svijeta";
+	String descriptionCoupon6 = "Rafting je uzbudljiva pustolovina za one mirne, a pogotovo za one željne dobre doze adrenalina. Na raftingu ćete bolje upoznati svoje kolege ili prijatelje, u drugačijem okruženju i neobičnim situacijama, a upoznat ćete i prirodne ljepote Neretve za koje još do sada možda i niste znali.";
 	
+	String nameCoupon7= "Proslavite praznik rada u Beču i odmorite se po Super cijeni!";
+	String remarkCoupon7 = "Platite samo 219 KM organizovano putovanje u Beč za Prvi maj!";
+	String descriptionCoupon7 ="Beč je vijekovima bio prijestolnica Habsburške monarhije, a sada je glavni grad bogate Austrije. Beč je grad slavnih koncertnih dvorana i vrhunskih koncerata, bogatih muzeja, opere i pozorišta, što ga uz neizostavnu kupovinu u Mariahlifer strasse, čini veoma primamljivim za turiste. ";
 
-
+	String nameCoupon8= "Trening plivanja i/ili vaterpola za Vaše mališane u PVK Dabar!!";
+	String remarkCoupon8 = "Mjesečnu članarinu za trening plivanja i/ili vaterpola (za djecu 8-15 godina) platite samo 25 KM umjesto 50 KM";
+	String descriptionCoupon8 = "Plivanje se smatra jednim od najzdravijih sportova jer jača mišiće cijelog tijela, podiže vitalnost i jača kardiovaskularni sistem. Za djecu je plivanje posebno bitno jer potiče razvoj djeteta, jača pluća i srce, poboljšava imunitet te razvija osjećaj koordinacije pokreta i samokontrole.";
+			
+	String nameCoupon9= "Odmorite se od duge zime i uživajte u toplim danima na Jadranu!" ;
+	String remarkCoupon9 = "Platite samo 239 KM dva noćenja na bazi polupansiona za dvije osobe u hotelu Plaža, Drašnice";
+	String descriptionCoupon9 = "Sunčano vrijeme i idealna temperatura zraka i mora, razlog su zbog kojeg mnogi svoj godišnji odmor planiraju i prije ljeta. Ako ne volite ljetnu gužvu i potreban Vam je pravi odmor od duge zime, preporučujemo Vam da iskoristite ovu fantastičnu ponudu i s voljenom osobom odete na sedmodnevni proljetni odmor u hotel Plaža u Drašnicama.";
+	
+			
 	@Override
 	public void onStart(Application app) {
 		
@@ -51,12 +75,12 @@ public class Global extends GlobalSettings {
 		Company bitCamp = null;
 		
 		if ( !Company.exists("Admin")){
-			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), "/", adress, city, contact);
+			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), pic, adress, city, contact);
 			bitCamp.save();
 		}
 		
 		if ( !Company.exists("BitCamp")){
-			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), "/", adress, city, contact);
+			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), pic, adress, city, contact);
 			bitCamp.save();
 		}
 		
@@ -105,7 +129,115 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon3, 2, 5 ,new Date(), bitCamp, true);
+		}
+		
+		if (Coupon.checkByName(nameCoupon4) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "05/05/2020";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Coupon.createCoupon(
+					nameCoupon4,
+					350,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 4 +".jpg",
+					travel, descriptionCoupon4,
+					remarkCoupon4, 5, 30 ,new Date(),bitCamp, true);
+		}
+		
+		if (Coupon.checkByName(nameCoupon5) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "05/05/2020";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Coupon.createCoupon(
+					nameCoupon5,
+					17,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
+					travel, descriptionCoupon5,
+					remarkCoupon5, 5, 30 ,new Date(),bitCamp, true);
+		}
+		
+		if (Coupon.checkByName(nameCoupon6) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "05/05/2020";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Coupon.createCoupon(
+					nameCoupon6,
+					34,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 6 +".jpg",
+					travel, descriptionCoupon6,
+					remarkCoupon6, 5, 30 ,new Date(), bitCamp, true);
+		}
+		
+		if (Coupon.checkByName(nameCoupon7) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "05/05/2020";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Coupon.createCoupon(
+					nameCoupon7,
+					219,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 7 +".jpg",
+					travel, descriptionCoupon7,
+					remarkCoupon7, 5, 30 ,new Date(), bitCamp, true);
+		}
+		
+		if (Coupon.checkByName(nameCoupon8) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "05/05/2020";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Coupon.createCoupon(
+					nameCoupon8,
+					25,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 8 +".jpg",
+					sport, descriptionCoupon8,
+					remarkCoupon8, 5, 30 ,new Date(), bitCamp, true);
+		}
+		
+		if (Coupon.checkByName(nameCoupon9) == false) {
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			String dateString = "05/05/2020";
+			Date date = null;
+			try {
+				date = df.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Coupon.createCoupon(
+					nameCoupon9,
+					239,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 9 +".jpg",
+					travel, descriptionCoupon9,
+					remarkCoupon9, 5, 30 ,new Date(), bitCamp, true);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {
