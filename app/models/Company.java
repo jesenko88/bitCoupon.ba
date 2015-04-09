@@ -57,11 +57,12 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = logo;
+		this.logo = "images/home/No-Logo.jpg";
 		this.contact = contact;	
 	}
 	
 	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
+		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
 		Company c = new Company(name, email, password, now, logo, adress, city, contact);
 		c.save();

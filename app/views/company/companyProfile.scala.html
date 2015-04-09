@@ -22,18 +22,29 @@
 </header>
 <div class="container">
    <h2 class="title text-center">Company name: @company.name</h2>
-   <div class="col-sm-12 spaceDiv_bottom ">
-      <div class="col-sm-4">
-         <div class="productinfo">
-            <img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
+   <div class="features_items">
+         <!--features_items-->
+         
+      
+      <div class="userInforamtion">
+         <div class="profilePicture">
+                        <img style="width: 400px; height: 400px"src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
+
          </div>
       </div>
-      <div class="col-sm-6 spaceDiv_left">
-         <div>
-            <p>Neke informacije o kompaniji koje treba ubaciti</p>
-         </div>
+      <div class="rightBox">
+         <ul>
+            <li>Name: @company.name</li>
+            <li>Email: @company.email</li>
+            <li>Date create: @company.created</li>
+            <li>Company adress: @company.adress</li>
+            <li>City:@company.city</li>
+            <li>Company contact: @company.contact</li>
+            <li>Company id: @company.id</li>
+         </ul>
       </div>
    </div>
+   
    <h2 class="title text-center">Company coupons:</h2>
    @for(coupon <- coupons){
    <div class="col-sm-4">

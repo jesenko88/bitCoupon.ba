@@ -43,7 +43,8 @@
             <div class="product-image-wrapper">
                <div class="single-products">
                   <div class="productinfo text-center">
-                     <img src="@routes.Assets.at("images/home/No-Logo.jpg")" alt="" />
+                              <img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
+                  
                      <h2>@company.name</h2>
                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
                   </div>
