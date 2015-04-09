@@ -96,8 +96,12 @@ public class SuperUserController extends Controller {
 			flash("error", "No such user or company");
 			return badRequest(userList.render( SuperUser.allSuperUsers()));
 		}
-
-		return ok(userList.render(merged));
+		/* content negotiation */
+		if (request().accepts("text/html")) {
+			return ok(userList.render(merged));
+		} else {
+			return ok(JSonHelper.superUserListToJson(merged));
+		}
 	}
 	
 	

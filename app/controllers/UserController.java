@@ -11,16 +11,23 @@ import helpers.SuperUserFilter;
 
 import java.util.List;
 
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import helpers.*;
 import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
 import views.html.coupon.*;
 import models.*;
+import controllersJSON.*;
 
 
 
@@ -42,63 +49,68 @@ public class UserController extends Controller {
 	 *         repeatedly if any error occurs
 	 */
 	public static Result register() {
+		
+		if (request().accepts("text/html")){
 
-		if (userForm.hasErrors()) {
-			return redirect("/signup ");
-		}
-
-		String username = userForm.bindFromRequest().get().username;
-		String surname = userForm.bindFromRequest().get().surname;
-		Date dob = userForm.bindFromRequest().get().dob;
-		String gender = userForm.bindFromRequest().get().gender;
-		String adress = userForm.bindFromRequest().get().adress;
-		String city = userForm.bindFromRequest().get().city;
-		String mail = userForm.bindFromRequest().get().email;
-		String password = userForm.bindFromRequest().get().password;
-		String hashPass = HashHelper.createPassword(password);
-		String confPass = userForm.bindFromRequest().field("confirmPassword")
-				.value();
-
-		if (username.length() < 4 || username.equals("Username")) {
-			flash("error", "Usernam must be at least 4 chatacters");
-			return badRequest(signup.render());
-		} else if (mail.equals("Email")) {
-			flash("error", "Email is required for registration !");
-			return badRequest(signup.render());
-		} else if (password.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render());
-		} else if (!password.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render());
-		}
-
-		/*
-		 * Creating new user if the username or mail is free for use, and there
-		 * are no errors
-		 */
-		else if (User.verifyRegistration(username, mail) == true) {
+			if (userForm.hasErrors()) {
+				return redirect("/signup ");
+			}
+	
+			String username = userForm.bindFromRequest().get().username;
+			String surname = userForm.bindFromRequest().get().surname;
+			Date dob = userForm.bindFromRequest().get().dob;
+			String gender = userForm.bindFromRequest().get().gender;
+			String adress = userForm.bindFromRequest().get().adress;
+			String city = userForm.bindFromRequest().get().city;
+			String mail = userForm.bindFromRequest().get().email;
+			String password = userForm.bindFromRequest().get().password;
+			String hashPass = HashHelper.createPassword(password);
+			String confPass = userForm.bindFromRequest().field("confirmPassword")
+					.value();
+	
+			if (username.length() < 4 || username.equals("Username")) {
+				flash("error", "Usernam must be at least 4 chatacters");
+				return badRequest(signup.render());
+			} else if (mail.equals("Email")) {
+				flash("error", "Email is required for registration !");
+				return badRequest(signup.render());
+			} else if (password.length() < 6) {
+				flash("error", "Password must be at least 6 characters!");
+				return badRequest(signup.render());
+			} else if (!password.equals(confPass)) {
+				flash("error", "Passwords don't match, try again ");
+				return badRequest(signup.render());
+			}
+	
 			/*
-			 * session().clear(); session("name", username);
+			 * Creating new user if the username or mail is free for use, and there
+			 * are no errors
 			 */
-
-			long id = User.createUser(username, surname, dob, gender, adress, city, mail, hashPass, false);
-			String verificationEmail = EmailVerification.addNewRecord(id);
-
-			MailHelper.send(mail,
-					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://" + PATH + "/verifyEmail/"
-							+ verificationEmail);
-			flash("success", "A verification mail has been sent to your email address!");
-			Logger.info("A verification mail has been sent to email address");
-			return ok(Loginpage
-					.render(" "));
-
-		} else {
-			flash("error", "Username or email allready exists!");
-			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render());
+			else if (User.verifyRegistration(username, mail) == true) {
+				/*
+				 * session().clear(); session("name", username);
+				 */
+	
+				long id = User.createUser(username, surname, dob, gender, adress, city, mail, hashPass, false);
+				String verificationEmail = EmailVerification.addNewRecord(id);
+	
+				MailHelper.send(mail,
+						"Click on the link below to verify your e-mail adress <br>"
+								+ "http://" + PATH + "/verifyEmail/"
+								+ verificationEmail);
+				flash("success", "A verification mail has been sent to your email address!");
+				Logger.info("A verification mail has been sent to email address");
+				return ok(Loginpage
+						.render(" "));
+	
+			} else {
+				flash("error", "Username or email allready exists!");
+				Logger.info("Username or email allready exists!");
+				return badRequest(signup.render());
+			}
 		}
+		/* return JSon if request().accept() is not text/html */
+		return JSonOperator.register();
 
 	}
 
@@ -241,8 +253,12 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
-
-		return ok(userList.render( SuperUser.allSuperUsers()));
+		/* content negotiation */
+		if( request().accepts("text/html")) {
+				return ok(userList.render( SuperUser.allSuperUsers()));			
+		} else {
+				return ok(JSonHelper.superUserListToJson(SuperUser.allSuperUsers()));
+		 }
 	}
 
 	/**
@@ -349,7 +365,11 @@ public class UserController extends Controller {
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result showBoughtCoupons(long userId) {
 		List<TransactionCP> transactions = TransactionCP.allFromBuyer(userId);
+		if (request().accepts("text/html")) {
 		return ok(boughtCoupons.render(session("name"), transactions));
+		} else {
+			return ok(JSonHelper.transactionListToJSon(transactions));
+		}
 		
 	}
 	

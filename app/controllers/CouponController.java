@@ -2,6 +2,7 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.JSonHelper;
 import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
@@ -713,23 +714,12 @@ public class CouponController extends Controller {
 		List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 		List<Coupon> nonApprovedCoupons = Coupon.nonApprovedCoupons();
 		
-		/*
-		for(Coupon coupon : coupons){
-			Date couponDate = coupon.dateExpire;
-			if (couponDate.after(current)) {
-				noExpireList.add(coupon);
-			}	
+		if (request().accepts("text/html")) {
+			return ok(couponsAll.render( approvedCoupons, nonApprovedCoupons));
+		} else {
+			return ok(JSonHelper.couponListsToJson(approvedCoupons, nonApprovedCoupons));
 		}
-		
-		if(noExpireList.isEmpty()){
-			flash("error", "All coupons had expired");
-			return ok(couponsAll.render(null, Coupon.all()));
-		}
-		*/
-		return ok(couponsAll.render( approvedCoupons, nonApprovedCoupons));
 	}
-	
-	
 	
 
 }

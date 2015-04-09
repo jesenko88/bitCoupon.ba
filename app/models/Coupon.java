@@ -1,25 +1,25 @@
 package models;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
+import helpers.JSonHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import play.Logger;
 import play.data.validation.Constraints.MinLength;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-import play.libs.F.Option;
-import play.mvc.QueryStringBindable;
+import play.libs.Json;
 
-import com.avaje.ebean.annotation.CreatedTimestamp;
-import com.avaje.ebean.annotation.UpdatedTimestamp;
+
 
 /**
  * 
@@ -242,6 +242,16 @@ public class Coupon extends Model {
 
 		return find.where().eq("category", Category.findByName(categoryName))
 				.findList();
+	}
+	
+	/**
+	 * @param categoryName
+	 * @return List of coupons by provided category. ArrayNode (JSon content) 
+	 */
+	public static ArrayNode listByCategoryJSon(String categoryName) {
+		
+		return JSonHelper.couponListToJson(find.where().eq("category", Category.findByName(categoryName))
+				.findList() );
 	}
 
 	/**

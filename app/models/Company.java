@@ -24,7 +24,7 @@ import play.mvc.Security;
 
 @Entity
 public class Company  extends SuperUser{	
-
+	
 	@Required
 	public String name;	
 	
