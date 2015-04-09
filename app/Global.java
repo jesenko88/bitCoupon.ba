@@ -126,7 +126,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon3, 2, 5 ,new Date(), bitCamp, true);
 		}
 		
 		if (Coupon.checkByName(nameCoupon4) == false) {
@@ -157,7 +157,7 @@ public class Global extends GlobalSettings {
 				e.printStackTrace();
 			}
 			Coupon.createCoupon(
-					nameCoupon4,
+					nameCoupon5,
 					17,
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
