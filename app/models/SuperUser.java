@@ -47,7 +47,15 @@ public abstract class SuperUser extends Model {
 	public static List<SuperUser> allSuperUsers() {
 		List<Company> allComp = Company.all();
 		List<User> allUsr = User.all();
-
+		
+		//In case user list or company list is null.
+		if(allComp == null){
+			allComp = new ArrayList<Company>();
+		}
+		if(allUsr == null){
+			allUsr = new ArrayList<User>();
+		}
+		
 		List<SuperUser> all = new ArrayList<SuperUser>();
 		all.addAll(allComp);
 		all.addAll(allUsr);

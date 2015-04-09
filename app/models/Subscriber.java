@@ -89,6 +89,9 @@ public class Subscriber extends Model{
 	public static List<String> getAllSubscribers() {
 		List<Subscriber> allSubscribers = find.all();
 		List<String> allEmails = new ArrayList<String>();
+		if(allSubscribers == null){
+			return allEmails;
+		}
 		for(Subscriber s: allSubscribers){
 			allEmails.add(s.email);
 		}

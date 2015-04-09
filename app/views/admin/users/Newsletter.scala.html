@@ -22,22 +22,14 @@
       <!--features_items-->
       <h2 class="title text-center"> Create newsletter</h2>
       <h6 class="title text-center"> Please select 3 coupons</h6>
-<<<<<<< HEAD
-      <div class="col-sm-6 col-sm-offset-1">
-=======
+
       <div class="col-sm-12 " style="ma">
->>>>>>> 9110157e4f8741c2a6c5419942f50d1d32a3d568
+
          <div class="signup-form">
             <!--newsletter form-->
             <form action="@routes.SubscribeController.sendNewsletters" method ="POST" >
                <input type="text" name="subject" id="subject" placeholder="Subject here" required/>
-<<<<<<< HEAD
-               @for(coupon <- coupons){
-               <h5> @coupon.name </h5>
-               <input type="checkbox" name="@coupon.id" id="@coupon.id" > 
-               }
-               <button type="submit" class="btn btn-default">SEND NEWSLETTER</button>
-=======
+
                              
                <div class="container">
                @for(coupon <- coupons){
@@ -53,7 +45,7 @@
                }
                </div>
                <button style="float: right" type="submit" class="btn btn-default">SEND NEWSLETTER</button>
->>>>>>> 9110157e4f8741c2a6c5419942f50d1d32a3d568
+
             </form>
          </div>
          <!--/sign up form-->
