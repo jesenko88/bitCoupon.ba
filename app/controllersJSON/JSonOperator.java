@@ -2,11 +2,12 @@ package controllersJSON;
 
 import java.util.Date;
 
+import javax.mail.internet.ParseException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import helpers.HashHelper;
-import helpers.JSonHelper;
+import helpers.*;
 import models.*;
 import play.Logger;
 import play.data.Form;
@@ -16,98 +17,110 @@ import play.mvc.Result;
 import views.html.*;
 
 public class JSonOperator extends Controller {
-
 	
+	/**
+	 * Helper method used only in this class for now
+	 * receives a tag and value as String and
+	 * returns a JSon as ObjectNode 
+	 * @param tag String
+	 * @param value String
+	 * @return ObjectNode
+	 */
+	private static ObjectNode messageToJSon(String tag, String value) {
+		ObjectNode jsnNode = Json.newObject();
+		jsnNode.put(tag, value);
+		return jsnNode;
+	}
+	
+	
+	/**
+	 * TODO comments
+	 * @return
+	 */
 	public static Result login() {
-			
 		JsonNode json = request().body().asJson();
-		System.out.println(json.toString());
 		String mail = json.findPath("email").textValue();
 		String password = json.findPath("password").textValue();
-		System.out.println("DEBUG ******** EMAIL *******" + mail);
-		
-		if (mail == null || password == null) {
-			Logger.info("Login error, mail or password is null");
-			return badRequest();
-		}
 
-		if (mail.isEmpty() || password.length() < 6) {
-			Logger.info("Invalid login form, mail empty or short password");
-			ObjectNode info = Json.newObject();
-			info.put("info", "Invalid login form, mail empty or short password");
-			return badRequest(info);
-		}
-		if (User.verifyLogin(mail, password) == true) {
+		if (mail == null) {
+			Logger.info("Login error, mail is null");
+			return badRequest(messageToJSon("error", "Email is null"));
+			
+		} else if (password == null) {
+			Logger.info("Login error, password is null");
+			return badRequest(messageToJSon("error", "Password is null"));
+			
+		} else if (mail.isEmpty()) {
+			Logger.info("Invalid login form, Email is empty ");
+			return badRequest(messageToJSon("error", "Email is empty"));
+			
+		} else if (password.length() < 6) {
+			Logger.info("Invalid login form, Short password");
+			return badRequest(messageToJSon("error", "Password length less then 6 chars"));
+			
+		} else if (User.verifyLogin(mail, password) == true) {
 			User cc = User.getUser(mail);
 			Logger.info(cc.username + " logged in");
 			session("name", cc.username);
 			session("email", cc.email);
 			System.out.println("DEBUG ********** LOGIN ");
-			return ok(JSonHelper.couponListToJson(Coupon.approvedCoupons() ));
-		}
-		if (Company.verifyLogin(mail, password) == true) {
+			return ok(JSonHelper.couponListToJson(Coupon.approvedCoupons()));
+			
+		} else if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);
 			Logger.info(cc.name + " logged in");
-			return ok(JSonHelper.companyToJSon(cc) );
+			return ok(JSonHelper.companyToJSon(cc));
 		}
 		Logger.info("User tried to login with invalid email or password");
-		return badRequest();
+		return badRequest(messageToJSon("error", "Invalid email or password"));
 	}
 	
-	public static Result register(){
+	/**
+	 * TODO comments
+	 * @return
+	 */
+	public static Result register() {
 		JsonNode json = request().body().asJson();
 		String username = json.findPath("username").textValue();
 		String surname = json.findPath("surname").textValue();
 		String mail = json.findPath("email").textValue();
-		Date dob = json.findPath("dob").textValue();
+		String dob = json.findPath("dob").textValue();
 		String gender = json.findPath("gender").textValue();
 		String adress = json.findPath("adress").textValue();
 		String city = json.findPath("city").textValue();
 		String password = json.findPath("password").textValue();
-		String hashPass = HashHelper.createPassword(password);
 		String confPass = json.findPath("confirmPassword").textValue();
 
 		if (username.length() < 4 || username.equals("Username")) {
-			flash("error", "Usernam must be at least 4 chatacters");
-			return badRequest();
-		} else if (mail.equals("Email")) {
-			flash("error", "Email is required for registration !");
-			return badRequest(signup.render());
+			return badRequest(messageToJSon("error","Usernam must be at least 4 chatacters"));
+		} else if (mail.isEmpty()) {
+			return badRequest(messageToJSon("error","Email is required for registration !"));
 		} else if (password.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render());
+			return badRequest(messageToJSon("error","Password must be at least 6 characters!"));
 		} else if (!password.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render());
+			return badRequest(messageToJSon("error","Passwords don't match, try again "));
 		}
-
-		/*
-		 * Creating new user if the username or mail is free for use, and there
-		 * are no errors
-		 */
+		/* Creating new user */
 		else if (User.verifyRegistration(username, mail) == true) {
-			/*
-			 * session().clear(); session("name", username);
-			 */
-
-			long id = User.createUser(username, surname, dob, gender, adress, city, mail, hashPass, false);
-			String verificationEmail = EmailVerification.addNewRecord(id);
-
-			MailHelper.send(mail,
-					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://" + PATH + "/verifyEmail/"
-							+ verificationEmail);
-			flash("success", "A verification mail has been sent to your email address!");
-			Logger.info("A verification mail has been sent to email address");
-			return ok(Loginpage
-					.render(" "));
-
-		} else {
-			flash("error", "Username or email allready exists!");
-			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render());
+			try {
+				/* parsing date from string */
+				Date dayOfBirth = DateHelper.getDate(dob);
+				String hashPass = HashHelper.createPassword(password);
+				long id = User.createUser(username, surname, dayOfBirth,gender, adress, city, mail, hashPass, false);
+				String verificationEmail = EmailVerification.addNewRecord(id);
+				/* temporary hard coded */
+				MailHelper.send(mail,"Click on the link below to verify your e-mail adress <br>"
+								+ "http://" + "localhost:9000"
+								+ "/verifyEmail/" + verificationEmail);
+				Logger.info("A verification mail has been sent to email address");
+				return ok(messageToJSon("info","A verification mail has been sent to this address: " + mail));
+			} catch (Exception e) {
+				Logger.error("error", "Registration error" + e.getMessage(), e);
+				return badRequest(messageToJSon("error","Ann error occured, please try again later"));
+			}
 		}
+		Logger.info("Username or email allready exists!");
+		return badRequest(messageToJSon("error","Username or email allready exists!"));
 
-		
 	}
 }

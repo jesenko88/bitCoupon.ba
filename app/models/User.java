@@ -138,13 +138,11 @@ public class User extends SuperUser {
 	public static boolean verifyLogin(String mail, String password) {
 		try {
 			User user = getFind().where().eq("email", mail).findUnique();
-			if(user != null && EmailVerification.isEmailVerified(user.id)){
+			if (user != null && EmailVerification.isEmailVerified(user.id)) {
 				return HashHelper.checkPass(password, user.password);
-			}
-			else{
+			} else {
 				return false;
 			}
-				
 
 		} catch (NullPointerException e) {
 			Logger.error(e.getMessage());
