@@ -34,12 +34,15 @@ public class Global extends GlobalSettings {
 			+ "Upravo ovakav ambijent začinit će i uljepšati Vašu romantičnu večeru.";
 
 
+
 	String nameCoupon4 = "Nezaboravno putovanje u najljepše gradove Mediterana!";
 	String remarkCoupon4 = "Platite samo 355 KM za šestodnevno putovanje u italijansku Ligurijsku rivijeru i francusku Azurnu obalu";
 	String adress4 = "Grbavicka 33";
 	String city4 = "Sarajevo";
 	String contact4 ="033/444-444";
 	String descriptionCoupon4 = "Ovo putovanje objedinjuje italijansku Ligurijsku rivijeru i francusku Azurnu obalu, fantastične predjele i nevjerovatno lijepe gradove... Pružamo Vam priliku da uživate u mirisima lovora, maslina, mora, jasmina i parfema u vazduhu...";
+
+	String pic = "images/home/No-Logo.jpg";
 
 	String nameCoupon5 = "Uživajte u vrhunskim delicijama Pivnice Sarajevo uz ručak ili večeru za dvije osobe!";
 	String remarkCoupon5 = "Super cijena za ručak ili večeru za dvije osobe + dva pića po izboru u Pivnici Sarajevo";
@@ -72,12 +75,12 @@ public class Global extends GlobalSettings {
 		Company bitCamp = null;
 		
 		if ( !Company.exists("Admin")){
-			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), "/", adress, city, contact);
+			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), pic, adress, city, contact);
 			bitCamp.save();
 		}
 		
 		if ( !Company.exists("BitCamp")){
-			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), "/", adress, city, contact);
+			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), pic, adress, city, contact);
 			bitCamp.save();
 		}
 		
