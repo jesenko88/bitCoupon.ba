@@ -22,16 +22,26 @@
       <!--features_items-->
       <h2 class="title text-center"> Create newsletter</h2>
       <h6 class="title text-center"> Please select 3 coupons</h6>
-      <div class="col-sm-6 col-sm-offset-1">
+      <div class="col-sm-12 " style="ma">
          <div class="signup-form">
             <!--newsletter form-->
             <form action="@routes.SubscribeController.sendNewsletters" method ="POST" >
                <input type="text" name="subject" id="subject" placeholder="Subject here" required/>
+                             
+               <div class="container">
                @for(coupon <- coupons){
-               <h5> @coupon.name </h5>
-               <input type="checkbox" name="@coupon.id" id="@coupon.id" > 
+               	<div class="spaceDiv_News">
+               <img class="col-sm-2 col-sm-offset-1" src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+               <div class="container">
+               <div class="col-sm-6 col-sm-offset-1" >
+               <h5 class="hCenter"> @coupon.name </h5>
+               <input  type="checkbox" name="@coupon.id" id="@coupon.id" > 
+               </div>
+               </div>
+               </div>
                }
-               <button type="submit" class="btn btn-default">SEND NEWSLETTER</button>
+               </div>
+               <button style="float: right" type="submit" class="btn btn-default">SEND NEWSLETTER</button>
             </form>
          </div>
          <!--/sign up form-->

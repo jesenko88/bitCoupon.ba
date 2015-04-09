@@ -2712,6 +2712,13 @@ h2.title {
 	margin-bottom: 30px; 
 }
 
+.spaceDiv_News{
+	margin-bottom: 10px; 
+}
+.hCenter{
+	text-align: center;
+}
+
 .spaceDiv_left{
 	margin-left: 30px; 
 }
