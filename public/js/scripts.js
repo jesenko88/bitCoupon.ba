@@ -23,13 +23,6 @@ $(document).ready(function() {
 			$('#inputEmailForm').show();
 	})
 	
-	$('#dob').change(function(e){
-		if(!calculateDate(new Date(this.value))){
-			$('#error').show();
-		} else {
-			$('#error').hide();
-		}
-	})
 	
 	$('#maxOrder').change(function(e){
 		var minOrder = document.getElementById("minOrder").value;
@@ -49,6 +42,14 @@ $('#changePassButton1').click(function(e) {
 		$('#changePassForm1').show();
 })
 
+$('#dob').change(function(e){
+	if(!calculateDate(new Date(this.value))){
+		$('#error').show();
+	} else {
+		$('#error').hide();
+	}
+})
+
 });
 
 function calculateDate(birth){
@@ -62,4 +63,19 @@ function calculateDate(birth){
 	    age = parseInt(age) - 1;
 	}
 	return age >= 18;
+}
+
+function calculateUsageDate(birth){
+	var today = new Date();
+
+	var age = today.getFullYear() - birth.getFullYear();
+	var age_month = today.getMonth() - birth.getMonth();
+	var age_day = today.getDate() - birth.getDate();
+	
+	var day = age + age_month + age_day;
+
+	if (day ) {
+	    age = parseInt(age) - 1;
+	}
+	return age >= 1;
 }
