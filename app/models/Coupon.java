@@ -189,6 +189,8 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> all() {
 		List<Coupon> coupons = find.findList();
+		if(coupons == null)
+			coupons = new ArrayList<Coupon>();
 		return coupons;
 	}
 
@@ -239,9 +241,11 @@ public class Coupon extends Model {
 	 * @return List of coupons by category
 	 */
 	public static List<Coupon> listByCategory(String categoryName) {
-
-		return find.where().eq("category", Category.findByName(categoryName))
+		List<Coupon> coupons = find.where().eq("category", Category.findByName(categoryName))
 				.findList();
+		if(coupons == null)
+			coupons = new ArrayList<Coupon>();
+		return coupons;
 	}
 	
 	/**
@@ -290,6 +294,11 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> sortByCategory(int method) {
 		List<Coupon> all = find.all();
+		
+		//Handling exceptions.
+		if(all == null){
+			return new ArrayList<Coupon>();
+		}
 		/*
 		 * Implementing comparator. Comparing category names and return its
 		 * string compare value.
@@ -321,7 +330,10 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> sortByPrice(int method) {
 		List<Coupon> all = find.all();
-
+		//Handling exceptions.
+		if(all == null){
+			return new ArrayList<Coupon>();
+		}
 		/*
 		 * Creating comparator for sorting by price.
 		 */
@@ -353,7 +365,10 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> sortByDate(int method) {
 		List<Coupon> all = find.all();
-
+		//Handling exceptions.
+		if(all == null){
+			return new ArrayList<Coupon>();
+		}
 		/*
 		 * Creating comparator for sorting by date.
 		 */
@@ -390,7 +405,10 @@ public class Coupon extends Model {
 	 * @return sorted list of coupons or null if there was error.
 	 */
 	public static List<Coupon> sortByCategory(List<Coupon> cpns, int method) {
-		;
+		if(cpns == null)
+			return new ArrayList<Coupon>();
+			
+		
 		/*
 		 * Implementing comparator. Comparing category names and return its
 		 * string compare value.
@@ -423,6 +441,9 @@ public class Coupon extends Model {
 	 * @return sorted list or null
 	 */
 	public static List<Coupon> sortByPrice(List<Coupon> cpns, int method) {
+		
+		if(cpns == null)
+			return new ArrayList<Coupon>();
 		/*
 		 * Creating comparator for sorting by price.
 		 */
@@ -452,6 +473,8 @@ public class Coupon extends Model {
 	 * @return
 	 */
 	public static List<Coupon> sortByDate(List<Coupon> cpns, int method) {
+		if(cpns == null)
+			return new ArrayList<Coupon>();
 		/*
 		 * Creating comparator for sorting by date.
 		 */
@@ -521,12 +544,18 @@ public class Coupon extends Model {
 	 * @return List of Coupons
 	 */
 	public static List<Coupon> ownedCoupons(long companyID) {
-
-		return find.where().eq("seller_id", companyID).findList();
+		List<Coupon> coupons = find.where().eq("seller_id", companyID).findList(); 
+		if(coupons == null)
+			coupons = new ArrayList<Coupon>();
+		return coupons;
 	}
 	
 	public static List<Coupon> userBoughtCoupons(long userId) {
-		return find.where().eq("buyer_id", userId).findList();
+		List<Coupon> coupons = find.where().eq("buyer_id", userId).findList();
+		if(coupons == null){
+			coupons = new ArrayList<Coupon>();
+		}
+		return coupons;
 	}
 	
 	/**
@@ -542,13 +571,13 @@ public class Coupon extends Model {
 	
 	
 	public static List<Coupon> approvedCoupons() {
-		List<Coupon> all = find.all();
+		List<Coupon> all = find.all();	
 		List<Coupon> approved = new ArrayList<Coupon>();
 		for(Coupon coupon: all){
 			if(coupon.status){
 				approved.add(coupon);
 			}
-		}
+		}		
 		return approved;
 	}
 	
