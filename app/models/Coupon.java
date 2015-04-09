@@ -170,7 +170,7 @@ public class Coupon extends Model {
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage, seller);
-		newCoupon.status = true;
+		newCoupon.status = status;
 		newCoupon.save();
 		return newCoupon.id;
 	}

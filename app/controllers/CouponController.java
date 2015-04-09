@@ -414,12 +414,10 @@ public class CouponController extends Controller {
 
 		
 
-		boolean status;
+		boolean status = false;
 
-		if (Sesija.adminCheck(ctx()) == true) {
+		if (Sesija.adminCheck(ctx())) {
 			status = true;
-		} else {
-			status = false;
 		}
 
 		//In case admin posted coupon.
