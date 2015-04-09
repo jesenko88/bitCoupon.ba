@@ -9,13 +9,17 @@ import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
+import models.Subscriber;
 import models.User;
 import play.Application;
 import play.GlobalSettings;
 
 public class Global extends GlobalSettings {
-	String nameCoupon1 = "Dvije noći za dvoje u Hotelu Sunce Neum";
+	String nameCoupon1 = "Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
 	String remarkCoupon1 = "Jedna osoba može kupiti maksimalno četiri kupona za ovu ponudu. Kuponi se mogu spajati.";
+	String adress = "Zmaja od Bosne 33.";
+	String city = "Sarajevo";
+	String contact ="033/333-333";
 
 
 	String descriptionCoupon1 = "Poželjeli ste da udahnete miris mora i da na bar dva dana pobjegnete od svakodnevnice, da se opustite uz duge šetnje plažom? Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
@@ -34,7 +38,7 @@ public class Global extends GlobalSettings {
 			+ "Upravo ovakav ambijent začinit će i uljepšati Vašu romantičnu večeru.";
 
 
-	
+	String pic = "images/home/No-Logo.jpg";
 
 
 	@Override
@@ -47,12 +51,12 @@ public class Global extends GlobalSettings {
 		Company bitCamp = null;
 		
 		if ( !Company.exists("Admin")){
-			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), "/");
+			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), pic, adress, city, contact);
 			bitCamp.save();
 		}
 		
 		if ( !Company.exists("BitCamp")){
-			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), "/");
+			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), pic, adress, city, contact);
 			bitCamp.save();
 		}
 		
@@ -74,7 +78,7 @@ public class Global extends GlobalSettings {
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
-					remarkCoupon1, 5, bitCamp, true);
+					remarkCoupon1, 5, 25 ,new Date(), bitCamp, true);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
 			Coupon.createCoupon(
@@ -83,7 +87,7 @@ public class Global extends GlobalSettings {
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
-					remarkCoupon2, 5, bitCamp, true);
+					remarkCoupon2, 5, 20 ,new Date(), bitCamp, true);
 		}
 		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -101,21 +105,29 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3, 5, bitCamp, true);
+					remarkCoupon3, 5, 30 ,new Date(), bitCamp, true);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {
-			User.createUser("Admin", "bitcoupon@gmail.com",
+			User.createUser("Admin","",new Date(), "","","", "bitcoupon@gmail.com",
 					HashHelper.createPassword("bitadmin"), true);
 			EmailVerification setVerified = new EmailVerification(1, true);
 			setVerified.save();
 		}
 		
 		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
-			User.createUser("John", "jesenko.gavric@bitcamp.ba",
+			User.createUser("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false);
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();
+		}
+		if (User.check("vedad.zornic@bitcamp.ba") == false) {
+			User.createUser("Vedad","",new Date(), "","","", "vedad.zornic@bitcamp.ba",
+					HashHelper.createPassword("johndoe"), false);
+			EmailVerification setVerified = new EmailVerification(2, true);
+			setVerified.save();
+			Subscriber sb = new Subscriber(User.findByEmail("vedad.zornic@bitcamp.ba"));
+			sb.save();
 		}
 		
 		

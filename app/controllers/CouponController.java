@@ -221,7 +221,6 @@ public class CouponController extends Controller {
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result
-	 *
 	 */
 	public static Result search(String q) {
 		List<Coupon> all = Coupon.find.where().ilike("name", "%" + q + "%")
@@ -243,7 +242,6 @@ public class CouponController extends Controller {
 		Logger.info(session("name") + " searched for: \"" + q + "\"");
 		return ok(searchFilter.render(coupons, Category.all()));
 	}
-
 	/**
 	 * Method for sorting coupon result. Can sort list of all coupons on index,
 	 * or just searched result of coupons.
@@ -381,6 +379,12 @@ public class CouponController extends Controller {
 
 		int minOrder = Integer.valueOf(couponForm.bindFromRequest()
 				.field("minOrder").value());
+		
+		
+		int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
+		Date usage = couponForm.bindFromRequest().get().usage;
+
+		
 
 		boolean status;
 
@@ -402,15 +406,16 @@ public class CouponController extends Controller {
 		String assetsPath = FileUpload.imageUpload("coupon_photos");
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
 			long id = Coupon.createCoupon(name, price, date, assetsPath,
-					category, description, remark, minOrder, company, status);
+					category, description, remark, minOrder, maxOrder, usage, company, status);
 			Logger.info(session("name") + " created coupon " + id);
 			flash("success", "Coupon successfuly created.");
 			return redirect("/couponPanel");
 		} else {
+			//In case user didn't upload photo of coupon
+			//we add default photo of this category for this coupon.
 			flash("success", "Coupon created without image");
 			long id = Coupon.createCoupon(name, price, date,
-					FileUpload.DEFAULT_IMAGE, category, description, remark,
-					minOrder, company);
+					category.picture,category, description, remark, minOrder, maxOrder, usage, company, status);
 			Logger.info(session("name") + " created coupon " + id
 					+ " without image");
 			return redirect("/couponPanel");

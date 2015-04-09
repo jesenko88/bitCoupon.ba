@@ -5,6 +5,7 @@ import helpers.CurrentUserFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -33,17 +34,17 @@ public class Company  extends SuperUser{
 	
 	public String logo;
 	
-
+	public String contact;
+	
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
 //	@OneToMany(mappedBy="seller", cascade=CascadeType.ALL)
 //	public List<TransactionCP> sold_coupons;	
 	
-	static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
+	public static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
 				Company.class);
 	
-		
 	/**
 	 * Constructor for company.
 	 * @param name Name of company
@@ -52,17 +53,18 @@ public class Company  extends SuperUser{
 	 * @param created date when its created
 	 * @param logo logo, picture path.
 	 */
-	public Company(String name, String email, String password, Date created, String logo){
-		super(email,password);
+	public Company(String name, String email, String password, Date created, String logo, String adress, String city, String contact){
+		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = logo;
-	
+		this.logo = "images/home/No-Logo.jpg";
+		this.contact = contact;	
 	}
 	
-	public static long createCompany(String name, String email, String password, String logo){
+	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
+		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
-		Company c = new Company(name, email, password, now, logo);
+		Company c = new Company(name, email, password, now, logo, adress, city, contact);
 		c.save();
 		return c.id;
 	

@@ -1,25 +1,19 @@
 
 @main("Registration"){
-<body>
-   <header id="header">
-      <!--header-->
-      <div class="header-middle">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-            <div class="logo pull-right">
-               <div class="search_box">
-                  <form action="/search" method="GET">
-                     <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>
-               </div>
-            </div>
-         </div>
-         <div class="row">
-         </div>
-      </div>
-      </div>	
-   </header>
+ <header id="header"><!--header-->
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+				<div class="logo pull-right">
+					<div class="search_box">
+					<form action="/search" method="GET">
+					<input id="q" name="q" type="text" placeholder="Search" />
+					</form>
+					</div>
+				</div>	
+			</div>		
+		</div>
+	</header>
    <div id="someId" class="container">
       <div class="features_items">
          <!--features_items-->
@@ -30,10 +24,22 @@
                <button type="submit" id="companySignup" class="btn btn-default" onClick="registrationForm"> Register as company </button>
                <h4>Sign Up</h4>
                <form action="@routes.UserController.register" method ="POST" >
-                  <input type="text" id="username" name="username"  onClick="this.select()"  placeholder="Username" required/>	<br>
                   <input type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
                   <input type="password" id="password" name="password" onClick="this.select()" placeholder="Password must be 6 characters including uppercase letter and numbers" pattern="(?=^.{6,16}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required/> <br>
                   <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>
+				  <br>
+                  <input type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
+                  <input type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	<br>
+                  <br>
+                  <p> Date of birth </p>
+                  <input type="date" id="datepicker" name="dob"  onClick="this.select()"  placeholder="Date of birth" required/>
+                  <input type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" required/>Male 
+                  <input type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female 
+                  <br>      
+                  <br>                            
+                  <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/><br>                
+                  <input type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
+                  <br>
                   <button type="submit" id="submit" class="btn btn-default">Signup</button>
                </form>
             </div>
@@ -56,24 +62,22 @@
                <button type="submit" id="signup" class="btn btn-default" onClick="someId"> Register as user </button>
                <h4>Company Registration</h4>
                <form action="@routes.CompanyController.registerC" method ="POST" >
-                  <input type="text" id="name" name="name"  onClick="this.select()"  placeholder="Company name" required/>	<br>
                   <input type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
-                  <input type="text" id="logo" name="logo" onClick="this.select()" placeholder="Logo" required/> <br>
                   <input type="password" id="password" name="password" onClick="this.select()" placeholder="Password must be 6 characters including uppercase letter and numbers" pattern="(?=^.{6,16}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required/> <br>
                   <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>
+                  <br>
+                  <input type="text" id="name" name="name"  onClick="this.select()"  placeholder="Company name" required/>	<br>
+                  <input type="text" id="contact" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>	<br>
+                  <input type="text" id="logo" name="logo" onClick="this.select()" placeholder="Logo" required/> <br>
+                  <br>
+                  <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Company adress" required/>	<br>
+                  <input type="text" id="city" name="city" onClick="this.select()"  placeholder="City" required/>	<br>
+                  <br>
                   <button type="submit" id="submit" class="btn btn-default">Register</button>
                </form>
             </div>
-            <!--/sign up form-->
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
          </div>
       </div>
    </div>
-   </div>
-   </div>
-   </div>
+
    }

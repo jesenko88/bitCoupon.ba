@@ -1,75 +1,52 @@
 @(info: String)
 @import helper._
 @main("Login"){
-<body>
-   <header id="header">
-      <!--header-->
-      <div class="header-middle">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-            <div class="logo pull-right">
-               <div class="search_box">
-                  <form action="/search" method="GET">
-                     <input id="q" name="q" type="text" placeholder="Search" />
-                  </form>
-               </div>
+	<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
             </div>
          </div>
-         <div class="row">
-         </div>
       </div>
-      </div>	
-   </header>
-   <div class="container">
-   <div class="features_items">
-   <!--features_items-->
-   <h2 class="title text-center">Login</h2>
-   <div class="col-sm-6 col-sm-offset-1">
+   </div>
+</header>
+<div class="container">
+<div class="features_items">
+<h2 class="title text-center">Login</h2>
+<div class="col-sm-6 col-sm-offset-1">
    <div class="signup-form">
-      <!--sign up form-->
       <h2>@info</h2>
+      <!-- javascript try to create class for it -->
       <script type="text/javascript">
-function showDiv(toggle){
-document.getElementById(toggle).style.display = 'block';
-}
-</script>
-      
+         function showDiv(toggle){
+         document.getElementById(toggle).style.display = 'block';
+         }
+         	 	 
+      </script>
       <form action="@routes.Application.login" method="POST">
          <input type="text" id="email" name="email" placeholder="Email" />
          <input type="password" id="password" name="password" placeholder="Password" />
          <button type="submit" id="submit" style="display:inline-block">Login</button>
-               <button type="button" name="answer" onclick="showDiv('toggle')" style=" border: none; display:inline-block; float:right ">Forgot password?</button>
-         							
+         <button type="button" name="answer" onclick="showDiv('toggle')" style=" border: none; display:inline-block; float:right ">Forgot password?</button> 							
       </form>
-      
-      
    </div>
-   
-
-</script>
-
-
-   
-   
-   
-   
-  </div>
-   <div id="toggle" style="display:none" class="col-sm-4 col-sm-offset-1">
-      <div class="signup-form">
-         <!--sign up form-->
-         <h2>@info</h2>
-         <form action="/sendRequest" method="GET">
-            <input type="email" id="email" name="email" placeholder="Email" required/>            
-            <button type="submit" id="submit">Send email</button>							
-         </form>
-      </div>
-      <!--/login form-->
-      <br>
-      <br>
-      <br>
-      <br>
+   </script> 
+</div>
+<div id="toggle" style="display:none" class="col-sm-4 col-sm-offset-1">
+   <div class="signup-form">
+      <!--sign up form-->
+      <h2>@info</h2>
+      <form action="/sendRequest" method="GET">
+         <input type="email" id="email" name="email" placeholder="Email" required/>            
+         <button type="submit" id="submit">Send email</button>							
+      </form>
    </div>
-</body>
-</html>
+</div>
 }

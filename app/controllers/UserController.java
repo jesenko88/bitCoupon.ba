@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import helpers.AdminFilter;
@@ -8,9 +10,8 @@ import helpers.FileUpload;
 import helpers.SuperUserFilter;
 
 import java.util.List;
+
 import helpers.*;
-import helpers.HashHelper;
-import helpers.MailHelper;
 import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -47,6 +48,11 @@ public class UserController extends Controller {
 		}
 
 		String username = userForm.bindFromRequest().get().username;
+		String surname = userForm.bindFromRequest().get().surname;
+		Date dob = userForm.bindFromRequest().get().dob;
+		String gender = userForm.bindFromRequest().get().gender;
+		String adress = userForm.bindFromRequest().get().adress;
+		String city = userForm.bindFromRequest().get().city;
 		String mail = userForm.bindFromRequest().get().email;
 		String password = userForm.bindFromRequest().get().password;
 		String hashPass = HashHelper.createPassword(password);
@@ -76,7 +82,7 @@ public class UserController extends Controller {
 			 * session().clear(); session("name", username);
 			 */
 
-			long id = User.createUser(username, mail, hashPass, false);
+			long id = User.createUser(username, surname, dob, gender, adress, city, mail, hashPass, false);
 			String verificationEmail = EmailVerification.addNewRecord(id);
 
 			MailHelper.send(mail,
@@ -104,7 +110,7 @@ public class UserController extends Controller {
 	 * @param useName
 	 *            received from the userUpdateView() method
 	 * @return Result renders the update view with info messages according to
-	 *         update success or fail
+	 *         update success or fail 
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updateUser(long id) {
@@ -112,14 +118,30 @@ public class UserController extends Controller {
 		if (updateForm.hasErrors()) {
 			return redirect("/updateUser ");
 		}
-		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		String username = updateForm.data().get("username");
+		String surname = updateForm.data().get("surname");
+		Date dob = null;
+		try {
+			dob = sdf.parse(updateForm.data().get("dob"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String gender = updateForm.data().get("gender");
+		String adress = updateForm.data().get("adress");
+		String city = updateForm.data().get("city");
 		String email = updateForm.data().get("email");
 		String oldPass = updateForm.data().get("password");
 		String newPass = updateForm.data().get("newPassword");
 
 		User cUser = User.find(id);
 		cUser.username = username;
+		cUser.surname = surname;
+		cUser.dob = dob;
+		cUser.gender = gender;
+		cUser.adress = adress;
+		cUser.city = city;
 		// cUser.email = email;
 		cUser.updated = new Date();
 
@@ -161,6 +183,11 @@ public class UserController extends Controller {
 		}
 
 		String username = userForm.bindFromRequest().field("username").value();
+		String surname = userForm.bindFromRequest().field("surname").value();
+		Date dob = userForm.bindFromRequest().get().dob;
+		String gender = userForm.bindFromRequest().field("gender").value();
+		String adress = userForm.bindFromRequest().field("adress").value();
+		String city = userForm.bindFromRequest().field("city").value();
 		String email = userForm.bindFromRequest().field("email").value();
 		String newPass = userForm.bindFromRequest().field("newPassword")
 				.value();
@@ -168,6 +195,11 @@ public class UserController extends Controller {
 
 		User cUser = User.find(id);
 		cUser.username = username;
+		cUser.surname = surname;
+		cUser.dob = dob;
+		cUser.gender = gender;
+		cUser.adress = adress;
+		cUser.city = city;
 		cUser.email = email;
 		/*
 		 * if admin doesn't explicitly change the users password, it stays
@@ -231,7 +263,10 @@ public class UserController extends Controller {
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		}
 		if (currentUser.id == id || Sesija.adminCheck(ctx())) {
-			User.delete(id);
+			User u = User.find(id);			
+			Subscriber.unsubscribe(u);			
+			User.delete(u.id);			
+			
 			if (currentUser.id == id) {
 				session().clear();
 				return redirect("/signup ");
@@ -317,7 +352,5 @@ public class UserController extends Controller {
 		return ok(boughtCoupons.render(session("name"), transactions));
 		
 	}
-	
-	
 	
 }
