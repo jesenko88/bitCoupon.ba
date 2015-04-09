@@ -5,6 +5,7 @@ import helpers.CurrentUserFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +45,6 @@ public class Company  extends SuperUser{
 	public static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
 				Company.class);
 	
-		
 	/**
 	 * Constructor for company.
 	 * @param name Name of company
