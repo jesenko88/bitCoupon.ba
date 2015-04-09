@@ -25,8 +25,8 @@ import models.*;
 
 
 public class UserController extends Controller {
-	public static final String PATH = "localhost:9000"; 
-	/* TODO move all messages to conf */
+	
+	 static String PATH = Play.application().configuration().getString("PATH");	/* TODO move all messages to conf */
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;

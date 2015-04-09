@@ -206,6 +206,15 @@ public class CouponController extends Controller {
 		if (!StringUtils.isNullOrEmpty(assetsPath)) {
 			coupon.picture = assetsPath;
 		}
+		boolean status;
+
+		if (Sesija.adminCheck(ctx()) == true) {
+			status = true;
+		} else {
+			status = false;
+		}
+		coupon.status = status;
+		
 		Coupon.updateCoupon(coupon);
 		Logger.info(session("name") + " updated coupon: " + coupon.id);
 		flash("success", "Coupon updated");
@@ -382,12 +391,10 @@ public class CouponController extends Controller {
 
 		
 
-		boolean status;
+		boolean status = false;
 
-		if (Sesija.adminCheck(ctx()) == true) {
+		if (Sesija.adminCheck(ctx())) {
 			status = true;
-		} else {
-			status = false;
 		}
 
 		//In case admin posted coupon.
