@@ -4,9 +4,12 @@ import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import controllersJSON.JSonOperatorGET;
 import models.*;
 import helpers.*;
 import play.Logger;
@@ -168,16 +171,18 @@ public class SuperUserController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result profilePage(String username) {
-		User u = User.find(username);
-		Company c = Company.find(username);
-		
-		if (u != null) {
-			return ok(profile.render(u));
-		}else if(c != null){
-			return ok(profile.render(c));
+		if (request().accepts("text/html")) {
+			User user = User.find(username);
+			Company company = Company.find(username);
+			if (user != null) {
+				return ok(profile.render(user));
+			} else if (company != null) {
+				return ok(profile.render(company));
+			}
+			flash("error", "Ooops, error has occured.");
+			return redirect("/");
 		}
-		flash("error", "Ooops, error has occured.");
-		return redirect("/");
+		return JSonOperatorGET.profilePage(username);
 	}
 	
 	

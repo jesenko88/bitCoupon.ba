@@ -31,6 +31,21 @@ public class JSonHelper {
 
 	
 	
+	/**
+	 * Helper method used for sending messages in JSon format
+	 * receives a tag and value as String and
+	 * returns a JSon as ObjectNode 
+	 * @param tag String
+	 * @param value String
+	 * @return ObjectNode
+	 */
+	public static ObjectNode messageToJSon(String tag, String value) {
+		ObjectNode jsnNode = Json.newObject();
+		jsnNode.put(tag, value);
+		return jsnNode;
+	}
+	
+	
 	public static ObjectNode userToJSon(User u) {
 		
 		ObjectNode userNode = Json.newObject();

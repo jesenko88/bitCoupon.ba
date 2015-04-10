@@ -109,7 +109,7 @@ public class UserController extends Controller {
 			}
 		}
 		/* return JSon if request().accept() is not text/html */
-		return JSonOperator.register();
+		return JSonOperatorPOST.register();
 
 	}
 
