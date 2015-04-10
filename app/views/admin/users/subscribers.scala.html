@@ -1,48 +1,23 @@
 @(subscribers: List[Subscriber])
 
-@main("Subscribers") {
-	
-<header id="header">
-   <!--header-->
-   <div class="header-middle">
-      <!--header-middle-->
-      <div class="container">
-         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-         <div class="logo pull-right">
-            <div class="search_box">
-               <form action="/search" method="GET">
-                  <input id="q" name="q" type="text" placeholder="Search" />
-               </form>
-            </div>
-         </div>
-      </div>
-   </div>
+@main("Admin subscribers list") {
    @_adminNavbar()
-</header>
-<div class='container'>
-   <div class="logo pull-right">
-      <div class="search_box">
-         <form action="/searchUsers" method="GET">
-            <input id="qU" name="qU" type="text" placeholder="Search for user" />
-         </form>
-      </div>
-   </div>
+
    <div class="col-sm-10">
       <div class="review-payment">
          <h2>List of Subscribers</h2>
       </div>
-      <div class="table-responsive cart_info">
-         <table class="table table-condensed">
+      <div class="table-responsive">
+         <table class="table table-striped">
             <thead>
                <tr class="cart_menu">
-                  <td class="description">Subscriber id</td>
-                  <td class="image">Email</td>
-                  <td class="total">Delete Subscriber</td>
-                  <td></td>
+                  <th>Subscriber id</th>
+                  <th>Email</th>
+                  <th>Delete Subscriber</th>          
                </tr>
             </thead>
             <tbody>
-               @for(subscriber <- subscribers){                 	
+               @for(subscriber <- subscribers){                   
                <tr>
                   <td> @subscriber.id </td>
                   <td> @subscriber.email </td>
@@ -54,5 +29,4 @@
       </div>
    </div>
 </div>
-
 }
