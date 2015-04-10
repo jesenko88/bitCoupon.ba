@@ -73,7 +73,9 @@
 							@for(category <- categories) {
 								<option>@category.name</option>
 								}
+								@if(Sesija.adminCheck(ctx()) == true) {
 								<option >New Category</option>
+								}
 							</select>
 							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
 							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
