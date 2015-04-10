@@ -91,11 +91,7 @@
                   <ul class="nav navbar-nav collapse navbar-collapse">
                      <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
                      <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
-                     @if(TransactionCP.allSoldCoupons(superUser.getCompany().id).size() > 0) {
 			       	<li id="notiff" ><a id="notif" href="@routes.CouponController.boughtCoupon(superUser.getCompany().id)"><i class="newbadge">@TransactionCP.allSoldCoupons(superUser.getCompany().id).size()</i>Notifications</a></li>
-                  } else {
-			       	<li>Notifications</li>                  
-                  }
                   </ul>
                </div>
             </div>

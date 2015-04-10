@@ -56,7 +56,7 @@ public class TransactionCP extends Model{
 	
 
 	/* constructor */
-	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,
+	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,Company seller,
 			User buyer, Coupon coupon) {
 		this.payment_id = payment_id;
 		this.couponPrice = couponPrice;
@@ -82,8 +82,7 @@ public class TransactionCP extends Model{
 	public static long createTransaction(String payment_id,double couponPrice,int quantity,
 			double totalPrice, String token, Company seller, User buyer,  Coupon coupon) {
 		
-		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, buyer, coupon);
-		transaction.seller = seller;
+		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, seller, buyer, coupon);
 		transaction.save();
 		
 		return transaction.id;
