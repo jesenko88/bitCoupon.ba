@@ -88,6 +88,7 @@ create table transaction_cp (
   total_price               double,
   token                     varchar(255),
   buyer_id                  bigint,
+  seller_id                 bigint,
   coupon_id                 bigint,
   date                      timestamp,
   constraint pk_transaction_cp primary key (id))
@@ -140,8 +141,10 @@ alter table subscriber add constraint fk_subscriber_subscriber_4 foreign key (su
 create index ix_subscriber_subscriber_4 on subscriber (subscriber_id);
 alter table transaction_cp add constraint fk_transaction_cp_buyer_5 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
 create index ix_transaction_cp_buyer_5 on transaction_cp (buyer_id);
-alter table transaction_cp add constraint fk_transaction_cp_coupon_6 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_transaction_cp_coupon_6 on transaction_cp (coupon_id);
+alter table transaction_cp add constraint fk_transaction_cp_seller_6 foreign key (seller_id) references company (id) on delete restrict on update restrict;
+create index ix_transaction_cp_seller_6 on transaction_cp (seller_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_7 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_7 on transaction_cp (coupon_id);
 
 
 

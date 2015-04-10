@@ -5,6 +5,7 @@ import helpers.CurrentUserFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +35,7 @@ public class Company  extends SuperUser{
 	public String logo;
 	
 	public String contact;
-	
-	public boolean status;
-	
+		
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
@@ -46,7 +45,6 @@ public class Company  extends SuperUser{
 	public static Finder<Long, Company> find = new Finder<Long, Company>(Long.class,
 				Company.class);
 	
-		
 	/**
 	 * Constructor for company.
 	 * @param name Name of company
@@ -59,16 +57,13 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = logo;
+		this.logo = "images/home/No-Logo.jpg";
 		this.contact = contact;	
-		this.status = false;
-
 	}
-	
-	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact, boolean status){
+	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
+		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
 		Company c = new Company(name, email, password, now, logo, adress, city, contact);
-		c.status = status;
 		c.save();
 		return c.id;
 	
@@ -172,7 +167,5 @@ public class Company  extends SuperUser{
 	
 	public static List<Company> nonApprovedCompanies() {
 		return find.where().eq("status", false).findList();
-	}
-	 
-
+	}	 
 }

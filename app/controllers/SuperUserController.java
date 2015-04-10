@@ -4,9 +4,11 @@ import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import models.*;
 import helpers.*;
 import play.Logger;
@@ -91,7 +93,6 @@ public class SuperUserController extends Controller {
 		List<SuperUser> merged = new ArrayList<SuperUser>();
 		merged.addAll(users);
 		merged.addAll(allCompanies);
-		
 		if (merged.isEmpty()) {
 			flash("error", "No such user or company");
 			return badRequest(userList.render( SuperUser.allSuperUsers()));

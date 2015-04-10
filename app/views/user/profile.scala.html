@@ -1,7 +1,6 @@
 @(superUser: SuperUser)
 @import helper._
 @main("User Panel") {
-<body>
    <header id="header">
       <!--header-->
       <div class="header-middle">
@@ -65,7 +64,11 @@
             <li>City: @superUser.getUser().city</li>
             <li>Email: @superUser.getUser().email</li>
             <li>Date create: @superUser.getUser().created</li>
-            <li>Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</li>
+             @if(TransactionCP.allFromBuyer(superUser.getUser().id).size() > 0) {
+            <li><a href="@TransactionCP.allFromBuyer(superUser.getUser().id).size()">Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</a></li>
+           } else {
+            <li>Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</li>            
+            }
          </ul>
       </div>
    </div>
@@ -88,6 +91,11 @@
                   <ul class="nav navbar-nav collapse navbar-collapse">
                      <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
                      <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
+                     @if(TransactionCP.allSoldCoupons(superUser.getCompany().id).size() > 0) {
+			       	<li id="notiff" ><a id="notif" href="@routes.CouponController.boughtCoupon(superUser.getCompany().id)"><i class="newbadge">@TransactionCP.allSoldCoupons(superUser.getCompany().id).size()</i>Notifications</a></li>
+                  } else {
+			       	<li>Notifications</li>                  
+                  }
                   </ul>
                </div>
             </div>
@@ -99,16 +107,15 @@
    <div class="container">
       <div class="features_items">
          <!--features_items-->
-         <h2 class="title text-center"> Profile page here </h2>
-         <div class="col-sm-6 col-sm-offset-1">
-         </div>
-      </div>
+         <h2 class="title text-center"> Profile page</h2>
+         
+      
       <div class="userInforamtion">
          <div class="profilePicture">
             @if(superUser.getCompany().logo == null){
-            <img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+            <img style="width: 400px; height: 400px" src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
             }else{
-            <img src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
+            <img style="width: 400px; height: 400px" src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
             }
          </div>
       </div>
@@ -120,14 +127,13 @@
             <li>Company adress: @superUser.getCompany().adress</li>
             <li>City: @superUser.getCompany().city</li>
             <li>Company contact: @superUser.getCompany().contact</li>
-            <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>
-            <a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">
+            @if(Coupon.ownedCoupons(superUser.getCompany().id).size() > 0) {
+            <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</a></li>
+            } else {
+            <li>Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>            
+            }        
          </ul>
       </div>
    </div>
    }
-   <br>
-   <br>
-   <br>
-</body>
 }

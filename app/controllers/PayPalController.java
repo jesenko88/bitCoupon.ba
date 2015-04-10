@@ -70,8 +70,11 @@ public class PayPalController extends Controller {
 			DynamicForm buyForm = Form.form().bindFromRequest();		
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
-			totalPrice = coupon.price * quantity;
-			
+			if ( quantity > coupon.maxOrder){
+				flash("info","There are only " + coupon.maxOrder + " left");
+				return ok(coupontemplate.render(company, coupon));
+			}
+			totalPrice = coupon.price * quantity;	
 			String totalPriceString = String.format("%1.2f",totalPrice);
 			
 			amount.setTotal(totalPriceString);
@@ -200,8 +203,12 @@ public class PayPalController extends Controller {
 		try {	
 			payment.execute(apiContext, paymentExecution);
 			
-			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
-
+			TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, company, currentUser, coupon);
+			coupon.maxOrder = coupon.maxOrder - quantity;
+			Coupon.updateCoupon(coupon);
+			System.out.println("DEBUGG*****MAXORDER*****" + coupon.maxOrder);
+			System.out.println("DEBUGG*****QUANTITY*****" + quantity);
+		
 					
 		} catch (PayPalRESTException e) {
 			Logger.debug(e.getMessage());

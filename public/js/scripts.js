@@ -22,24 +22,7 @@ $(document).ready(function() {
 	$('#forgotPass').click(function(e) {
 			$('#inputEmailForm').show();
 	})
-	
-	$('#changePassword').click(function(e) {
-			$('#passFormUser').show();
-	})
-	
-	
-	$('#changePassword1').click(function(e) {
-			$('#passFormCompany').show();
-	})
-	
-	$('#dob').change(function(e){
-		if(!calculateDate(new Date(this.value))){
-			$('#error').show();
-		} else {
-			$('#error').hide();
-		}
-	})
-	
+
 	$('#maxOrder').change(function(e){
 		var minOrder = document.getElementById("minOrder").value;
 		var maxOrder = document.getElementById("maxOrder").value;
@@ -50,6 +33,30 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#changePassButton').click(function(e) {
+		$('#changePassForm').show();
+})
+
+$('#changePassButton1').click(function(e) {
+		$('#changePassForm1').show();
+})
+
+$('#dob').change(function(e){
+	if(!calculateDate(new Date(this.value))){
+		$('#error').show();
+	} else {
+		$('#error').hide();
+	}
+})
+
+$('#usage').change(function(e){
+	if(calculateUsageDate(new Date(this.value))){
+		$('#error1').show();
+	} else {
+		$('#error1').hide();
+	}
+})
+
 });
 function calculateDate(birth){
 	var today = new Date();
@@ -64,3 +71,14 @@ function calculateDate(birth){
 	return age >= 18;
 }
 
+function calculateUsageDate(birth){
+	var today = new Date();
+
+	var age = today.getFullYear() - birth.getFullYear();
+	var age_month = today.getMonth() - birth.getMonth();
+	var age_day = today.getDate() - birth.getDate();
+	
+	var day = age + age_month + age_day;
+	
+	return day >= 1;
+}

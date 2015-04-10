@@ -42,6 +42,9 @@ public class TransactionCP extends Model{
 	@ManyToOne(cascade=CascadeType.ALL)
 	public User buyer;
 	
+	@ManyToOne(cascade = CascadeType.ALL)
+	public Company seller;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	public Coupon coupon;
 	
@@ -61,7 +64,7 @@ public class TransactionCP extends Model{
 		this.totalPrice = totalPrice;
 		this.token = token;
 		this.buyer = buyer;
-		//this.seller = seller;
+		this.seller = seller;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
@@ -77,9 +80,10 @@ public class TransactionCP extends Model{
 	 * @return id of the created transaction (long)
 	 */
 	public static long createTransaction(String payment_id,double couponPrice,int quantity,
-			double totalPrice, String token, User buyer,  Coupon coupon) {
+			double totalPrice, String token, Company seller, User buyer,  Coupon coupon) {
 		
 		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, buyer, coupon);
+		transaction.seller = seller;
 		transaction.save();
 		
 		return transaction.id;
@@ -102,6 +106,15 @@ public class TransactionCP extends Model{
 	 */
 	public static List<Coupon> allBoughtCoupons(long id) {
 		List<TransactionCP> ids = find.where().eq("buyer_id", id).findList();
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		for ( TransactionCP tsc : ids) {
+			coupons.add(Coupon.find(tsc.coupon.id));
+		}
+		return coupons;
+	}
+	
+	public static List<Coupon> allSoldCoupons(long id) {
+		List<TransactionCP> ids = find.where().eq("seller_id", id).findList();
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		for ( TransactionCP tsc : ids) {
 			coupons.add(Coupon.find(tsc.coupon.id));
