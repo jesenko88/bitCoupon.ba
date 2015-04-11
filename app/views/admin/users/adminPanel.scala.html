@@ -1,13 +1,11 @@
 @(user: User)(addCouponInfo: String)
 
-
 @main("Admin Panel") {
-
 
 @_adminNavbar()
         
            <div class="col-sm-6">
-            <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
+            <a href="@routes.UserController.controlPanel(user.id)"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
             <hr>
 
                    

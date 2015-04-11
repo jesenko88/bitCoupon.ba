@@ -1,5 +1,7 @@
 @(name: String)(categories: List[Category])
 
+@import helper._
+
 @main("User Panel") {
 
 <body>
@@ -27,18 +29,7 @@
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 							</button>
-						</div>
-						
-						<div class="mainmenu pull-left">
-
-							<ul class="nav navbar-nav collapse navbar-collapse">
-							@if(Sesija.adminCheck(ctx()) == true) {
-								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
-								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
-								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
-								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
-							}
-						</div>
+						</div>						
 						
 					</div>
 				</div>
@@ -112,4 +103,3 @@
 
 	
 }
-

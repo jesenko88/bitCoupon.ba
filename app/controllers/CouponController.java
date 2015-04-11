@@ -53,6 +53,15 @@ public class CouponController extends Controller {
 			flash("error", "Ooops, error has occured. Please try again later.");
 			return redirect("/");
 		}
+		
+		User u = User.find(name);
+		if(u != null){ 
+			if(u.isAdmin){
+				return ok(adminCouponPanel.render(name, categories));
+			}
+		}
+		
+
 		return ok(couponPanel.render(name, categories));
 	}
 
