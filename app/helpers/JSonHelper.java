@@ -3,6 +3,7 @@ package helpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import play.Logger;
 import play.libs.Json;
 import models.Category;
 import models.Company;
@@ -29,6 +30,21 @@ public class JSonHelper {
 	public static final String SUPERUSER_USER = "user";
 	public static final String SUPERUSER_COMPANY = "company";
 
+	
+	
+	/**
+	 * Helper method used for sending messages in JSon format
+	 * receives a tag and value as String and
+	 * returns a JSon as ObjectNode 
+	 * @param tag String
+	 * @param value String
+	 * @return ObjectNode
+	 */
+	public static ObjectNode messageToJSon(String tag, String value) {
+		ObjectNode jsnNode = Json.newObject();
+		jsnNode.put(tag, value);
+		return jsnNode;
+	}
 	
 	
 	public static ObjectNode userToJSon(User u) {
@@ -63,6 +79,27 @@ public class JSonHelper {
 //		userNode.put("created", company.created.toString());
 //		userNode.put("updated", company());
 		return companyNode;
+	}
+	
+	
+	public static ObjectNode couponToJSon(Coupon coupon) {
+		if (coupon == null){
+			Logger.error("error","Coupon null at couponToJSon()");
+			return JSonHelper.messageToJSon("error", "Error occured");
+		}
+		ObjectNode couponNode = Json.newObject();
+		couponNode.put("id", coupon.id);
+		couponNode.put("name", coupon.name);
+		couponNode.put("email", coupon.price);
+		couponNode.put("email", coupon.dateExpire.toString());
+		couponNode.put("adress", coupon.picture);
+		couponNode.put("email", coupon.category.name);
+		couponNode.put("city", coupon.description);
+		couponNode.put("contact", coupon.remark);
+		couponNode.put("email", coupon.seller.name);
+		couponNode.put("email", coupon.seller.email);
+		couponNode.put("contact", coupon.minOrder);
+		return couponNode;
 	}
 	
 	
@@ -116,8 +153,9 @@ public class JSonHelper {
 		for (Company company : companies) {
 			ObjectNode companyNode = Json.newObject();
 			companyNode.put("name", company.name);
-			companyNode.put("isAdmin", company.created.toString()); //??
-			companyNode.put("created", company.logo); 
+			companyNode.put("created", company.created.toString()); //??
+			companyNode.put("logo", company.logo); 
+			companyNode.put("contact", company.contact); 
 			arrayNode.add(companyNode);
 		}
 		return arrayNode;

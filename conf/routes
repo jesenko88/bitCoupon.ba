@@ -50,8 +50,8 @@ GET    /deletCompany                  controllers.CompanyController.deleteCompan
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
 
-GET    /searchCompany                 controllers.CompanyController.searchCompanyView()
-GET    /searchCompanyS                controllers.CompanyController.searchCompany(qc: String)
+GET    /companies                     controllers.CompanyController.listCompanies()
+GET    /searchCompany 	              controllers.CompanyController.searchCompany(name: String)
 
 
 

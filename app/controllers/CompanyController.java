@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllersJSON.JSonOperator;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
@@ -14,6 +15,7 @@ import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.FileUpload;
 import helpers.HashHelper;
+import helpers.JSonHelper;
 import helpers.MailHelper;
 import models.*;
 import play.Logger;
@@ -283,40 +285,40 @@ public class CompanyController extends Controller {
 	}
 
 	
-	public static Result searchCompanyView() {
-		List<Company> companys = Company.all();
-		return ok(searchCompany.render(companys));
+	/**
+	 * Returns the list of all companies
+	 * If the request accepts html then the searchCompany page is
+	 * rendered, otherwise it returns the list as JSon  
+	 * @return 
+	 */
+	public static Result listCompanies() {
+		List<Company> companies = Company.all();
+		if (request().accepts("text/html")){
+			return ok(searchCompany.render(companies));
+		}
+		return ok(JSonHelper.companyListToJSon(companies));
 	}
 	
 	
 	/**
-	 * Search method for coupons. If search is unsuccessful a flash message is
+	 * Search method for companies. If search is unsuccessful a flash message is
 	 * sent
-	 * 
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result
 	 *
 	 */
-	public static Result searchCompany(String qc) {
-		
-		List<Company> allCompany = Company.find.where().ilike("name", "%" + qc + "%")
+	public static Result searchCompany(String name) {	
+		List<Company> searchedCompanies = Company.find.where().ilike("name", "%" + name + "%")
 				.findList();
-		
-		//Getting only activated coupons from search result.
-		
-		List<Company> companys = new ArrayList<Company>();
-		for(Company company: allCompany){
-			companys.add(company);		
-		}
-	
-		if((companys.isEmpty())){
-			flash("error", "No resoult for this search");
-			return badRequest(searchCompany.render(companys));
-		}
-
-		Logger.info(session("name") + " searched for: \"" + qc + "\"");
-		return ok(searchCompany.render(companys));
+		if (request().accepts("text/html")){
+			if((searchedCompanies.isEmpty())){
+				flash("error", "No resoult for this search");
+				return badRequest(searchCompany.render(searchedCompanies));
+			}
+			Logger.info(session("name") + " searched for: \"" + name + "\"");
+			return ok(searchCompany.render(searchedCompanies));
+		} return JSonOperator.searchCompany(name);
 	}
-	
+		
 }
