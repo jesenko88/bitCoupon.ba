@@ -3,6 +3,13 @@
 @main("Admin add category") {
 	
 	@_adminNavbar()
+	<div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <i class="glyphicon glyphicon-wrench pull-right"></i>
+                                <h4>Create category</h4>
+                            </div>
+                        </div>
 <div class="signup-form">
             <!--sign up form-->
             <form action="@routes.CategoryController.addCategory" method ="POST" 
