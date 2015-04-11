@@ -978,6 +978,7 @@ h2.title {
   margin: 0 15px;
   text-transform: uppercase;
   margin-bottom: 30px;
+  margin-top: 15px;
   position: relative;
 }
 
@@ -2804,7 +2805,7 @@ h2.title {
     */
   margin: 0px;
   top: 200px;
-  left: -110px;
+  left: -100px;
   position: absolute;
   z-index: 200;
 }
