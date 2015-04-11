@@ -86,14 +86,18 @@
                   <p>@coupon.name</p>
                   <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
                </div>
-               <div class="product-overlay">
+                <a href="/coupon/@coupon.id" >
+               <div class="product-overlay" >
                   <div class="overlay-content">
+                  	 <a href="/coupon/@coupon.id" >
+                  	 <p>@coupon.description</p>
                      <h2>Only @coupon.getPriceString() KM</h2>
                      <p>@coupon.name</p>
                      <p>@coupon.getExpiration()</p>
                      <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+                     </a>
                   </div>
-               </div>
+               </div>  
             </div>
          </div>
       </div>
