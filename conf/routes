@@ -51,7 +51,7 @@ POST   /updateCompany/:id             controllers.CompanyController.adminUpdateC
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
 
 GET    /companies                     controllers.CompanyController.listCompanies()
-GET    /searchCompany                 controllers.CompanyController.searchCompany(qc: String)
+GET    /searchCompany 	              controllers.CompanyController.searchCompany(name: String)
 
 
 

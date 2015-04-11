@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllersJSON.JSonOperatorGET;
+import controllersJSON.JSonOperator;
 import models.*;
 import helpers.*;
 import play.Logger;
@@ -182,7 +182,7 @@ public class SuperUserController extends Controller {
 			flash("error", "Ooops, error has occured.");
 			return redirect("/");
 		}
-		return JSonOperatorGET.profilePage(username);
+		return JSonOperator.profilePage(username);
 	}
 	
 	

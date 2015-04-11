@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import controllersJSON.JSonOperator;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
@@ -307,15 +308,17 @@ public class CompanyController extends Controller {
 	 *         view for search result
 	 *
 	 */
-	public static Result searchCompany(String qc) {	
-		List<Company> searchedCompanies = Company.find.where().ilike("name", "%" + qc + "%")
+	public static Result searchCompany(String name) {	
+		List<Company> searchedCompanies = Company.find.where().ilike("name", "%" + name + "%")
 				.findList();
-		if((searchedCompanies.isEmpty())){
-			flash("error", "No resoult for this search");
-			return badRequest(searchCompany.render(searchedCompanies));
-		}
-		Logger.info(session("name") + " searched for: \"" + qc + "\"");
-		return ok(searchCompany.render(searchedCompanies));
+		if (request().accepts("text/html")){
+			if((searchedCompanies.isEmpty())){
+				flash("error", "No resoult for this search");
+				return badRequest(searchCompany.render(searchedCompanies));
+			}
+			Logger.info(session("name") + " searched for: \"" + name + "\"");
+			return ok(searchCompany.render(searchedCompanies));
+		} return JSonOperator.searchCompany(name);
 	}
 		
 }
