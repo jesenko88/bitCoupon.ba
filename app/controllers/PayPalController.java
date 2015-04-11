@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import models.Company;
 import models.Category;
 import models.Coupon;
 import models.TransactionCP;
@@ -36,7 +35,6 @@ import com.paypal.base.rest.PayPalRESTException;
 public class PayPalController extends Controller {
 	
 	static User currentUser = User.find(session("name"));
-	static Company company = Company.find(session("name"));
 	static Coupon coupon;
 	static List<String> details;
 	static APIContext apiContext;
@@ -70,7 +68,7 @@ public class PayPalController extends Controller {
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if ( quantity > coupon.maxOrder){
 				flash("info","There are only " + coupon.maxOrder + " left");
-				return ok(coupontemplate.render(company, coupon));
+				return ok(coupontemplate.render(coupon));
 			}
 			totalPrice = coupon.price * quantity;	
 			String totalPriceString = String.format("%1.2f",totalPrice);
@@ -171,7 +169,7 @@ public class PayPalController extends Controller {
 	 */
 	public static Result couponFail(){
 		flash("error","Transaction canceled");
-		return badRequest(coupontemplate.render(company, coupon));
+		return badRequest(coupontemplate.render(coupon));
 	}
 	
 	/**

@@ -73,15 +73,15 @@ public class CouponController extends Controller {
 	 * @return redirect to the Coupon view
 	 */
 	public static Result showCoupon(long id) {
-		Coupon current = Coupon.find(id);
-		Company company = Company.find(session("name"));
-		//Exception handling.
-		if(current == null ){
-			flash("error", "Ooops, error has occured.");
-			return redirect("/");
-		}
-		return ok(coupontemplate.render(company, current));
-
+		Coupon coupon = Coupon.find(id);
+		if (request().accepts("text/html")){
+			if(coupon == null ){
+				Logger.error("error", "Coupon null at showCoupon()");
+				flash("error", "Ooops, error has occured.");
+				return redirect("/");
+			}
+			return ok(coupontemplate.render(coupon));
+		} return ok(JSonHelper.couponToJSon(coupon));
 	}
 
 	/**

@@ -3,6 +3,7 @@ package helpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import play.Logger;
 import play.libs.Json;
 import models.Category;
 import models.Company;
@@ -78,6 +79,27 @@ public class JSonHelper {
 //		userNode.put("created", company.created.toString());
 //		userNode.put("updated", company());
 		return companyNode;
+	}
+	
+	
+	public static ObjectNode couponToJSon(Coupon coupon) {
+		if (coupon == null){
+			Logger.error("error","Coupon null at couponToJSon()");
+			return JSonHelper.messageToJSon("error", "Error occured");
+		}
+		ObjectNode couponNode = Json.newObject();
+		couponNode.put("id", coupon.id);
+		couponNode.put("name", coupon.name);
+		couponNode.put("email", coupon.price);
+		couponNode.put("email", coupon.dateExpire.toString());
+		couponNode.put("adress", coupon.picture);
+		couponNode.put("email", coupon.category.name);
+		couponNode.put("city", coupon.description);
+		couponNode.put("contact", coupon.remark);
+		couponNode.put("email", coupon.seller.name);
+		couponNode.put("email", coupon.seller.email);
+		couponNode.put("contact", coupon.minOrder);
+		return couponNode;
 	}
 	
 	
