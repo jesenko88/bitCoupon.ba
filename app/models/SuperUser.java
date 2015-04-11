@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-
+import play.libs.Json;
 
 @MappedSuperclass
 public abstract class SuperUser extends Model {
@@ -26,22 +32,37 @@ public abstract class SuperUser extends Model {
 	@Required
 	public String password;
 	
+	public String adress;
+	
+	public String city;
+	
 
-	public SuperUser(String email, String password) {
+	public SuperUser(String email, String password, String adress, String city) {
 		this.email = email;
 		this.password = password;
+		this.adress = adress;
+		this.city = city;
 	}
 
 	public static List<SuperUser> allSuperUsers() {
 		List<Company> allComp = Company.all();
 		List<User> allUsr = User.all();
-
+		
+		//In case user list or company list is null.
+		if(allComp == null){
+			allComp = new ArrayList<Company>();
+		}
+		if(allUsr == null){
+			allUsr = new ArrayList<User>();
+		}
+		
 		List<SuperUser> all = new ArrayList<SuperUser>();
 		all.addAll(allComp);
 		all.addAll(allUsr);
 		return all;
 	}
-
+	
+	
 	public boolean isUser() {
 		return (this instanceof User);
 	}

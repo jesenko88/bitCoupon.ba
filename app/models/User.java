@@ -10,11 +10,18 @@ import java.util.Stack;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import controllers.UserController;
 import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.libs.Json;
 
 /**
  * 
@@ -25,9 +32,16 @@ import play.db.ebean.Model;
 
 @Entity
 public class User extends SuperUser {
-	
+
 	@Required
 	public String username;
+	
+	@Required
+	public String surname;
+
+	public Date dob;
+	
+	public String gender;
 
 	public boolean isAdmin;
 	
@@ -36,7 +50,6 @@ public class User extends SuperUser {
 	public Date updated;
 	
 	public String profilePicture;
-	
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -47,9 +60,12 @@ public class User extends SuperUser {
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
-	public User(String username, String email, String password, boolean isAdmin) {
-		super(email, password);
-		this.username = username;		
+	public User(String username, String surname, Date dob, String gender, String adress, String city, String email, String password, boolean isAdmin) {
+		super(email, password, adress, city);
+		this.username = username;	
+		this.surname = surname;
+		this.dob = dob;
+		this.gender = gender;
 		this.created = new Date();
 		this.isAdmin = isAdmin;
 	}
@@ -65,16 +81,19 @@ public class User extends SuperUser {
 	 *            String
 	 * @return the id of the new user (long)
 	 */
-	public static long createUser(String username, String email,
+	public static long createUser(String username, String surname, Date dob, String gender, String adress, String city, String email,
 			String password, boolean isAdmin) {
-		User newUser = new User(username, email, password, isAdmin);
+		User newUser = new User(username, surname, dob, gender, adress, city, email, password, isAdmin);
 		newUser.save();
 		return newUser.id;
 	}
 
 	/* Return all users */
 	public static List<User> all() {
-		return getFind().all();
+		List<User> all = getFind().all();
+		if(all == null)
+			all = new ArrayList<User>();
+		return all;
 	}
 	
 	/**
@@ -85,7 +104,22 @@ public class User extends SuperUser {
 		List<User> users = find.findList();
 		return users;
 	}
-
+	
+	//TODO
+	/*
+	 *  
+	 */
+	public static ArrayNode allAsJson() {
+		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
+		List<User> users = all();
+		for (User u : users) {
+			ObjectNode userNode = Json.newObject();
+			userNode.put("username", u.username);
+			userNode.put("isAdmin", u.isAdmin);
+			userNode.put("created", u.created.toString()); // ?
+		}
+		return arrayNode;
+	}
 	
 	
 	public void setAdmin(boolean isAdmin){
@@ -107,13 +141,11 @@ public class User extends SuperUser {
 	public static boolean verifyLogin(String mail, String password) {
 		try {
 			User user = getFind().where().eq("email", mail).findUnique();
-			if(user != null && EmailVerification.isEmailVerified(user.id)){
+			if (user != null && EmailVerification.isEmailVerified(user.id)) {
 				return HashHelper.checkPass(password, user.password);
-			}
-			else{
+			} else {
 				return false;
 			}
-				
 
 		} catch (NullPointerException e) {
 			Logger.error(e.getMessage());
@@ -154,6 +186,21 @@ public class User extends SuperUser {
 		}
 		return emails;
 	}
+	
+	/**
+	 * Returns all admin email's as Json
+	 * @return ArrayNode
+	 */
+	public static ArrayNode allAdminMailsJSon(){	
+		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
+		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
+		for(User u: userList){
+			ObjectNode mailAd = Json.newObject();
+			mailAd.put("email", u.email);
+			arrayNode.add(mailAd);
+		}
+		return arrayNode;
+	}
 
 	/*
 	 * Return user by mail
@@ -162,6 +209,19 @@ public class User extends SuperUser {
 		User user = getFind().where().eq("email", mail).findUnique();
 
 		return user;
+	}
+	
+	public static ObjectNode getUserJson(String mail) {
+		User user = getFind().where().eq("email", mail).findUnique();
+		ObjectNode userJson = Json.newObject();
+		userJson.put("username", user.username);
+		userJson.put("email", user.email);
+		userJson.put("isAdmin", user.isAdmin);
+		userJson.put("created", user.created.toString()); // ?????
+		userJson.put("updated", user.updated.toString()); // ?????
+		userJson.put("profilePicture", user.profilePicture);
+
+		return userJson;
 	}
 	
 	/*

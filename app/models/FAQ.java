@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -53,6 +54,8 @@ public class FAQ extends Model {
 	 */
 	public static List<FAQ> all(){
 		List<FAQ> faqs = find.findList();
+		if(faqs == null)
+			faqs = new ArrayList<FAQ>();
 		return faqs;
 	}
 	

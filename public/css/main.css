@@ -39,6 +39,78 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+
+
+
+
+
+
+
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+ 
+    /*----- Tab Links -----*/
+    /* Clearfix */
+    .tab-links:after {
+        display:block;
+        clear:both;
+        content:'';
+    }
+ 
+    .tab-links li {
+        margin:0px 5px;
+        float:left;
+        list-style:none;
+    }
+ 
+        .tab-links a {
+            padding:9px 15px;
+            display:inline-block;
+            border-radius:3px 3px 0px 0px;
+            background:red;
+            font-size:16px;
+            font-weight:600;
+            color:#4c4c4c;
+            transition:all linear 0.15s;
+        }
+ 
+        .tab-links a:hover {
+            background:#a7cce5;
+            text-decoration:none;
+        }
+ 
+    li.active a, li.active a:hover {
+        background:#fff;
+        color:#4c4c4c;
+    }
+ 
+    /*----- Content of Tabs -----*/
+    .tab-content {
+        padding:15px;
+        border-radius:3px;
+        box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+        background:#fff;
+    }
+ 
+        .tab {
+            display:none;
+        }
+ 
+        .tab.active {
+            display:block;
+        }
+
+
+
+
+
+
+
+
+
+
 .search_filter{
 	border: solid gray 1px;
 	width: 100%;
@@ -410,6 +482,7 @@ ul.sub-menu {
 
 #footer {
   background: #F0F0E9;
+  margin-top: 202px;
 }
 
 
@@ -905,6 +978,7 @@ h2.title {
   margin: 0 15px;
   text-transform: uppercase;
   margin-bottom: 30px;
+  margin-top: 15px;
   position: relative;
 }
 
@@ -1538,7 +1612,7 @@ h2.title {
   background: #F0F0E9;
   border: medium none;
   color: #696763;
-  display: block;
+  display: inline;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 300;
@@ -2618,7 +2692,6 @@ h2.title {
 
 
 
-
 @charset"utf-8";
 
 
@@ -2636,6 +2709,24 @@ h2.title {
     font-style: normal;
 }
 
+.spaceDiv_bottom{
+	margin-bottom: 30px; 
+}
+
+.spaceDiv_News{
+	margin-bottom: 10px; 
+}
+.hCenter{
+	text-align: center;
+}
+
+.spaceDiv_left{
+	margin-left: 30px; 
+}
+
+.spaceDiv_top{
+	margin-top: 30px; 
+}
 .top-offer {
     padding: 7px;
     position: relative;
@@ -2713,7 +2804,7 @@ h2.title {
     /* [disabled]border-top-color: #A93F89;
     */
   margin: 0px;
-  top: 300px;
+  top: 200px;
   left: -100px;
   position: absolute;
   z-index: 200;

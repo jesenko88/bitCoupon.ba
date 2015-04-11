@@ -57,6 +57,10 @@ public class Photo extends Model {
 	 */
 	public static int photoStackLength(Coupon c){
 		List<Photo> photos =  finder.all();
+		//In case there is no photos in DB.
+		if(photos == null)
+			return 0;
+		
 		int counter = 0;
 		for(Photo p: photos){
 			if(p.coupon.id == c.id){
@@ -69,11 +73,16 @@ public class Photo extends Model {
 	public static List<Photo> photosByCoupon(Coupon c){
 		List<Photo> allPhotos = finder.all();
 		List<Photo> byCoupon = new ArrayList<Photo>();
+		//In case there is no photos in DB.
+		if(allPhotos == null){
+			return new ArrayList<Photo>();
+		}
+		
 		for(Photo p: allPhotos){
 			if(p.coupon.id == c.id){
 				byCoupon.add(p);
 			}
-		}
+		}		
 		return byCoupon;
 	}
 }

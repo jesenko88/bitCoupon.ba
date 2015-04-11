@@ -29,18 +29,7 @@
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 							</button>
-						</div>
-						
-						<div class="mainmenu pull-left">
-
-							<ul class="nav navbar-nav collapse navbar-collapse">
-							@if(Sesija.adminCheck(ctx()) == true) {
-								<li><a href="@routes.UserController.listUsers">Users panel</a></li>
-								<li><a href="@routes.CouponController.addCouponView">Add Coupon panel</a></li>
-								<li><a href="@routes.CategoryController.listCategories">Category panel</a></li>
-								<li><a href="@routes.CategoryController.addCategoryView">Add Category panel</a></li>
-							}
-						</div>
+						</div>						
 						
 					</div>
 				</div>
@@ -79,8 +68,14 @@
 							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
 							<p></p>
 							<textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>
+							<p></p>
 							<input type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" required/>
-							<button type="submit" class="btn btn-default">Create Coupon</button>
+							<input type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" required/>
+                            <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>		     				
+                            <p> Usage date </p>  
+                            <input type="date" id="usage" name="usage"/>
+                           <span id="error1" style="display:none; color:red"> Date of usage must be older than expiration date </span>                           	
+      						<button type="submit" class="btn btn-default">Create Coupon</button>
 								<p></p>
 									<p></p>
 										<p></p>
@@ -108,4 +103,3 @@
 
 	
 }
-

@@ -31,10 +31,16 @@ POST   /updateUser                    controllers.UserController.updateUser(id: 
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /userPanel                     controllers.UserController.listUsers()
 GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
-GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
+GET    /deletUser                     controllers.UserController.deleteUser(id: Long) 
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
 
+GET    /subscribers                   controllers.SubscribeController.subscribers()
+GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)
+GET    /newsletter                    controllers.SubscribeController.newsletterPanel()
+POST   /newsletter                    controllers.SubscribeController.sendNewsletters()
+GET    /subscribe                     controllers.SubscribeController.subscribe(email: String)		
+GET    /unsubscribe/:token            controllers.SubscribeController.unsubscribe(token: String)
 # Company controller 
 GET    /companyPanel                  controllers.CompanyController.companyPanel(id: Long)
 POST   /companyUpdatePhoto            controllers.CompanyController.updatePhoto(id: Long)	
@@ -42,6 +48,12 @@ POST   /registerC                     controllers.CompanyController.registerC()
 POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
+GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
+
+GET    /companies                     controllers.CompanyController.listCompanies()
+GET    /searchCompany 	              controllers.CompanyController.searchCompany(name: String)
+
+
 
 # Coupon controller 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
@@ -72,7 +84,7 @@ GET    /deleteFAQ                     controllers.FAQController.deleteFAQ(id: In
 # Category controller 
 GET    /categoryPanel                 controllers.CategoryController.addCategoryView()
 GET    /categoryList                  controllers.CategoryController.listCategories()
-GET    /category/                     controllers.CategoryController.categoryView(name: String)
+GET    /category/:name                controllers.CategoryController.categoryView(name: String)
 POST   /addCategory                   controllers.CategoryController.addCategory()
 GET    /deleteCategory/:id            controllers.CategoryController.deleteCategory(id: Long)
 GET    /editCategory/                 controllers.CategoryController.editCategoryView(name: String)

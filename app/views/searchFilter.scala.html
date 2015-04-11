@@ -5,9 +5,7 @@
 <h2>@message @name</h2>
 <h4>Home: </h4>
 *@
-<body>
    <header id="header">
-      <!--header-->
       <div class="col-sm-12">
          <!--header-middle-->
          <div class="container">
@@ -17,6 +15,8 @@
            		<div class="search_box">
             		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
   							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+  					<button type="button" class="btn-btn default"name="answer"  style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
+                  			font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px"><a href="/companies">Search company</a></button>
                                   <script type="text/javascript">
 									function showDiv(toggle){
 									document.getElementById(toggle).style.display = 'block';
@@ -33,8 +33,6 @@
                </div>
             </div>
          </div>
-         <div class="row">
-         </div>
       </div>
       </div>	
    </header>
@@ -50,7 +48,7 @@
  		 <div class="col-md-12" style="margin: 20px 0" >
       
       
-         <div class="col-sm-6">
+         <div class="col-sm-5">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
                   <option value="" style="display:none">Select category</option>
@@ -58,20 +56,21 @@
                   <option>@category.name</option>
                   }
                </select>
-               <input type="submit" class="btn btn-success"> 
+               <input type="submit" class="btn btn-fefault cart"> 
             </form>
             <form action="@routes.CouponController.filterPrice(Coupon.commaSeparatedIds(coupons))" method="POST">
                <input type="number" name="start_price" id="start_price" min="1" step="any" placeholder="Price"/>
                <input type="number" name="end_price" id="end_price" min="1" step="any" placeholder="Price"/>
-               <input type="submit" class="btn btn-success"> 
+               <input type="submit" class="btn btn-fefault cart"> 
             </form>
             <form action="@routes.CouponController.filterDate(Coupon.commaSeparatedIds(coupons))" method="POST">
                @*	<input type="date" name="dateExpire"  max="2030-1-12"  min="2015-3-10" id="dateExpire" placeholder="Date of expire" required/>
                *@	<input type="date" id="datepicker" name="dateExpire">
-               <input type="submit" class="btn btn-success"> 
+               <input type="submit" class="btn btn-fefault cart"> 
             </form>
             </div>
-            <div class="col-sm-6">
+            <br>
+            <div class="col-sm-5">
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
                   <option value="" style="display:none">Order by: </option>
@@ -81,15 +80,20 @@
                </select>
                <input type="radio" id="method" name="method" value="ascending" checked>Ascending
                <input type="radio" id="method" name="method" value="descending">Descending
-               <input type="submit" class="btn btn-success">                  
+               <input type="submit" class="btn btn-fefault cart">                  
             </form>
          </div>
       </div>
       </div>
-      <h2 class="title text-center">Search Result</h2>
+      
+      
    </div>
+ <h2 class="title text-center">Search Result</h2>
+   
+     
    <div class="container">
       @for(coupon <- coupons){
+      	
       <div class="col-sm-4">
          <div class="logo pull-left">
             <div class="product-image-wrapper">
@@ -110,8 +114,12 @@
                   </div>
                </div>
             </div>
-         </div>
+         </div> 
       </div>
       }
+      </div>
+      
+  
+      
    </div>
    }

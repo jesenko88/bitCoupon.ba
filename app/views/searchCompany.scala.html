@@ -1,0 +1,67 @@
+@(companys: List[Company])
+@import helper._
+@main("SearchFilter") {
+@*	
+<h2>@message @name</h2>
+<h4>Home: </h4>
+*@
+   <header id="header">
+      <div class="col-sm-12">
+         <!--header-middle-->
+         <div class="container">
+            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            
+            <div class="logo pull-right">
+           		<div class="search_box">
+            	</div>
+            </div>
+            <div class="logo pull-right">
+               <div class="search_box">
+                  <form action="/searchCompany" method="GET">
+                     <input id="name" name="name" type="text" placeholder="Search Company" />
+                  </form>
+                  
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>	
+   </header>
+   <div class="container">
+   <div class="features_items">
+      <!--features_items-->
+    
+    
+   </div>
+ <h2 class="title text-center">Search Result</h2>
+   
+   <div class="container">
+      
+      @for(company <- companys){
+      	 <div class="col-sm-4">
+         <div class="logo pull-left">
+            <div class="product-image-wrapper">
+               <div class="single-products">
+                  <div class="productinfo text-center">
+                              <img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
+                  
+                     <h2>@company.name</h2>
+                    <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
+                  </div>
+                  <div class="product-overlay">
+                     <div class="overlay-content">
+                        <p>@company.name</p>
+                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+    
+      	
+      }
+     </div> 
+      
+   </div>
+   }

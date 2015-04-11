@@ -1,0 +1,40 @@
+@(coupons: List[Coupon])
+@main("Admin newsletter") {
+@_adminNavbar()
+
+<div class="features_items">
+   <!--features_items-->
+   <h2 class="title text-center"> Create newsletter</h2>
+   <h6 class="title text-center"> Please select 3 coupons</h6>
+</div>
+
+<div class="signup-form">
+  
+   <!--newsletter form-->
+   <form action="@routes.SubscribeController.sendNewsletters" method ="POST" >
+      <input type="text" name="subject" id="subject" placeholder="Subject here" required/>
+      
+      <div class="row">
+         @for(coupon <- coupons){      
+         <div class="col-sm-6 col-md-4"  style="max-height: 330px">
+            <div class="thumbnail">
+               <img src="@routes.Assets.at(coupon.picture)" alt="..." class="thumbnail">
+               <div class="caption">
+                  <p>@coupon.name</p>
+                  <input  type="checkbox" name="@coupon.id" id="@coupon.id" > 
+               </div>
+            </div>
+         </div>
+         }               
+      </div>
+
+      <br>
+      <button style="float: right" type="submit" class="btn btn-default">SEND NEWSLETTER</button>
+      <br>
+      <br>
+   </form>
+   <!--/sign up form-->
+
+</div>
+</div>
+}
