@@ -131,8 +131,9 @@ public class JSonHelper {
 		for (Company company : companies) {
 			ObjectNode companyNode = Json.newObject();
 			companyNode.put("name", company.name);
-			companyNode.put("isAdmin", company.created.toString()); //??
-			companyNode.put("created", company.logo); 
+			companyNode.put("created", company.created.toString()); //??
+			companyNode.put("logo", company.logo); 
+			companyNode.put("contact", company.contact); 
 			arrayNode.add(companyNode);
 		}
 		return arrayNode;
