@@ -15,6 +15,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.admin.users.*;
 import views.html.category.CategoriesList;
 import views.html.category.categoryPage;
 import views.html.category.categoryPanel;
@@ -37,7 +38,7 @@ public class CategoryController extends Controller {
 		if(byCategory == null || categoryName == null){
 			flash("error", "Error has occured, please try again alter.");
 			return redirect("/");
-		}		
+		}
 		return ok(categoryPage.render(user, byCategory, categoryName));
 	}
 
@@ -53,6 +54,10 @@ public class CategoryController extends Controller {
 		if(name == null){
 			flash("error", "Error has occured, please try again.");
 			return redirect("/");
+		}
+		User u = User.find(name);
+		if(u.isAdmin){
+			return ok(adminCategoryPanel.render(name));
 		}
 		return ok(categoryPanel.render(name));
 	}

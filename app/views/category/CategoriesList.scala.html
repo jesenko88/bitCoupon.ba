@@ -1,36 +1,22 @@
 @(name: String)(categories: List[Category])
-  @import helper._
+  @import views.html.admin.users._
 
-@main("Category List") {
-<header id="header">
-   <!--header-->
-   <div class="header-middle">
-      <!--header-middle-->
-      <div class="container">
-         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
-         <div class="logo pull-right">
-            <div class="search_box">
-               <form action="/search" method="GET">
-                  <input id="q" name="q" type="text" placeholder="Search" />
-               </form>
-            </div>
-         </div>
-      </div>
-   </div>
-</header>
-<div class='container'>
+@main("Admin Category List") {
+   @_adminNavbar()
+
+   <div class='container'>
    <div class="review-payment">
       <h2>List of Categories</h2>
    </div>
-   <div class="table-responsive cart_info">
-      <div class='container'>
-         <table class="table table-condensed">
+   </div>
+<div class="table-responsive">
+   <table class="table table-striped">
             <thead>
                <tr class="cart_menu">
-                  <td class="image">Name</td>
-                  <td class="description">NumberOfCoupons</td>
-                  <td class="total">Delete Category</td>
-                  <td></td>
+                  <th>Name</th>
+                  <th>NumberOfCoupons</th>
+                  <th>Delete Category</th>
+                  
                </tr>
             </thead>
             <tbody>
@@ -46,6 +32,6 @@
          </table>
       </div>
    </div>
-</div>
+
 }
 	

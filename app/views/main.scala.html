@@ -1,145 +1,144 @@
 @(title: String)(content: Html)
-
 <!DOCTYPE html>
+<html>
+   <title>@title</title>
+   <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/logo.png")">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link href="@routes.Assets.at("css/bootstrap1.min.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/font-awesome1.min.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/prettyPhoto1.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/main1.css")"  rel="stylesheet">   
+      <link href="@routes.Assets.at("css/price-range1.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/animate1.css")" rel="stylesheet">	
+      <link href="@routes.Assets.at("css/responsive1.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/footer1.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/font-awesome.min.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/prettyPhoto.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/main.css")"  rel="stylesheet">   
+      <link href="@routes.Assets.at("css/price-range.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/animate.css")" rel="stylesheet">	
+      <link href="@routes.Assets.at("css/responsive.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/footer.css")" rel="stylesheet">
+      <script src="@routes.Assets.at("js/main.js")"></script>
+      <script src="@routes.Assets.at("js/jquery.js")"></script>
+      <script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
+      <script src="@routes.Assets.at("js/jquery.scrollUp.min.js")"></script>
+      <script src="@routes.Assets.at("js/price-range.js")"></script>
+      <script src="@routes.Assets.at("js/jquery.prettyPhoto.js")"></script>
+      <script src="@routes.Assets.at("js/jquery.js")"></script>
+      <script src="@routes.Assets.at("js/scripts.js")"></script>
+      <script src="@routes.Assets.at("js/jquery.countdown.min.js")"></script>
+      <link rel="shortcut icon" href="home/logo.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+      <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      <link rel="stylesheet" href="/resources/demos/style.css">
+      <script>
+         $(function() {
+           $( "#datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+         });
+      </script> 
+   </head>
+   <!--/head-->
+   <body>
+      @if(!title.contains("Admin")){
+      	@navbarT()
+      }	
 
-<html> <title>@title</title>
- <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/logo.png")">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-   	<link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("css/font-awesome.min.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("css/prettyPhoto.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("css/price-range.css")" rel="stylesheet">
-	<link href="@routes.Assets.at("css/animate.css")" rel="stylesheet">
-	<link href="@routes.Assets.at("css/main.css")"  rel="stylesheet">
-	<link href="@routes.Assets.at("css/responsive.css")" rel="stylesheet">
-	<link href="@routes.Assets.at("css/footer.css")" rel="stylesheet">
+      @if(flash.get("success")){
+      <br>
+      <div class="container">
+         <div class="row clearfix">
+            <div class="col-md-12 column">
+               <div class="alert alert-dismissable alert-success">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  @flash.get("success") 
+               </div>
+            </div>
+         </div>
+      </div>
+      }
+      @if(flash.get("info")){
+      <br>
+      <div class="container">
+         <div class="row clearfix">
+            <div class="col-md-12 column">
+               <div class="alert alert-dismissable alert-info">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  @flash.get("info") 
+               </div>
+            </div>
+         </div>
+      </div>
+      }
+      @if(flash.get("warning")){
+      <br>
+      <div class="container">
+         <div class="row clearfix">
+            <div class="col-md-12 column">
+               <div class="alert alert-dismissable alert-warning">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  @flash.get("warning") 
+               </div>
+            </div>
+         </div>
+      </div>
+      }
+      @if(flash.get("error")){
+      <br>
+      <div class="container">
+         <div class="row clearfix">
+            <div class="col-md-12 column">
+               <div class="alert alert-dismissable alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  @flash.get("error")
+               </div>
+            </div>
+         </div>
+      </div>
+      }
 
- 	<script src="@routes.Assets.at("js/main.js")"></script>
-	<script src="@routes.Assets.at("js/jquery.js")"></script>
-	<script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
-	<script src="@routes.Assets.at("js/jquery.scrollUp.min.js")"></script>
-	<script src="@routes.Assets.at("js/price-range.js")"></script>
-	<script src="@routes.Assets.at("js/jquery.prettyPhoto.js")"></script>
-	<script src="@routes.Assets.at("js/jquery.js")"></script>
-	<script src="@routes.Assets.at("js/scripts.js")"></script>
-	<script src="@routes.Assets.at("js/jquery.countdown.min.js")"></script>
+      @if(!title.contains("Admin")){
+      <div class="container">
+         <div class="col-md-1">
+            <ul class="sections">
+               <li><a href="/" class="home"><span class="transition">Home</span></a>
+               </li>
+               @for(category <- Category.all()){
+               <li>	<a href="@routes.CategoryController.categoryView(category.name)" class="@category.name">
+                  <span class="transition"> @category.name </i>  </span></a>   
+               </li>
+               }
+            </ul>
+         </div>
+      </div>
+      <div class="row">
+      }
 
-    <link rel="shortcut icon" href="home/logo.png">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-    
-    
-   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script>
-  $(function() {
-    $( "#datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
-  });
-  </script> 
-    
-</head><!--/head-->
-
-    <body>
-
-		@navbarT()
-		
-		@if(flash.get("success")){
-		<br>
-		<div class="container">
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					<div class="alert alert-dismissable alert-success">
-					 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-					 @flash.get("success") 
-					</div>
-				</div>
-			</div>
-		</div>
-	}
-	
-		@if(flash.get("info")){
-			<br>
-		<div class="container">
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					<div class="alert alert-dismissable alert-info">
-					 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-					 @flash.get("info") 
-					</div>
-				</div>
-			</div>
-		</div>
-	}
-	
-	@if(flash.get("warning")){
-		<br>
-		<div class="container">
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					<div class="alert alert-dismissable alert-warning">
-					 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-					 @flash.get("warning") 
-					</div>
-				</div>
-			</div>
-		</div>
-	}
-
-
-	@if(flash.get("error")){
-		<br>
-		<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="alert alert-dismissable alert-danger">
-				 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-				 @flash.get("error")
-			</div>
-		</div>
-	</div>
-</div>
-	}
-
-       <div class="container">
-  <div class="col-md-1">
-    <ul class="sections">
-        <li><a href="/" class="home"><span class="transition">Home</span></a>
-        </li>
-    @for(category <- Category.all()){
-	        		
-	        	 <li>	<a href="@routes.CategoryController.categoryView(category.name)" class="@category.name">
-	        	   <span class="transition"> @category.name </i>  </span></a>   </li>
-
-	       		}
-    </ul>
+         @content
+         @if(!title.contains("Admin")){
       </div>
       </div>
-	<div class="row">
-			
-
-        @content
-        	 </div>	   	
-     </div>
-     <a id="scrollUp" href="#top" style="position: fixed; z-index: 2147483647;"><i class="fa fa-angle-up"></i></a>
-  
-     @footer()
-
-    </body>
-    <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-  
+      <a id="scrollUp" href="#top" style="position: fixed; z-index: 2147483647;"><i class="fa fa-angle-up"></i></a>
+      @footer()
+      }
+   </body>
+   <div id="fb-root"></div>
+   <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+   </script>
 </html>
