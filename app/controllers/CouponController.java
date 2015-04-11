@@ -175,6 +175,7 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result updateCoupon(long id) {
+		DynamicForm df = Form.form().bindFromRequest();
 		try {
 			Coupon coupon = Coupon.find(id);
 			if (couponForm.hasErrors()) {
@@ -192,8 +193,11 @@ public class CouponController extends Controller {
 				Logger.info(session("name") + "entered a too long coupon name in coupon update");
 				return ok(updateCouponView.render(session("name"), coupon,categories, photos));
 			}
+			
 			/* price */
-			double price = couponForm.bindFromRequest().get().price;
+			String sPrice = df.data().get("price");
+			double price = Double.valueOf(sPrice);
+			
 			if (price <= 0) {
 				Logger.info(session("name")	+ " entered a invalid price in coupon update");
 				flash("error", "Enter a valid price");
@@ -201,15 +205,26 @@ public class CouponController extends Controller {
 						coupon, categories, photos));
 			}
 			coupon.price = price;
-			/* date */
+			/* date 
+			 * FIX FOR DATE BUG.
+			 * */
 			Date current = new Date();
-			Date date = couponForm.bindFromRequest().get().dateExpire;
+			String sDate = df.data().get("dateExpire");	
+			Date date = null;
+			//In case user did not enter date, date will stay still.
+			if(sDate.isEmpty()){
+				date = coupon.dateExpire;
+			}else{
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				date = formatter.parse(sDate);				
+			}
+			
 			if (date != null) {
 				if (date.before(current)) {
 					flash("error", "Enter a valid expiration date");
 					Logger.info(session("name")	+ " entered a invalid date in coupon update");
 					return ok(updateCouponView.render(session("name"), coupon, categories, photos));
-				}
+			}
 				coupon.dateExpire = date;
 			}
 			/* category */
@@ -246,7 +261,7 @@ public class CouponController extends Controller {
 			return ok(updateCouponView.render(session("name"), coupon,categories, photos));
 		} catch (Exception e) {
 			flash("error", "Error while updating coupon. If you're admin please check logs");
-			Logger.error("Error at updateCoupon: " + e.getMessage());
+			Logger.error("Error at updateCoupon: " + e.getMessage(), e);
 			return redirect("/");
 		}
 	}
