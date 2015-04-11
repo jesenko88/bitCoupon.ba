@@ -3,6 +3,8 @@
 # ~~~~
 
 # Home page
+GET    /test                          controllers.Application.test()
+POST   /postTest                      controllers.Application.postTest()
 
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()

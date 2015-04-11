@@ -1,9 +1,19 @@
-@(superUsers: List[SuperUser])
-
-@for(user <- superUsers){
-	@if(user.isUser()){
-		<h3> @user.getUser().username </h3>		
-	}else{
-		
-	}
-}
+ @(append: Html)
+ 
+  @main("TEST"){
+  
+  
+  <form action="/postTest" method="post">
+  <textarea name="editor1" id="editor1"></textarea>
+        
+  <input type="submit"/>
+  </form>
+  
+  <div id="appendable" class="container">  
+  	@append  
+  </div>
+  
+  <script>
+			CKEDITOR.replace('editor1');			
+  </script>
+  }
