@@ -100,6 +100,7 @@ public class SubscribeController extends Controller {
 				return redirect("/newsletter");
 			}
 			MailHelper.sendNewsletter(subscribers, subject, coupons, message);
+			flash("success", "Newsletter has been sent.");
 			return redirect(refererUrl);
 		} catch (Exception e) {
 			flash("error", "Error while sending newsletter."
