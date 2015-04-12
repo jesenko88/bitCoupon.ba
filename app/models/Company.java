@@ -55,7 +55,7 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = "images/home/No-Logo.jpg";
+		this.logo = "images/home/company-default.jpg";
 		this.contact = contact;	
 	}
 	

@@ -60,8 +60,6 @@ public class MailHelper {
 	 * @param message
 	 */
 	public static void sendFeedback(String email, String name, String phone, String message) {
-
-		String adminMail = "haris.krkalic@bitcamp.ba";
 		
 		/**
 		 * Set subject, body and sender of mail and send mail
