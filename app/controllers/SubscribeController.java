@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.ckeditor.CKEditorConfig;
+import com.ckeditor.CKEditorReplaceTag;
+
 import models.Coupon;
 import models.Subscriber;
 import models.User;
@@ -92,6 +95,10 @@ public class SubscribeController extends Controller {
 				}
 			}
 			String message = form.data().get("message");
+			if(message.contains("<script>")){
+				flash("warning", "No scripts allowed!");
+				return redirect("/newsletter");
+			}
 			MailHelper.sendNewsletter(subscribers, subject, coupons, message);
 			return redirect(refererUrl);
 		} catch (Exception e) {

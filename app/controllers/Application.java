@@ -61,24 +61,7 @@ public class Application extends Controller {
 		public String name;
 	}
 	
-	public static Result test(){
-		CKEditorConfig ckec = new CKEditorConfig();
-		return ok(test.render(null));
-	}
-	
-	public static Result postTest(){
-		DynamicForm df = Form.form().bindFromRequest();
-		String result = df.data().get("editor1");
-		Logger.debug(result);		
-		Html html = new Html(result);
-		Logger.debug(""+html);
-		if(result.contains("<script>")){
-			flash("error", "DONT USE SCRIPT");
-			return redirect("/");
-		}
-		
-		return ok(test.render(html));
-	}
+
 
 	/**
 	 * @return render the index page
