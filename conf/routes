@@ -27,6 +27,7 @@ GET    /sendRequest                   controllers.SuperUserController.sendReques
 POST   /register                      controllers.UserController.register()
 GET    /control-panel/user/:id        controllers.UserController.controlPanel(id: Long)
 POST   /updateUser                    controllers.UserController.updateUser(id: Long)
+POST   /api/updateUser                controllers.JSonOperator.updateUser()
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /userPanel                     controllers.UserController.listUsers()
 GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
@@ -50,7 +51,7 @@ POST   /updateCompany/:id             controllers.CompanyController.adminUpdateC
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
 
 GET    /companies                     controllers.CompanyController.listCompanies()
-GET    /searchCompany 	              controllers.CompanyController.searchCompany(name: String)
+GET    /searchCompany                 controllers.CompanyController.searchCompany(name: String)
 
 
 

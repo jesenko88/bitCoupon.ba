@@ -37,7 +37,6 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import models.*;
-import controllersJSON.*;
 
 import com.ckeditor.CKEditorConfig;
 import com.ckeditor.CKEditorReplaceAllTag;

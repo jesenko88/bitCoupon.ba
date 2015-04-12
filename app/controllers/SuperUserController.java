@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllersJSON.JSonOperator;
 import models.*;
 import helpers.*;
 import play.Logger;

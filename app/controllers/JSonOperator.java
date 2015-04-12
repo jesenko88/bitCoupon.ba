@@ -1,5 +1,6 @@
-package controllersJSON;
+package controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import helpers.*;
 import models.*;
 import play.Logger;
+import play.Play;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -19,7 +22,7 @@ import views.html.*;
 
 public class JSonOperator extends Controller {
 	
-
+	static String PATH = Play.application().configuration().getString("PATH");
 	
 	/**
 	 * TODO comments
@@ -71,7 +74,7 @@ public class JSonOperator extends Controller {
 		JsonNode json = request().body().asJson();
 		String username = json.findPath("username").textValue();
 		String surname = json.findPath("surname").textValue();
-		String mail = json.findPath("email").textValue();
+		String email = json.findPath("email").textValue();
 		String dob = json.findPath("dob").textValue();
 		String gender = json.findPath("gender").textValue();
 		String adress = json.findPath("adress").textValue();
@@ -81,7 +84,7 @@ public class JSonOperator extends Controller {
 
 		if (username.length() < 4 || username.equals("Username")) {
 			return badRequest(JSonHelper.messageToJSon("error","Usernam must be at least 4 chatacters"));
-		} else if (mail.isEmpty()) {
+		} else if (email.isEmpty()) {
 			return badRequest(JSonHelper.messageToJSon("error","Email is required for registration !"));
 		} else if (password.length() < 6) {
 			return badRequest(JSonHelper.messageToJSon("error","Password must be at least 6 characters!"));
@@ -89,19 +92,19 @@ public class JSonOperator extends Controller {
 			return badRequest(JSonHelper.messageToJSon("error","Passwords don't match, try again "));
 		}
 		/* Creating new user */
-		else if (User.verifyRegistration(username, mail) == true) {
+		else if (User.verifyRegistration(username, email) == true) {
 			try {
 				/* parsing date from string */
 				Date dayOfBirth = DateHelper.getDate(dob);
 				String hashPass = HashHelper.createPassword(password);
-				long id = User.createUser(username, surname, dayOfBirth,gender, adress, city, mail, hashPass, false);
+				long id = User.createUser(username, surname, dayOfBirth,gender, adress, city, email, hashPass, false);
 				String verificationEmail = EmailVerification.addNewRecord(id);
 				/* temporary hard coded */
-				MailHelper.send(mail,"Click on the link below to verify your e-mail adress <br>"
-								+ "http://" + "localhost:9000"
+				MailHelper.send(email,"Click on the link below to verify your e-mail adress <br>"
+								+ "http://" + PATH
 								+ "/verifyEmail/" + verificationEmail);
 				Logger.info("A verification mail has been sent to email address");
-				return ok(JSonHelper.messageToJSon("info","A verification mail has been sent to this address: " + mail));
+				return ok(JSonHelper.messageToJSon("info","A verification mail has been sent to this address: " + email));
 			} catch (Exception e) {
 				Logger.error("error", "Registration error" + e.getMessage(), e);
 				return badRequest(JSonHelper.messageToJSon("error","Ann error occured, please try again later"));
@@ -116,6 +119,13 @@ public class JSonOperator extends Controller {
 	
 	/* GET requests */
 	
+	/**
+	 * Method returns the profile page data for user or company as JSon data.
+	 * It receives a username as String and calls a method from the JSonHelper class
+	 * which returns the object user or company as an ObjectNode
+	 * @param username String
+	 * @return
+	 */
 	public static Result profilePage(String username) {
 		try {
 			User user = User.find(username);
@@ -146,6 +156,59 @@ public class JSonOperator extends Controller {
 		}
 		return ok(JSonHelper.companyListToJSon(searchedCompanies));
 
+	}
+
+	/**
+	 * Method for updating user profile. It finds the user by
+	 * provided id. Parses the data from the received JsonNode
+	 * and saves the new values to the database.
+	 * Returns a JSon message with a 'info' tag if the update is successful,
+	 * or an error message if update fails
+	 * @param id of the user
+	 * @return 
+	 */
+	public static Result updateUser() {
+			JsonNode json = request().body().asJson();
+			String id = json.findPath("id").textValue();
+			String username = json.findPath("username").textValue();
+			String surname = json.findPath("surname").textValue();
+			String email = json.findPath("email").textValue();
+			String dob = json.findPath("dob").textValue();
+			String gender = json.findPath("gender").textValue();
+			String adress = json.findPath("adress").textValue();
+			String city = json.findPath("city").textValue();
+
+			try {
+				User cUser = User.find(Long.parseLong(id));
+				cUser.username = username;
+				cUser.surname = surname;
+				cUser.dob =	DateHelper.getDate(dob);
+				cUser.gender = gender;
+				cUser.adress = adress;
+				cUser.city = city;
+				cUser.updated = new Date();
+
+				if (!cUser.email.equals(email)) {
+					String verificationEmail = EmailVerification
+							.addNewRecord(cUser.id);
+					MailHelper.send(email,"Click on the link below to verify your e-mail adress <br>"
+							+ "http://" + PATH
+							+ "/verifyEmail/" + verificationEmail);
+					cUser.email = email;
+					cUser.save();
+					Logger.info("A verification mail has been sent to this email: " + email);
+					return ok(JSonHelper.messageToJSon("info","Update successful, a verification mail has been sent to this address: " + email));
+				}
+				cUser.email = email;
+				cUser.save();
+				flash("success", "Profile updated!");
+				Logger.info(cUser.username + " updated profile from mobile app");
+				session("name", cUser.username);
+				return ok(JSonHelper.messageToJSon("info","Update successful"));
+			} catch (Exception e) {
+				Logger.error("Error at updateUser: " + e.getMessage(), e);
+				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
+			}		
 	}
 	
 }
