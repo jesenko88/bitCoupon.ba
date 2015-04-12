@@ -131,6 +131,7 @@ public class SubscribeController extends Controller {
 				Logger.debug("User " + u.email + " subscribed.");
 			} else {
 				Logger.debug("Visitor with email " + email + " subscribed.");
+				flash("success", "You are now subscribed with following email: " + email);
 				Subscriber.subscribe(email);
 			}
 			return redirect(refererUrl);
