@@ -20,5 +20,6 @@ libraryDependencies ++= Seq(
   "edu.vt.middleware" % "vt-password" % "3.1.2",
   "org.imgscalr" % "imgscalr-lib" % "4.2",
   "com.paypal.sdk" % "rest-api-sdk" % "1.2.0",
-  "org.jsoup" % "jsoup" % "1.8.1"
+  "org.jsoup" % "jsoup" % "1.8.1",
+  "com.ckeditor" % "ckeditor-java-core" % "3.5.3"
 )

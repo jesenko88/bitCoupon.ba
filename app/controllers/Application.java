@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import play.twirl.api.Html;
+
+import org.jsoup.Jsoup;
+
 import helpers.JSonHelper;
 import helpers.MailHelper;
 import models.User;
@@ -30,10 +34,14 @@ import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import models.*;
 import controllersJSON.*;
 
+import com.ckeditor.CKEditorConfig;
+import com.ckeditor.CKEditorReplaceAllTag;
+import com.ckeditor.CKEditorReplaceTag;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Application extends Controller {
@@ -52,6 +60,8 @@ public class Application extends Controller {
 		public String phone;
 		public String name;
 	}
+	
+
 
 	/**
 	 * @return render the index page

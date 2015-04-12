@@ -105,7 +105,7 @@ public class MailHelper {
 	 * @param subject
 	 * @param coupons
 	 */
-	public static void sendNewsletter(List<String> emails, String subject, List<Coupon> coupons)  {
+	public static void sendNewsletter(List<String> emails, String subject, List<Coupon> coupons, String addHTML)  {
 		copyImages(coupons);
 		
 		Email mail = new Email();
@@ -131,6 +131,7 @@ public class MailHelper {
 		for(String email: emails){
 			mail.addTo(email);
 			preparedHTML = getPreparedHTML(email, message, coupons);
+			preparedHTML.getElementById("appendableText").append(addHTML);
 			mail.setBodyHtml(preparedHTML.toString());
 			MailerPlugin.send(mail);			
 		}	
