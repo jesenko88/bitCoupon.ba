@@ -74,14 +74,12 @@ public class CouponController extends Controller {
 	 */
 	public static Result showCoupon(long id) {
 		Coupon coupon = Coupon.find(id);
-		if (request().accepts("text/html")){
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
 				flash("error", "Ooops, error has occured.");
 				return redirect("/");
 			}
 			return ok(coupontemplate.render(coupon));
-		} return ok(JSonHelper.couponToJSon(coupon));
 	}
 
 	/**
@@ -283,8 +281,7 @@ public class CouponController extends Controller {
 			if(coupon.status){
 				coupons.add(coupon);
 			}
-		}
-		
+		}	
 		if (coupons.isEmpty()) {
 			flash("error", "No such coupon");
 			User u = User.find(session("name"));

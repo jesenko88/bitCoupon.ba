@@ -71,7 +71,6 @@ public class CategoryController extends Controller {
 	public static Result listCategories() {
 		String name = session("name");
 		List<Category> allCategories = Category.all();
-		// Exception handling.
 		if (name == null || allCategories == null) {
 			flash("error", "Ooops, error has occured. Please try again.");
 			return redirect("/");

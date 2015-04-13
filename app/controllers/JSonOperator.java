@@ -120,25 +120,38 @@ public class JSonOperator extends Controller {
 	/* GET requests */
 	
 	/**
-	 * Method returns the profile page data for user or company as JSon data.
-	 * It receives a username as String and calls a method from the JSonHelper class
-	 * which returns the object user or company as an ObjectNode
-	 * @param username String
-	 * @return
+	 * Method returns the profile page data for user as JSon data.
+	 * It receives an id as String, parses the id to long, and finds the user by id.
+	 * Finally it returns the object user in JSon format
+	 * @param id String
+	 * @return 
 	 */
-	public static Result profilePage(String username) {
+	public static Result userProfile() {
+		JsonNode json = request().body().asJson();
+		String id = json.findPath("id").textValue();
 		try {
-			User user = User.find(username);
-			Company company = Company.find(username);
-			if (user != null) {
-				return ok(JSonHelper.userToJSon(user));
-			} else if (company != null) {
-				return ok(JSonHelper.companyToJSon(company));
-			}
+			User user = User.find(Long.parseLong(id));
+			return ok(JSonHelper.userToJSon(user));	
 		} catch (Exception e) {
-			Logger.error("error","Profile page failed due null user or company! " + e.getMessage(), e);
+			Logger.error("error","Profile page failed due null user ! " + e.getMessage(), e);
 		}
 		return badRequest(JSonHelper.messageToJSon("erorr",	"An error occured"));
+	}
+	
+	/**
+	 * Method returns the profile page data for company as JSon data.
+	 * It receives an id as String, parses the id to long, and finds the company by id.
+	 * Finally it returns the object company in JSon format
+	 * @param company id String
+	 * @return 
+	 */
+	public static Result companyProfile() {
+		JsonNode json = request().body().asJson();
+		String id = json.findPath("id").textValue();
+		Company company = Company.findById(Long.parseLong(id));
+		if (company != null)
+			return ok(JSonHelper.companyToJSon(company));
+		return badRequest(JSonHelper.messageToJSon("erorr", "An error occured"));
 	}
 	
 	/**
@@ -149,12 +162,43 @@ public class JSonOperator extends Controller {
 	 * @param company name or part of it
 	 * @return JSon (ArrayNode)
 	 */
-	public static Result searchCompany(String name) {
+	public static Result searchCompany() {
+		JsonNode json = request().body().asJson();
+		String name = json.findPath("name").textValue();
 		List<Company> searchedCompanies = Company.find.where().ilike("name", "%" + name + "%").findList();
 		if (searchedCompanies.isEmpty()) {
 			return badRequest(JSonHelper.messageToJSon("info","No result for this search"));
 		}
 		return ok(JSonHelper.companyListToJSon(searchedCompanies));
+
+	}
+	
+	public static Result searchCoupon() {
+		JsonNode json = request().body().asJson();
+		String name = json.findPath("name").textValue();
+		List<Coupon> searchedCoupons = Coupon.find.where().ilike("name", "%" + name + "%").findList();
+		if (searchedCoupons.isEmpty()) {
+			return badRequest(JSonHelper.messageToJSon("info","No result for this search"));
+		}
+		return ok(JSonHelper.couponListToJson(searchedCoupons));
+
+	}
+	
+	/**
+	 * Method returns a specific coupon in JSon format.
+	 * It receives an id as String and returns the coupon by provided id.
+	 * @return
+	 */
+	public static Result showCoupon() {
+		JsonNode json = request().body().asJson();
+		long id = Long.parseLong(json.findPath("id").textValue());
+		Coupon coupon = Coupon.find(id);
+		if(coupon == null ){
+			Logger.error("error", "Coupon null at showCoupon()");
+			flash("error", "Ooops, error has occured.");
+			return badRequest(JSonHelper.messageToJSon("error", "Internal server error"));
+		}
+		return ok(JSonHelper.couponToJSon(coupon));
 
 	}
 
@@ -173,8 +217,6 @@ public class JSonOperator extends Controller {
 			String username = json.findPath("username").textValue();
 			String surname = json.findPath("surname").textValue();
 			String email = json.findPath("email").textValue();
-			String dob = json.findPath("dob").textValue();
-			String gender = json.findPath("gender").textValue();
 			String adress = json.findPath("adress").textValue();
 			String city = json.findPath("city").textValue();
 
@@ -182,8 +224,6 @@ public class JSonOperator extends Controller {
 				User cUser = User.find(Long.parseLong(id));
 				cUser.username = username;
 				cUser.surname = surname;
-				cUser.dob =	DateHelper.getDate(dob);
-				cUser.gender = gender;
 				cUser.adress = adress;
 				cUser.city = city;
 				cUser.updated = new Date();

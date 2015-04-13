@@ -93,8 +93,6 @@ public class Application extends Controller {
 	 *         login page with a warning message.
 	 */
 	public static Result login() {
-		if (request().accepts("text/html")) {
-
 			Form<Login> login = new Form<Login>(Login.class);
 			if (login.hasGlobalErrors()) {
 				Logger.info("Login global error");
@@ -142,9 +140,6 @@ public class Application extends Controller {
 				Logger.error("Error has occured at login: " + e.getMessage(), e);
 				return redirect("/");
 			}
-		}
-		/* return JSon if request().accept() is not text/html */
-		return JSonOperator.login();
 	}
 
 	/**

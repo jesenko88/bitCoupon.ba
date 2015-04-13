@@ -2,6 +2,20 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#API
+POST   /api/updateUser                controllers.JSonOperator.updateUser()
+POST   /api/login                     controllers.JSonOperator.login()
+POST   /api/searchCompany             controllers.JSonOperator.searchCompany()
+POST   /api/searchCoupon              controllers.JSonOperator.searchCoupon()
+POST   /api/coupon                    controllers.JSonOperator.showCoupon()
+POST   /api/userProfile               controllers.JSonOperator.userProfile()
+POST   /api/companyProfile            controllers.JSonOperator.companyProfile()
+POST   /api/updateUser                controllers.JSonOperator.updateUser()
+GET    /api/categoryList              controllers.CategoryController.listCategories()
+GET    /api/companies                 controllers.CompanyController.listCompanies()
+GET    /api/allCoupons                controllers.CouponController.listCoupons()
+GET    /api/faq                       controllers.FAQController.showFAQ()
+
 # Home page
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
@@ -27,7 +41,6 @@ GET    /sendRequest                   controllers.SuperUserController.sendReques
 POST   /register                      controllers.UserController.register()
 GET    /control-panel/user/:id        controllers.UserController.controlPanel(id: Long)
 POST   /updateUser                    controllers.UserController.updateUser(id: Long)
-POST   /api/updateUser                controllers.JSonOperator.updateUser()
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /userPanel                     controllers.UserController.listUsers()
 GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
@@ -49,7 +62,6 @@ POST   /updateCompany                 controllers.CompanyController.updateCompan
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
-
 GET    /companies                     controllers.CompanyController.listCompanies()
 GET    /searchCompany                 controllers.CompanyController.searchCompany(name: String)
 
