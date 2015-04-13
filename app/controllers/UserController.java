@@ -43,8 +43,11 @@ public class UserController extends Controller {
 	 */
 	public static Result register() {
 
-		if (userForm.hasErrors()) {
-			return redirect("/signup ");
+		Form<User> submit = Form.form(User.class).bindFromRequest();
+
+		
+		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
 
 		String username = userForm.bindFromRequest().get().username;
@@ -61,17 +64,18 @@ public class UserController extends Controller {
 
 		if (username.length() < 4 || username.equals("Username")) {
 			flash("error", "Usernam must be at least 4 chatacters");
-			return badRequest(signup.render());
-		} else if (mail.equals("Email")) {
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
+			} else if (mail.equals("Email")) {
 			flash("error", "Email is required for registration !");
-			return badRequest(signup.render());
-		} else if (password.length() < 6) {
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
+			} else if (password.length() < 6) {
 			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render());
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		} else if (!password.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render());
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
+		
 
 		/*
 		 * Creating new user if the username or mail is free for use, and there
@@ -97,8 +101,8 @@ public class UserController extends Controller {
 		} else {
 			flash("error", "Username or email allready exists!");
 			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render());
-		}
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
+			}
 
 	}
 

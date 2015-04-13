@@ -2,6 +2,7 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
+import helpers.HashHelper;
 import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
@@ -50,7 +51,7 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
 		List<Category> categories = Category.all();
-		return ok(couponPanel.render(session("name"), categories));
+		return ok(couponPanel.render(session("name"), categories, new Form<Coupon>(Coupon.class)));
 	}
 
 	/**
@@ -312,26 +313,31 @@ public class CouponController extends Controller {
 
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
+		List<Category> categories = Category.all();
 
-		if (couponForm.hasErrors()) {
+		
+		Form<Coupon> submit = Form.form(Coupon.class).bindFromRequest();
+
+		String name = couponForm.bindFromRequest().field("name").value();
+		
+		
+		if (couponForm.hasErrors() || submit.hasGlobalErrors()) {
 			Logger.debug("Error adding coupon");
-			return redirect("/couponPanel");
+			return ok(couponPanel.render(session("name"), categories, submit));
 		}
 
-		/* name */
-		String name = couponForm.bindFromRequest().field("name").value();
-		List<Category> categories = Category.all();
+		
 
 		if (name.length() < 4) {
 			Logger.info(session("name") + "entered a short coupon name");
 			flash("error", "Name must be 4 characters long");
-			return badRequest(couponPanel.render(session("name"), categories));
+			return ok(couponPanel.render(session("name"), categories, submit));
 
 		}
 		if (name.length() > 70) {
 			Logger.info(session("name") + "entered a too long coupon name");
 			flash("error", "Name must be max 70 characters long");
-			return badRequest(couponPanel.render(session("name"), categories));
+			return ok(couponPanel.render(session("name"), categories, submit));
 		}
 		/* price */
 		String stringPrice = couponForm.bindFromRequest().field("price")
@@ -342,7 +348,7 @@ public class CouponController extends Controller {
 		if (price <= 0) {
 			Logger.info(session("name") + "entered a invalid price ( <= 0 )");
 			flash("error", "Enter a valid price");
-			return badRequest(couponPanel.render(session("name"), categories));
+			return ok(couponPanel.render(session("name"), categories, submit));
 		}
 
 		/* date */
@@ -351,7 +357,7 @@ public class CouponController extends Controller {
 		if (date.before(current)) {
 			Logger.info(session("name") + "entered a invalid date");
 			flash("error", "Enter a valid expiration date");
-			return badRequest(couponPanel.render(session("name"), categories));
+			return ok(couponPanel.render(session("name"), categories, submit));
 
 		}
 		/* category */
@@ -378,8 +384,21 @@ public class CouponController extends Controller {
 		
 		
 		int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
-		Date usage = couponForm.bindFromRequest().get().usage;
+		
+		if(minOrder>maxOrder){
+			flash("error", "Maximal order must be biger then minimal order");
+			return ok(couponPanel.render(session("name"), categories, submit));
 
+		}
+		
+		
+		Date usage = couponForm.bindFromRequest().get().usage;
+		if (usage.before(date)) {
+			Logger.info(session("name") + "entered a invalid date");
+			flash("error", "Enter a valid usage date");
+			return ok(couponPanel.render(session("name"), categories, submit));
+
+		}
 		
 
 		boolean status;

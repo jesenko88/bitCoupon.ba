@@ -246,7 +246,7 @@ public class Application extends Controller {
 	 * @return Renders the registration view
 	 */
 	public static Result signup() {
-		return ok(signup.render());
+		return ok(signup.render(new Form<User>(User.class), new Form<Company>(Company.class)));
 	}
 
 }

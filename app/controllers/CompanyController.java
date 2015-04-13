@@ -38,9 +38,14 @@ public static final String PATH = "localhost:9000";
 	 */
 	public static Result registerC() {
 
-		if (companyForm.hasErrors()) {
-			return redirect("/companySignup");
+		Form<Company> submit = Form.form(Company.class).bindFromRequest();
+
+		
+		
+		if (companyForm.hasErrors()|| submit.hasGlobalErrors()) {
+			return ok(signup.render(new Form<User>(User.class), submit));
 		}
+
 
 		String name = companyForm.bindFromRequest().get().name;
 		String mail = companyForm.bindFromRequest().get().email;
@@ -56,16 +61,16 @@ public static final String PATH = "localhost:9000";
 
 		if (name.length() < 4 || name.equals("Name")) {
 			flash("error", "Name must be at least 4 chatacters");
-			return badRequest(signup.render());
+			return ok(signup.render(new Form<User>(User.class), submit));
 		} else if (mail.equals("Email")) {
 			flash("error", "Email is required for registration !");
-			return badRequest(signup.render());
+			return ok(signup.render(new Form<User>(User.class), submit));
 		} else if (password.length() < 6) {
 			flash("error", "Password must be at least 6 characters!");
-			return badRequest(signup.render());
+			return ok(signup.render(new Form<User>(User.class), submit));
 		} else if (!password.equals(confPass)) {
 			flash("error", "Passwords don't match, try again ");
-			return badRequest(signup.render());
+			return ok(signup.render(new Form<User>(User.class), submit));
 		}
 
 		else if (Company.verifyRegistration(name, mail) == true) {
@@ -79,12 +84,12 @@ public static final String PATH = "localhost:9000";
 							+ verificationEmail);
 			flash("success", "A verification mail has been sent to your email address!");
 			Logger.info("A verification mail has been sent to email address");
-			return ok(signup.render());
+			return ok(signup.render(new Form<User>(User.class), submit));
 
 		} else {
 			flash("error", "Username or email allready exists!");
 			Logger.info("Username or email allready exists!");
-			return badRequest(signup.render());
+			return ok(signup.render(new Form<User>(User.class), submit));
 		}
 	}
 	
