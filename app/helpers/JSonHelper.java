@@ -176,13 +176,11 @@ public class JSonHelper {
 			couponNode.put("name", c.name);
 			couponNode.put("price", c.price);
 			couponNode.put("description", c.description);
-			couponNode.put("remark", c.remark);
 			couponNode.put("minOrder", c.minOrder);
 			couponNode.put("picture", c.picture);
 			couponNode.put("dateExpire", c.dateExpire.toString()); // ??
 			couponNode.put("category", c.category.name);
-			couponNode.put("minOrder", c.minOrder);
-			couponNode.put("status", c.status);		
+			couponNode.put("remark", c.remark);
 			arrayNode.add(couponNode);
 		}
 		return arrayNode;

@@ -2,6 +2,7 @@ package models;
 
 import helpers.JSonHelper;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -101,15 +102,6 @@ public class Coupon extends Model {
 		this.category = category;
 		this.description = description;
 		this.remark = remark;		
-		
-		/*
-		 * this.code = code; this.lastMinute = lastMinute; this.duration =
-		 * duration; this.specialPrice = specialPrice; this.viewCount =
-		 * viewCount; this.specialOffer = specialOffer; this.multiOffer_id =
-		 * multiOffer_id; this.status = status; this.company_id = company_id;
-		 * this.comment_user_id = comment_user_id; this.response_company_id =
-		 * response_company_id;
-		 */
 	}
 	public Coupon(String name, double price, Date dateExpire, String picture,
 			Category category, String description, String remark, int minOrder, int maxOrder,Date usage, Company seller) {
@@ -127,6 +119,12 @@ public class Coupon extends Model {
 		this.usage = usage;
 		this.seller = seller;
 		this.status = false;
+	}
+	
+	/*TODO coupons for empty fields */
+	public Coupon(String name, String picture) {
+		this.name = name;
+		this.picture = picture;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -565,7 +563,9 @@ public class Coupon extends Model {
 	 */
 	public  boolean checkIfExpired(){
 		Date now = new Date();
-		return dateExpire.before(now);
+		if (dateExpire != null)
+			return dateExpire.before(now);
+		return false;
 	}
 
 	
@@ -577,9 +577,38 @@ public class Coupon extends Model {
 			if(coupon.status){
 				approved.add(coupon);
 			}
-		}		
+		}	
+		/* if the last row on the page is not fulfilled, additional coupons
+		 * are add to the list, according to the number of blank fields. */
+		int columns = 3;
+		int emptyFields = approved.size() % columns;
+		if (emptyFields != 0){
+			int missing = columns - emptyFields;
+			List<Coupon> blank = emptyCoupons(missing);
+			List<Coupon> merged = new ArrayList<Coupon>();
+			merged.addAll(approved);
+			merged.addAll(blank);
+			return merged;
+		}
 		return approved;
 	}
+	
+	/**
+	 * Makes a list of coupons to add into the blank fields on
+	 * the page. It receives a number of empty coupons to creat as
+	 * parameter.
+	 * @param missing coupons int
+	 * @return  List<Coupon>
+	 */
+	private static List<Coupon> emptyCoupons(int missing){
+		List<Coupon> blank = new ArrayList<Coupon>();
+		for (int i = 1; i <= missing; i++){
+			blank.add(Coupon.find(i));
+		}
+		return blank;
+	}
+	
+
 	
 	public static List<Coupon> nonApprovedCoupons() {
 		List<Coupon> all = find.all();
