@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import helpers.FileUpload;
 import helpers.HashHelper;
 import models.Category;
 import models.Company;
@@ -85,15 +86,18 @@ public class Global extends GlobalSettings {
 		}
 		
 		if(Category.exists("Food") == false){
-			food = new Category("Food"); 
+			food = new Category("Food", "images" 
+					+ File.separator + "category-photos" + File.separator + "food.png"); 
 			food.save();
 		}
 		if(Category.exists("Travel") == false){
-			travel = new Category("Travel");	
+			travel = new Category("Travel", "images" 
+					+ File.separator + "category-photos" + File.separator + "travel.png");	
 			travel.save();
 		}
 		if(Category.exists("Sport") == false){
-			sport = new Category("Sport");
+			sport = new Category("Sport", "images" 
+					+ File.separator + "category-photos" + File.separator + "sport.png");
 			sport.save();
 		}
 		if(Category.exists("Other") == false){

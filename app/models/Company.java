@@ -4,13 +4,11 @@ import helpers.AdminFilter;
 import helpers.CurrentUserFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
-
+import java.util.ArrayList;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.*;
-
 import controllers.Sesija;
 import play.Logger;
 import play.data.DynamicForm;
@@ -24,7 +22,7 @@ import play.mvc.Security;
 
 @Entity
 public class Company  extends SuperUser{	
-
+	
 	@Required
 	public String name;	
 	
@@ -57,7 +55,7 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = "images/home/No-Logo.jpg";
+		this.logo = "images/home/company-default.jpg";
 		this.contact = contact;	
 	}
 	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
@@ -85,6 +83,8 @@ public class Company  extends SuperUser{
 	
 	public static List<Company> all(){
 		List<Company> all = find.all();
+		if(all == null)
+			all = new ArrayList<Company>();
 		return all;
 	}
 	

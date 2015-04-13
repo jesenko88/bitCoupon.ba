@@ -2,8 +2,21 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+#API
+POST   /api/updateUser                controllers.JSonOperator.updateUser()
+POST   /api/login                     controllers.JSonOperator.login()
+POST   /api/searchCompany             controllers.JSonOperator.searchCompany()
+POST   /api/searchCoupon              controllers.JSonOperator.searchCoupon()
+POST   /api/coupon                    controllers.JSonOperator.showCoupon()
+POST   /api/userProfile               controllers.JSonOperator.userProfile()
+POST   /api/companyProfile            controllers.JSonOperator.companyProfile()
+POST   /api/updateUser                controllers.JSonOperator.updateUser()
+GET    /api/categoryList              controllers.CategoryController.listCategories()
+GET    /api/companies                 controllers.CompanyController.listCompanies()
+GET    /api/allCoupons                controllers.CouponController.listCoupons()
+GET    /api/faq                       controllers.FAQController.showFAQ()
 
+# Home page
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
 POST   /login                         controllers.Application.login()
@@ -31,7 +44,7 @@ POST   /updateUser                    controllers.UserController.updateUser(id: 
 POST   /userUpdatePhoto               controllers.UserController.updatePhoto(id: Long)	
 GET    /userPanel                     controllers.UserController.listUsers()
 GET    /boughtCoupons                 controllers.UserController.showBoughtCoupons(id: Long)
-GET    /deletUser                     controllers.UserController.deleteUser(id: Long)
+GET    /deletUser                     controllers.UserController.deleteUser(id: Long) 
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
 
@@ -48,10 +61,10 @@ POST   /registerC                     controllers.CompanyController.registerC()
 POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
-GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
-GET    /searchCompany                 controllers.CompanyController.searchCompanyView()
-GET    /searchCompanyS                controllers.CompanyController.searchCompany(qc: String)
 
+GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
+GET    /companies                     controllers.CompanyController.listCompanies()
+GET    /searchCompany                 controllers.CompanyController.searchCompany(name: String)
 
 # Coupon controller 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
@@ -70,7 +83,7 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
-GET    /boughtCoupon                  controllers.CouponController.boughtCoupon(id: Long)
+# GET    /boughtCoupon                  controllers.CouponController.boughtCoupon(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
@@ -83,7 +96,7 @@ GET    /deleteFAQ                     controllers.FAQController.deleteFAQ(id: In
 # Category controller 
 GET    /categoryPanel                 controllers.CategoryController.addCategoryView()
 GET    /categoryList                  controllers.CategoryController.listCategories()
-GET    /category/                     controllers.CategoryController.categoryView(name: String)
+GET    /category/:name                controllers.CategoryController.categoryView(name: String)
 POST   /addCategory                   controllers.CategoryController.addCategory()
 GET    /deleteCategory/:id            controllers.CategoryController.deleteCategory(id: Long)
 GET    /editCategory/                 controllers.CategoryController.editCategoryView(name: String)
