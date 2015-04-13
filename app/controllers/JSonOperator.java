@@ -129,13 +129,10 @@ public class JSonOperator extends Controller {
 	public static Result userProfile() {
 		JsonNode json = request().body().asJson();
 		String id = json.findPath("id").textValue();
-		try {
-			User user = User.find(Long.parseLong(id));
-			return ok(JSonHelper.userToJSon(user));	
-		} catch (Exception e) {
-			Logger.error("error","Profile page failed due null user ! " + e.getMessage(), e);
-		}
-		return badRequest(JSonHelper.messageToJSon("erorr",	"An error occured"));
+		User user = User.find(Long.parseLong(id));
+		if (user != null)
+			return ok(JSonHelper.userToJSon(user));
+		return badRequest(JSonHelper.messageToJSon("erorr", "An error occured"));
 	}
 	
 	/**
