@@ -578,34 +578,22 @@ public class Coupon extends Model {
 				approved.add(coupon);
 			}
 		}	
-		/* if the last row on the page is not fulfilled, additional coupons
-		 * are add to the list, according to the number of blank fields. */
-		int columns = 3;
-		int emptyFields = approved.size() % columns;
-		if (emptyFields != 0){
-			int missing = columns - emptyFields;
-			List<Coupon> blank = emptyCoupons(missing);
-			List<Coupon> merged = new ArrayList<Coupon>();
-			merged.addAll(approved);
-			merged.addAll(blank);
-			return merged;
-		}
 		return approved;
 	}
 	
+	
+	
 	/**
-	 * Makes a list of coupons to add into the blank fields on
-	 * the page. It receives a number of empty coupons to creat as
-	 * parameter.
-	 * @param missing coupons int
-	 * @return  List<Coupon>
+	 * Returns the number of empty fields on in a row on the page
+	 * @return
 	 */
-	private static List<Coupon> emptyCoupons(int missing){
-		List<Coupon> blank = new ArrayList<Coupon>();
-		for (int i = 1; i <= missing; i++){
-			blank.add(Coupon.find(i));
-		}
-		return blank;
+	public static int numberOfEmptyFields(){
+		List<Coupon> approved = approvedCoupons();
+		int columns = 3;
+		int emptyFields = approved.size() % columns;
+		if(emptyFields > 0)
+			return columns - emptyFields;
+		return 0;
 	}
 	
 

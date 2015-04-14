@@ -78,7 +78,7 @@
    <h2 class="title text-center">Available Coupons</h2>
 	<div class="container">
    @for(coupon <- coupons){
-   	   @if(coupon.name != "empty"){
+   	 
 		   <div class="col-sm-4">
 		         <div class="product-image-wrapper">
 		            <div class="single-products">
@@ -102,21 +102,22 @@
 		               </div>  
 		            </div>
 		         </div>
-		      </div>
-        }else{
-        	 <div class="col-sm-4">
+		      </div>       
+        
+   }		
+
+   		@for(index <- 0 until Coupon.numberOfEmptyFields() ){
+           	 <div class="col-sm-4">
 		         <div class="product-image-wrapper">
 		            <div class="single-products">
 		               <div class="productinfo text-center">
-		                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+		                  <img src="@routes.Assets.at("images/default_image.jpg")" />
 		                  <h2> BitCoupon </h2>
 		                  <p> Place for your coupon</p>
 		               </div>
 		            </div>
 		         </div>
-		      </div>
-        
-        }
-   }			
+		      </div>	
+		}
 
 }
