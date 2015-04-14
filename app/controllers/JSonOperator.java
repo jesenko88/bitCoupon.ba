@@ -67,7 +67,10 @@ public class JSonOperator extends Controller {
 	}
 	
 	/**
-	 * TODO comments
+	 * This method registers a new user. It parses all data from a JsonNode and registers the new user
+	 * with the provided details. It expects a valid email, that is already registered for the android device,
+	 * and sets the email to 'verified' in the database without sending a verification email.
+	 * The date provided in json has to be in this form: dd/mm/yyyy  
 	 * @return
 	 */
 	public static Result register() {
@@ -76,9 +79,6 @@ public class JSonOperator extends Controller {
 		String surname = json.findPath("surname").textValue();
 		String email = json.findPath("email").textValue();
 		String dob = json.findPath("dob").textValue();
-		String gender = json.findPath("gender").textValue();
-		String adress = json.findPath("adress").textValue();
-		String city = json.findPath("city").textValue();
 		String password = json.findPath("password").textValue();
 		String confPass = json.findPath("confirmPassword").textValue();
 
@@ -91,23 +91,17 @@ public class JSonOperator extends Controller {
 		} else if (!password.equals(confPass)) {
 			return badRequest(JSonHelper.messageToJSon("error","Passwords don't match, try again "));
 		}
-		/* Creating new user */
 		else if (User.verifyRegistration(username, email) == true) {
 			try {
-				/* parsing date from string */
 				Date dayOfBirth = DateHelper.getDate(dob);
 				String hashPass = HashHelper.createPassword(password);
-				long id = User.createUser(username, surname, dayOfBirth,gender, adress, city, email, hashPass, false);
-				String verificationEmail = EmailVerification.addNewRecord(id);
-				/* temporary hard coded */
-				MailHelper.send(email,"Click on the link below to verify your e-mail adress <br>"
-								+ "http://" + PATH
-								+ "/verifyEmail/" + verificationEmail);
-				Logger.info("A verification mail has been sent to email address");
-				return ok(JSonHelper.messageToJSon("info","A verification mail has been sent to this address: " + email));
+				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false);
+				EmailVerification.makeNewRecord(id, true);
+				return ok(JSonHelper.messageToJSon("info","You are successfuly registered! "
+												+ "You can now login with the following email: " + email));
 			} catch (Exception e) {
 				Logger.error("error", "Registration error" + e.getMessage(), e);
-				return badRequest(JSonHelper.messageToJSon("error","Ann error occured, please try again later"));
+				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
 			}
 		}
 		Logger.info("Username or email allready exists!");

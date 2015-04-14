@@ -3,6 +3,7 @@
 # ~~~~
 
 #API
+POST   /api/register                  controllers.JSonOperator.register()
 POST   /api/updateUser                controllers.JSonOperator.updateUser()
 POST   /api/login                     controllers.JSonOperator.login()
 POST   /api/searchCompany             controllers.JSonOperator.searchCompany()
