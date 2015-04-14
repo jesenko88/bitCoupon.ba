@@ -3000,3 +3000,14 @@ h2.title {
 .offer-box.super .pricebox {
     background-color: #C65CAB;
 }
+
+.empty-offer{
+    height: 300px;
+    width: 95%;
+    border-color: #FF9F38;
+    border-style: dashed;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    margin:auto;
+    text-align: center;
+}
