@@ -176,13 +176,11 @@ public class JSonHelper {
 			couponNode.put("name", c.name);
 			couponNode.put("price", c.price);
 			couponNode.put("description", c.description);
-			couponNode.put("remark", c.remark);
 			couponNode.put("minOrder", c.minOrder);
 			couponNode.put("picture", c.picture);
 			couponNode.put("dateExpire", c.dateExpire.toString()); // ??
 			couponNode.put("category", c.category.name);
-			couponNode.put("minOrder", c.minOrder);
-			couponNode.put("status", c.status);		
+			couponNode.put("remark", c.remark);
 			arrayNode.add(couponNode);
 		}
 		return arrayNode;
@@ -251,8 +249,8 @@ public class JSonHelper {
 		for (FAQ faq : questions) {
 			ObjectNode faqNoe = Json.newObject();
 			faqNoe.put("id", faq.id); 
-			faqNoe.put("name", faq.question);
-			faqNoe.put("picture", faq.answer); 
+			faqNoe.put("question", faq.question);
+			faqNoe.put("answer", faq.answer); 
 			arrayNode.add(faqNoe);
 		}
 		return arrayNode;

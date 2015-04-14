@@ -63,6 +63,16 @@ public class EmailVerification extends Model {
 		verify.save();
 		return verify.id;
 	}
+	
+	/**
+	 * Make a new record by specifying all parameters
+	 * @param userId
+	 * @param verified
+	 */
+	public static void makeNewRecord(long userId, boolean verified) {
+		EmailVerification verify = new EmailVerification(userId, verified);
+		verify.save();
+	}
 
 	/**
 	 * Sets verification e-mail to verified

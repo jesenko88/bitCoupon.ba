@@ -3,6 +3,7 @@
 # ~~~~
 
 #API
+POST   /api/register                  controllers.JSonOperator.register()
 POST   /api/updateUser                controllers.JSonOperator.updateUser()
 POST   /api/login                     controllers.JSonOperator.login()
 POST   /api/searchCompany             controllers.JSonOperator.searchCompany()
@@ -13,7 +14,7 @@ POST   /api/companyProfile            controllers.JSonOperator.companyProfile()
 POST   /api/updateUser                controllers.JSonOperator.updateUser()
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
-GET    /api/allCoupons                controllers.CouponController.listCoupons()
+GET    /api/coupons               	  controllers.JSonOperator.coupons()
 GET    /api/faq                       controllers.FAQController.showFAQ()
 
 # Home page

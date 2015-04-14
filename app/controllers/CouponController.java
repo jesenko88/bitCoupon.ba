@@ -804,6 +804,6 @@ public class CouponController extends Controller {
 		if (request().accepts("text/html")) {
 			return ok(couponsAll.render(approvedCoupons, nonApprovedCoupons));
 		}
-		return ok(JSonHelper.couponListsToJson(approvedCoupons,nonApprovedCoupons));
+		return ok(JSonHelper.couponListToJson(approvedCoupons));
 	}
 }

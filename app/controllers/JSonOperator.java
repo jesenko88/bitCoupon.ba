@@ -7,6 +7,8 @@ import java.util.List;
 import javax.mail.internet.ParseException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import helpers.*;
@@ -55,7 +57,7 @@ public class JSonOperator extends Controller {
 			session("name", cc.username);
 			session("email", cc.email);
 			System.out.println("DEBUG ********** LOGIN ");
-			return ok(JSonHelper.couponListToJson(Coupon.approvedCoupons()));
+			return ok(JSonHelper.userToJSon(cc));
 			
 		} else if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);
@@ -67,7 +69,10 @@ public class JSonOperator extends Controller {
 	}
 	
 	/**
-	 * TODO comments
+	 * This method registers a new user. It parses all data from a JsonNode and registers the new user
+	 * with the provided details. It expects a valid email, that is already registered for the android device,
+	 * and sets the email to 'verified' in the database without sending a verification email.
+	 * The date provided in json has to be in this form: dd/mm/yyyy  
 	 * @return
 	 */
 	public static Result register() {
@@ -76,9 +81,6 @@ public class JSonOperator extends Controller {
 		String surname = json.findPath("surname").textValue();
 		String email = json.findPath("email").textValue();
 		String dob = json.findPath("dob").textValue();
-		String gender = json.findPath("gender").textValue();
-		String adress = json.findPath("adress").textValue();
-		String city = json.findPath("city").textValue();
 		String password = json.findPath("password").textValue();
 		String confPass = json.findPath("confirmPassword").textValue();
 
@@ -91,23 +93,17 @@ public class JSonOperator extends Controller {
 		} else if (!password.equals(confPass)) {
 			return badRequest(JSonHelper.messageToJSon("error","Passwords don't match, try again "));
 		}
-		/* Creating new user */
 		else if (User.verifyRegistration(username, email) == true) {
 			try {
-				/* parsing date from string */
 				Date dayOfBirth = DateHelper.getDate(dob);
 				String hashPass = HashHelper.createPassword(password);
-				long id = User.createUser(username, surname, dayOfBirth,gender, adress, city, email, hashPass, false);
-				String verificationEmail = EmailVerification.addNewRecord(id);
-				/* temporary hard coded */
-				MailHelper.send(email,"Click on the link below to verify your e-mail adress <br>"
-								+ "http://" + PATH
-								+ "/verifyEmail/" + verificationEmail);
-				Logger.info("A verification mail has been sent to email address");
-				return ok(JSonHelper.messageToJSon("info","A verification mail has been sent to this address: " + email));
+				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false);
+				EmailVerification.makeNewRecord(id, true);
+				return ok(JSonHelper.messageToJSon("info","You are successfuly registered! "
+												+ "You can now login with the following email: " + email));
 			} catch (Exception e) {
 				Logger.error("error", "Registration error" + e.getMessage(), e);
-				return badRequest(JSonHelper.messageToJSon("error","Ann error occured, please try again later"));
+				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
 			}
 		}
 		Logger.info("Username or email allready exists!");
@@ -119,6 +115,20 @@ public class JSonOperator extends Controller {
 	
 	/* GET requests */
 	
+	
+	/**
+	 * Returns all approved coupon as JSon
+	 * @return
+	 */
+	public static Result coupons() {
+		List<Coupon> coupons = Coupon.approvedCoupons();
+		if (coupons != null){
+			return ok(JSonHelper.couponListToJson(coupons));
+		}
+		return ok(new ArrayNode(JsonNodeFactory.instance));
+	}
+	
+	
 	/**
 	 * Method returns the profile page data for user as JSon data.
 	 * It receives an id as String, parses the id to long, and finds the user by id.
@@ -129,13 +139,10 @@ public class JSonOperator extends Controller {
 	public static Result userProfile() {
 		JsonNode json = request().body().asJson();
 		String id = json.findPath("id").textValue();
-		try {
-			User user = User.find(Long.parseLong(id));
-			return ok(JSonHelper.userToJSon(user));	
-		} catch (Exception e) {
-			Logger.error("error","Profile page failed due null user ! " + e.getMessage(), e);
-		}
-		return badRequest(JSonHelper.messageToJSon("erorr",	"An error occured"));
+		User user = User.find(Long.parseLong(id));
+		if (user != null)
+			return ok(JSonHelper.userToJSon(user));
+		return badRequest(JSonHelper.messageToJSon("erorr", "An error occured"));
 	}
 	
 	/**
