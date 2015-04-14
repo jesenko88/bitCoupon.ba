@@ -78,31 +78,46 @@
    <h2 class="title text-center">Available Coupons</h2>
 	<div class="container">
    @for(coupon <- coupons){
-   <div class="col-sm-4">
-         <div class="product-image-wrapper">
-            <div class="single-products">
-               <div class="productinfo text-center">
-                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-                  <h2>Only @coupon.getPriceString() KM</h2>
-                  <p>@coupon.name</p>
-                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-               </div>
-                <a href="/coupon/@coupon.id" >
-               <div class="product-overlay" >
-                  <div class="overlay-content">
-                  	 <a href="/coupon/@coupon.id" >
-                  	 <p>@coupon.description</p>
-                     <h2>Only @coupon.getPriceString() KM</h2>
-                     <p>@coupon.name</p>
-                     <p>@coupon.getExpiration()</p>
-                     <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
-                     </a>
-                  </div>
-               </div>  
-            </div>
-         </div>
-      </div>
-    
-   }			
+   	 
+		   <div class="col-sm-4">
+		         <div class="product-image-wrapper">
+		            <div class="single-products">
+		               <div class="productinfo text-center">
+		                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+		                  <h2>Only @coupon.getPriceString() KM</h2>
+		                  <p>@coupon.name</p>
+		                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+		               </div>
+		                <a href="/coupon/@coupon.id" >
+		               <div class="product-overlay" >
+		                  <div class="overlay-content">
+		                  	 <a href="/coupon/@coupon.id" >
+		                  	 <p>@coupon.description</p>
+		                     <h2>Only @coupon.getPriceString() KM</h2>
+		                     <p>@coupon.name</p>
+		                     <p>@coupon.getExpiration()</p>
+		                     <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+		                     </a>
+		                  </div>
+		               </div>  
+		            </div>
+		         </div>
+		      </div>       
+        
+   }		
+
+   		@for(index <- 0 until Coupon.numberOfEmptyFields() ){
+           	 <div class="col-sm-4">
+		         <div class="product-image-wrapper">
+		            <div class="single-products">
+		               <div class="productinfo text-center">
+		                  <img src="@routes.Assets.at("images/default_image.jpg")" />
+		                  <h2> BitCoupon </h2>
+		                  <p> Place for your coupon</p>
+		               </div>
+		            </div>
+		         </div>
+		      </div>	
+		}
 
 }

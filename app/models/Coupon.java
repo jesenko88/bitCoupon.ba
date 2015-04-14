@@ -2,6 +2,7 @@ package models;
 
 import helpers.JSonHelper;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -101,15 +102,6 @@ public class Coupon extends Model {
 		this.category = category;
 		this.description = description;
 		this.remark = remark;		
-		
-		/*
-		 * this.code = code; this.lastMinute = lastMinute; this.duration =
-		 * duration; this.specialPrice = specialPrice; this.viewCount =
-		 * viewCount; this.specialOffer = specialOffer; this.multiOffer_id =
-		 * multiOffer_id; this.status = status; this.company_id = company_id;
-		 * this.comment_user_id = comment_user_id; this.response_company_id =
-		 * response_company_id;
-		 */
 	}
 	public Coupon(String name, double price, Date dateExpire, String picture,
 			Category category, String description, String remark, int minOrder, int maxOrder,Date usage, Company seller) {
@@ -127,6 +119,12 @@ public class Coupon extends Model {
 		this.usage = usage;
 		this.seller = seller;
 		this.status = false;
+	}
+	
+	/*TODO coupons for empty fields */
+	public Coupon(String name, String picture) {
+		this.name = name;
+		this.picture = picture;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -565,7 +563,9 @@ public class Coupon extends Model {
 	 */
 	public  boolean checkIfExpired(){
 		Date now = new Date();
-		return dateExpire.before(now);
+		if (dateExpire != null)
+			return dateExpire.before(now);
+		return false;
 	}
 
 	
@@ -577,9 +577,26 @@ public class Coupon extends Model {
 			if(coupon.status){
 				approved.add(coupon);
 			}
-		}		
+		}	
 		return approved;
 	}
+	
+	
+	
+	/**
+	 * Returns the number of empty fields on in a row on the page
+	 * @return
+	 */
+	public static int numberOfEmptyFields(){
+		List<Coupon> approved = approvedCoupons();
+		int columns = 3;
+		int emptyFields = approved.size() % columns;
+		if(emptyFields > 0)
+			return columns - emptyFields;
+		return 0;
+	}
+	
+
 	
 	public static List<Coupon> nonApprovedCoupons() {
 		List<Coupon> all = find.all();
