@@ -249,8 +249,8 @@ public class JSonHelper {
 		for (FAQ faq : questions) {
 			ObjectNode faqNoe = Json.newObject();
 			faqNoe.put("id", faq.id); 
-			faqNoe.put("name", faq.question);
-			faqNoe.put("picture", faq.answer); 
+			faqNoe.put("question", faq.question);
+			faqNoe.put("answer", faq.answer); 
 			arrayNode.add(faqNoe);
 		}
 		return arrayNode;

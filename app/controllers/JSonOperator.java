@@ -7,6 +7,8 @@ import java.util.List;
 import javax.mail.internet.ParseException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import helpers.*;
@@ -55,7 +57,7 @@ public class JSonOperator extends Controller {
 			session("name", cc.username);
 			session("email", cc.email);
 			System.out.println("DEBUG ********** LOGIN ");
-			return ok(JSonHelper.couponListToJson(Coupon.approvedCoupons()));
+			return ok(JSonHelper.userToJSon(cc));
 			
 		} else if (Company.verifyLogin(mail, password) == true) {
 			Company cc = Company.findByEmail(mail);
@@ -112,6 +114,20 @@ public class JSonOperator extends Controller {
 	
 	
 	/* GET requests */
+	
+	
+	/**
+	 * Returns all approved coupon as JSon
+	 * @return
+	 */
+	public static Result coupons() {
+		List<Coupon> coupons = Coupon.approvedCoupons();
+		if (coupons != null){
+			return ok(JSonHelper.couponListToJson(coupons));
+		}
+		return ok(new ArrayNode(JsonNodeFactory.instance));
+	}
+	
 	
 	/**
 	 * Method returns the profile page data for user as JSon data.
