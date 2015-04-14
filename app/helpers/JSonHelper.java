@@ -51,7 +51,7 @@ public class JSonHelper {
 		
 		ObjectNode userNode = Json.newObject();
 		userNode.put("id", u.id);
-		userNode.put("username", u.username);
+		userNode.put("name", u.username);
 		userNode.put("surname", u.surname);
 		userNode.put("email", u.email);
 		userNode.put("adress", u.adress);
