@@ -595,7 +595,7 @@ public class CouponController extends Controller {
 	 */
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
-		List<Category> categories = Category.all();		
+		List<Category> categories = Category.all();	
 		//Handling exceptions.
 		if(coupons == null || categories == null ){
 			flash("error", "Ooops, error has occured. Plealse try again later.");
@@ -605,10 +605,11 @@ public class CouponController extends Controller {
 
 	}
 	
-	/*public static Result boughtCoupon(long id) {
-		List<Coupon> c = TransactionCP.allSoldCoupons(id);
+	public static Result boughtCoupon(long id) {
+		List<Coupon> c = Coupon.ownedCoupons(id);
+		
 		return ok(boughtCoupon.render(c));
-	}*/
+	}
 
 	/**
 	 * This methode get string, and convert string to list of Coupons, Then

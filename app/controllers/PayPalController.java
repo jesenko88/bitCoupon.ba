@@ -188,6 +188,7 @@ public class PayPalController extends Controller {
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
 			Coupon.updateCoupon(coupon);
+			Coupon.ownedCoupons(coupon.seller.id).add(coupon);
 
 			Logger.info(session("name") + " approved transaction: //TODO");
 			flash("success", "Transaction complete");

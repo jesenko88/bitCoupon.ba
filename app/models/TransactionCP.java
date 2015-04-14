@@ -108,15 +108,6 @@ public class TransactionCP extends Model{
 		return coupons;
 	}
 	
-	/*public static List<Coupon> allSoldCoupons(long id) {
-		List<TransactionCP> ids = find.where().eq("seller_id", id).findList();
-		List<Coupon> coupons = new ArrayList<Coupon>();
-		for ( TransactionCP tsc : ids) {
-			coupons.add(Coupon.find(tsc.coupon.id));
-		}
-		return coupons;
-	}*/
-	
 	/**
 	 * Returns all transactions from a certain buyer
 	 * @param id of the buyer
@@ -138,5 +129,16 @@ public class TransactionCP extends Model{
 		return "Expiring: " + dateFormat.format(date);
 
 	}
-	
+	public static List<TransactionCP> allFromCompany(long id) {
+		List<Coupon> coupons = Coupon.ownedCoupons(id);
+		List<TransactionCP> ids = TransactionCP.find.all();
+		List<TransactionCP> forCompany = new ArrayList<TransactionCP>();
+		for(int i = 0; i < ids.size(); i++) {
+			for(int j = 0; j < coupons.size() ; j ++) {
+				if(coupons.get(j).equals(ids.get(i).coupon))
+						forCompany.add(ids.get(i));
+			}
+		}
+		return forCompany;
+	}
 }

@@ -83,7 +83,7 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
-# GET    /boughtCoupon                  controllers.CouponController.boughtCoupon(id: Long)
+GET    /boughtCoupon                  controllers.CouponController.boughtCoupon(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
