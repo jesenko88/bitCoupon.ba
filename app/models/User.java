@@ -59,8 +59,8 @@ public class User extends SuperUser {
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
 	public List<TransactionCP> bought_coupons;
 	
-	//@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
-	public String pin;
+	@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
+	public Pin pin;
 	
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
@@ -73,7 +73,7 @@ public class User extends SuperUser {
 		this.gender = gender;
 		this.created = new Date();
 		this.isAdmin = isAdmin;
-		this.pin = "";
+		this.pin = null;
 	}
 
 	/**
@@ -294,27 +294,12 @@ public class User extends SuperUser {
 	public static User findByEmail(String email){
 		return find.where().eq("email", email).findUnique();
 	}
-	
-	public static void generatePin(long id) {
-		String generatedPin = UUID.randomUUID().toString().substring(0, 6);
-		User user = find(id);
-		user.pin = generatedPin;
-		System.out.println("PINININII" + user.pin);
-		user.save();
-		terminatePin(user, 1);
-	}
-	
-	private static void terminatePin(User user, int minutes) {
-	long currentTime = Calendar.getInstance().getTimeInMillis();
-	long duration = currentTime + (minutes * 60000);
-	while (currentTime < duration) {
-		currentTime = Calendar.getInstance().getTimeInMillis();
-	}
-	System.out.println("VALIDAACIJAA" + user.pin);
-	user.pin = "";
-	user.save();
-	System.out.println("VALIDAACIJAA" + user.pin);
-	}
 
+	public String getPin() {
+		if (pin != null)
+			return pin.code;
+		return "";
+	}
+	
 	
 }

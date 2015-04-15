@@ -416,12 +416,29 @@ public class UserController extends Controller {
 		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
 	
-	public static Result generatePin(long id) {
+	//TODO comment
+	public static Result newPin(long id) {
 		User currentUser = User.find(id);
-		if (currentUser.pin.length() == 0){
-			User.generatePin(currentUser.id);
-		}
+		Pin.generatePin(currentUser);
 		return ok(profile.render(currentUser));
 	}
-		
+	
+	//TODO comment
+	public static Result buyForUser() {
+		DynamicForm df = Form.form().bindFromRequest();
+		long id = Long.parseLong(df.data().get("coupon_id"));
+		Coupon coupon = Coupon.find(id);
+		String pinCode = df.data().get("pin");
+		User user = Pin.getPinUser(pinCode);
+		Pin p = Pin.getPin(pinCode);
+		System.out.println(p.date.toString());
+		if (user == null || !Pin.isValid(p.date)){
+			flash("error", "Invalid pin code");
+			return badRequest(coupontemplate.render(coupon));
+		}
+		return ok (buyForUser.render(coupon, user));
+	}
+	
+	
+			
 }

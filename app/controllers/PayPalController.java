@@ -34,7 +34,7 @@ import com.paypal.base.rest.PayPalRESTException;
 
 public class PayPalController extends Controller {
 	
-	static User currentUser = User.find(session("name"));
+	static User currentUser;// = User.find(session("name"));
 	static Coupon coupon;
 	static List<String> details;
 	static APIContext apiContext;
@@ -63,7 +63,9 @@ public class PayPalController extends Controller {
 			apiContext.setConfigurationMap(sdkConfig);
 			
 			Amount amount = new Amount();		
-			DynamicForm buyForm = Form.form().bindFromRequest();		
+			DynamicForm buyForm = Form.form().bindFromRequest();	
+			
+			currentUser = User.find(Long.parseLong((buyForm.data().get("user_id"))));
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if ( quantity > coupon.maxOrder){

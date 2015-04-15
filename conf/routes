@@ -14,7 +14,7 @@ POST   /api/companyProfile            controllers.JSonOperator.companyProfile()
 POST   /api/updateUser                controllers.JSonOperator.updateUser()
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
-GET    /api/coupons               	  controllers.JSonOperator.coupons()
+GET    /api/coupons                   controllers.JSonOperator.coupons()
 GET    /api/faq                       controllers.FAQController.showFAQ()
 
 # Home page
@@ -48,7 +48,8 @@ GET    /boughtCoupons                 controllers.UserController.showBoughtCoupo
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long) 
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
-GET    /pin/:id							  controllers.UserController.generatePin(id: Long)
+POST   /pin                           controllers.UserController.newPin(id: Long)
+GET    /buyForUser   				  controllers.UserController.buyForUser()
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)
