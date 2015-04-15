@@ -2,10 +2,10 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
-import helpers.JSonHelper;
 
 import java.util.List;
 
+import api.JSonHelper;
 import models.Category;
 import models.Company;
 import models.Coupon;

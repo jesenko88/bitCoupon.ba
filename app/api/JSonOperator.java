@@ -1,4 +1,4 @@
-package controllers;
+package api;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -223,19 +223,15 @@ public class JSonOperator extends Controller {
 			String id = json.findPath("id").textValue();
 			String username = json.findPath("username").textValue();
 			String surname = json.findPath("surname").textValue();
-			String email = json.findPath("email").textValue();
-			String adress = json.findPath("adress").textValue();
-			String city = json.findPath("city").textValue();
+		//	String email = json.findPath("email").textValue();
 
 			try {
 				User cUser = User.find(Long.parseLong(id));
 				cUser.username = username;
 				cUser.surname = surname;
-				cUser.adress = adress;
-				cUser.city = city;
 				cUser.updated = new Date();
 
-				if (!cUser.email.equals(email)) {
+			/*	if (!cUser.email.equals(email)) {
 					String verificationEmail = EmailVerification
 							.addNewRecord(cUser.id);
 					MailHelper.send(email,"Click on the link below to verify your e-mail adress <br>"
@@ -246,7 +242,7 @@ public class JSonOperator extends Controller {
 					Logger.info("A verification mail has been sent to this email: " + email);
 					return ok(JSonHelper.messageToJSon("info","Update successful, a verification mail has been sent to this address: " + email));
 				}
-				cUser.email = email;
+				cUser.email = email;  */
 				cUser.save();
 				flash("success", "Profile updated!");
 				Logger.info(cUser.username + " updated profile from mobile app");

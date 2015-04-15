@@ -1,7 +1,5 @@
 package models;
 
-import helpers.JSonHelper;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+
+import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;

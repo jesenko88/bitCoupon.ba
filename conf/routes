@@ -3,18 +3,18 @@
 # ~~~~
 
 #API
-POST   /api/register                  controllers.JSonOperator.register()
-POST   /api/updateUser                controllers.JSonOperator.updateUser()
-POST   /api/login                     controllers.JSonOperator.login()
-POST   /api/searchCompany             controllers.JSonOperator.searchCompany()
-POST   /api/searchCoupon              controllers.JSonOperator.searchCoupon()
-POST   /api/coupon                    controllers.JSonOperator.showCoupon()
-POST   /api/userProfile               controllers.JSonOperator.userProfile()
-POST   /api/companyProfile            controllers.JSonOperator.companyProfile()
-POST   /api/updateUser                controllers.JSonOperator.updateUser()
+POST   /api/register                  api.JSonOperator.register()
+POST   /api/updateUser                api.JSonOperator.updateUser()
+POST   /api/login                     api.JSonOperator.login()
+POST   /api/searchCompany             api.JSonOperator.searchCompany()
+POST   /api/searchCoupon              api.JSonOperator.searchCoupon()
+POST   /api/coupon                    api.JSonOperator.showCoupon()
+POST   /api/userProfile               api.JSonOperator.userProfile()
+POST   /api/companyProfile            api.JSonOperator.companyProfile()
+POST   /api/updateUser                ap.JSonOperator.updateUser()
+GET    /api/coupons                   api.JSonOperator.coupons()
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
-GET    /api/coupons                   controllers.JSonOperator.coupons()
 GET    /api/faq                       controllers.FAQController.showFAQ()
 
 # Home page
