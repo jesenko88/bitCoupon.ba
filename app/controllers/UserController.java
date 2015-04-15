@@ -415,4 +415,11 @@ public class UserController extends Controller {
 		}
 		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
+	
+	public static Result generatePin(long id) {
+		User currentUser = User.find(id);
+		Pin pin = Pin.generatePin(currentUser);
+		return ok(profile.render(currentUser));
+	}
+		
 }

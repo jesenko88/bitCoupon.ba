@@ -57,6 +57,9 @@ public class User extends SuperUser {
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
 	public List<TransactionCP> bought_coupons;
 	
+	@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
+	public Pin pin;
+	
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 

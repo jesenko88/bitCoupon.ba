@@ -45,6 +45,15 @@
          <div class="col-sm-6 col-sm-offset-1">
          </div>
       </div>
+      
+      <!-- probaaaa -->
+     
+      <form action="@routes.UserController.generatePin(superUser.getUser().id)">
+      <button type="submit"class="btn btn-default">Generate pin</button>
+	  <h3> @superUser.getUser().pin</h3>
+   	  </form>
+      <!--   ----   -->
+       
       <div class="userInforamtion">
          <div class="profilePicture">
             @if(superUser.getUser().profilePicture == null){
