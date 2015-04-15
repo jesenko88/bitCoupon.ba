@@ -19,6 +19,7 @@ import helpers.MailHelper;
 import models.*;
 import play.Logger;
 import play.Play;
+import play.api.mvc.Session;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.db.ebean.Model.Finder;
@@ -27,7 +28,8 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 public class CompanyController extends Controller {
-    static String PATH = Play.application().configuration().getString("PATH");
+
+	static String PATH = Play.application().configuration().getString("PATH");
 	static Form<Company> companyForm = new Form<Company>(Company.class);
 	public static final Company COMPANY_ADMIN = Company.findById(1);
 
@@ -303,7 +305,6 @@ public class CompanyController extends Controller {
 		}
 		return ok(JSonHelper.companyListToJSon(companies));
 	}
-	
 	
 	/**
 	 * Search method for companies. If search is unsuccessful a flash message is

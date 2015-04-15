@@ -14,7 +14,7 @@ POST   /api/companyProfile            controllers.JSonOperator.companyProfile()
 POST   /api/updateUser                controllers.JSonOperator.updateUser()
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
-GET    /api/coupons               	  controllers.JSonOperator.coupons()
+GET    /api/coupons                   controllers.JSonOperator.coupons()
 GET    /api/faq                       controllers.FAQController.showFAQ()
 
 # Home page
@@ -84,7 +84,7 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
-GET    /boughtCoupon                  controllers.CouponController.boughtCoupon(id: Long)
+GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()

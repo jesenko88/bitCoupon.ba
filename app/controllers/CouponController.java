@@ -14,9 +14,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.imageio.ImageIO;
+
 import org.h2.util.StringUtils;
+
 import com.google.common.io.Files;
+
 import models.Category;
 import models.Company;
 import models.Coupon;
@@ -40,6 +44,7 @@ public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
+	public static int notifications;
 
 	/**
 	 * 
@@ -74,6 +79,8 @@ public class CouponController extends Controller {
 	 * @return redirect to the Coupon view
 	 */
 	public static Result showCoupon(long id) {
+		if(Sesija.companyCheck(ctx()) == true)
+		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
@@ -605,14 +612,16 @@ public class CouponController extends Controller {
 
 	}
 	
-	public static Result boughtCoupon(long id) {
-		List<Coupon> c = Coupon.ownedCoupons(id);
-		
-		return ok(boughtCoupon.render(c));
+	public static Result notifications(long id) {
+		notifications = 0;
+		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
+		return ok(notificationsForCompany.render(transactions));
 	}
 
+	
+	
 	/**
-	 * This methode get string, and convert string to list of Coupons, Then
+	 * This method get string, and convert string to list of Coupons, Then
 	 * check if any of coupons is in category that user chose and return new
 	 * list of coupons
 	 * 
