@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import api.JSonHelper;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
@@ -14,7 +15,6 @@ import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.FileUpload;
 import helpers.HashHelper;
-import helpers.JSonHelper;
 import helpers.MailHelper;
 import models.*;
 import play.Logger;

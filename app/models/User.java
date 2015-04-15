@@ -3,10 +3,12 @@ package models;
 import helpers.HashHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -57,6 +59,9 @@ public class User extends SuperUser {
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
 	public List<TransactionCP> bought_coupons;
 	
+	@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
+	public Pin pin;
+	
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
@@ -68,6 +73,7 @@ public class User extends SuperUser {
 		this.gender = gender;
 		this.created = new Date();
 		this.isAdmin = isAdmin;
+		this.pin = null;
 	}
 
 	/**
@@ -289,5 +295,11 @@ public class User extends SuperUser {
 		return find.where().eq("email", email).findUnique();
 	}
 
+	public String getPin() {
+		if (pin != null)
+			return pin.code;
+		return "";
+	}
+	
 	
 }

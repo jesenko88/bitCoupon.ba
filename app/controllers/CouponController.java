@@ -2,7 +2,6 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
-import helpers.JSonHelper;
 import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
@@ -14,9 +13,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.imageio.ImageIO;
+
 import org.h2.util.StringUtils;
+
+import api.JSonHelper;
+
 import com.google.common.io.Files;
+
 import models.Category;
 import models.Company;
 import models.Coupon;

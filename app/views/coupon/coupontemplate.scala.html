@@ -68,6 +68,7 @@
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
                <label>Enter the amount of coupons </label>
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
+               	  <input type="text" id="user_id" name="user_id" value=@Sesija.getCurrent(ctx()).id hidden/>
                   <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
                   <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
                   <button type="submit" >
@@ -86,6 +87,16 @@
                <a href='@routes.CouponController.editCoupon(coupon.id)' class="btn btn-fefault cart">Update coupon</a>						
                <a href='@routes.CouponController.deleteCoupon(coupon.id)' onclick="return confirm('Are you sure you want to delete this coupon?');"
                   class="btn btn-fefault cart">Delete coupon</a>
+                  
+                  
+                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
+               <form action="/buyForUser" method="GET" >
+               	  <input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
+               	  <input id="pin" name="pin" type="text" style="width: 150px;"  placeholder="Pin code" required/>
+                  <button type="submit" class="btn btn-default" >Buy for User</button> 
+               </form>
+               }
+                  
                }
                <label class="pull-left" >Minimum coupons to be sold:
                <span><textarea disabled rows="1">@coupon.minOrder</textarea></span>
