@@ -56,12 +56,7 @@ public class JSonHelper {
 		userNode.put("email", u.email);
 		userNode.put("adress", u.adress);
 		userNode.put("city", u.city);
-//		userNode.put("dob", u.dob.toString());
-//		userNode.put("gender", u.gender);
-//		userNode.put("isAdmin", u.isAdmin);
 //		userNode.put("profilePicture", u.profilePicture);
-//		userNode.put("created", u.created.toString());
-//		userNode.put("updated", u.updated.toString());
 		return userNode;
 	}
 	
@@ -90,15 +85,14 @@ public class JSonHelper {
 		ObjectNode couponNode = Json.newObject();
 		couponNode.put("id", coupon.id);
 		couponNode.put("name", coupon.name);
-		couponNode.put("email", coupon.price);
-		couponNode.put("email", coupon.dateExpire.toString());
-		couponNode.put("adress", coupon.picture);
-		couponNode.put("email", coupon.category.name);
-		couponNode.put("city", coupon.description);
-		couponNode.put("contact", coupon.remark);
-		couponNode.put("email", coupon.seller.name);
-		couponNode.put("email", coupon.seller.email);
-		couponNode.put("contact", coupon.minOrder);
+		couponNode.put("price", coupon.price);
+		couponNode.put("expiration", coupon.dateExpire.toString());
+		couponNode.put("picture", coupon.picture);
+		couponNode.put("categoryName", coupon.category.name);
+		couponNode.put("description", coupon.description);
+		couponNode.put("remark", coupon.remark);
+		couponNode.put("seller", coupon.seller.name);
+		couponNode.put("minOrder", coupon.minOrder);
 		return couponNode;
 	}
 	
@@ -134,9 +128,9 @@ public class JSonHelper {
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
 		for (User u : users) {
 			ObjectNode userNode = Json.newObject();
+			userNode.put("id", u.id);
 			userNode.put("username", u.username);
-			userNode.put("isAdmin", u.isAdmin);
-			userNode.put("created", u.created.toString()); // ?
+			userNode.put("email", u.email);
 			arrayNode.add(userNode);
 		}
 		return arrayNode;
@@ -152,10 +146,9 @@ public class JSonHelper {
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
 		for (Company company : companies) {
 			ObjectNode companyNode = Json.newObject();
+			companyNode.put("id", company.id);
 			companyNode.put("name", company.name);
-			companyNode.put("created", company.created.toString()); //??
 			companyNode.put("logo", company.logo); 
-			companyNode.put("contact", company.contact); 
 			arrayNode.add(companyNode);
 		}
 		return arrayNode;
@@ -175,12 +168,7 @@ public class JSonHelper {
 			couponNode.put("id", c.id);
 			couponNode.put("name", c.name);
 			couponNode.put("price", c.price);
-			couponNode.put("description", c.description);
-			couponNode.put("minOrder", c.minOrder);
 			couponNode.put("picture", c.picture);
-			couponNode.put("dateExpire", c.dateExpire.toString()); // ??
-			couponNode.put("category", c.category.name);
-			couponNode.put("remark", c.remark);
 			arrayNode.add(couponNode);
 		}
 		return arrayNode;
@@ -205,14 +193,7 @@ public class JSonHelper {
 			couponNode.put("id", c.id);
 			couponNode.put("name", c.name);
 			couponNode.put("price", c.price);
-			couponNode.put("description", c.description);
-			couponNode.put("remark", c.remark);
-			couponNode.put("minOrder", c.minOrder);
-			couponNode.put("picture", c.picture);
-			couponNode.put("dateExpire", c.dateExpire.toString()); // ??
-			couponNode.put("category", c.category.name);
-			couponNode.put("minOrder", c.minOrder);
-			couponNode.put("status", c.status);		
+			couponNode.put("picture", c.picture);	
 			arrayNode.add(couponNode);
 		}
 		return arrayNode;
