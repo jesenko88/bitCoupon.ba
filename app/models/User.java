@@ -3,10 +3,12 @@ package models;
 import helpers.HashHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -57,8 +59,8 @@ public class User extends SuperUser {
 	@OneToMany(mappedBy="buyer", cascade=CascadeType.ALL)
 	public List<TransactionCP> bought_coupons;
 	
-	@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
-	public Pin pin;
+	//@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
+	public String pin;
 	
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
@@ -71,6 +73,7 @@ public class User extends SuperUser {
 		this.gender = gender;
 		this.created = new Date();
 		this.isAdmin = isAdmin;
+		this.pin = "";
 	}
 
 	/**
@@ -290,6 +293,27 @@ public class User extends SuperUser {
 	
 	public static User findByEmail(String email){
 		return find.where().eq("email", email).findUnique();
+	}
+	
+	public static void generatePin(long id) {
+		String generatedPin = UUID.randomUUID().toString().substring(0, 6);
+		User user = find(id);
+		user.pin = generatedPin;
+		System.out.println("PINININII" + user.pin);
+		user.save();
+		terminatePin(user, 1);
+	}
+	
+	private static void terminatePin(User user, int minutes) {
+	long currentTime = Calendar.getInstance().getTimeInMillis();
+	long duration = currentTime + (minutes * 60000);
+	while (currentTime < duration) {
+		currentTime = Calendar.getInstance().getTimeInMillis();
+	}
+	System.out.println("VALIDAACIJAA" + user.pin);
+	user.pin = "";
+	user.save();
+	System.out.println("VALIDAACIJAA" + user.pin);
 	}
 
 	

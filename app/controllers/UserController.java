@@ -418,7 +418,9 @@ public class UserController extends Controller {
 	
 	public static Result generatePin(long id) {
 		User currentUser = User.find(id);
-		Pin pin = Pin.generatePin(currentUser);
+		if (currentUser.pin.length() == 0){
+			User.generatePin(currentUser.id);
+		}
 		return ok(profile.render(currentUser));
 	}
 		
