@@ -47,7 +47,7 @@
       </div>
     
 
-      
+      @if(superUser.email.equals(Sesija.getCurrent(ctx()).email)){
       <!-- probaaaa -->
    	<div class="pull-right">
           <h5>PIN: @Pin.getCode(superUser.getUser().id) </h5>
@@ -55,7 +55,7 @@
      			<button type="submit" class="btn btn-default" >Generate pin</button> 
    		  </form>
 	</div>
-	
+	}
       <!--   ----   -->
         
       <div class="userInforamtion">

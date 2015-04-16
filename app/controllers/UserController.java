@@ -448,7 +448,7 @@ public class UserController extends Controller {
 	 * @return
 	 */
 	public static long getCurrentUserId() {
-		User u = User.find(session("email"));
+		User u = User.findByEmail(session("email"));
 		if ( u != null)
 			return u.id;
 		return -1;
