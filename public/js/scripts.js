@@ -1,14 +1,3 @@
-$(document).ready(function() {
-	
-	$('#category').change(function(e) {
-		if ($('#category option:selected').text() === 'New Category')
-			$('#newCategory').show();
-		else
-			$('#newCategory').hide();
-	})
-
-	$('#signup').click(function(e) {
-			$('#companyRegistration').hide();
 
     
 
@@ -81,21 +70,20 @@ $(document).ready(function() {
 	    }
 
 	  }, false);
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 });
+
+$(document).ready(function() {
+	
+	$('#category').change(function(e) {
+		if ($('#category option:selected').text() === 'New Category')
+			$('#newCategory').show();
+		else
+			$('#newCategory').hide();
+	})
+
+	$('#signup').click(function(e) {
+			$('#companyRegistration').hide();
 
 
 			$('#someId').show();
