@@ -36,6 +36,7 @@ import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
 
 public class PayPalController extends Controller {
+
     static String PATH = Play.application().configuration().getString("PATH");
 
 	static User currentUser = User.find(session("name"));
@@ -67,7 +68,12 @@ public class PayPalController extends Controller {
 			apiContext.setConfigurationMap(sdkConfig);
 			
 			Amount amount = new Amount();		
-			DynamicForm buyForm = Form.form().bindFromRequest();		
+			DynamicForm buyForm = Form.form().bindFromRequest();	
+			
+			currentUser = User.find(Long.parseLong((buyForm.data().get("user_id"))));
+			
+			//TODO if null
+			
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if ( quantity > coupon.maxOrder){

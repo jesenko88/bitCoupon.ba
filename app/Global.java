@@ -264,7 +264,7 @@ public class Global extends GlobalSettings {
 		if (User.check("vedad.zornic@bitcamp.ba") == false) {
 			User.createUser("Vedad","",new Date(), "","","", "vedad.zornic@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false);
-			EmailVerification setVerified = new EmailVerification(2, true);
+			EmailVerification setVerified = new EmailVerification(3, true);
 			setVerified.save();
 			Subscriber sb = new Subscriber(User.findByEmail("vedad.zornic@bitcamp.ba"));
 			sb.save();

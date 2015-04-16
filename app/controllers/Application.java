@@ -18,7 +18,6 @@ import play.twirl.api.Html;
 
 import org.jsoup.Jsoup;
 
-import helpers.JSonHelper;
 import helpers.MailHelper;
 import models.User;
 import play.Logger;
@@ -37,6 +36,7 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import models.*;
+import api.JSonHelper;
 
 import com.ckeditor.CKEditorConfig;
 import com.ckeditor.CKEditorReplaceAllTag;
