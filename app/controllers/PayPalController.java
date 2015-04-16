@@ -79,6 +79,9 @@ public class PayPalController extends Controller {
 			}
 			totalPrice = coupon.price * quantity;	
 			String totalPriceString = String.format("%1.2f",totalPrice);
+			String couponName = coupon.name;
+			if (couponName.length() > 65)
+				couponName = couponName.substring(0, 65) + "...";
 			
 			amount.setTotal(totalPriceString);
 			amount.setCurrency("USD");
@@ -90,8 +93,8 @@ public class PayPalController extends Controller {
 			String description = String.format("Coupon: %s\n"
 					+ "Price: %s\n"
 					+ "Quantity: %d\n"
-					+ "Total: %s", coupon.name, coupon.price, quantity, totalPriceString);
-					
+					+ "Total: %s", couponName, coupon.price, quantity, totalPriceString);
+		
 			Transaction transaction = new Transaction();
 			transaction.setDescription(description);
 			transaction.setAmount(amount);
