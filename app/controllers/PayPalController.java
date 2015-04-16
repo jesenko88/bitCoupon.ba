@@ -70,9 +70,6 @@ public class PayPalController extends Controller {
 			Amount amount = new Amount();		
 			DynamicForm buyForm = Form.form().bindFromRequest();	
 			
-			currentUser = User.find(Long.parseLong(buyForm.data().get("user_id")));
-			
-			//TODO if null
 			
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));

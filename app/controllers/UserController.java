@@ -16,6 +16,11 @@ import java.util.List;
 
 
 
+
+
+
+
+
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -28,6 +33,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.*;
+import tyrex.services.UUID;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
@@ -428,19 +434,33 @@ public class UserController extends Controller {
 	}
 	
 	//TODO comment
-	public static Result buyForUser() {
+	public static Result buyForUserPage() {
 		DynamicForm df = Form.form().bindFromRequest();
 		long id = Long.parseLong(df.data().get("coupon_id"));
 		Coupon coupon = Coupon.find(id);
 		String pinCode = df.data().get("pin");
 		User user = Pin.getPinUser(pinCode);
 		Pin p = Pin.getPin(pinCode);
-		System.out.println(p.date.toString());
 		if (user == null || !Pin.isValid(p.date)){
 			flash("error", "Invalid pin code");
 			return badRequest(coupontemplate.render(coupon));
 		}
-		return ok (buyForUser.render(coupon, user));
+		return ok(buyForUser.render(coupon, user));
+	}
+	
+	//TODO comment
+	public static Result buyForUserExecute() {
+		DynamicForm df = Form.form().bindFromRequest();
+		long id = Long.parseLong(df.data().get("coupon_id"));
+		int quantity = Integer.parseInt(df.data().get("quantity"));
+		Coupon coupon = Coupon.find(id);
+		User client = User.find(Long.parseLong(df.data().get("user_id")));
+		if (client == null) { return badRequest(coupontemplate.render(coupon)); }
+		double totalPrice = coupon.price * quantity;	
+		long t = TransactionCP.createTransaction( new UUID().toString().substring(0, 12),coupon.price, quantity, totalPrice, "", client, coupon);
+		CouponController.notifications ++;
+		flash("success", "Transaction complete");
+		return ok(index.render(Coupon.all(), Category.all()));
 	}
 	
 	/**

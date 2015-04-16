@@ -49,7 +49,8 @@ GET    /deletUser                     controllers.UserController.deleteUser(id: 
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
 POST   /pin                           controllers.UserController.newPin(id: Long)
-GET    /buyForUser   				  controllers.UserController.buyForUser()
+POST   /buyForUser                    controllers.UserController.buyForUserExecute()
+GET    /buyForUser                    controllers.UserController.buyForUserPage()
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)

@@ -68,7 +68,6 @@
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
                <label>Enter the amount of coupons </label>
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
-               	  <input type="text" id="user_id" name="user_id" value=@UserController.getCurrentUserId() hidden/>
                   <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
                   <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
                   <button type="submit" >
