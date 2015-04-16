@@ -44,109 +44,66 @@ public class CompanyController extends Controller {
 
 		Form<Company> submit = Form.form(Company.class).bindFromRequest();
 
-		if (companyForm.hasErrors()|| submit.hasGlobalErrors()) {
+		if (companyForm.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(new Form<User>(User.class), submit));
 
 		}
-		//Exception handling.
-		try{
+		// Exception handling.
+		try {
+
 			String name = companyForm.bindFromRequest().get().name;
 			String mail = companyForm.bindFromRequest().get().email;
 			String logo = companyForm.bindFromRequest().get().logo;
 			String password = companyForm.bindFromRequest().get().password;
 			String hashPass = HashHelper.createPassword(password);
-			String confPass = companyForm.bindFromRequest().field("confirmPassword")
-					.value();
+			String confPass = companyForm.bindFromRequest()
+					.field("confirmPassword").value();
 			String adress = companyForm.bindFromRequest().get().adress;
 			String city = companyForm.bindFromRequest().get().city;
 			String contact = companyForm.bindFromRequest().get().contact;
-			
-			
+
 			if (name.length() < 4 || name.equals("Name")) {
 				flash("error", "Name must be at least 4 chatacters");
-				return badRequest(signup.render());
+				return ok(signup.render(new Form<User>(User.class), submit));
 			} else if (mail.equals("Email")) {
 				flash("error", "Email is required for registration !");
-				return badRequest(signup.render());
+				return ok(signup.render(new Form<User>(User.class), submit));
 			} else if (password.length() < 6) {
 				flash("error", "Password must be at least 6 characters!");
-				return badRequest(signup.render());
+				return ok(signup.render(new Form<User>(User.class), submit));
 			} else if (!password.equals(confPass)) {
 				flash("error", "Passwords don't match, try again ");
-				return badRequest(signup.render());
+				return ok(signup.render(new Form<User>(User.class), submit));
 			}
-			
+
 			else if (Company.verifyRegistration(name, mail) == true) {
-				
-				long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact);
+
+				long id = Company.createCompany(name, mail, hashPass, logo,
+						adress, city, contact);
 				String verificationEmail = EmailVerification.addNewRecord(id);
-				
+
 				MailHelper.send(mail,
 						"Click on the link below to verify your e-mail adress <br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success", "A verification mail has been sent to your email address!");
+				flash("success",
+						"A verification mail has been sent to your email address!");
 				Logger.info("A verification mail has been sent to email address");
-				return ok(signup.render());
-				
+				return ok(signup.render(new Form<User>(User.class), submit));
+
 			} else {
 				flash("error", "Username or email allready exists!");
 				Logger.info("Username or email allready exists!");
-				return badRequest(signup.render());
-			}			
-		}catch(Exception e){
+				return ok(signup.render(new Form<User>(User.class), submit));
+
+			}
+		} catch (Exception e) {
 			flash("Error occured. If you are admin, please check logs.");
-			Logger.error("Error at registration: " +e.getMessage());
+			Logger.error("Error at registration: " + e.getMessage());
 			return redirect("companySignup");
-
-
-		String name = companyForm.bindFromRequest().get().name;
-		String mail = companyForm.bindFromRequest().get().email;
-		String logo = companyForm.bindFromRequest().get().logo;
-		String password = companyForm.bindFromRequest().get().password;
-		String hashPass = HashHelper.createPassword(password);
-		String confPass = companyForm.bindFromRequest().field("confirmPassword")
-				.value();
-		String adress = companyForm.bindFromRequest().get().adress;
-		String city = companyForm.bindFromRequest().get().city;
-		String contact = companyForm.bindFromRequest().get().contact;
-		
-
-		if (name.length() < 4 || name.equals("Name")) {
-			flash("error", "Name must be at least 4 chatacters");
-			return ok(signup.render(new Form<User>(User.class), submit));
-		} else if (mail.equals("Email")) {
-			flash("error", "Email is required for registration !");
-			return ok(signup.render(new Form<User>(User.class), submit));
-		} else if (password.length() < 6) {
-			flash("error", "Password must be at least 6 characters!");
-			return ok(signup.render(new Form<User>(User.class), submit));
-		} else if (!password.equals(confPass)) {
-			flash("error", "Passwords don't match, try again ");
-			return ok(signup.render(new Form<User>(User.class), submit));
-		}
-
-		else if (Company.verifyRegistration(name, mail) == true) {
-
-			long id = Company.createCompany(name, mail, hashPass, logo, adress, city, contact);
-			String verificationEmail = EmailVerification.addNewRecord(id);
-
-			MailHelper.send(mail,
-					"Click on the link below to verify your e-mail adress <br>"
-							+ "http://" + PATH + "/verifyEmail/"
-							+ verificationEmail);
-			flash("success", "A verification mail has been sent to your email address!");
-			Logger.info("A verification mail has been sent to email address");
-			return ok(signup.render(new Form<User>(User.class), submit));
-
-		} else {
-			flash("error", "Username or email allready exists!");
-			Logger.info("Username or email allready exists!");
-			return ok(signup.render(new Form<User>(User.class), submit));
 
 		}
 	}
-	
 
 	/**
 	 * Update user by getting the values from the form in the userUpdate view.

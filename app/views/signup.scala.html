@@ -38,9 +38,9 @@
 				 		</div>
 					</div>
 					}
-               
+                  <!-- onchange="form.confirmPassword.pattern = this.value;" -->
                   <input value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
-                  <p> <input value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password" onchange="form.confirmPassword.pattern = this.value;" placeholder="Password"></p>
+                  <p> <input value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"></p>
 				  <p> <input value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "></p>
 				  <br>
                   <input value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>

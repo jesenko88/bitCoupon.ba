@@ -44,10 +44,10 @@ public class TransactionCP extends Model{
 	
 	public String token; //token from paypalReturn
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	public User buyer;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	public Coupon coupon;
 	
 	public Date date;
@@ -147,5 +147,7 @@ public class TransactionCP extends Model{
 		Collections.reverse(forCompany);
 		return forCompany;
 	}
+	
+	
 	
 }

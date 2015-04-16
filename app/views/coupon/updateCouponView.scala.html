@@ -1,4 +1,4 @@
-@(username: String)(coupon: Coupon)(categories: List[Category])(photos : List[Photo])
+@(username: String)(coupon: Coupon)(photos : List[Photo])
 @import helper._
 @main("Coupon Panel") {
 <header id="header">
@@ -40,7 +40,7 @@
                      <label> Category </label>
                      <select id="category" name="category" >
                         <option  style="display:none">@coupon.getCategoryName()</option>
-                        @for(category <- categories) {
+                        @for(category <- Category.all()) {
                         <option value="@category.name">@category.name</option>
                         }
                         <option >New Category</option>

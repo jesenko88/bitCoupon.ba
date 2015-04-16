@@ -47,7 +47,7 @@
       </div>
     
 
-      @if(superUser.email.equals(Sesija.getCurrent(ctx()).email)){
+      @if(superUser.email.equals(Sesija.getCurrent(ctx()).email) && Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false){
       <!-- probaaaa -->
    	<div class="pull-right">
           <h5>PIN: @Pin.getCode(superUser.getUser().id) </h5>
