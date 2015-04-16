@@ -93,6 +93,7 @@ public class Application extends Controller {
 	 *         login page with a warning message.
 	 */
 	public static Result login() {
+		
 			Form<Login> login = new Form<Login>(Login.class);
 			if (login.hasGlobalErrors()) {
 				Logger.info("Login global error");

@@ -1,5 +1,7 @@
 package controllers;
 
+import helpers.MailHelper;
+
 import java.awt.ItemSelectable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.TransactionCP;
 import models.User;
@@ -33,8 +36,10 @@ import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
 
 public class PayPalController extends Controller {
-	
-	static User currentUser;// = User.find(session("name"));
+
+    static String PATH = Play.application().configuration().getString("PATH");
+
+	static User currentUser = User.find(session("name"));
 	static Coupon coupon;
 	static List<String> details;
 	static APIContext apiContext;
@@ -187,12 +192,18 @@ public class PayPalController extends Controller {
 
 		try {
 			payment.execute(apiContext, paymentExecution);
-			TransactionCP.createTransaction(paymentID, coupon.price, quantity,totalPrice, token, currentUser, coupon);
+			
+			long t = TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
 
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
 			Coupon.updateCoupon(coupon);
-
+			MailHelper.send(coupon.seller.email,
+					"Congratulations. Your coupon " + coupon.name +" is purchased. "
+							+ "To see details go to your profile. <br>"
+							+ "http://" + PATH + "/loginpage");
+			Company company = Company.findById(coupon.seller.id);
+            CouponController.notifications ++;
 			Logger.info(session("name") + " approved transaction: //TODO");
 			flash("success", "Transaction complete");
 			return ok(index.render(Coupon.all(), Category.all()));

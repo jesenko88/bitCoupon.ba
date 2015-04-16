@@ -22,8 +22,7 @@ $(document).ready(function() {
 	$('#forgotPass').click(function(e) {
 			$('#inputEmailForm').show();
 	})
-	
-	
+
 	$('#maxOrder').change(function(e){
 		var minOrder = document.getElementById("minOrder").value;
 		var maxOrder = document.getElementById("maxOrder").value;
@@ -59,7 +58,6 @@ $('#usage').change(function(e){
 })
 
 });
-
 function calculateDate(birth){
 	var today = new Date();
 

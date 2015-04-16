@@ -114,7 +114,8 @@
                   <label class="pull-left" >Remark</label>
                   <textarea disabled rows="4">@coupon.remark</textarea>
                   <label class="pull-left">Published by</label>
-                  <textarea disabled rows="4">@coupon.seller.name</textarea>
+                  
+               <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span> 
                </div>
             </div>
          </div>
