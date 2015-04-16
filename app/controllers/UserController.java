@@ -15,6 +15,7 @@ import java.util.List;
 
 
 
+
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -442,6 +443,15 @@ public class UserController extends Controller {
 		return ok (buyForUser.render(coupon, user));
 	}
 	
-	
+	/**
+	 * TODO comment
+	 * @return
+	 */
+	public static long getCurrentUserId() {
+		User u = User.find(session("email"));
+		if ( u != null)
+			return u.id;
+		return -1;
+	}
 			
 }
