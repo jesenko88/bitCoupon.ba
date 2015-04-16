@@ -1,0 +1,51 @@
+@(transactions: List[TransactionCP])
+@import helper._
+@main("Bought coupons") {
+@*	
+<h2>@message @name</h2>
+<h4>Home: </h4>
+*@
+   <header id="header">
+      <div class="col-sm-12">
+         <!--header-middle-->
+         <div class="container">
+            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            
+            <div class="logo pull-right">
+           		
+            </div>
+            <div class="logo pull-right">
+               
+            </div>
+         </div>
+      </div>	
+   </header>
+   <div class="container">
+   
+ <h2 class="title text-center">Bought coupons</h2> 
+   <div class="container">
+      @for(transaction <- transactions){
+      	
+      <div class="col-sm-4">
+         <div class="logo pull-left">
+            <div class="product-image-wrapper">
+               <div class="single-products">
+                  <div class="productinfo text-center">
+                     <img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
+                     <h2>Price: @transaction.coupon.getPriceString() KM</h2>
+                     <p>Coupon name: @transaction.coupon.name</p>
+                     <p>Quantity: @transaction.quantity</p>
+                     <p>Buyer: <a href="@routes.SuperUserController.profilePage(transaction.buyer.username)">@transaction.buyer.username @transaction.buyer.surname</p>
+                     <a href="@routes.CouponController.showCoupon(transaction.coupon.id)" class="btn btn-default add-to-cart">View Coupon</a>
+                  </div>
+               </div>
+            </div>
+         </div> 
+      </div>
+      }
+      </div>
+      
+  
+      
+   </div>
+   }

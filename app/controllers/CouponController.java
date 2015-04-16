@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import org.h2.util.StringUtils;
 
+
 import api.JSonHelper;
 
 import com.google.common.io.Files;
@@ -27,6 +28,7 @@ import models.Company;
 import models.Coupon;
 import models.Photo;
 import models.SuperUser;
+import models.TransactionCP;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -44,6 +46,7 @@ public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
+	public static int notifications;
 
 	/**
 	 * 
@@ -78,6 +81,8 @@ public class CouponController extends Controller {
 	 * @return redirect to the Coupon view
 	 */
 	public static Result showCoupon(long id) {
+		if(Sesija.companyCheck(ctx()) == true)
+		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
@@ -185,6 +190,7 @@ public class CouponController extends Controller {
 				Logger.info("Coupon updated");
 				return redirect("/");
 			}
+
 			List<Category> categories = Category.all();
 			List<Photo> photos = Photo.photosByCoupon(coupon);
 			coupon.name = couponForm.bindFromRequest().field("name").value();
@@ -467,9 +473,7 @@ public class CouponController extends Controller {
 				"Error occured while adding coupon. If you're admin please check logs.");
 		Logger.error("Error att addCoupon: " + e.getMessage(), e);
 		return redirect("/couponPanel");
-
-	}
-
+	   }
 	}
 
 	/**
@@ -600,7 +604,7 @@ public class CouponController extends Controller {
 	 */
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
-		List<Category> categories = Category.all();		
+		List<Category> categories = Category.all();	
 		//Handling exceptions.
 		if(coupons == null || categories == null ){
 			flash("error", "Ooops, error has occured. Plealse try again later.");
@@ -609,9 +613,17 @@ public class CouponController extends Controller {
 		return ok(searchFilter.render(coupons, categories));
 
 	}
+	
+	public static Result notifications(long id) {
+		notifications = 0;
+		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
+		return ok(notificationsForCompany.render(transactions));
+	}
 
+	
+	
 	/**
-	 * This methode get string, and convert string to list of Coupons, Then
+	 * This method get string, and convert string to list of Coupons, Then
 	 * check if any of coupons is in category that user chose and return new
 	 * list of coupons
 	 * 

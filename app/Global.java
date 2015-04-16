@@ -100,6 +100,10 @@ public class Global extends GlobalSettings {
 					+ File.separator + "category-photos" + File.separator + "sport.png");
 			sport.save();
 		}
+		if(Category.exists("Other") == false){
+			sport = new Category("Other");
+			sport.save();
+		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
 			Coupon.createCoupon(nameCoupon1, 80, new Date(),
