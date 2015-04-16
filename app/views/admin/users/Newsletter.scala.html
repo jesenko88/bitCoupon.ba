@@ -16,10 +16,10 @@
       
       <div class="row">
          @for(coupon <- coupons){      
-         <div class="col-sm-6 col-md-4"  style="max-height: 330px">
+         <div class="col-sm-6 col-md-4" style="height:450px">
             <div class="thumbnail">
                <img src="@routes.Assets.at(coupon.picture)" alt="..." class="thumbnail">
-               <div class="caption">
+               <div class="caption"  style="overflow: hidden;" >
                   <p>@coupon.name</p>
                   <input  type="checkbox" name="@coupon.id" id="@coupon.id" > 
                </div>
