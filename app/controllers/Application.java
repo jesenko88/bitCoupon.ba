@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import helpers.JSonHelper;
+import play.twirl.api.Html;
+
+import org.jsoup.Jsoup;
+
 import helpers.MailHelper;
 import models.User;
 import play.Logger;
@@ -30,10 +33,14 @@ import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import models.*;
-import controllersJSON.*;
+import api.JSonHelper;
 
+import com.ckeditor.CKEditorConfig;
+import com.ckeditor.CKEditorReplaceAllTag;
+import com.ckeditor.CKEditorReplaceTag;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Application extends Controller {
@@ -52,6 +59,8 @@ public class Application extends Controller {
 		public String phone;
 		public String name;
 	}
+	
+
 
 	/**
 	 * @return render the index page
@@ -84,8 +93,7 @@ public class Application extends Controller {
 	 *         login page with a warning message.
 	 */
 	public static Result login() {
-		if (request().accepts("text/html")) {
-
+		
 			Form<Login> login = new Form<Login>(Login.class);
 			if (login.hasGlobalErrors()) {
 				Logger.info("Login global error");
@@ -133,9 +141,6 @@ public class Application extends Controller {
 				Logger.error("Error has occured at login: " + e.getMessage(), e);
 				return redirect("/");
 			}
-		}
-		/* return JSon if request().accept() is not text/html */
-		return JSonOperator.login();
 	}
 
 	/**
@@ -269,7 +274,7 @@ public class Application extends Controller {
 	 * @return Renders the registration view
 	 */
 	public static Result signup() {
-		return ok(signup.render());
+		return ok(signup.render(new Form<User>(User.class), new Form<Company>(Company.class)));
 	}
 
 }

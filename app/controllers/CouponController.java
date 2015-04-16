@@ -2,7 +2,7 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
-import helpers.JSonHelper;
+import helpers.HashHelper;
 import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
@@ -14,14 +14,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.imageio.ImageIO;
+
 import org.h2.util.StringUtils;
+
+
+
+import api.JSonHelper;
+
 import com.google.common.io.Files;
+
 import models.Category;
 import models.Company;
 import models.Coupon;
 import models.Photo;
 import models.SuperUser;
+import models.TransactionCP;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -31,6 +40,7 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import scala.reflect.api.Scopes;
 import views.html.coupon.*;
 import views.html.*;
 import views.html.admin.users.*;
@@ -39,6 +49,8 @@ public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
+	public static int notifications;
+	static Result result;
 
 	/**
 	 * 
@@ -47,6 +59,7 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
 		List<Category> categories = Category.all();
+
 		String name = session("name");
 		//Exception handling.
 		if(categories == null || name == null){
@@ -57,12 +70,12 @@ public class CouponController extends Controller {
 		User u = User.find(name);
 		if(u != null){ 
 			if(u.isAdmin){
-				return ok(adminCouponPanel.render(name, categories));
+				return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));
 			}
 		}
-		
 
-		return ok(couponPanel.render(name, categories));
+		return ok(couponPanel.render(session("name"), categories, new Form<Coupon>(Coupon.class)));
+
 	}
 
 	/**
@@ -73,15 +86,15 @@ public class CouponController extends Controller {
 	 * @return redirect to the Coupon view
 	 */
 	public static Result showCoupon(long id) {
+		if(Sesija.companyCheck(ctx()) == true)
+		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
-		if (request().accepts("text/html")){
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
 				flash("error", "Ooops, error has occured.");
 				return redirect("/");
 			}
 			return ok(coupontemplate.render(coupon));
-		} return ok(JSonHelper.couponToJSon(coupon));
 	}
 
 	/**
@@ -102,7 +115,15 @@ public class CouponController extends Controller {
 					Photo.delete(photo.id);
 				}
 			}
+			List<TransactionCP> transactions = c.buyers;
+			for(TransactionCP transaction: transactions){
+				transaction.coupon = null;				
+				transaction.save();
+			}
+			
+			c.buyers = null;						
 			Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");
+			System.out.println("DEBUGG BEFORE DELETE");
 			Coupon.delete(id);
 			return redirect("/");
 		} catch (Exception e) {
@@ -136,7 +157,7 @@ public class CouponController extends Controller {
 			flash("error", "Ooops, error has occured. Please try again later.");
 			return redirect("/");
 		}
-		return ok(updateCouponView.render(name, coupon, categories, photosByCoupon));
+		return ok(updateCouponView.render(name, coupon, photosByCoupon));
 
 	}
 
@@ -179,19 +200,20 @@ public class CouponController extends Controller {
 		try {
 			Coupon coupon = Coupon.find(id);
 			if (couponForm.hasErrors()) {
-				Logger.info("Coupon updated");
+				Logger.info("Coupon update error");
 				return redirect("/");
 			}
+
 			List<Category> categories = Category.all();
 			List<Photo> photos = Photo.photosByCoupon(coupon);
 			coupon.name = couponForm.bindFromRequest().field("name").value();
 			if (coupon.name.length() < 4) {
 				Logger.info(session("name")+ "entered a short coupon name in coupon update");
-				return ok(updateCouponView.render(session("name"), coupon,categories, photos));
+				return ok(updateCouponView.render(session("name"), coupon, photos));
 			}
 			if (coupon.name.length() > 120) {
 				Logger.info(session("name") + "entered a too long coupon name in coupon update");
-				return ok(updateCouponView.render(session("name"), coupon,categories, photos));
+				return ok(updateCouponView.render(session("name"), coupon, photos));
 			}
 			
 			/* price */
@@ -202,7 +224,7 @@ public class CouponController extends Controller {
 				Logger.info(session("name")	+ " entered a invalid price in coupon update");
 				flash("error", "Enter a valid price");
 				return badRequest(updateCouponView.render(session("name"),
-						coupon, categories, photos));
+						coupon, photos));
 			}
 			coupon.price = price;
 			/* date 
@@ -223,7 +245,7 @@ public class CouponController extends Controller {
 				if (date.before(current)) {
 					flash("error", "Enter a valid expiration date");
 					Logger.info(session("name")	+ " entered a invalid date in coupon update");
-					return ok(updateCouponView.render(session("name"), coupon, categories, photos));
+					return ok(updateCouponView.render(session("name"), coupon,  photos));
 			}
 				coupon.dateExpire = date;
 			}
@@ -235,7 +257,7 @@ public class CouponController extends Controller {
 			} else {
 				if (newCategory.isEmpty()) {
 					flash("error", "Enter new Category name");
-					return ok(updateCouponView.render(session("name"), coupon, categories, photos));
+					return ok(updateCouponView.render(session("name"), coupon, photos));
 				}
 				coupon.category = Category.find(Category.createCategory(newCategory));
 			}
@@ -258,7 +280,7 @@ public class CouponController extends Controller {
 			Coupon.updateCoupon(coupon);
 			Logger.info(session("name") + " updated coupon: " + coupon.id);
 			flash("success", "Coupon updated");
-			return ok(updateCouponView.render(session("name"), coupon,categories, photos));
+			return ok(updateCouponView.render(session("name"), coupon, photos));
 		} catch (Exception e) {
 			flash("error", "Error while updating coupon. If you're admin please check logs");
 			Logger.error("Error at updateCoupon: " + e.getMessage(), e);
@@ -283,8 +305,7 @@ public class CouponController extends Controller {
 			if(coupon.status){
 				coupons.add(coupon);
 			}
-		}
-		
+		}	
 		if (coupons.isEmpty()) {
 			flash("error", "No such coupon");
 			User u = User.find(session("name"));
@@ -370,59 +391,28 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
 
-		if (couponForm.hasErrors()) {
-			Logger.debug("Error adding coupon");
-			return redirect("/couponPanel");
+		Form<Coupon> submit = Form.form(Coupon.class).bindFromRequest();
+		List<Category> categories = Category.all();	
+		String name = couponForm.bindFromRequest().field("name").value();
+
+		if (Sesija.companyCheck(ctx())){
+			System.out.println("DEBUUUUUUUGGGGGG");
+			result = ok(couponPanel.render(session("name"), categories, submit));
+		}else{
+			result = ok(adminCouponPanel.render(session("name"), categories, submit));
 		}
-		try{
-			/* name */
-			String name = couponForm.bindFromRequest().field("name").value();
-			List<Category> categories = Category.all();	
-			if (name.length() < 4) {
-				Logger.info(session("name") + "entered a short coupon name");
-				flash("error", "Name must be 4 characters long");
-				return badRequest(couponPanel.render(session("name"), categories));	
-			}
-			
-			if (name.length() > 70) {
-				Logger.info(session("name") + "entered a too long coupon name");
-				flash("error", "Name must be max 70 characters long");
-				return badRequest(couponPanel.render(session("name"), categories));
-			}
-			
-			/* price */
-			String stringPrice = couponForm.bindFromRequest().field("price").value();
-			stringPrice = stringPrice.replace(",", ".");
-			double price = couponForm.bindFromRequest().get().price;	
-			if (price <= 0) {
-				Logger.info(session("name") + "entered a invalid price ( <= 0 )");
-				flash("error", "Enter a valid price");
-				return badRequest(couponPanel.render(session("name"), categories));
-			}
-			
-			/* date */
-			Date current = new Date();
-			Date date = couponForm.bindFromRequest().get().dateExpire;
-			if (date.before(current)) {
-				Logger.info(session("name") + "entered a invalid date");
-				flash("error", "Enter a valid expiration date");
-				return badRequest(couponPanel.render(session("name"), categories));
 	
-			}
-			/* category */
+		if (couponForm.hasErrors() || submit.hasGlobalErrors()) {
+			Logger.debug("Error adding coupon");
+			return result;
+		}
+
+		try{		
+			double price = couponForm.bindFromRequest().get().price;	
+			Date date = couponForm.bindFromRequest().get().dateExpire;
 			Category category = null;
 			String newCategory = couponForm.bindFromRequest().field("newCategory").value();
 			String categoryy = couponForm.bindFromRequest().field("category").value();
-			if (!categoryy.equals("New Category")) {
-				category = Category.findByName(categoryy);
-			} else {
-				if (newCategory.isEmpty()) {
-					flash("error", "Enter new Category name");
-					return redirect("/couponPanel");
-				}
-				category = Category.find(Category.createCategory(newCategory));
-			}
-			
 			String description = couponForm.bindFromRequest().field("description").value();
 			String remark = couponForm.bindFromRequest().field("remark").value();
 			int minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());	
@@ -432,8 +422,7 @@ public class CouponController extends Controller {
 			boolean status = false;
 			if (Sesija.adminCheck(ctx())) {
 				status = true;
-			}
-	
+			}	
 			//In case admin posted coupon.
 			Company company = Company.find(session("name"));
 			if(company == null){
@@ -461,12 +450,10 @@ public class CouponController extends Controller {
 				return redirect("/couponPanel");
 			}
 		}catch(Exception e){
-		flash("error",
-				"Error occured while adding coupon. If you're admin please check logs.");
+		flash("error", "Error occured while adding coupon. If you're admin please check logs.");
 		Logger.error("Error att addCoupon: " + e.getMessage(), e);
-		return redirect("/couponPanel");
-
-	}
+		return result;
+	   }
 
 	}
 
@@ -553,8 +540,7 @@ public class CouponController extends Controller {
 			}
 			flash("success", "Successfully uploaded photos.");
 			Coupon coupon = Coupon.find(couponId);
-			return ok(updateCouponView.render(session("name"), coupon,
-					allCategories, Photo.photosByCoupon(coupon)));
+			return ok(updateCouponView.render(session("name"), coupon, Photo.photosByCoupon(coupon)));
 		} catch (Exception e) {
 			flash("error", "Error occured while uploading gallery photos."
 					+ " If you're admin please check logs.");
@@ -598,7 +584,7 @@ public class CouponController extends Controller {
 	 */
 	public static Result searchPage() {
 		List<Coupon> coupons = Coupon.all();
-		List<Category> categories = Category.all();		
+		List<Category> categories = Category.all();	
 		//Handling exceptions.
 		if(coupons == null || categories == null ){
 			flash("error", "Ooops, error has occured. Plealse try again later.");
@@ -607,9 +593,17 @@ public class CouponController extends Controller {
 		return ok(searchFilter.render(coupons, categories));
 
 	}
+	
+	public static Result notifications(long id) {
+		notifications = 0;
+		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
+		return ok(notificationsForCompany.render(transactions));
+	}
 
+	
+	
 	/**
-	 * This methode get string, and convert string to list of Coupons, Then
+	 * This method get string, and convert string to list of Coupons, Then
 	 * check if any of coupons is in category that user chose and return new
 	 * list of coupons
 	 * 
@@ -801,6 +795,6 @@ public class CouponController extends Controller {
 		if (request().accepts("text/html")) {
 			return ok(couponsAll.render(approvedCoupons, nonApprovedCoupons));
 		}
-		return ok(JSonHelper.couponListsToJson(approvedCoupons,nonApprovedCoupons));
+		return ok(JSonHelper.couponListToJson(approvedCoupons));
 	}
 }

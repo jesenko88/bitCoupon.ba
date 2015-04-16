@@ -2,8 +2,22 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+#API
+POST   /api/register                  api.JSonOperator.register()
+POST   /api/updateUser                api.JSonOperator.updateUser()
+POST   /api/login                     api.JSonOperator.login()
+POST   /api/searchCompany             api.JSonOperator.searchCompany()
+POST   /api/searchCoupon              api.JSonOperator.searchCoupon()
+POST   /api/coupon                    api.JSonOperator.showCoupon()
+POST   /api/userProfile               api.JSonOperator.userProfile()
+POST   /api/companyProfile            api.JSonOperator.companyProfile()
+POST   /api/updateUser                api.JSonOperator.updateUser()
+GET    /api/coupons                   api.JSonOperator.coupons()
+GET    /api/categoryList              controllers.CategoryController.listCategories()
+GET    /api/companies                 controllers.CompanyController.listCompanies()
+GET    /api/faq                       controllers.FAQController.showFAQ()
 
+# Home page
 GET    /                              controllers.Application.index()
 GET    /loginpage                     controllers.Application.loginpage()
 POST   /login                         controllers.Application.login()
@@ -34,6 +48,9 @@ GET    /boughtCoupons                 controllers.UserController.showBoughtCoupo
 GET    /deletUser                     controllers.UserController.deleteUser(id: Long) 
 POST   /updateUser/:id                controllers.UserController.adminUpdateUser(id: Long)
 POST   /createNewPassword             controllers.UserController.createNewPassword(id: String)
+POST   /pin                           controllers.UserController.newPin(id: Long)
+POST   /buyForUser                    controllers.UserController.buyForUserExecute()
+GET    /buyForUser                    controllers.UserController.buyForUserPage()
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)
@@ -48,12 +65,10 @@ POST   /registerC                     controllers.CompanyController.registerC()
 POST   /updateCompany                 controllers.CompanyController.updateCompany(id: Long)
 GET    /deletCompany                  controllers.CompanyController.deleteCompany(id: Long)
 POST   /updateCompany/:id             controllers.CompanyController.adminUpdateCompany(id: Long)
+
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
-
 GET    /companies                     controllers.CompanyController.listCompanies()
-GET    /searchCompany 	              controllers.CompanyController.searchCompany(name: String)
-
-
+GET    /searchCompany                 controllers.CompanyController.searchCompany(name: String)
 
 # Coupon controller 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
@@ -72,6 +87,7 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
+GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()

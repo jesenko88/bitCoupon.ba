@@ -11,7 +11,7 @@ import helpers.FileUpload;
 import helpers.SuperUserFilter;
 
 import java.util.List;
-
+import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -23,12 +23,12 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.*;
+import tyrex.services.UUID;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
 import views.html.coupon.*;
 import models.*;
-import controllersJSON.*;
 
 public class UserController extends Controller {
 	
@@ -48,68 +48,72 @@ public class UserController extends Controller {
 	 */
 	public static Result register() {
 
-		if (request().accepts("text/html")) {
+		Form<User> submit = Form.form(User.class).bindFromRequest();
 
-			if (userForm.hasErrors()) {
-				return redirect("/signup ");
-			}
-
-			try {
-				String username = userForm.bindFromRequest().get().username;
-				String surname = userForm.bindFromRequest().get().surname;
-				Date dob = userForm.bindFromRequest().get().dob;
-				String gender = userForm.bindFromRequest().get().gender;
-				String adress = userForm.bindFromRequest().get().adress;
-				String city = userForm.bindFromRequest().get().city;
-				String mail = userForm.bindFromRequest().get().email;
-				String password = userForm.bindFromRequest().get().password;
-				String hashPass = HashHelper.createPassword(password);
-				String confPass = userForm.bindFromRequest()
-						.field("confirmPassword").value();
-
-				if (username.length() < 4 || username.equals("Username")) {
-					flash("error", "Usernam must be at least 4 chatacters");
-					return badRequest(signup.render());
-				} else if (mail.equals("Email")) {
-					flash("error", "Email is required for registration !");
-					return badRequest(signup.render());
-				} else if (password.length() < 6) {
-					flash("error", "Password must be at least 6 characters!");
-					return badRequest(signup.render());
-				} else if (!password.equals(confPass)) {
-					flash("error", "Passwords don't match, try again ");
-					return badRequest(signup.render());
-				}
-				/*
-				 * Creating new user if the username or mail is free for use,
-				 * and there are no errors
-				 */
-				else if (User.verifyRegistration(username, mail) == true) {
-					long id = User.createUser(username, surname, dob, gender,
-							adress, city, mail, hashPass, false);
-					String verificationEmail = EmailVerification.addNewRecord(id);
-					MailHelper.send(mail,
-							"Click on the link below to verify your e-mail adress <br>"
-									+ "http://" + PATH + "/verifyEmail/"
-									+ verificationEmail);
-					flash("success","A verification mail has been sent to your email address!");
-					Logger.info("A verification mail has been sent to email address");
-					return ok(Loginpage.render(" "));
-
-				} else {
-					flash("error", "Username or email allready exists!");
-					Logger.info("Username or email allready exists!");
-					return badRequest(signup.render());
-				}
-			} catch (Exception e) {
-				flash("error",
-						"Ooops, error has occured. Please try again later.");
-				Logger.error("Error at registration: " + e.getMessage(), e);
-				return redirect("/");
-			}
+		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
+			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
-		/* return JSon if request().accept() is not text/html */
-		return JSonOperator.register();
+
+		try {
+
+			String username = userForm.bindFromRequest().get().username;
+			String surname = userForm.bindFromRequest().get().surname;
+			Date dob = userForm.bindFromRequest().get().dob;
+			String gender = userForm.bindFromRequest().get().gender;
+			String adress = userForm.bindFromRequest().get().adress;
+			String city = userForm.bindFromRequest().get().city;
+			String mail = userForm.bindFromRequest().get().email;
+			String password = userForm.bindFromRequest().get().password;
+			String hashPass = HashHelper.createPassword(password);
+			String confPass = userForm.bindFromRequest()
+					.field("confirmPassword").value();
+
+			if (username.length() < 4 || username.equals("Username")) {
+				flash("error", "Usernam must be at least 4 chatacters");
+				return badRequest(signup.render(submit, new Form<Company>(
+						Company.class)));
+			} else if (mail.equals("Email")) {
+				flash("error", "Email is required for registration !");
+				return badRequest(signup.render(submit, new Form<Company>(
+						Company.class)));
+			} else if (password.length() < 6) {
+				flash("error", "Password must be at least 6 characters!");
+				return badRequest(signup.render(submit, new Form<Company>(
+						Company.class)));
+			} else if (!password.equals(confPass)) {
+				flash("error", "Passwords don't match, try again ");
+				return badRequest(signup.render(submit, new Form<Company>(
+						Company.class)));
+			}
+
+			/*
+			 * Creating new user if the username or mail is free for use, and
+			 * there are no errors
+			 */
+
+			else if (User.verifyRegistration(username, mail) == true) {
+				
+				long id = User.createUser(username, surname, dob, gender,
+						adress, city, mail, hashPass, false);
+				String verificationEmail = EmailVerification.addNewRecord(id);
+				MailHelper.send(mail,"Click on the link below to verify your e-mail adress <br>"
+								+ "http://" + PATH + "/verifyEmail/"
+								+ verificationEmail);
+				flash("success","A verification mail has been sent to your email address!");
+				Logger.info("A verification mail has been sent to email address");
+				return ok(Loginpage.render(" "));
+
+			} else {
+				flash("error", "Username or email allready exists!");
+				Logger.info("Username or email allready exists!");
+				return badRequest(signup.render(submit, new Form<Company>(Company.class)));
+			}
+
+		} catch (Exception e) {
+			flash("error", "Ooops, error has occured. Please try again later.");
+			Logger.error("Error at registration: " + e.getMessage(), e);
+			return badRequest(signup.render(submit, new Form<Company>(Company.class)));
+		}
 
 	}
 
@@ -124,6 +128,7 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updateUser(long id) {
+
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
 			return redirect("/updateUser ");
@@ -133,18 +138,11 @@ public class UserController extends Controller {
 			String username = updateForm.data().get("username");
 			String surname = updateForm.data().get("surname");
 			Date dob = null;
-			try {
-				dob = sdf.parse(updateForm.data().get("dob"));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			dob = sdf.parse(updateForm.data().get("dob"));
 			String gender = updateForm.data().get("gender");
 			String adress = updateForm.data().get("adress");
 			String city = updateForm.data().get("city");
 			String email = updateForm.data().get("email");
-			String oldPass = updateForm.data().get("password");
-			String newPass = updateForm.data().get("newPassword");
 
 			User cUser = User.find(id);
 			cUser.username = username;
@@ -153,7 +151,6 @@ public class UserController extends Controller {
 			cUser.gender = gender;
 			cUser.adress = adress;
 			cUser.city = city;
-			// cUser.email = email;
 			cUser.updated = new Date();
 
 			if (!cUser.email.equals(email)) {
@@ -181,7 +178,6 @@ public class UserController extends Controller {
 			Logger.error("Error at updateUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
-
 	}
 
 	/**
@@ -219,10 +215,8 @@ public class UserController extends Controller {
 			cUser.adress = adress;
 			cUser.city = city;
 			cUser.email = email;
-			/*
-			 * if admin doesn't explicitly change the users password, it stays
-			 * intact
-			 */
+			
+			//if admin doesn't explicitly change the users password, it stays intact
 			if (newPass.length() > 5) {
 				cUser.password = HashHelper.createPassword(newPass);
 			}
@@ -417,4 +411,53 @@ public class UserController extends Controller {
 		}
 		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
+	
+	//TODO comment
+	public static Result newPin(long id) {
+		User currentUser = User.find(id);
+		Pin.generatePin(currentUser);
+		return ok(profile.render(currentUser));
+	}
+	
+	//TODO comment
+	public static Result buyForUserPage() {
+		DynamicForm df = Form.form().bindFromRequest();
+		long id = Long.parseLong(df.data().get("coupon_id"));
+		Coupon coupon = Coupon.find(id);
+		String pinCode = df.data().get("pin");
+		User user = Pin.getPinUser(pinCode);
+		Pin p = Pin.getPin(pinCode);
+		if (user == null || !Pin.isValid(p.date)){
+			flash("error", "Invalid pin code");
+			return badRequest(coupontemplate.render(coupon));
+		}
+		return ok(buyForUser.render(coupon, user));
+	}
+	
+	//TODO comment
+	public static Result buyForUserExecute() {
+		DynamicForm df = Form.form().bindFromRequest();
+		long id = Long.parseLong(df.data().get("coupon_id"));
+		int quantity = Integer.parseInt(df.data().get("quantity"));
+		Coupon coupon = Coupon.find(id);
+		User client = User.find(Long.parseLong(df.data().get("user_id")));
+		if (client == null) { return badRequest(coupontemplate.render(coupon)); }
+		double totalPrice = coupon.price * quantity;	
+		long t = TransactionCP.createTransaction( new UUID().toString().substring(0, 12),coupon.price, quantity, totalPrice, "", client, coupon);
+		CouponController.notifications ++;
+		flash("success", "Transaction complete");
+		return ok(index.render(Coupon.all(), Category.all()));
+	}
+	
+	/**
+	 * TODO comment
+	 * @return
+	 */
+	public static long getCurrentUserId() {
+		User u = User.findByEmail(session("email"));
+		if ( u != null)
+			return u.id;
+		return -1;
+	}
+			
 }

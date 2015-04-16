@@ -3,12 +3,16 @@ package models;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
 
+import controllers.CouponController;
 import controllers.PayPalController;
+import controllers.Sesija;
+import play.api.mvc.Session;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 import scala.Array;
@@ -26,6 +30,7 @@ import scala.Array;
 @Entity
 public class TransactionCP extends Model{
 	
+
 	@Id
 	public long id;
 	
@@ -39,19 +44,18 @@ public class TransactionCP extends Model{
 	
 	public String token; //token from paypalReturn
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	public User buyer;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	public Coupon coupon;
 	
 	public Date date;
-
+	
 	/* ebean finder */
 	private static Finder<Long, TransactionCP> find = new Finder<Long, TransactionCP>(Long.class,
 			TransactionCP.class);
 	
-
 	/* constructor */
 	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,
 			User buyer, Coupon coupon) {
@@ -61,7 +65,6 @@ public class TransactionCP extends Model{
 		this.totalPrice = totalPrice;
 		this.token = token;
 		this.buyer = buyer;
-		//this.seller = seller;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
@@ -130,5 +133,21 @@ public class TransactionCP extends Model{
 		return "Expiring: " + dateFormat.format(date);
 
 	}
+	
+	public static List<TransactionCP> allFromCompany(long id) {
+		List<Coupon> coupons = Coupon.ownedCoupons(id);
+		List<TransactionCP> ids = TransactionCP.find.all();
+		List<TransactionCP> forCompany = new ArrayList<TransactionCP>();
+		for(int i = 0; i < ids.size(); i++) {
+			for(int j = 0; j < coupons.size() ; j ++) {
+				if(coupons.get(j).equals(ids.get(i).coupon))
+						forCompany.add(ids.get(i));
+			}
+		}
+		Collections.reverse(forCompany);
+		return forCompany;
+	}
+	
+	
 	
 }

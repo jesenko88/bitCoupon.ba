@@ -1,5 +1,7 @@
 package controllers;
 
+import helpers.MailHelper;
+
 import java.awt.ItemSelectable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.Category;
+import models.Company;
 import models.Coupon;
 import models.TransactionCP;
 import models.User;
@@ -33,7 +36,9 @@ import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
 
 public class PayPalController extends Controller {
-	
+
+    static String PATH = Play.application().configuration().getString("PATH");
+
 	static User currentUser = User.find(session("name"));
 	static Coupon coupon;
 	static List<String> details;
@@ -63,7 +68,9 @@ public class PayPalController extends Controller {
 			apiContext.setConfigurationMap(sdkConfig);
 			
 			Amount amount = new Amount();		
-			DynamicForm buyForm = Form.form().bindFromRequest();		
+			DynamicForm buyForm = Form.form().bindFromRequest();	
+			
+			
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if ( quantity > coupon.maxOrder){
@@ -72,6 +79,9 @@ public class PayPalController extends Controller {
 			}
 			totalPrice = coupon.price * quantity;	
 			String totalPriceString = String.format("%1.2f",totalPrice);
+			String couponName = coupon.name;
+			if (couponName.length() > 65)
+				couponName = couponName.substring(0, 65) + "...";
 			
 			amount.setTotal(totalPriceString);
 			amount.setCurrency("USD");
@@ -83,8 +93,8 @@ public class PayPalController extends Controller {
 			String description = String.format("Coupon: %s\n"
 					+ "Price: %s\n"
 					+ "Quantity: %d\n"
-					+ "Total: %s", coupon.name, coupon.price, quantity, totalPriceString);
-					
+					+ "Total: %s", couponName, coupon.price, quantity, totalPriceString);
+		
 			Transaction transaction = new Transaction();
 			transaction.setDescription(description);
 			transaction.setAmount(amount);
@@ -182,12 +192,18 @@ public class PayPalController extends Controller {
 
 		try {
 			payment.execute(apiContext, paymentExecution);
-			TransactionCP.createTransaction(paymentID, coupon.price, quantity,totalPrice, token, currentUser, coupon);
+			
+			long t = TransactionCP.createTransaction( paymentID,coupon.price, quantity, totalPrice, token, currentUser, coupon);
 
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
 			Coupon.updateCoupon(coupon);
-
+			MailHelper.send(coupon.seller.email,
+					"Congratulations. Your coupon " + coupon.name +" is purchased. "
+							+ "To see details go to your profile. <br>"
+							+ "http://" + PATH + "/loginpage");
+			Company company = Company.findById(coupon.seller.id);
+            CouponController.notifications ++;
 			Logger.info(session("name") + " approved transaction: //TODO");
 			flash("success", "Transaction complete");
 			return ok(index.render(Coupon.all(), Category.all()));

@@ -4,11 +4,14 @@ import helpers.AdminFilter;
 import helpers.CurrentUserFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
+
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.*;
+
 import controllers.Sesija;
 import play.Logger;
 import play.data.DynamicForm;
@@ -33,7 +36,7 @@ public class Company  extends SuperUser{
 	public String logo;
 	
 	public String contact;
-	
+		
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
@@ -55,10 +58,9 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = "images/home/No-Logo.jpg";
+		this.logo = "images/home/company-default.jpg";
 		this.contact = contact;	
 	}
-	
 	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
 		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
@@ -160,5 +162,14 @@ public class Company  extends SuperUser{
 	public static boolean exists(String name) {
 		return getFind().where().eq("name", name).findUnique() != null;
 	}
+	
+	public static List<Company> approvedCompanies() {
+		return find.where().eq("status", true)
+				.findList();
+	}
+	
+	public static List<Company> nonApprovedCompanies() {
+		return find.where().eq("status", false).findList();
+	}	 
 
 }

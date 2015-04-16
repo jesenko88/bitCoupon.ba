@@ -1,7 +1,6 @@
 package models;
 
-import helpers.JSonHelper;
-
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+
+import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -18,8 +19,6 @@ import play.Logger;
 import play.data.validation.Constraints.MinLength;
 import play.db.ebean.Model;
 import play.libs.Json;
-
-
 
 /**
  * 
@@ -54,20 +53,21 @@ public class Coupon extends Model {
 	public String description;
 
 	public String remark;
-	
+
 	@ManyToOne
 	public Company seller;
-	
-	@OneToMany(mappedBy="coupon", cascade=CascadeType.ALL)
+
+	@OneToMany(mappedBy = "coupon")
 	public List<TransactionCP> buyers;
 
 	public int minOrder;
-	
+
 	public int maxOrder;
-	
+
 	public Date usage;
-	
-    public boolean status;
+
+	public boolean status;
+
 	/*
 	 * public String code;
 	 * 
@@ -82,7 +82,7 @@ public class Coupon extends Model {
 	 * public boolean specialOffer;
 	 * 
 	 * public long multiOffer_id
-	 *  
+	 * 
 	 * public long company_id;
 	 * 
 	 * public long comment_user_id;
@@ -101,18 +101,11 @@ public class Coupon extends Model {
 		this.category = category;
 		this.description = description;
 		this.remark = remark;		
-		
-		/*
-		 * this.code = code; this.lastMinute = lastMinute; this.duration =
-		 * duration; this.specialPrice = specialPrice; this.viewCount =
-		 * viewCount; this.specialOffer = specialOffer; this.multiOffer_id =
-		 * multiOffer_id; this.status = status; this.company_id = company_id;
-		 * this.comment_user_id = comment_user_id; this.response_company_id =
-		 * response_company_id;
-		 */
 	}
+
 	public Coupon(String name, double price, Date dateExpire, String picture,
-			Category category, String description, String remark, int minOrder, int maxOrder,Date usage, Company seller) {
+			Category category, String description, String remark, int minOrder,
+			int maxOrder, Date usage, Company seller) {
 
 		this.name = name;
 		this.price = price;
@@ -127,6 +120,12 @@ public class Coupon extends Model {
 		this.usage = usage;
 		this.seller = seller;
 		this.status = false;
+	}
+	
+	/*TODO coupons for empty fields */
+	public Coupon(String name, String picture) {
+		this.name = name;
+		this.picture = picture;
 	}
 
 	public static Finder<Long, Coupon> find = new Finder<Long, Coupon>(
@@ -147,29 +146,35 @@ public class Coupon extends Model {
 		newCoupon.save();
 		return newCoupon.id;
 	}
-	
+
 	/**
 	 * Method with minimum order variable.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder,int maxOrder, Date usage, Company seller, User buyer) {
+			String picture, Category category, String description,
+			String remark, int minOrder, int maxOrder, Date usage,
+			Company seller, User buyer) {
 
-		// Logger.debug(category.name);	
+		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder, maxOrder, usage, seller);
+				category, description, remark, minOrder, maxOrder, usage,
+				seller);
 		newCoupon.save();
 		return newCoupon.id;
 	}
-	
+
 	/**
 	 * Method with status variable for global coupons.
 	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
-			String picture, Category category, String description, String remark, int minOrder, int maxOrder, Date usage, Company seller, boolean status) {
+			String picture, Category category, String description,
+			String remark, int minOrder, int maxOrder, Date usage,
+			Company seller, boolean status) {
 
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
-				category, description, remark, minOrder, maxOrder, usage, seller);
+				category, description, remark, minOrder, maxOrder, usage,
+				seller);
 		newCoupon.status = status;
 		newCoupon.save();
 		return newCoupon.id;
@@ -189,7 +194,7 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> all() {
 		List<Coupon> coupons = find.findList();
-		if(coupons == null)
+		if (coupons == null)
 			coupons = new ArrayList<Coupon>();
 		return coupons;
 	}
@@ -241,21 +246,21 @@ public class Coupon extends Model {
 	 * @return List of coupons by category
 	 */
 	public static List<Coupon> listByCategory(String categoryName) {
-		List<Coupon> coupons = find.where().eq("category", Category.findByName(categoryName))
-				.findList();
-		if(coupons == null)
+		List<Coupon> coupons = find.where()
+				.eq("category", Category.findByName(categoryName)).findList();
+		if (coupons == null)
 			coupons = new ArrayList<Coupon>();
 		return coupons;
 	}
-	
+
 	/**
 	 * @param categoryName
-	 * @return List of coupons by provided category. ArrayNode (JSon content) 
+	 * @return List of coupons by provided category. ArrayNode (JSon content)
 	 */
 	public static ArrayNode listByCategoryJSon(String categoryName) {
-		
-		return JSonHelper.couponListToJson(find.where().eq("category", Category.findByName(categoryName))
-				.findList() );
+
+		return JSonHelper.couponListToJson(find.where()
+				.eq("category", Category.findByName(categoryName)).findList());
 	}
 
 	/**
@@ -294,9 +299,9 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> sortByCategory(int method) {
 		List<Coupon> all = find.all();
-		
-		//Handling exceptions.
-		if(all == null){
+
+		// Handling exceptions.
+		if (all == null) {
 			return new ArrayList<Coupon>();
 		}
 		/*
@@ -330,8 +335,8 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> sortByPrice(int method) {
 		List<Coupon> all = find.all();
-		//Handling exceptions.
-		if(all == null){
+		// Handling exceptions.
+		if (all == null) {
 			return new ArrayList<Coupon>();
 		}
 		/*
@@ -365,8 +370,8 @@ public class Coupon extends Model {
 	 */
 	public static List<Coupon> sortByDate(int method) {
 		List<Coupon> all = find.all();
-		//Handling exceptions.
-		if(all == null){
+		// Handling exceptions.
+		if (all == null) {
 			return new ArrayList<Coupon>();
 		}
 		/*
@@ -405,10 +410,9 @@ public class Coupon extends Model {
 	 * @return sorted list of coupons or null if there was error.
 	 */
 	public static List<Coupon> sortByCategory(List<Coupon> cpns, int method) {
-		if(cpns == null)
+		if (cpns == null)
 			return new ArrayList<Coupon>();
-			
-		
+
 		/*
 		 * Implementing comparator. Comparing category names and return its
 		 * string compare value.
@@ -441,8 +445,8 @@ public class Coupon extends Model {
 	 * @return sorted list or null
 	 */
 	public static List<Coupon> sortByPrice(List<Coupon> cpns, int method) {
-		
-		if(cpns == null)
+
+		if (cpns == null)
 			return new ArrayList<Coupon>();
 		/*
 		 * Creating comparator for sorting by price.
@@ -473,7 +477,7 @@ public class Coupon extends Model {
 	 * @return
 	 */
 	public static List<Coupon> sortByDate(List<Coupon> cpns, int method) {
-		if(cpns == null)
+		if (cpns == null)
 			return new ArrayList<Coupon>();
 		/*
 		 * Creating comparator for sorting by date.
@@ -481,10 +485,10 @@ public class Coupon extends Model {
 		Comparator<Coupon> c = new Comparator<Coupon>() {
 			@Override
 			public int compare(Coupon c1, Coupon c2) {
-				if(c1.dateExpire == null || c2.dateExpire == null){
+				if (c1.dateExpire == null || c2.dateExpire == null) {
 					return 0;
-				}				
-				
+				}
+
 				if (c1.dateExpire.before(c2.dateExpire)) {
 					return -1;
 				} else if (c1.dateExpire.after(c2.dateExpire)) {
@@ -506,17 +510,18 @@ public class Coupon extends Model {
 	}
 
 	/**
-	 * Method to parse list of coupons into comma separated string format.
-	 * This we use for sorting all coupons or only searched one. Instead of routing
+	 * Method to parse list of coupons into comma separated string format. This
+	 * we use for sorting all coupons or only searched one. Instead of routing
 	 * whole list of Coupon we only send this string.
+	 * 
 	 * @param coupons
 	 * @return
 	 */
 	public static String commaSeparatedIds(List<Coupon> coupons) {
-		if(coupons.size() < 1){
+		if (coupons.size() < 1) {
 			return null;
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		for (Coupon c : coupons) {
 			sb.append(c.id).append(",");
@@ -524,7 +529,6 @@ public class Coupon extends Model {
 		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
-
 
 	/*
 	 * public static List<Coupon> listByDate(){ List<Coupon> oldCoupon = new
@@ -536,60 +540,100 @@ public class Coupon extends Model {
 	 * 
 	 * } if (oldCoupon.isEmpty()){ return null; } } return oldCoupon;
 	 */
-	
-	
 	/**
 	 * Return all coupons owned by a company
-	 * @param id of the company
+	 * 
+	 * @param id
+	 *            of the company
 	 * @return List of Coupons
 	 */
-	public static List<Coupon> ownedCoupons(long companyID) {
-		List<Coupon> coupons = find.where().eq("seller_id", companyID).findList(); 
-		if(coupons == null)
+	/*public static List<Coupon> companyCoupons(long companyID) {
+		List<Coupon> coupons = find.where().eq("seller_id", companyID)
+				.findList();
+		if (coupons == null)
 			coupons = new ArrayList<Coupon>();
 		return coupons;
-	}
-	
+	}*/
+
+
 	public static List<Coupon> userBoughtCoupons(long userId) {
 		List<Coupon> coupons = find.where().eq("buyer_id", userId).findList();
-		if(coupons == null){
+		if (coupons == null) {
 			coupons = new ArrayList<Coupon>();
 		}
 		return coupons;
+	}
+
+	/**
+	 * Method checking if this coupon expired. Returning true if it expired and
+	 * false if it is not expired.
+	 * @return
+	 */
+	public boolean checkIfExpired() {
+		Date now = new Date();
+		if (dateExpire != null)
+			return dateExpire.before(now);
+		return false;
+	}
+
+	public static List<Coupon> approvedCoupons() {
+		return find.where().eq("status", true).findList();
 	}
 	
 	/**
-	 * Method checking if this coupon expired.
-	 * Returning true if it expired and false if it is not expired.
+	 * Returns the number of empty fields on in a row on the page
 	 * @return
 	 */
-	public  boolean checkIfExpired(){
-		Date now = new Date();
-		return dateExpire.before(now);
+	public static int numberOfEmptyFields(){
+		List<Coupon> approved = approvedCoupons();
+		int columns = 3;
+		int emptyFields = approved.size() % columns;
+		if(emptyFields > 0)
+			return columns - emptyFields;
+		return 0;
+	}	
+
+		public static List<Coupon> nonApprovedCoupons() {
+		return find.where().eq("status", false).findList();
 	}
 
-	
-	
-	public static List<Coupon> approvedCoupons() {
-		List<Coupon> all = find.all();	
-		List<Coupon> approved = new ArrayList<Coupon>();
-		for(Coupon coupon: all){
-			if(coupon.status){
-				approved.add(coupon);
-			}
-		}		
-		return approved;
+	public static List<Coupon> ownedCoupons(long companyID) {
+		return find.where().eq("seller_id", companyID).findList();
 	}
 	
-	public static List<Coupon> nonApprovedCoupons() {
-		List<Coupon> all = find.all();
-		List<Coupon> nonApproved = new ArrayList<Coupon>();
-		for(Coupon coupon: all){
-			if(!coupon.status){
-				nonApproved.add(coupon);
+	
+	public String validate() {
+		
+			if ( name.length() < 4 || name.length() > 70){
+				return "Coupon name has to be in range 4 - 70 characters";
 			}
-		}
-		return nonApproved;
+			if ( price <= 0){
+				return "Invalid price";
+			}
+			if (dateExpire.before(new Date())){
+				return "Invalid date";
+			}
+			if (category.name.equals("New Category")){
+				if (Category.findByName(category.name) != null){
+					return "Category allready exists";
+				}
+			}else{
+				if (Category.findByName(category.name) == null){
+					return "Invalid category selection";
+				}
+			}
+			if (description.length() < 10 || description.length() > 999){
+				return "Description length has to be in range 10 - 999 characters";
+			}
+			if (remark.length() > 150){
+				return "Remark length has to be max 150 characters";
+			}
+			if ( minOrder < 0 || maxOrder < 0 || minOrder > maxOrder){
+				return "Invalid order amount";
+			}
+			//TODO dateUsage ??
+			
+		return null;
 	}
 	
 }

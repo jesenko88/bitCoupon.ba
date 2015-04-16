@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import controllersJSON.JSonOperator;
 import models.*;
 import helpers.*;
 import play.Logger;
@@ -105,11 +104,8 @@ public class SuperUserController extends Controller {
 			return badRequest(userList.render( SuperUser.allSuperUsers()));
 		}
 		/* content negotiation */
-		if (request().accepts("text/html")) {
-			return ok(userList.render(merged));
-		} else {
-			return ok(JSonHelper.superUserListToJson(merged));
-		}
+		return ok(userList.render(merged));
+
 	}
 	
 	
@@ -171,7 +167,6 @@ public class SuperUserController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result profilePage(String username) {
-		if (request().accepts("text/html")) {
 			User user = User.find(username);
 			Company company = Company.find(username);
 			if (user != null) {
@@ -181,8 +176,6 @@ public class SuperUserController extends Controller {
 			}
 			flash("error", "Ooops, error has occured.");
 			return redirect("/");
-		}
-		return JSonOperator.profilePage(username);
 	}
 	
 	

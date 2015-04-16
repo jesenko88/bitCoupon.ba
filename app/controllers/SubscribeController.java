@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.ckeditor.CKEditorConfig;
+import com.ckeditor.CKEditorReplaceTag;
+
 import models.Coupon;
 import models.Subscriber;
 import models.User;
@@ -76,7 +79,7 @@ public class SubscribeController extends Controller {
 			List<Coupon> coupons = new ArrayList<Coupon>();
 
 			// If checked coupons are more then 3, returning back.
-			if (formResult.size() != 4) {
+			if (formResult.size() != 5) {
 				flash("warning",
 						"Number of selected coupons must be exactly 3.");
 				return redirect("/newsletter");
@@ -91,12 +94,18 @@ public class SubscribeController extends Controller {
 					coupons.add(cp);
 				}
 			}
-			MailHelper.sendNewsletter(subscribers, subject, coupons);
+			String message = form.data().get("message");
+			if(message.contains("<script>")){
+				flash("warning", "No scripts allowed!");
+				return redirect("/newsletter");
+			}
+			MailHelper.sendNewsletter(subscribers, subject, coupons, message);
+			flash("success", "Newsletter has been sent.");
 			return redirect(refererUrl);
 		} catch (Exception e) {
 			flash("error", "Error while sending newsletter."
 					+ "Please check your logs.");
-			Logger.error("Error at sendNewsletters: " + e.getMessage());
+			Logger.error("Error at sendNewsletters: " + e.getMessage(),e );
 			return redirect(refererUrl);
 		}
 	}
@@ -122,6 +131,7 @@ public class SubscribeController extends Controller {
 				Logger.debug("User " + u.email + " subscribed.");
 			} else {
 				Logger.debug("Visitor with email " + email + " subscribed.");
+				flash("success", "You are now subscribed with following email: " + email);
 				Subscriber.subscribe(email);
 			}
 			return redirect(refererUrl);
