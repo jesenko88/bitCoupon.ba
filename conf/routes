@@ -15,9 +15,6 @@ POST   /api/updateUser                api.JSonOperator.updateUser()
 GET    /api/coupons                   api.JSonOperator.coupons()
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
-
-GET    /api/coupons                   controllers.JSonOperator.coupons()
-
 GET    /api/faq                       controllers.FAQController.showFAQ()
 
 # Home page
