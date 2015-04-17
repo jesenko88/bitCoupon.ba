@@ -74,13 +74,13 @@
 						
 						
 
-							<input  value='@myForm("name").value' type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
-							<input  value='@myForm("price").value' type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
-							<input  value='@myForm("date").value' type="date" id="datepicker" name="dateExpire" required>
+							<input  class="form-control" value='@myForm("name").value' type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
+							<input  class="form-control"  value='@myForm("price").value' type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
+							<input  class="form-control" value='@myForm("date").value' id="datepicker" placeholder="Date" name="dateExpire" required>
 							<label> Choose your coupon photo</label>
-							<input type="file" name="picture" id="picture" placeholder="Choose your photo" />
+							<input class="form-control" type="file" name="picture" id="picture" placeholder="Choose your photo" />
 
-							<select  value='@myForm("category").value'  id="category" name="category" required>
+							<select class="form-control"  value='@myForm("category").value'  id="category" name="category" required>
 							
 							    <option value="" style="display:none">Select category</option>
 								@for(category <- categories) {
@@ -90,23 +90,20 @@
 										<option >New Category</option>
 									}
 							</select>
-							<input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
-							<textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
+							<input class="form-control"  type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
+							<textarea class="form-control" name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>	
 							<p></p>
 
-							<textarea  value='@myForm("remark").value' name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>
-							<input  value='@myForm("minOrder").value' type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" required/>
-							<input  value='@myForm("maxOrder").value' type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" required/>
+							<textarea class="form-control"  value='@myForm("remark").value' name="remark" id="remark" rows="6" placeholder="Remark of Coupon"></textarea>
+							<br>
+							<input class="form-control"  value='@myForm("minOrder").value' type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" required/>
+							<input class="form-control"  value='@myForm("maxOrder").value' type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" required/>
 							 <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>	
 							 <p> Usage date </p>  
-		     				<input  value='@myForm("datepicker").value' type="date" id="datepicker" name="usage" required>
+		     				<input class="form-control"  value='@myForm("datepicker").value' type="date" id="datepicker" name="usage" required/>
 		     				<span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
 							<button type="submit" class="btn btn-default" required>Create Coupon</button>
 
-								<p></p>
-									<p></p>
-										<p></p>
-											<p></p>
 						</form>
 					</div><!--/sign up form-->
 					} else {

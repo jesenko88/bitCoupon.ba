@@ -39,24 +39,24 @@
 					</div>
 					}
                   <!-- onchange="form.confirmPassword.pattern = this.value;" -->
-                  <input value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
-                  <p> <input value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"></p>
-				  <p> <input value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "></p>
+                  <input class="form-control" value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
+                  <p> <input class="form-control" value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"></p>
+				  <p> <input class="form-control" value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "></p>
 				  <br>
-                  <input value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
-                  <input value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	<br>
+                  <input class="form-control" value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
+                  <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	<br>
                   <br>
 
                   <p> Date of birth </p>
-                  <input value='@myForm("datepicker").value' type="date" id="datepicker" name="dob"  onClick="this.select()"  placeholder="Date of birth" required/>
+                  <input class="form-control" value='@myForm("datepicker").value' id="datepicker" name="dob"  onClick="this.select()"  placeholder="Date of birth" required/>
                    <span id="error" style="display:none; color:red"> You are underage of 18 </span>
-                  <input value='@myForm("gender").value' type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" required/>Male 
-                  <input value='@myForm("gender").value' type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female 
+                  <input class="form-control" value='@myForm("gender").value' type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" required/>Male 
+                  <input class="form-control" value='@myForm("gender").value' type="radio" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female 
 
                   <br>      
                   <br>                            
-                  <input value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/><br>                
-                  <input value='@myForm("City").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
+                  <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/><br>                
+                  <input class="form-control" value='@myForm("City").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
                   <br>
                   <button type="submit" class="btn btn-default" >Submit</button>
                </form>
@@ -90,16 +90,16 @@
 				 		</div>
 					</div>
 					}
-                  <input value='@companyForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
-                  <p> <input value='@companyForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password" onchange="form.confirmPassword.pattern = this.value;" placeholder="Password"></p>
-				  <p> <input value='@companyForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "></p>
+                  <input class="form-control" value='@companyForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
+                  <p> <input class="form-control" value='@companyForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password" onchange="form.confirmPassword.pattern = this.value;" placeholder="Password"></p>
+				  <p> <input class="form-control" value='@companyForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "></p>
                   <br>
-                  <input value='@companyForm("name").value' type="text" id="name" name="name"  onClick="this.select()"  placeholder="Company name" required/>	<br>
-                  <input value='@companyForm("contact").value' type="text" id="contact" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>	<br>
-                  <input value='@companyForm("logo").value' type="text" id="logo" name="logo" onClick="this.select()" placeholder="Logo" required/> <br>
+                  <input class="form-control" value='@companyForm("name").value' type="text" id="name" name="name"  onClick="this.select()"  placeholder="Company name" required/>	<br>
+                  <input class="form-control" value='@companyForm("contact").value' type="text" id="contact" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>	<br>
+                  <input class="form-control" value='@companyForm("logo").value' type="text" id="logo" name="logo" onClick="this.select()" placeholder="Logo" required/> <br>
                   <br>
-                  <input value='@companyForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Company adress" required/>	<br>
-                  <input value='@companyForm("city").value' type="text" id="city" name="city" onClick="this.select()"  placeholder="City" required/>	<br>
+                  <input class="form-control" value='@companyForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Company adress" required/>	<br>
+                  <input class="form-control" value='@companyForm("city").value' type="text" id="city" name="city" onClick="this.select()"  placeholder="City" required/>	<br>
                   <br>
                   <button type="submit" class="btn btn-default" >Submit</button>
                </form>
