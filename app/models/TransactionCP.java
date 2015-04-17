@@ -53,7 +53,7 @@ public class TransactionCP extends Model{
 	public Date date;
 	
 	/* ebean finder */
-	private static Finder<Long, TransactionCP> find = new Finder<Long, TransactionCP>(Long.class,
+	public static Finder<Long, TransactionCP> find = new Finder<Long, TransactionCP>(Long.class,
 			TransactionCP.class);
 	
 	/* constructor */

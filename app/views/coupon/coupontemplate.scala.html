@@ -64,7 +64,7 @@
                <h2> @coupon.name </h2>
                <span>
                <span> @coupon.getPriceString() KM</span>
-               @if(Sesija.adminCheck(ctx()) == false || Sesija.companyCheck(ctx()) == false) {
+               @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false) {
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
                <label>Enter the amount of coupons </label>
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
@@ -86,6 +86,9 @@
                <a href='@routes.CouponController.editCoupon(coupon.id)' class="btn btn-fefault cart">Update coupon</a>						
                <a href='@routes.CouponController.deleteCoupon(coupon.id)' onclick="return confirm('Are you sure you want to delete this coupon?');"
                   class="btn btn-fefault cart">Delete coupon</a>
+                   
+                  <a href="/refundCoupon/@coupon.id" class="btn btn-fefault cart">Refund</a>
+               
                }
                <label class="pull-left" >Minimum coupons to be sold:
                <span><textarea disabled rows="1">@coupon.minOrder</textarea></span>
