@@ -76,7 +76,7 @@
 
 							<input  class="form-control" value='@myForm("name").value' type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Title" required/>
 							<input  class="form-control"  value='@myForm("price").value' type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
-							<input  class="form-control" value='@myForm("date").value' id="datepicker" placeholder="Date" name="dateExpire" required>
+							<input  class="form-control datepicker-bit" value='@myForm("date").value' type="date" id="datepicker" placeholder="Date" name="dateExpire" required>
 							<label> Choose your coupon photo</label>
 							<input class="form-control" type="file" name="picture" id="picture" placeholder="Choose your photo" />
 
@@ -100,7 +100,7 @@
 							<input class="form-control"  value='@myForm("maxOrder").value' type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" required/>
 							 <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>	
 							 <p> Usage date </p>  
-		     				<input class="form-control"  value='@myForm("datepicker").value' type="date" id="datepicker" name="usage" required/>
+		     				<input class="form-control datepicker-bit"  value='@myForm("datepicker").value' type="date" id="datepicker" name="usage" required/>
 		     				<span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
 							<button type="submit" class="btn btn-default" required>Create Coupon</button>
 
