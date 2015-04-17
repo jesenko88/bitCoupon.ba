@@ -76,7 +76,7 @@ public class PayPalController extends Controller {
 			sdkConfig.put("mode", "sandbox");
 			apiContext = new APIContext(accessToken);
 			apiContext.setConfigurationMap(sdkConfig);
-+	
+	
 			Amount amount = new Amount();		
 			DynamicForm buyForm = Form.form().bindFromRequest();	
 			
