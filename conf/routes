@@ -13,6 +13,7 @@ POST   /api/userProfile               api.JSonOperator.userProfile()
 POST   /api/companyProfile            api.JSonOperator.companyProfile()
 POST   /api/updateUser                api.JSonOperator.updateUser()
 GET    /api/coupons                   api.JSonOperator.coupons()
+# Content negotiation
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
 GET    /api/faq                       controllers.FAQController.showFAQ()
@@ -111,7 +112,7 @@ POST   /couponpurchase                controllers.PayPalController.purchaseProce
 GET    /couponsuccess                 controllers.PayPalController.couponSuccess()
 GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
-
+GET   /refundCoupon/:couponId         controllers.PayPalController.refundProcessing(couponId: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)

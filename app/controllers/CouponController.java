@@ -19,8 +19,6 @@ import javax.imageio.ImageIO;
 
 import org.h2.util.StringUtils;
 
-
-
 import api.JSonHelper;
 
 import com.google.common.io.Files;
@@ -40,8 +38,8 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import scala.reflect.api.Scopes;
 import views.html.coupon.*;
+import views.html.company.*;
 import views.html.*;
 import views.html.admin.users.*;
 
@@ -409,15 +407,16 @@ public class CouponController extends Controller {
 
 		try{		
 			double price = couponForm.bindFromRequest().get().price;	
-			Date date = couponForm.bindFromRequest().get().dateExpire;
-			Category category = null;
+			Date date = couponForm.bindFromRequest().get().dateExpire;			
 			String newCategory = couponForm.bindFromRequest().field("newCategory").value();
-			String categoryy = couponForm.bindFromRequest().field("category").value();
+			String categoryString = couponForm.bindFromRequest().field("category").value();
 			String description = couponForm.bindFromRequest().field("description").value();
 			String remark = couponForm.bindFromRequest().field("remark").value();
 			int minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());	
 			int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
 			Date usage = couponForm.bindFromRequest().get().usage;
+			
+			Category category = Category.findByName(categoryString);
 			
 			boolean status = false;
 			if (Sesija.adminCheck(ctx())) {
