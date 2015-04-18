@@ -154,6 +154,7 @@
             </li>         
        		}
         </ul>
+        @if(Sesija.getCurrent(ctx()).isUser()){
         <form class="form-inline" action="@routes.CouponController.comment(coupon.id)" method="POST">
             <div class="form-group">
                 <input class="form-control" id="comment" name="comment" type="text" placeholder="Your comments" />
@@ -162,6 +163,7 @@
                 <button type="submit" class="btn btn-default">Add</button>
             </div>
         </form>
+        }
     </div>
 </div>
    
