@@ -19,8 +19,6 @@ import javax.imageio.ImageIO;
 
 import org.h2.util.StringUtils;
 
-
-
 import api.JSonHelper;
 
 import com.google.common.io.Files;
@@ -40,8 +38,8 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import scala.reflect.api.Scopes;
 import views.html.coupon.*;
+import views.html.company.*;
 import views.html.*;
 import views.html.admin.users.*;
 
