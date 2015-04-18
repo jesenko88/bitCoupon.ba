@@ -21,11 +21,13 @@ import org.h2.util.StringUtils;
 
 
 
+
 import api.JSonHelper;
 
 import com.google.common.io.Files;
 
 import models.Category;
+import models.Comment;
 import models.Company;
 import models.Coupon;
 import models.Photo;
@@ -87,7 +89,7 @@ public class CouponController extends Controller {
 	 */
 	public static Result showCoupon(long id) {
 		if(Sesija.companyCheck(ctx()) == true)
-		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
+			TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
@@ -797,5 +799,15 @@ public class CouponController extends Controller {
 			return ok(couponsAll.render(approvedCoupons, nonApprovedCoupons));
 		}
 		return ok(JSonHelper.couponListToJson(approvedCoupons));
+	}
+	
+	public static Result comment(long couponId){
+		DynamicForm df = Form.form().bindFromRequest();
+		Coupon coupon = Coupon.find(couponId);
+		User user = Sesija.getCurrentUser(ctx());
+		String comment = df.data().get("comment");
+		Comment.create(comment, coupon, user);
+		Logger.debug("CREATED COMMENT");
+		return showCoupon(couponId);		
 	}
 }

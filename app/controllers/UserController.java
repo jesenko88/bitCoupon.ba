@@ -53,7 +53,7 @@ public class UserController extends Controller {
 		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
-
+		
 		try {
 
 			String username = userForm.bindFromRequest().get().username;
@@ -329,15 +329,14 @@ public class UserController extends Controller {
 			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
 					+ subFolder).isDirectory();
 			if (checkIfDirectoryExists) {
-				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug(assetsPath);
+				String assetsPath = FileUpload.imageUpload(subFolder);				
 				u.profilePicture = assetsPath;
 				u.save();
 				return redirect("/profile/@" + u.username);
 			} else {
 				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
 				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug(assetsPath);
+				Logger.debug("mkdir");
 				u.profilePicture = assetsPath;
 				u.save();
 				return redirect("/profile/@" + u.username);
