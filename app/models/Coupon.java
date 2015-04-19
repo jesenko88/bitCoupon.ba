@@ -67,7 +67,9 @@ public class Coupon extends Model {
 	public Date usage;
 
 	public boolean status;
-
+	
+	public int numOfViews;
+	
 	/*
 	 * public String code;
 	 * 
@@ -100,7 +102,7 @@ public class Coupon extends Model {
 		this.picture = picture;
 		this.category = category;
 		this.description = description;
-		this.remark = remark;		
+		this.remark = remark;
 	}
 
 	public Coupon(String name, double price, Date dateExpire, String picture,
@@ -120,6 +122,7 @@ public class Coupon extends Model {
 		this.usage = usage;
 		this.seller = seller;
 		this.status = false;
+		this.numOfViews = 0;
 	}
 	
 	/*TODO coupons for empty fields */
@@ -175,6 +178,7 @@ public class Coupon extends Model {
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage,
 				seller);
+		newCoupon.numOfViews = 0;
 		newCoupon.status = status;
 		newCoupon.save();
 		return newCoupon.id;
