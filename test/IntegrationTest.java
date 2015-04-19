@@ -9,6 +9,7 @@ import models.Category;
 import models.Company;
 import models.Coupon;
 import models.EmailVerification;
+import models.Pin;
 import models.User;
 
 import org.junit.*;
@@ -253,6 +254,61 @@ public class IntegrationTest {
 						assertThat(browser.pageSource()).contains("Hawai");
 						assertThat(browser.pageSource()).contains("Enter the amount of coupons");
 											
+					}
+				});
+	}
+	
+	/**
+	 * Testing the 'buy for user' feature
+	 */
+	@Test
+	public void buyForUser() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				new HtmlUnitDriver(), new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) throws ParseException {
+						
+						//creating coupon
+						Category category = new Category("TestCategory");
+						category.save();
+						DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+						Date expiration = df.parse("08/10/2050");
+						Company company = new Company("Company", "email", "password", new Date(), "logo", "adress", "city", "contact");
+						company.save();
+		            	long couponId = Coupon.createCoupon("Hawai", 45, expiration, "pic", category, "desc", "rem", 2, 5, new Date(), company, true);
+					
+		            	//creating customer
+						User lucky = new User("buyer", "lucky", new Date(), "female", "adress", "city", 
+								"lucky@mail.com", HashHelper.createPassword("123456"), false);
+						lucky.save();
+						EmailVerification.makeNewRecord(lucky.id, true);
+						Pin pin = Pin.generatePin(lucky);
+						
+						//creating administrator
+						User admin = new User("AdminNN", "worker", new Date(), "female", "adress", "city", 
+								"adminNN@mail.com", HashHelper.createPassword("123456"), true);
+						admin.save();
+						EmailVerification.makeNewRecord(admin.id, true);
+						
+						// Login as admin
+						browser.goTo("http://localhost:3333/loginpage");
+						browser.fill("#email").with("adminNN@mail.com");
+						browser.fill("#password").with("123456");
+						browser.submit("#submit-login");		
+						
+						//Go to coupon page and enter pin for user
+						browser.goTo("http://localhost:3333/coupon/" + couponId);
+						browser.fill("#pin").with(pin.code);
+						browser.submit("#buy-for");		
+						
+						//Proceed page
+						assertThat(browser.pageSource()).contains("lucky@mail.com");
+						assertThat(browser.pageSource()).contains("Hawai");
+						browser.fill("#quantity").with("1");
+						browser.submit("#submit-buy-for");	
+						
+						assertThat(browser.pageSource()).contains("Transaction complete");
+						assertThat(lucky.bought_coupons.size() > 0);
+
 					}
 				});
 	}
