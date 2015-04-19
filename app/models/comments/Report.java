@@ -1,5 +1,6 @@
 package models.comments;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -45,6 +46,20 @@ public class Report extends Model {
 	
 	public static List<Report> findByUser(User user){
 		return find.where().eq("user", user).findList();				
+	}
+	
+	public static HashMap<Comment, Integer> reports(){
+		HashMap<Comment, Integer> reportedComments = new HashMap<Comment, Integer>();
+		List<Report> all = find.all();
+		for(Report report: all){
+			if(reportedComments.containsKey(report.comment)){
+				int i = reportedComments.get(report.comment) ;
+				reportedComments.put(report.comment, i+1);
+			}else{
+				reportedComments.put(report.comment, 1);
+			}
+		}		
+		return reportedComments;	
 	}
 
 }
