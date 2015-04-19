@@ -19,9 +19,12 @@ import javax.imageio.ImageIO;
 
 import org.h2.util.StringUtils;
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> af7782551b44134ab7ecb64e8ef39d73134d014a
 import api.JSonHelper;
 
 import com.google.common.io.Files;
@@ -42,8 +45,8 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import scala.reflect.api.Scopes;
 import views.html.coupon.*;
+import views.html.company.*;
 import views.html.*;
 import views.html.admin.users.*;
 
@@ -53,7 +56,6 @@ public class CouponController extends Controller {
 	static List<Category> allCategories = Category.all();
 	public static int notifications;
 	static Result result;
-
 	/**
 	 * 
 	 * @return renders the view for coupon add form
@@ -91,6 +93,8 @@ public class CouponController extends Controller {
 		if(Sesija.companyCheck(ctx()) == true)
 			TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
+		coupon.numOfViews ++;
+		coupon.save();
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
 				flash("error", "Ooops, error has occured.");
