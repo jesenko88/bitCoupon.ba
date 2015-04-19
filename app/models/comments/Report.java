@@ -10,6 +10,12 @@ import javax.persistence.ManyToOne;
 import models.User;
 import play.db.ebean.Model;
 
+/**
+ * class represents model of report.
+ * At this moment message of report is empty.
+ * TODO Do modal report, so message can be left and displayed to admin.
+ *
+ */
 @Entity
 public class Report extends Model {
 	
@@ -48,6 +54,11 @@ public class Report extends Model {
 		return find.where().eq("user", user).findList();				
 	}
 	
+	/**
+	 * Method returns HashMap of reports.
+	 * Key is comment, value is number of reports.
+	 * @return
+	 */
 	public static HashMap<Comment, Integer> reports(){
 		HashMap<Comment, Integer> reportedComments = new HashMap<Comment, Integer>();
 		List<Report> all = find.all();
@@ -62,6 +73,10 @@ public class Report extends Model {
 		return reportedComments;	
 	}
 	
+	/**
+	 * Removing all reports on comment.
+	 * @param commentId
+	 */
 	public static void removeCommentReports(long commentId){
 		Comment c = Comment.findById(commentId);
 		List<Report> reports = findByComment(c);

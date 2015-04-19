@@ -17,6 +17,8 @@ import play.db.ebean.Model;
 
 /**
  * Model comment on coupon.
+ * Represents Comments on coupon. 
+ * All CRUD operations implemented.
  *
  */
 @Entity

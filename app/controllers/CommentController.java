@@ -12,18 +12,34 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+/**
+ * Controller for comments.
+ * Available methods for commenting coupon,
+ * reporting coupon, and removing coupon and report.
+ *
+ */
 public class CommentController extends Controller {
 	
+	/**
+	 * Method for creating comment.
+	 * @param couponId
+	 * @return
+	 */
 	public static Result comment(long couponId){
 		DynamicForm df = Form.form().bindFromRequest();
 		Coupon coupon = Coupon.find(couponId);
 		User user = Sesija.getCurrentUser(ctx());
 		String comment = df.data().get("comment");
-		Comment.create(comment, coupon, user);
-		Logger.debug("CREATED COMMENT");
+		Comment.create(comment, coupon, user);	
 		return CouponController.showCoupon(couponId);		
 	}
 	
+	/**
+	 * Method for reporting comment.
+	 * TODO ajax on this method.
+	 * @param commentId
+	 * @return
+	 */
 	public static Result report(long commentId){
 		Comment comment = Comment.findById(commentId);
 		User user = Sesija.getCurrentUser(ctx());
@@ -31,14 +47,25 @@ public class CommentController extends Controller {
 		return CouponController.showCoupon(comment.coupon.id);	
 	}
 	
-	public static Result removeComment(long commentId){	
-		Comment c = Comment.findById(commentId);
+	/**
+	 * Method for removing comment.
+	 * First of all removing all reports on comment.
+	 * @param commentId
+	 * @return
+	 */
+	public static Result removeComment(long commentId){		
 		Report.removeCommentReports(commentId);
 		Comment.delete(commentId);
 		long userId = Sesija.getCurrent(ctx()).id;
 		return UserController.controlPanel(userId);
 	}
 	
+	/**
+	 * Method for removing reports.
+	 * All reports on comment will be removed.
+	 * @param commentId
+	 * @return
+	 */
 	public static Result removeReport(long commentId){
 		Report.removeCommentReports(commentId);
 		long userId = Sesija.getCurrent(ctx()).id;
