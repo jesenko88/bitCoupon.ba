@@ -77,29 +77,35 @@
                }
                 @if(coupon.maxOrder <= 0) {
                <label><h3>Offer succeded </h3></label>
-               }
+              	 }
                @if(CouponController.isExpired(coupon.id)==true) {
                <label>Coupon has expired </label>
+              	 }
                }
-               }
-               @if(Sesija.adminCheck(ctx()) == true || Sesija.companyCheck(ctx()) == true) {
+               @if(Sesija.adminCheck(ctx()) == true) {
                <a href='@routes.CouponController.editCoupon(coupon.id)' class="btn btn-fefault cart">Update coupon</a>						
                <a href='@routes.CouponController.deleteCoupon(coupon.id)' onclick="return confirm('Are you sure you want to delete this coupon?');"
                   class="btn btn-fefault cart">Delete coupon</a>
-                   
+                   @if(coupon.buyers.size() > 0) {
                   <a href="/refundCoupon/@coupon.id" class="btn btn-fefault cart" onclick="return confirm('Are you sure you want to refund?);">Refund</a>
-               
-               }
-           
-               	@if( Sesija.adminCheck(ctx()) == true && CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
+             	  }
+             	  
+               	@if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
 	               <form action="/buyForUser" method="GET" >
 	               	  <input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
 	               	  <input id="pin" name="pin" type="text" style="width: 150px;" maxlength="6" placeholder="Pin code" required/>
 	                  <button type="submit" class="btn btn-default" >Buy for User</button> 
 	               </form>
+              	 }
                }
-               
-               
+                @if(Sesija.companyCheck(ctx()) == true && Coupon.ownedCoupons(Sesija.getCurrentCompany(ctx()).id).contains(coupon)) {
+               <a href='@routes.CouponController.editCoupon(coupon.id)' class="btn btn-fefault cart">Update coupon</a>						
+               <a href='@routes.CouponController.deleteCoupon(coupon.id)' onclick="return confirm('Are you sure you want to delete this coupon?');"
+                  class="btn btn-fefault cart">Delete coupon</a>
+                   @if(coupon.buyers.size() > 0) {
+                  <a href="/refundCoupon/@coupon.id" class="btn btn-fefault cart" onclick="return confirm('Are you sure you want to refund?);">Refund</a>
+             	  }
+         	   }
                <label class="pull-left" >Minimum coupons to be sold:
                <span><textarea disabled rows="1">@coupon.minOrder</textarea></span>
                </label>	
@@ -118,6 +124,8 @@
                   <label class="pull-left">Published by</label>
                   
                <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span> 
+               <label class="pull-left">Number of views @coupon.numOfViews</label>
+               
                </div>
             </div>
          </div>

@@ -49,7 +49,6 @@ public class CouponController extends Controller {
 	static List<Category> allCategories = Category.all();
 	public static int notifications;
 	static Result result;
-
 	/**
 	 * 
 	 * @return renders the view for coupon add form
@@ -87,6 +86,8 @@ public class CouponController extends Controller {
 		if(Sesija.companyCheck(ctx()) == true)
 		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
+		coupon.numOfViews ++;
+		coupon.save();
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
 				flash("error", "Ooops, error has occured.");
