@@ -1,6 +1,6 @@
 @(coupon: Coupon)
 
-@import helper._
+@import models.comments._
 @import java.math.BigInteger; var i=0
 
 @main("Welcome to bitCoupon") {
@@ -123,10 +123,7 @@
          </div>
          <!--/product-information-->
       </div>
-   </div>
-      
-   
-   <!--/product-details-->
+   </div> 
 </div>
    
    <!-- comments -->   
@@ -145,17 +142,22 @@
             <li>
                 <div class="commenterImage">
                   <img src="@routes.Assets.at(comment.user.profilePicture)" />
-                </div>
+                   </div>
                 <div class="commentText">
-                    <p class="">@comment.comment</p>
-                     <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>
-
+                   <p class="">@comment.comment</p>                   
+                    <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
+               			
+               		<span style="margin-left:20px" title="Report this comment">
+                	 <a style="color:red" href="@routes.CommentController.report(comment.id)"><i class="glyphicon glyphicon-ban-circle"></i></a> 
+               		</span>
+                
                 </div>
             </li>         
        		}
         </ul>
+        @if(Sesija.getCurrent(ctx()) != null){
         @if(Sesija.getCurrent(ctx()).isUser()){
-        <form class="form-inline" action="@routes.CouponController.comment(coupon.id)" method="POST">
+        <form class="form-inline" action="@routes.CommentController.comment(coupon.id)" method="POST">
             <div class="form-group">
                 <input class="form-control" id="comment" name="comment" type="text" placeholder="Your comments" />
             </div>
@@ -163,6 +165,7 @@
                 <button type="submit" class="btn btn-default">Add</button>
             </div>
         </form>
+        }
         }
     </div>
 </div>

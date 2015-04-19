@@ -88,7 +88,9 @@ POST   /filterCategory                controllers.CouponController.filterCategor
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
 GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
-POST   /comment/:id                   controllers.CouponController.comment(id: Long)	
+
+POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
+GET 	/report/					controllers.CommentController.report(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()

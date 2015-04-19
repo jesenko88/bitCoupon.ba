@@ -1,7 +1,7 @@
 /**
  * 
  */
-package models;
+package models.comments;
 
 import java.util.Date;
 import java.util.List;
@@ -9,7 +9,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+import models.*;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -31,6 +33,9 @@ public class Comment extends Model{
 	
 	@ManyToOne
 	public Coupon coupon;
+
+	@OneToMany
+	public Report report;
 	
 	public Date date;
 	
@@ -60,6 +65,10 @@ public class Comment extends Model{
 	
 	public static List<Comment> findByCoupon(Coupon c){
 		return find.where().eq("coupon", c).findList();
+	}
+	
+	public static Comment findById(long id){
+		return find.where().eq("id", id).findUnique();
 	}
 	
 }

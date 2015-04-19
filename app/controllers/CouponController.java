@@ -27,7 +27,7 @@ import api.JSonHelper;
 import com.google.common.io.Files;
 
 import models.Category;
-import models.Comment;
+import models.comments.Comment;
 import models.Company;
 import models.Coupon;
 import models.Photo;
@@ -801,13 +801,5 @@ public class CouponController extends Controller {
 		return ok(JSonHelper.couponListToJson(approvedCoupons));
 	}
 	
-	public static Result comment(long couponId){
-		DynamicForm df = Form.form().bindFromRequest();
-		Coupon coupon = Coupon.find(couponId);
-		User user = Sesija.getCurrentUser(ctx());
-		String comment = df.data().get("comment");
-		Comment.create(comment, coupon, user);
-		Logger.debug("CREATED COMMENT");
-		return showCoupon(couponId);		
-	}
+	
 }
