@@ -23,20 +23,22 @@
             </tr>
          </thead>
          <tbody>
+          @if(Report.reports() != null){
             @for((comment, value) <- Report.reports()){          
             <tr>
                <td style="max-width: 200px; word-wrap:break-word;" >@comment.comment </td>
                <td>@comment.user.username </td>
                <td>@value</td>
                <td > <a href="" class="btn btn-default" >View comment</a></td>
-               <td> <a href="" 
+               <td> <a href="@routes.CommentController.removeComment(comment.id)" 
                   onclick="return confirm('Are you sure you want to delete this company?');"
                   class="btn btn-danger">Remove comment</a></td>
-               <td> <a href="" 
+               <td> <a href="@routes.CommentController.removeReport(comment.id)" 
                   onclick="return confirm('Are you sure you want to delete this company?');"
                   class="btn btn-danger">Remove report</a></td>
             </tr>
             }
+          }
          </tbody>
       </table>
    </div>

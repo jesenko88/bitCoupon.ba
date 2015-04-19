@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import models.Coupon;
 import models.User;
 import models.comments.Comment;
@@ -27,6 +29,20 @@ public class CommentController extends Controller {
 		User user = Sesija.getCurrentUser(ctx());
 		Report.create("", comment, user);		
 		return CouponController.showCoupon(comment.coupon.id);	
+	}
+	
+	public static Result removeComment(long commentId){	
+		Comment c = Comment.findById(commentId);
+		Report.removeCommentReports(commentId);
+		Comment.delete(commentId);
+		long userId = Sesija.getCurrent(ctx()).id;
+		return UserController.controlPanel(userId);
+	}
+	
+	public static Result removeReport(long commentId){
+		Report.removeCommentReports(commentId);
+		long userId = Sesija.getCurrent(ctx()).id;
+		return UserController.controlPanel(userId);
 	}
 	
 	
