@@ -1,7 +1,8 @@
 @(user: User)(addCouponInfo: String)
 @import models.comments._
 @main("Admin Panel") {
-@_adminNavbar()
+
+@adminNavbar()
 <div class="col-sm-12">
    <a href="@routes.UserController.controlPanel(user.id)"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
    <hr>
@@ -50,6 +51,7 @@
 </div>  
 <!--/col-span-9-->
 </div>
+
 </div>
 <!-- /Main -->
 <footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>

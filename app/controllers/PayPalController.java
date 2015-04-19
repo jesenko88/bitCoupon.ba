@@ -280,64 +280,13 @@ public class PayPalController extends Controller {
 				}
 			}
 
-			flash("success", "All buyers successfully refunded!");
+			flash("success", "All buyers of this coupon are successfully refunded!");
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (PayPalRESTException e) {
 			flash("error", "Error occured while purchasing through paypal."
 					+ " If you're admin please check your logs");
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
-			return redirect("/");
-		}
-	}
-
-	public static Result refundSuccess() {
-		String payerID;
-		try {
-			DynamicForm paypalReturn = Form.form().bindFromRequest();
-			paymentID = paypalReturn.get("paymentId");
-			payerID = paypalReturn.get("PayerID");
-			token = paypalReturn.get("token");
-			String accessToken = new OAuthTokenCredential(CLIENT_ID,
-					CLIENT_SECRET).getAccessToken();
-			Map<String, String> sdkConfig = new HashMap<String, String>();
-			sdkConfig.put("mode", "sandbox");
-			apiContext = new APIContext(accessToken);
-			apiContext.setConfigurationMap(sdkConfig);
-			payment = Payment.get(accessToken, paymentID);
-
-			paymentExecution = new PaymentExecution();
-			paymentExecution.setPayerId(payerID);
-			// su = SuperUser.getSuperUser(currentCompany.email);
-			flash("info", "Approve transaction");
-			return ok(couponResult.render(currentCompany, coupon, details));
-		} catch (Exception e) {
-			flash("error",
-					"Error occoured. If you're admin please check your logs.");
-			Logger.debug("Error at couponSucess: " + e.getMessage(), e);
-			return redirect("/");
-		}
-	}
-
-	public static Result approveRefunding() {
-
-		try {
-			payment.execute(apiContext, paymentExecution);
-			List<TransactionCP> transactions = TransactionCP.find.where()
-					.eq("coupon_id", coupon.id).findList();
-			for (int i = 0; i < transactions.size(); i++) {
-				TransactionCP.createTransaction(paymentID, coupon.price,
-						quantity, totalPrice, token, currentUser, coupon);
-
-				Logger.info(session("name") + " approved transaction: //TODO");
-			}
-			flash("success", "Transaction complete");
-			return ok(index.render(Coupon.all(), Category.all()));
-
-		} catch (PayPalRESTException e) {
-			flash("error", "Error occured while approving transaction. "
-					+ "If you're admin please check your logs.");
-			Logger.debug("Error at approveTransaction: " + e.getMessage() + e);
 			return redirect("/");
 		}
 	}

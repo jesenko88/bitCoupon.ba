@@ -412,6 +412,7 @@ public class UserController extends Controller {
 	}
 	
 	//TODO comment
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result newPin(long id) {
 		User currentUser = User.find(id);
 		Pin.generatePin(currentUser);
@@ -419,6 +420,7 @@ public class UserController extends Controller {
 	}
 	
 	//TODO comment
+	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserPage() {
 		DynamicForm df = Form.form().bindFromRequest();
 		long id = Long.parseLong(df.data().get("coupon_id"));
@@ -434,6 +436,7 @@ public class UserController extends Controller {
 	}
 	
 	//TODO comment
+	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserExecute() {
 		DynamicForm df = Form.form().bindFromRequest();
 		long id = Long.parseLong(df.data().get("coupon_id"));
@@ -447,16 +450,5 @@ public class UserController extends Controller {
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
-	
-	/**
-	 * TODO comment
-	 * @return
-	 */
-	public static long getCurrentUserId() {
-		User u = User.findByEmail(session("email"));
-		if ( u != null)
-			return u.id;
-		return -1;
-	}
-			
+		
 }
