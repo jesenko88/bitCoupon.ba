@@ -70,7 +70,7 @@
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
                   <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
                   <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
-                  <button type="submit" >
+                  <button type="submit" id="submit-buy" >
                   <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
                   </button>
                </form>
@@ -94,7 +94,7 @@
 	               <form action="/buyForUser" method="GET" >
 	               	  <input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
 	               	  <input id="pin" name="pin" type="text" style="width: 150px;" maxlength="6" placeholder="Pin code" required/>
-	                  <button type="submit" class="btn btn-default" >Buy for User</button> 
+	                  <button type="submit" id="buy-for" class="btn btn-default" >Buy for User</button> 
 	               </form>
               	 }
                }
