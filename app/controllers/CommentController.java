@@ -25,9 +25,8 @@ public class CommentController extends Controller {
 	public static Result report(long commentId){
 		Comment comment = Comment.findById(commentId);
 		User user = Sesija.getCurrentUser(ctx());
-		Report.create("", comment, user);
-		String referedUrl = request().getHeader("referer");
-		return redirect(referedUrl);
+		Report.create("", comment, user);		
+		return CouponController.showCoupon(comment.coupon.id);	
 	}
 	
 	
