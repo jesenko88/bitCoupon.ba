@@ -1,3 +1,5 @@
+import helpers.HashHelper;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,6 +8,8 @@ import java.util.Date;
 import models.Category;
 import models.Company;
 import models.Coupon;
+import models.EmailVerification;
+import models.User;
 
 import org.junit.*;
 import org.openqa.selenium.By;
@@ -25,7 +29,7 @@ public class IntegrationTest {
 	/*
 	 * Registration test //PROBLEM
 	 */
-	
+/*	
 	@Test
 	public void testRegistration() {
 		running( testServer(3333, fakeApplication(inMemoryDatabase())),
@@ -49,7 +53,7 @@ public class IntegrationTest {
 			}
 		});
 	} 
-	
+*/	
 	
 	
 	/**
@@ -79,20 +83,57 @@ public class IntegrationTest {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())),
 				new HtmlUnitDriver(), new Callback<TestBrowser>() {
 					public void invoke(TestBrowser browser) {
+						long id = User.createUser("steven", "hawking", new Date(),"male","adress", "city", 
+										"hawking@mail.com",HashHelper.createPassword("123456"), false);
+						EmailVerification.makeNewRecord(id, true);
 						browser.goTo("http://localhost:3333/loginpage");
 						assertThat(browser.pageSource().contains("LOGIN"));
 						assertThat(browser.pageSource()).contains("Forgot password?");
-						browser.fill("#email").with("jesenko.gavric@bitcamp.ba");
-						browser.fill("#password").with("johndoe");
+						browser.fill("#email").with("hawking@mail.com");
+						browser.fill("#password").with("123456");
 						browser.submit("#submit-login");
-						assertThat(browser.pageSource()).contains("You are logged in as: jesenko.gavric@bitcamp.ba");
-						assertThat(browser.pageSource()).contains("John");
+						assertThat(browser.pageSource()).contains("You are logged in as: hawking@mail.com");
+						assertThat(browser.pageSource()).contains("steven");
 						assertThat(browser.pageSource()).contains("Menu");
 					}
 				});
 	}
 	
 
+	/**
+	 * Test unauthorized admin panel access
+	 */
+	@Test
+	public void adminPanelAcces() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				new HtmlUnitDriver(), new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) {
+						
+						/* creating administrator */
+						long adminId = User.createUser("nikola", "tesla", new Date(),"male","adress", "city", 
+								"tesla@mail.com",HashHelper.createPassword("123456"), true);
+						EmailVerification.makeNewRecord(adminId, true);
+						
+						/* creating regular user without admin rights*/
+						long userId = User.createUser("regUser", "hawking", new Date(),"male","adress", "city", 
+								"regUser@mail.com",HashHelper.createPassword("123456"), false);
+						EmailVerification.makeNewRecord(userId, true);
+						
+						/* loging in as regular user */
+						browser.goTo("http://localhost:3333/loginpage");
+						assertThat(browser.pageSource().contains("LOGIN"));
+						assertThat(browser.pageSource()).contains("Forgot password?");
+						browser.fill("#email").with("regUser@mail.com");
+						browser.fill("#password").with("123456");
+						browser.submit("#submit-login");
+						assertThat(browser.pageSource()).contains("You are logged in as: regUser@mail.com");			
+						browser.goTo("http://localhost:9000/control-panel/user/1");
+						assertThat(browser.pageSource().contains(":( Login to complete this action"));
+					}
+				});
+	}
+	
+	
 	/**
 	 * Test added coupon preview on the index page
 	 */
@@ -135,7 +176,9 @@ public class IntegrationTest {
 
 	}
 
-	
+	/**
+	 * Testing coupon search
+	 */
 	@Test
     public void testSearch() {
         running(testServer(3333, fakeApplication(inMemoryDatabase())), new HtmlUnitDriver(), new Callback<TestBrowser>() {
@@ -157,7 +200,9 @@ public class IntegrationTest {
 
 
 	
-	
+	/**
+	 * Test if a expired coupon can be bought
+	 */
 	@Test
 	public void testExpiredCoupon() {
 		running(testServer(3333, fakeApplication(inMemoryDatabase())), new HtmlUnitDriver(), new Callback<TestBrowser>() {
@@ -179,6 +224,40 @@ public class IntegrationTest {
         });
 		
 	}
+	
+	/**
+	 * Test maximal order quantity
+	 */
+	@Test
+	public void testMaxOrder() {
+		running(testServer(3333, fakeApplication(inMemoryDatabase())),
+				new HtmlUnitDriver(), new Callback<TestBrowser>() {
+					public void invoke(TestBrowser browser) throws ParseException {
+						int maxOrder = 5;
+						String invaliQuantity = "15";
+						Category category = new Category("TestCategory");
+						category.save();
+						DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+						Date expiration = df.parse("08/10/2050");
+						Company company = new Company("Company", "email", "password", new Date(), "logo", "adress", "city", "contact");
+						company.save();
+		            	long id = Coupon.createCoupon("Hawai", 45, expiration, "pic", category, "desc", "rem", 2, maxOrder, null, company, true);
+						browser.goTo("http://localhost:3333/coupon/" + id);
+						browser.fill("#quantity").with(invaliQuantity);
+						browser.submit("#submit-buy");
+						
+						assertThat(browser.pageSource()).doesNotContain("Choose a way to pay");
+						assertThat(browser.pageSource()).doesNotContain("Your order summary");
+						assertThat(browser.pageSource()).doesNotContain("Pay with my PayPal account");
+
+						assertThat(browser.pageSource()).contains("Hawai");
+						assertThat(browser.pageSource()).contains("Enter the amount of coupons");
+											
+					}
+				});
+	}
+	
+	
 	
 	
 }
