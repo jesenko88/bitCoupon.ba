@@ -167,10 +167,32 @@
                            <p class="">@comment.comment</p>
                            <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
                            <span style="margin-left:20px" title="Report this comment">
-                           <a style="color:red" href="@routes.CommentController.report(comment.id)"><i class="glyphicon glyphicon-ban-circle"></i></a> 
+                           <a id="report" style="color:red" style="cursor: hand;" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
                            </span>
                         </div>
                      </li>
+                     <!-- AJAX HANDLE REPORT  -->
+                      <script>						
+						$("#report").click(function(e) {
+						$.ajax({
+							  method: "GET",
+							  url: "@routes.CommentController.report(comment.id)",							  
+							  
+							}).done(function(msg) {
+								 console.log("FAILED");
+								  console.log(msg);
+							   	  alert( "You successfuly reported this comment." );
+							 }).fail(function( msg ) {
+								  console.log("FAILED");
+								  console.log(msg);
+							   	  alert( "Reporting failed, please try again later." );
+							  });
+									e.preventDefault();
+						});
+			 		</script>
+                
+                     
+                     
                      }
                   </ul>
                   <br><br><br>
@@ -183,7 +205,8 @@
                      <div class="form-group">
                         <button type="submit" class="btn btn-default">Comment</button>
                      </div>
-                  </form>
+                  </form>    
+   
                   }
                   }
                </div>
@@ -197,4 +220,9 @@
       </div>
    </div>
 </div>
+
+														
+			              
+
+
 }

@@ -91,9 +91,9 @@ POST   /filterDate                    controllers.CouponController.filterDate(id
 GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
-GET 	/report/					controllers.CommentController.report(id: Long)
-GET		/removeReport/:id			controllers.CommentController.removeReport(id: Long)
-GET		/removeComment/:id			controllers.CommentController.removeComment(id: Long)
+GET    /report/                       controllers.CommentController.report(id: Long)
+GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
+GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
 
 
 # FAQ controller 
