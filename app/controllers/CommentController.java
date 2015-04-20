@@ -31,7 +31,7 @@ public class CommentController extends Controller {
 		User user = Sesija.getCurrentUser(ctx());
 		String comment = df.data().get("comment");
 		Comment.create(comment, coupon, user);	
-		return CouponController.showCoupon(couponId);		
+		return redirect("/coupon/" +couponId);	
 	}
 	
 	/**
