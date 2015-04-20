@@ -25,8 +25,10 @@
  <h2 class="title text-center">Sold coupons</h2> 
    <div class="container">
       @for(transaction <- transactions){
-      	
-      <div class="col-sm-4">
+      	<ul id="results">
+      	<li id="showCoupon1"><a href="#">@transaction.coupon.name </a>is sold</li>
+
+      <div id="viewCoupon1" style="display:none" class="col-sm-4">
          <div class="logo pull-left">
             <div class="product-image-wrapper">
                <div class="single-products">
@@ -42,6 +44,7 @@
             </div>
          </div> 
       </div>
+	</ul> 
       }
       </div>
       
