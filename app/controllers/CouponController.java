@@ -107,23 +107,8 @@ public class CouponController extends Controller {
 	// TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		try {
-			Coupon c = Coupon.find(id);
-			List<Photo> photos = Photo.photosByCoupon(c);
-			if (photos != null) {
-				for (Photo photo : photos) {
-					photo.coupon = null;
-					Photo.delete(photo.id);
-				}
-			}
-			List<TransactionCP> transactions = c.buyers;
-			for(TransactionCP transaction: transactions){
-				transaction.coupon = null;				
-				transaction.save();
-			}
-			
-			c.buyers = null;						
-			Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");
-			System.out.println("DEBUGG BEFORE DELETE");
+			Coupon c = Coupon.find(id);											
+			Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");			
 			Coupon.delete(id);
 			return redirect("/");
 		} catch (Exception e) {
@@ -173,7 +158,7 @@ public class CouponController extends Controller {
 	public static Result approveCoupon(long id) {
 		try {
 			Coupon c = Coupon.find(id);
-			c.status = true;
+			c.status = Coupon.Status.ACTIVE;
 			c.save();
 			flash("succes", "Coupon " + c.name + " has been approved");
 			return ok(couponsAll.render(Coupon.approvedCoupons(),
@@ -269,11 +254,11 @@ public class CouponController extends Controller {
 			if (!StringUtils.isNullOrEmpty(assetsPath)) {
 				coupon.picture = assetsPath;
 			}
-			boolean status;
+			int status;
 			if (Sesija.adminCheck(ctx()) == true) {
-				status = true;
+				status = Coupon.Status.ACTIVE;
 			} else {
-				status = false;
+				status = Coupon.Status.DEFAULT;
 			}
 			coupon.status = status;
 			
@@ -302,7 +287,7 @@ public class CouponController extends Controller {
 		//Getting only activated coupons from search result.
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		for(Coupon coupon: all){
-			if(coupon.status){
+			if(coupon.status == Coupon.Status.ACTIVE){
 				coupons.add(coupon);
 			}
 		}	
@@ -420,9 +405,9 @@ public class CouponController extends Controller {
 			
 			Category category = Category.findByName(categoryString);
 			
-			boolean status = false;
+			int status = Coupon.Status.DEFAULT;
 			if (Sesija.adminCheck(ctx())) {
-				status = true;
+				status = Coupon.Status.ACTIVE;
 			}	
 			//In case admin posted coupon.
 			Company company = Company.find(session("name"));

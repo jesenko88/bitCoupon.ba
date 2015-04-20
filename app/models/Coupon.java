@@ -66,7 +66,7 @@ public class Coupon extends Model {
 
 	public Date usage;
 
-	public boolean status;
+	public int status;
 	
 	public int numOfViews;
 	
@@ -121,7 +121,7 @@ public class Coupon extends Model {
 		this.maxOrder = maxOrder;
 		this.usage = usage;
 		this.seller = seller;
-		this.status = false;
+		this.status = Status.DEFAULT;
 		this.numOfViews = 0;
 	}
 	
@@ -172,7 +172,7 @@ public class Coupon extends Model {
 	public static long createCoupon(String name, double price, Date dateExpire,
 			String picture, Category category, String description,
 			String remark, int minOrder, int maxOrder, Date usage,
-			Company seller, boolean status) {
+			Company seller, int status) {
 
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
@@ -221,7 +221,9 @@ public class Coupon extends Model {
 	 *            long
 	 */
 	public static void delete(long id) {
-		find.byId(id).delete();
+		Coupon coupon = find.byId(id);
+		coupon.status = Status.DELETED;
+		coupon.save();
 	}
 
 	/**
@@ -581,7 +583,7 @@ public class Coupon extends Model {
 	}
 
 	public static List<Coupon> approvedCoupons() {
-		return find.where().eq("status", true).findList();
+		return find.where().eq("status", Status.ACTIVE).findList();
 	}
 	
 	/**
@@ -598,7 +600,7 @@ public class Coupon extends Model {
 	}	
 
 		public static List<Coupon> nonApprovedCoupons() {
-		return find.where().eq("status", false).findList();
+		return find.where().eq("status", Status.DEFAULT).findList();
 	}
 
 	public static List<Coupon> ownedCoupons(long companyID) {
@@ -638,6 +640,33 @@ public class Coupon extends Model {
 			//TODO dateUsage ??
 			
 		return null;
+	}
+	
+	/**
+	 * This method gets list of coupons by status sent as parameter.
+	 * in case list is null or sent status is not valid, method
+	 * returns empty array list.
+	 * @param status
+	 * @return
+	 */
+	public static List<Coupon> getByStatus(int status){
+		List<Coupon> byStatus = find.where().eq("status", status).findList();
+		if(byStatus == null){
+			byStatus = new ArrayList<Coupon>();
+		}
+		return byStatus;
+	}
+	
+	
+	public abstract class Status{
+		
+		public static final int ACTIVE = 1;
+		public static final int DEFAULT = 0;
+		public static final int DELETED = -1;
+		public static final int EXPIRED = -2;
+		public static final int OFFER_FAILED = -3;
+		public static final int OFFER_SUCCEED = 3;
+		
 	}
 	
 }

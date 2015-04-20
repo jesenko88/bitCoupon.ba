@@ -47,7 +47,7 @@ create table coupon (
   min_order                 integer,
   max_order                 integer,
   usage                     timestamp,
-  status                    boolean,
+  status                    integer,
   num_of_views              integer,
   constraint pk_coupon primary key (id))
 ;

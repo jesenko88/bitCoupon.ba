@@ -74,6 +74,7 @@ public class Global extends GlobalSettings {
 		Category sport = null;
 		Company admin = null;
 		Company bitCamp = null;
+		int status = Coupon.Status.ACTIVE;
 		
 		if ( !Company.exists("Admin")){
 			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), pic, adress, city, contact);
@@ -110,7 +111,7 @@ public class Global extends GlobalSettings {
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
-					remarkCoupon1, 5, 25 ,new Date(), bitCamp, true);
+					remarkCoupon1, 5, 25 ,new Date(), bitCamp, status);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
 			Coupon.createCoupon(
@@ -119,7 +120,7 @@ public class Global extends GlobalSettings {
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
-					remarkCoupon2, 5, 20 ,new Date(), bitCamp, true);
+					remarkCoupon2, 5, 20 ,new Date(), bitCamp, status);
 		}
 		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -137,7 +138,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3, 2, 5 ,new Date(), bitCamp, true);
+					remarkCoupon3, 2, 5 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon4) == false) {
@@ -155,7 +156,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 4 +".jpg",
 					travel, descriptionCoupon4,
-					remarkCoupon4, 5, 30 ,new Date(),bitCamp, true);
+					remarkCoupon4, 5, 30 ,new Date(),bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon5) == false) {
@@ -173,7 +174,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
 					travel, descriptionCoupon5,
-					remarkCoupon5, 5, 30 ,new Date(),bitCamp, true);
+					remarkCoupon5, 5, 30 ,new Date(),bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon6) == false) {
@@ -191,7 +192,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 6 +".jpg",
 					travel, descriptionCoupon6,
-					remarkCoupon6, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon6, 5, 30 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon7) == false) {
@@ -209,7 +210,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 7 +".jpg",
 					travel, descriptionCoupon7,
-					remarkCoupon7, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon7, 5, 30 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon8) == false) {
@@ -227,7 +228,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 8 +".jpg",
 					sport, descriptionCoupon8,
-					remarkCoupon8, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon8, 5, 30 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon9) == false) {
@@ -245,7 +246,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 9 +".jpg",
 					travel, descriptionCoupon9,
-					remarkCoupon9, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon9, 5, 30 ,new Date(), bitCamp, status);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {
