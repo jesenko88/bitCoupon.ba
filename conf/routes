@@ -90,6 +90,12 @@ POST   /filterPrice                   controllers.CouponController.filterPrice(i
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
 GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
+POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
+GET    /report/:id                     controllers.CommentController.report(id: String)
+GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
+GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
+
+
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
 GET    /addFAQ                        controllers.FAQController.addFAQView()
@@ -112,7 +118,7 @@ POST   /couponpurchase                controllers.PayPalController.purchaseProce
 GET    /couponsuccess                 controllers.PayPalController.couponSuccess()
 GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
-GET   /refundCoupon/:couponId         controllers.PayPalController.refundProcessing(couponId: Long)
+GET    /refundCoupon/:couponId        controllers.PayPalController.refundProcessing(couponId: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)

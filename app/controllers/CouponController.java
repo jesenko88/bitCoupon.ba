@@ -24,6 +24,7 @@ import api.JSonHelper;
 import com.google.common.io.Files;
 
 import models.Category;
+import models.comments.Comment;
 import models.Company;
 import models.Coupon;
 import models.Photo;
@@ -84,7 +85,7 @@ public class CouponController extends Controller {
 	 */
 	public static Result showCoupon(long id) {
 		if(Sesija.companyCheck(ctx()) == true)
-		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
+			TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
 		coupon.numOfViews ++;
 		coupon.save();
@@ -797,4 +798,6 @@ public class CouponController extends Controller {
 		}
 		return ok(JSonHelper.couponListToJson(approvedCoupons));
 	}
+	
+	
 }
