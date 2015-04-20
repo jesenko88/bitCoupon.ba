@@ -4,8 +4,6 @@ import java.util.Date;
 
 import models.Coupon;
 import models.User;
-import models.comments.Comment;
-import models.comments.Report;
 import models.questions.Question;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -13,6 +11,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class QuestionController extends Controller {
+	
 
 	public static Result addQuestion(long couponId) {
 		
@@ -20,7 +19,8 @@ public class QuestionController extends Controller {
 		Coupon coupon = Coupon.find(couponId);
 		User user = Sesija.getCurrentUser(ctx());
 		String question = form.data().get("question");
-		Question.create(question, "", coupon, user);
+		long id = Question.create(question, "", coupon, user);
+		CouponController.notifications++;
 		return redirect("/coupon/" + coupon.id);
 	}
 	

@@ -54,6 +54,13 @@
     border-radius:50%;
 }
 
+.askerImage {
+    width:30px;
+    margin:5px 9px 0px 3px;
+    height:100%;
+    float:left;
+}
+
 .askerImage img {
     width:100%;
     border-radius:50%;
