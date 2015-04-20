@@ -47,6 +47,15 @@ public class CommentController extends Controller {
 		return CouponController.showCoupon(comment.coupon.id);	
 	}
 	
+	public static Result report(String id){
+		Logger.debug("IN STRING REPORT WITH ID " +id);
+		long commentId = Long.valueOf(id);
+		Comment comment = Comment.findById(commentId);
+		User user = Sesija.getCurrentUser(ctx());
+		Report.create("", comment, user);		
+		return CouponController.showCoupon(comment.coupon.id);	
+	}
+	
 	/**
 	 * Method for removing comment.
 	 * First of all removing all reports on comment.

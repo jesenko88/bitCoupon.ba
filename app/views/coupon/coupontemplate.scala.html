@@ -167,30 +167,10 @@
                            <p class="">@comment.comment</p>
                            <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
                            <span style="margin-left:20px" title="Report this comment">
-                           <a id="report" style="color:red" style="cursor: hand;" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
+                           <a class="report" style="color:red" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
                            </span>
                         </div>
-                     </li>
-                     <!-- AJAX HANDLE REPORT  -->
-                      <script>						
-						$("#report").click(function(e) {
-						$.ajax({
-							  method: "GET",
-							  url: "@routes.CommentController.report(comment.id)",							  
-							  
-							}).done(function(msg) {
-								 console.log("FAILED");
-								  console.log(msg);
-							   	  alert( "You successfuly reported this comment." );
-							 }).fail(function( msg ) {
-								  console.log("FAILED");
-								  console.log(msg);
-							   	  alert( "Reporting failed, please try again later." );
-							  });
-									e.preventDefault();
-						});
-			 		</script>
-                
+                     </li>                     
                      
                      
                      }
@@ -221,6 +201,26 @@
    </div>
 </div>
 
+   <!-- AJAX HANDLE REPORT  -->
+                <script>						
+						function report(id) {		
+							$.ajax({							
+								  method: "GET",
+								  url: "/report/" +id,							  
+								  
+								}).done(function(msg) {
+									 console.log("FAILED");								 
+								   	  alert( "You successfuly reported this comment." );
+								 }).fail(function( msg ) {
+									  console.log("FAILED");
+									  console.log(msg);
+									  console.log("ID IS "+id)
+								   	  alert( "Reporting failed, please try again later." );
+								  });
+										e.preventDefault();
+							}
+						
+			 		</script>
 														
 			              
 
