@@ -23,8 +23,8 @@ public class QuestionController extends Controller {
 	public static Result addAnswer(long questionId) {
 		
 		DynamicForm form = Form.form().bindFromRequest();
-		User user = Sesija.getCurrentUser(ctx());
 		String answer = form.data().get("answer");
+		System.out.println("DEBUGGG ANSWEER" + answer);
 		Question question = Question.findById(questionId);
 		question.answer = answer;
 		question.save();

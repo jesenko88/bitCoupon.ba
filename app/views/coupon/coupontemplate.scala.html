@@ -193,6 +193,7 @@
                </div>
             </div>
          </div>
+         <!-- Questions  -->
          <div class="tab-pane" id="panel-807788">
 			 <div class="detailBox">
                <div class="titleBox">
@@ -208,14 +209,27 @@
                         </div>
                         <div class="commentText">
                            <p class="">@question.question</p>
-                           <span class="date sub-text">Question by: @question.user.username on @question.questionDate</span>					
-                     </li>                     
-					<li>                                  
+                           <span class="date sub-text">Question by: @question.user.username on @question.questionDate</span>		
+                     </li>    
+                     
+                     <li>
+				          <form class="form-inline" action="@routes.QuestionController.addAnswer(question.id)" method="POST">
+
+                           <input class="form-control" id="answer" name="answer" type="text" placeholder="answer here" required/>
+             
+                          <div class="form-group">
+                          <button type="submit" class="btn btn-default">Answer</button>
+                          </div>
+                  </form>                
+                     
+                     </li>                 
+					
+				     <li>                                  
     <!--  -->              <div class="commentText">
-                           <h6>@question.answer ODGOVORRR </h6>
+                           <h6>Answer: @question.answer </h6>
                            <span class="date sub-text">Answer by: @coupon.seller.name on @question.answerDate</span>					
                            </div>								
-					</li>
+					 </li>
                      
                      }
                   </ul>

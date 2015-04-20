@@ -98,6 +98,7 @@ GET    /removeComment/:id             controllers.CommentController.removeCommen
 
 # Question controller
 POST   /question/:id                  controllers.QuestionController.addQuestion(id: Long)	
+POST   /answer/:id                    controllers.QuestionController.addAnswer(id: Long)	
 
 
 # FAQ controller 
