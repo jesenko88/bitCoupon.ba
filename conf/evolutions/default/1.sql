@@ -83,6 +83,17 @@ create table pin (
   constraint pk_pin primary key (id))
 ;
 
+create table question (
+  id                        bigint not null,
+  question                  varchar(255),
+  user_id                   bigint,
+  coupon_id                 bigint,
+  answer                    varchar(255),
+  question_date             timestamp,
+  answer_date               timestamp,
+  constraint pk_question primary key (id))
+;
+
 create table report (
   id                        bigint not null,
   message                   varchar(255),
@@ -152,6 +163,8 @@ create sequence photo_seq;
 
 create sequence pin_seq;
 
+create sequence question_seq;
+
 create sequence report_seq;
 
 create sequence reset_pasword_seq;
@@ -174,16 +187,20 @@ alter table photo add constraint fk_photo_coupon_5 foreign key (coupon_id) refer
 create index ix_photo_coupon_5 on photo (coupon_id);
 alter table pin add constraint fk_pin_user_6 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_pin_user_6 on pin (user_id);
-alter table report add constraint fk_report_comment_7 foreign key (comment_id) references comment (id) on delete restrict on update restrict;
-create index ix_report_comment_7 on report (comment_id);
-alter table report add constraint fk_report_user_8 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_report_user_8 on report (user_id);
-alter table subscriber add constraint fk_subscriber_subscriber_9 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
-create index ix_subscriber_subscriber_9 on subscriber (subscriber_id);
-alter table transaction_cp add constraint fk_transaction_cp_buyer_10 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
-create index ix_transaction_cp_buyer_10 on transaction_cp (buyer_id);
-alter table transaction_cp add constraint fk_transaction_cp_coupon_11 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_transaction_cp_coupon_11 on transaction_cp (coupon_id);
+alter table question add constraint fk_question_user_7 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_question_user_7 on question (user_id);
+alter table question add constraint fk_question_coupon_8 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_question_coupon_8 on question (coupon_id);
+alter table report add constraint fk_report_comment_9 foreign key (comment_id) references comment (id) on delete restrict on update restrict;
+create index ix_report_comment_9 on report (comment_id);
+alter table report add constraint fk_report_user_10 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_report_user_10 on report (user_id);
+alter table subscriber add constraint fk_subscriber_subscriber_11 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
+create index ix_subscriber_subscriber_11 on subscriber (subscriber_id);
+alter table transaction_cp add constraint fk_transaction_cp_buyer_12 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_buyer_12 on transaction_cp (buyer_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_13 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_13 on transaction_cp (coupon_id);
 
 
 
@@ -206,6 +223,8 @@ drop table if exists faq;
 drop table if exists photo;
 
 drop table if exists pin;
+
+drop table if exists question;
 
 drop table if exists report;
 
@@ -234,6 +253,8 @@ drop sequence if exists faq_seq;
 drop sequence if exists photo_seq;
 
 drop sequence if exists pin_seq;
+
+drop sequence if exists question_seq;
 
 drop sequence if exists report_seq;
 

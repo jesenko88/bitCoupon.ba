@@ -90,10 +90,14 @@ POST   /filterPrice                   controllers.CouponController.filterPrice(i
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
 GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
+# Comment controller
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
-GET    /report/:id                     controllers.CommentController.report(id: String)
+GET    /report/:id                    controllers.CommentController.report(id: String)
 GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
 GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
+
+# Question controller
+POST   /question/:id                  controllers.QuestionController.addQuestion(id: Long)	
 
 
 # FAQ controller 

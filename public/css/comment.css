@@ -65,3 +65,15 @@
     border-top:1px dotted #bbb;
     padding:10px;
 }
+
+.questionRow {
+    padding:0;
+    list-style:none;
+    border: 1px solid #bbb;
+    border-radius: 9px;
+    max-height:200px;
+    overflow:auto;
+}
+
+
+
