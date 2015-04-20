@@ -109,7 +109,7 @@ public class Category extends Model{
      * @return true or false
      */
     public static boolean exists(String name){
-		 List<Category> list=find.where().eq("name", name).findList();
+		 List<Category> list = find.where().eq("name", name).findList();
 		 if(list.size()>0)
 			 return true;
 		 return false;
