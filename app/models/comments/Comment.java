@@ -65,8 +65,8 @@ public class Comment extends Model{
 		comment.update();
 	}
 	
-	public static List<Comment> findByCoupon(Coupon c){
-		return find.where().eq("coupon", c).findList();
+	public static List<Comment> findByCoupon(Coupon coupon){
+		return find.where().eq("coupon", coupon).findList();
 	}
 	
 	public static Comment findById(long id){

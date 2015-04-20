@@ -55,8 +55,8 @@ public class CategoryController extends Controller {
 			flash("error", "Error has occured, please try again.");
 			return redirect("/");
 		}
-		User u = User.find(name);
-		if(u.isAdmin){
+		User user = User.find(name);
+		if(user.isAdmin){
 			return ok(adminCategoryPanel.render(name));
 		}
 		return ok(categoryPanel.render(name));
@@ -143,15 +143,15 @@ public class CategoryController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteCategory(long id) {
 		try {
-			Category c = Category.find(id);
-			List<Coupon> cpns = c.coupons;
-			for (Coupon cp : cpns) {
-				cp.category = null;
-				cp.save();
+			Category category = Category.find(id);
+			List<Coupon> coupons = category.coupons;
+			for (Coupon coupon : coupons) {
+				coupon.category = null;
+				coupon.save();
 			}
-			c.coupons = null;
-			c.save();
-			Logger.info(session("name") + " deleted category: \"" + c.name
+			category.coupons = null;
+			category.save();
+			Logger.info(session("name") + " deleted category: \"" + category.name
 					+ "\"");
 			Category.delete(id);
 			return ok(CategoriesList.render(session("name"), Category.all()));
