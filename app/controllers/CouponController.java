@@ -65,9 +65,9 @@ public class CouponController extends Controller {
 			return redirect("/");
 		}
 		
-		User u = User.find(name);
-		if(u != null){ 
-			if(u.isAdmin){
+		User user = User.find(name);
+		if(user != null){ 
+			if(user.isAdmin){
 				return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));
 			}
 		}
@@ -107,23 +107,8 @@ public class CouponController extends Controller {
 	// TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		try {
-			Coupon c = Coupon.find(id);
-			List<Photo> photos = Photo.photosByCoupon(c);
-			if (photos != null) {
-				for (Photo photo : photos) {
-					photo.coupon = null;
-					Photo.delete(photo.id);
-				}
-			}
-			List<TransactionCP> transactions = c.buyers;
-			for(TransactionCP transaction: transactions){
-				transaction.coupon = null;				
-				transaction.save();
-			}
-			
-			c.buyers = null;						
-			Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");
-			System.out.println("DEBUGG BEFORE DELETE");
+			Coupon coupon = Coupon.find(id);											
+			Logger.info(session("name") + " deleted coupon: \"" + coupon.name + "\"");			
 			Coupon.delete(id);
 			return redirect("/");
 		} catch (Exception e) {
@@ -172,10 +157,10 @@ public class CouponController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result approveCoupon(long id) {
 		try {
-			Coupon c = Coupon.find(id);
-			c.status = true;
-			c.save();
-			flash("succes", "Coupon " + c.name + " has been approved");
+			Coupon coupon = Coupon.find(id);
+			coupon.status = Coupon.Status.ACTIVE;
+			coupon.save();
+			flash("succes", "Coupon " + coupon.name + " has been approved");
 			return ok(couponsAll.render(Coupon.approvedCoupons(),
 					Coupon.nonApprovedCoupons()));
 		} catch (Exception e) {
@@ -196,7 +181,7 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result updateCoupon(long id) {
-		DynamicForm df = Form.form().bindFromRequest();
+		DynamicForm updateCouponForm = Form.form().bindFromRequest();
 		try {
 			Coupon coupon = Coupon.find(id);
 			if (couponForm.hasErrors()) {
@@ -204,7 +189,6 @@ public class CouponController extends Controller {
 				return redirect("/");
 			}
 
-			List<Category> categories = Category.all();
 			List<Photo> photos = Photo.photosByCoupon(coupon);
 			coupon.name = couponForm.bindFromRequest().field("name").value();
 			if (coupon.name.length() < 4) {
@@ -217,7 +201,7 @@ public class CouponController extends Controller {
 			}
 			
 			/* price */
-			String sPrice = df.data().get("price");
+			String sPrice = updateCouponForm.data().get("price");
 			double price = Double.valueOf(sPrice);
 			
 			if (price <= 0) {
@@ -231,7 +215,7 @@ public class CouponController extends Controller {
 			 * FIX FOR DATE BUG.
 			 * */
 			Date current = new Date();
-			String sDate = df.data().get("dateExpire");	
+			String sDate = updateCouponForm.data().get("dateExpire");	
 			Date date = null;
 			//In case user did not enter date, date will stay still.
 			if(sDate.isEmpty()){
@@ -269,11 +253,11 @@ public class CouponController extends Controller {
 			if (!StringUtils.isNullOrEmpty(assetsPath)) {
 				coupon.picture = assetsPath;
 			}
-			boolean status;
+			int status;
 			if (Sesija.adminCheck(ctx()) == true) {
-				status = true;
+				status = Coupon.Status.ACTIVE;
 			} else {
-				status = false;
+				status = Coupon.Status.DEFAULT;
 			}
 			coupon.status = status;
 			
@@ -302,13 +286,12 @@ public class CouponController extends Controller {
 		//Getting only activated coupons from search result.
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		for(Coupon coupon: all){
-			if(coupon.status){
+			if(coupon.status == Coupon.Status.ACTIVE){
 				coupons.add(coupon);
 			}
 		}	
 		if (coupons.isEmpty()) {
-			flash("error", "No such coupon");
-			User u = User.find(session("name"));
+			flash("error", "No such coupon");		
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
 													, Category.all()));
 		}
@@ -323,8 +306,7 @@ public class CouponController extends Controller {
 	 * @return
 	 */
 	public static Result sort(String ids) {
-		try {
-			Logger.debug("Ids: " + ids);
+		try {			
 			/*
 			 * Getting all ids of coupons and adding them to list we are going
 			 * to sort.
@@ -337,11 +319,11 @@ public class CouponController extends Controller {
 				coupons.add(currentCoupon);
 			}
 
-			DynamicForm df = Form.form().bindFromRequest();
-			String orderBy = df.data().get("orderby");
+			DynamicForm sortForm = Form.form().bindFromRequest();
+			String orderBy = sortForm.data().get("orderby");
 
 			// Getting sort method.
-			String parseMethod = df.data().get("method");
+			String parseMethod = sortForm.data().get("method");
 			int method = 0;
 			if (parseMethod.equalsIgnoreCase("ascending")) {
 				method = Coupon.SORT_ASCENDING;
@@ -391,18 +373,17 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
 
-		Form<Coupon> submit = Form.form(Coupon.class).bindFromRequest();
+		Form<Coupon> addCouponForm = Form.form(Coupon.class).bindFromRequest();
 		List<Category> categories = Category.all();	
 		String name = couponForm.bindFromRequest().field("name").value();
 
-		if (Sesija.companyCheck(ctx())){
-			System.out.println("DEBUUUUUUUGGGGGG");
-			result = ok(couponPanel.render(session("name"), categories, submit));
+		if (Sesija.companyCheck(ctx())){		
+			result = ok(couponPanel.render(session("name"), categories, addCouponForm));
 		}else{
-			result = ok(adminCouponPanel.render(session("name"), categories, submit));
+			result = ok(adminCouponPanel.render(session("name"), categories, addCouponForm));
 		}
 	
-		if (couponForm.hasErrors() || submit.hasGlobalErrors()) {
+		if (couponForm.hasErrors() || addCouponForm.hasGlobalErrors()) {
 			Logger.debug("Error adding coupon");
 			return result;
 		}
@@ -420,9 +401,9 @@ public class CouponController extends Controller {
 			
 			Category category = Category.findByName(categoryString);
 			
-			boolean status = false;
+			int status = Coupon.Status.DEFAULT;
 			if (Sesija.adminCheck(ctx())) {
-				status = true;
+				status = Coupon.Status.ACTIVE;
 			}	
 			//In case admin posted coupon.
 			Company company = Company.find(session("name"));
@@ -479,8 +460,8 @@ public class CouponController extends Controller {
 			String savePath = FileUpload.IMAGES_FOLDER + "coupon_photos"
 					+ File.separator + "cpn" + couponId + File.separator;
 
-			Coupon cp = Coupon.find(couponId);
-			int photos = Photo.photoStackLength(cp);
+			Coupon coupon = Coupon.find(couponId);
+			int photos = Photo.photoStackLength(coupon);
 
 			/*
 			 * Checking if coupon has fulfilled his stack for photos and if user
@@ -490,7 +471,7 @@ public class CouponController extends Controller {
 				Logger.info(session("name") + " tried to add too many photos");
 				flash("error",
 						"You already fullfilled this coupons photos. Delete some to add more.");
-				return redirect("/editCoupon/" + cp.id);
+				return redirect("/editCoupon/" + coupon.id);
 			}
 			MultipartFormData body = request().body().asMultipartFormData();
 			List<FilePart> photoParts = body.getFiles();
@@ -498,7 +479,7 @@ public class CouponController extends Controller {
 				flash("error", "You selected " + photoParts.size()
 						+ " photos but you can upload only " + (4 - photos)
 						+ " more.");
-				return redirect("/editCoupon/" + cp.id);
+				return redirect("/editCoupon/" + coupon.id);
 			}
 
 			/*
@@ -536,11 +517,10 @@ public class CouponController extends Controller {
 							+ "coupon_photos" + File.separator + "cpn"
 							+ couponId + File.separator + saveFile.getName();
 
-					Photo.create(assetsPath, saveFile.getPath(), cp);
+					Photo.create(assetsPath, saveFile.getPath(), coupon);
 				}
 			}
-			flash("success", "Successfully uploaded photos.");
-			Coupon coupon = Coupon.find(couponId);
+			flash("success", "Successfully uploaded photos.");			
 			return ok(updateCouponView.render(session("name"), coupon, Photo.photosByCoupon(coupon)));
 		} catch (Exception e) {
 			flash("error", "Error occured while uploading gallery photos."
@@ -560,16 +540,16 @@ public class CouponController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deletePhoto(int id) {		
 		try {
-			Photo temp = Photo.find(id);
-			Coupon cp = temp.coupon;
-			File image = new File(temp.savePath);
+			Photo photo = Photo.find(id);
+			Coupon coupon = photo.coupon;
+			File image = new File(photo.savePath);
 			image.delete();
-			temp.delete();
-			temp.save();
+			photo.delete();
+			photo.save();
 			Logger.info(session("name") + " deleted image id:\"" + id
-					+ "\" from " + cp.name);
+					+ "\" from " + coupon.name);
 			flash("succes", "You have successfuly deleted photo.");
-			return redirect("/editCoupon/" + cp.id);
+			return redirect("/editCoupon/" + coupon.id);
 		} catch (Exception e) {
 			flash("error",
 					"Error occured while deleting photo. If you're admin please check loggs.");
@@ -626,8 +606,8 @@ public class CouponController extends Controller {
 				coupons.add(currentCoupon);
 			}
 
-			DynamicForm df = Form.form().bindFromRequest();
-			String categoryChosed = df.data().get("category");
+			DynamicForm filterForm = Form.form().bindFromRequest();
+			String categoryChosed = filterForm.data().get("category");
 			List<Coupon> list = new ArrayList<Coupon>();
 
 			for (Coupon coupon : coupons) {
@@ -672,12 +652,12 @@ public class CouponController extends Controller {
 				coupons.add(currentCoupon);
 			}
 
-			DynamicForm df = Form.form().bindFromRequest();
+			DynamicForm filterForm = Form.form().bindFromRequest();
 			List<Coupon> list = new ArrayList<Coupon>();
 
 			// PRICE Filter
-			String startP = df.data().get("start_price");
-			String endP = df.data().get("end_price");
+			String startP = filterForm.data().get("start_price");
+			String endP = filterForm.data().get("end_price");
 			double startPrice = 0;
 			double endPrice = Double.MAX_VALUE;
 

@@ -118,11 +118,11 @@ public class User extends SuperUser {
 	public static ArrayNode allAsJson() {
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
 		List<User> users = all();
-		for (User u : users) {
+		for (User user : users) {
 			ObjectNode userNode = Json.newObject();
-			userNode.put("username", u.username);
-			userNode.put("isAdmin", u.isAdmin);
-			userNode.put("created", u.created.toString()); // ?
+			userNode.put("username", user.username);
+			userNode.put("isAdmin", user.isAdmin);
+			userNode.put("created", user.created.toString()); // ?
 		}
 		return arrayNode;
 	}
@@ -187,8 +187,8 @@ public class User extends SuperUser {
 	public static List<String> allAdminMails(){	
 		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
 		List<String> emails = new ArrayList<String>();
-		for(User u: userList){
-			emails.add(u.email);
+		for(User user: userList){
+			emails.add(user.email);
 		}
 		return emails;
 	}
@@ -200,9 +200,9 @@ public class User extends SuperUser {
 	public static ArrayNode allAdminMailsJSon(){	
 		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
-		for(User u: userList){
+		for(User user: userList){
 			ObjectNode mailAd = Json.newObject();
-			mailAd.put("email", u.email);
+			mailAd.put("email", user.email);
 			arrayNode.add(mailAd);
 		}
 		return arrayNode;
