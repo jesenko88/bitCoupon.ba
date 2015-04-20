@@ -1,6 +1,5 @@
 @(coupons: List[Coupon])(nonApprovedCoupons: List[Coupon])
-
-
+@import java.math.BigInteger; var DELETED = -1
 @main("Admin  Coupon Panel") {
 
 @adminNavbar()
@@ -46,7 +45,7 @@
    <table class="table table-striped">
             <thead>
                <tr class="cart_menu">
-                  <th width="45%">Name</th>
+                  <th max-width="30%">Name</th>
                   <th>Price</th>
                   <th>Category</th>
                   <th>Seller ID</th>
@@ -110,6 +109,37 @@
          </table>
       </div>
    </div>
+   
+   <!--  DELETED COUPONS -->
+   <div class="col-sm-12">
+      <div class="review-payment">
+         <h2>List of deleted Coupons</h2>
+      </div>
+      <div class="table-responsive">
+   <table class="table table-striped">
+            <thead>
+               <tr class="cart_menu">
+                  <th max-width="30%">Name</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Seller ID</th>                                 
+               </tr>
+            </thead>
+            <tbody>
+               @for(coupon <- Coupon.getByStatus(DELETED)){             
+               <tr>
+                  <td> <a href="@routes.CouponController.showCoupon(coupon.id)">@coupon.name </a></td>
+                  <td> @coupon.price </td>
+                  <td> @coupon.category.name </td>
+                  <td> @coupon.seller.id </td>
+                  </tr>
+             
+               }
+            </tbody>
+         </table>
+      </div>
+   </div>
+   
     </div>
 </div>
 

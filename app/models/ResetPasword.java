@@ -30,20 +30,20 @@ public class ResetPasword extends Model {
 	}
 	
 	public static String createRequest(String userEmail){
-		ResetPasword rp = new ResetPasword(userEmail);
-		rp.save();
-		return rp.id;		
+		ResetPasword ressetPassword = new ResetPasword(userEmail);
+		ressetPassword.save();
+		return ressetPassword.id;		
 	}
 	
 	public static String findByID(String id){
 		Logger.debug(id);
-		String str = "";
+		String email = "";
 		try{
-			str = find.byId(id).userEmail;
+			email = find.byId(id).userEmail;
 		} catch(Exception e){
 			return null;
 		}
-		return str;
+		return email;
 	}
 }
 
