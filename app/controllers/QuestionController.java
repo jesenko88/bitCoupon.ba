@@ -1,7 +1,11 @@
 package controllers;
 
+import java.util.Date;
+
 import models.Coupon;
 import models.User;
+import models.comments.Comment;
+import models.comments.Report;
 import models.questions.Question;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -16,7 +20,7 @@ public class QuestionController extends Controller {
 		Coupon coupon = Coupon.find(couponId);
 		User user = Sesija.getCurrentUser(ctx());
 		String question = form.data().get("question");
-		Question.create(question,"", coupon, user);
+		Question.create(question, "", coupon, user);
 		return redirect("/coupon/" + coupon.id);
 	}
 	
@@ -27,10 +31,17 @@ public class QuestionController extends Controller {
 		System.out.println("DEBUGGG ANSWEER" + answer);
 		Question question = Question.findById(questionId);
 		question.answer = answer;
+		question.answerDate = new Date();
 		question.save();
 		return redirect("/coupon/" + question.coupon.id);
 	}
 	
+	
+	public static Result deleteQuestion(long questionID){	
+		Coupon coupon = Question.findById(questionID).coupon;
+		Question.delete(questionID);
+		return redirect("/coupon/" + coupon.id);
+	}
 	
 	
 	

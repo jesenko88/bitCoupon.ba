@@ -53,6 +53,11 @@
     width:100%;
     border-radius:50%;
 }
+
+.askerImage img {
+    width:100%;
+    border-radius:50%;
+}
 .commentText p {
     margin:0;
 }
@@ -73,6 +78,17 @@
     border-radius: 9px;
     max-height:200px;
     overflow:auto;
+}
+
+.answerText company-color{
+	color: #FE980F;
+    margin:0;
+}
+
+.answerList li {
+    margin:0;
+    margin-top:10px;
+    margin-bottom: 40px;
 }
 
 
