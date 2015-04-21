@@ -444,6 +444,7 @@ public class UserController extends Controller {
 		double totalPrice = coupon.price * quantity;	
 		TransactionCP.createTransaction( new UUID().toString().substring(0, 12),coupon.price, quantity, totalPrice, "", client, coupon);
 		CouponController.notifications ++;
+		coupon.statistic.bought(quantity); //NEW adding to statistics.
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
