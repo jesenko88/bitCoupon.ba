@@ -405,10 +405,7 @@ public class UserController extends Controller {
 		if (transactions == null) {
 			transactions = new ArrayList<TransactionCP>();
 		}
-		if (request().accepts("text/html")) {
-			return ok(boughtCoupons.render(session("name"), transactions));
-		}
-		return ok(JSonHelper.transactionListToJSon(transactions));
+		return ok(boughtCoupons.render(session("name"), transactions));
 	}
 	
 	//TODO comment
