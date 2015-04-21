@@ -9,9 +9,12 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 
 import play.Logger;
 import play.db.ebean.Model;
@@ -34,7 +37,7 @@ public class Statistic extends Model{
 	
 	public int bought;
 	
-	static final String statsFilePath = "/statistic/admin_statistic/";
+	static final String statsFilePath = "./statistic/admin_statistic/";
 	static Finder<Long, Statistic> find = new Finder<Long, Statistic>(Long.class, Statistic.class);
 	/**
 	 * Constructor for statistic.
@@ -98,8 +101,23 @@ public class Statistic extends Model{
 	        File statistic = new File(statsFilePath +fileName);
 	        List<Statistic> all = find.all();
 	        
+	        //SETTING STYLE
+	        HSSFCellStyle style = workbook.createCellStyle();
+	        style.setBorderTop((short) 6); 
+	        style.setBorderBottom((short) 1); 
+	        style.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+	        
+	        HSSFFont font = workbook.createFont();
+	        font.setFontName(HSSFFont.FONT_ARIAL);
+	        font.setFontHeightInPoints((short) 20);
+	        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+	        font.setColor(HSSFColor.BLUE.index);
+	        style.setFont(font);
+	        style.setWrapText(true);
+	        
 	        //HARDCODED CELLS
 	        HSSFRow rowhead=   sheet.createRow((short)0);
+	        rowhead.setRowStyle(style);
 	        rowhead.createCell(0).setCellValue("Coupon id");
 	        rowhead.createCell(1).setCellValue("Coupon name");
 	        rowhead.createCell(2).setCellValue("Visited");
@@ -112,11 +130,13 @@ public class Statistic extends Model{
 	        	row.createCell(0).setCellValue(stat.coupon.id);
 	            row.createCell(1).setCellValue(stat.coupon.name);
 	            row.createCell(2).setCellValue(stat.visited);
-	            row.createCell(3).setCellValue(stat.bought);        	
+	            row.createCell(3).setCellValue(stat.bought); 
+	            rowIndex++;
 	        }
 	        
 	        FileOutputStream fileOut = new FileOutputStream(statistic);
 	        workbook.write(fileOut);
+	        fileOut.flush();
 	        fileOut.close();
 	        workbook.close();
 	        System.out.println("Your excel file has been generated!");	

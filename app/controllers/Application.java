@@ -8,8 +8,7 @@ import play.data.validation.Constraints.Required;
 import play.mvc.*;
 import views.html.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +59,13 @@ public class Application extends Controller {
 		public String name;
 	}
 	
+	public static Result test(){
+		File stats = Statistic.createStatisticsFile();
+		response().setContentType("application/x-download");  
+		response().setHeader("Content-disposition","attachment");
+		return ok(stats);
+	
+	}
 
 
 	/**

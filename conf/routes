@@ -2,6 +2,9 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#TEST
+GET		/test						  controllers.Application.test()
+
 #API
 POST   /api/register                  api.JSonOperator.register()
 POST   /api/updateUser                api.JSonOperator.updateUser()
