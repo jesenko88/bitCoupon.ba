@@ -216,7 +216,7 @@ public class PayPalController extends Controller {
 			TransactionCP.createTransaction(paymentID, coupon.price, quantity,
 					totalPrice, response.getTransactions().get(0).getRelatedResources().get(0).getSale().getId(), currentUser, coupon);
 
-			//coupon.statistic.bought();
+			coupon.statistic.bought(quantity);
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
 			Coupon.updateCoupon(coupon);

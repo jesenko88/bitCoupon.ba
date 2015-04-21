@@ -9,7 +9,7 @@ import play.db.ebean.Model;
  *TODO: Since its statistic and has lot of insertions in
  *		this model, we should use NoSQL DB for this model.
  */
-
+@Entity
 public class Statistic extends Model{
 	
 	@Id
@@ -70,8 +70,8 @@ public class Statistic extends Model{
 	/**
 	 * Non static method for increasing number of purchases on this coupon.
 	 */
-	public void bought() {
-		this.bought ++;
+	public void bought(int quantity) {
+		this.bought += quantity;
 		this.update();	
 		
 	}

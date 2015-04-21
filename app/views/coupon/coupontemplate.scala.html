@@ -128,7 +128,7 @@
 
                   
                <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span> 
-               <label class="pull-left">Number of views </label>
+               <label class="pull-left">Number of views @coupon.statistic.visited</label>
                
 
                </div>
@@ -271,7 +271,7 @@
    <!-- AJAX HANDLE REPORT  -->
                 <script>						
 						function report(id) {		
-							$.ajax({							
+							$.ajax({							/login.do?jsessionid=53cff75ab909d5247924df66c93ecf04
 								  method: "GET",
 								  url: "/report/" +id,							  
 								  
