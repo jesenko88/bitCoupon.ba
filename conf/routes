@@ -91,7 +91,7 @@ POST   /filterDate                    controllers.CouponController.filterDate(id
 GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
-GET    /report/:id                     controllers.CommentController.report(id: String)
+GET    /report/:id                    controllers.CommentController.report(id: String)
 GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
 GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
 

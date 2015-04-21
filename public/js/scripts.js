@@ -76,21 +76,7 @@ $(document).ready(function() {
 
 	    }
 
-	  }, false);
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	  }, false);	
 });
 
 $(document).ready(function() {
