@@ -29,9 +29,9 @@
       @for(question <- Question.newQuestions(Sesija.getCurrentCompany(ctx()).id)){
       	
      
-         <ul class="commentList">
+         <ul class="actionBox">
 		
-          <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question for coupn @question.coupon.id</a> </li>
+          <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question for coupon ID: @question.coupon.id</a> </li>
 		</ul>
 
       }

@@ -85,11 +85,11 @@ create table pin (
 
 create table question (
   id                        bigint not null,
-  question                  varchar(255),
+  question                  TEXT,
   user_id                   bigint,
   company_id                bigint,
   coupon_id                 bigint,
-  answer                    varchar(255),
+  answer                    TEXT,
   question_date             timestamp,
   answer_date               timestamp,
   new_question              boolean,
