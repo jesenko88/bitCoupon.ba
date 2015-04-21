@@ -11,6 +11,7 @@ import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
 import models.Subscriber;
+import models.TransactionCP;
 import models.User;
 import play.Application;
 import play.GlobalSettings;
@@ -74,6 +75,8 @@ public class Global extends GlobalSettings {
 		Category sport = null;
 		Company admin = null;
 		Company bitCamp = null;
+		long ownedCoupinID1 = 0;
+		long ownedCoupinID2 = 0;
 		int status = Coupon.Status.ACTIVE;
 		
 		if ( !Company.exists("Admin")){
@@ -114,7 +117,7 @@ public class Global extends GlobalSettings {
 					remarkCoupon1, 5, 25 ,new Date(), bitCamp, status);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
-			Coupon.createCoupon(
+			ownedCoupinID1 = Coupon.createCoupon(
 					nameCoupon2,
 					40,
 					new Date(),
@@ -132,7 +135,7 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(
+			ownedCoupinID2 = Coupon.createCoupon(
 					nameCoupon3,
 					20,
 					date,
@@ -251,20 +254,29 @@ public class Global extends GlobalSettings {
 
 		if (User.check("bitcoupon@gmail.com") == false) {
 			User.createUser("Admin","",new Date(), "","","", "bitcoupon@gmail.com",
-					HashHelper.createPassword("bitadmin"), true);
+					HashHelper.createPassword("bitadmin"), true, pic);
 			EmailVerification setVerified = new EmailVerification(1, true);
 			setVerified.save();
 		}
 		
 		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
-			User.createUser("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
-					HashHelper.createPassword("johndoe"), false);
+			User user = new User("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
+					HashHelper.createPassword("johndoe"), false, pic);
+			user.save();
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();
+			Coupon c1 = Coupon.find(ownedCoupinID1);
+			Coupon c2 = Coupon.find(ownedCoupinID2);
+			TransactionCP.createTransaction("AH-324ASD", c1.price, 1,
+					c1.price, "TOKEN01010", user, c1);
+			TransactionCP.createTransaction("AH-324ASD", c2.price, 1,
+					c2.price, "TOKEN2222", user, c2);
+			
 		}
+		
 		if (User.check("vedad.zornic@bitcamp.ba") == false) {
 			User.createUser("Vedad","",new Date(), "","","", "vedad.zornic@bitcamp.ba",
-					HashHelper.createPassword("johndoe"), false);
+					HashHelper.createPassword("johndoe"), false, pic);
 			EmailVerification setVerified = new EmailVerification(3, true);
 			setVerified.save();
 			Subscriber sb = new Subscriber(User.findByEmail("vedad.zornic@bitcamp.ba"));

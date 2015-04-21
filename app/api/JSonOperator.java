@@ -97,7 +97,7 @@ public class JSonOperator extends Controller {
 			try {
 				Date dayOfBirth = DateHelper.getDate(dob);
 				String hashPass = HashHelper.createPassword(password);
-				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false);
+				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false, "");
 				EmailVerification.makeNewRecord(id, true);
 				return ok(JSonHelper.messageToJSon("info","You are successfuly registered! "
 												+ "You can now login with the following email: " + email));
@@ -255,5 +255,15 @@ public class JSonOperator extends Controller {
 				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
 			}		
 	}
+	
+	public static Result showBoughtCoupons() {
+				JsonNode json = request().body().asJson();
+				String id = json.findPath("userId").textValue();
+				List<TransactionCP> transactions = TransactionCP.allFromBuyer(Long.parseLong(id));
+				if (transactions == null) {
+					return badRequest(new ArrayNode(JsonNodeFactory.instance));
+				}
+				return ok(JSonHelper.transactionListToJSon(transactions));
+			}
 	
 }

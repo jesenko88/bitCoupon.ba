@@ -94,7 +94,7 @@ public class UserController extends Controller {
 			else if (User.verifyRegistration(username, mail) == true) {
 				
 				long id = User.createUser(username, surname, dob, gender,
-						adress, city, mail, hashPass, false);
+						adress, city, mail, hashPass, false, "");
 				String verificationEmail = EmailVerification.addNewRecord(id);
 				MailHelper.send(mail,"Click on the link below to verify your e-mail adress <br>"
 								+ "http://" + PATH + "/verifyEmail/"
@@ -405,10 +405,7 @@ public class UserController extends Controller {
 		if (transactions == null) {
 			transactions = new ArrayList<TransactionCP>();
 		}
-		if (request().accepts("text/html")) {
-			return ok(boughtCoupons.render(session("name"), transactions));
-		}
-		return ok(JSonHelper.transactionListToJSon(transactions));
+		return ok(boughtCoupons.render(session("name"), transactions));
 	}
 	
 	//TODO comment

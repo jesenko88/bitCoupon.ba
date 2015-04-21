@@ -13,6 +13,7 @@ POST   /api/userProfile               api.JSonOperator.userProfile()
 POST   /api/companyProfile            api.JSonOperator.companyProfile()
 POST   /api/updateUser                api.JSonOperator.updateUser()
 GET    /api/coupons                   api.JSonOperator.coupons()
+POST   /api/boughtCoupons             api.JSonOperator.showBoughtCoupons()
 # Content negotiation
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
@@ -91,7 +92,7 @@ POST   /filterDate                    controllers.CouponController.filterDate(id
 GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
-GET    /report/:id                     controllers.CommentController.report(id: String)
+GET    /report/:id                    controllers.CommentController.report(id: String)
 GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
 GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
 

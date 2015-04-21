@@ -51,7 +51,7 @@ public class User extends SuperUser {
 	
 	public Date updated;
 	
-	public String profilePicture;
+	public String profilePicture = "images/home/No-Logo.jpg";
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -65,7 +65,7 @@ public class User extends SuperUser {
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
-	public User(String username, String surname, Date dob, String gender, String adress, String city, String email, String password, boolean isAdmin) {
+	public User(String username, String surname, Date dob, String gender, String adress, String city, String email, String password, boolean isAdmin, String profilePicture) {
 		super(email, password, adress, city);
 		this.username = username;	
 		this.surname = surname;
@@ -74,6 +74,7 @@ public class User extends SuperUser {
 		this.created = new Date();
 		this.isAdmin = isAdmin;
 		this.pin = null;
+		this.profilePicture = profilePicture;
 	}
 
 	/**
@@ -88,8 +89,8 @@ public class User extends SuperUser {
 	 * @return the id of the new user (long)
 	 */
 	public static long createUser(String username, String surname, Date dob, String gender, String adress, String city, String email,
-			String password, boolean isAdmin) {
-		User newUser = new User(username, surname, dob, gender, adress, city, email, password, isAdmin);
+			String password, boolean isAdmin, String profilePicture) {
+		User newUser = new User(username, surname, dob, gender, adress, city, email, password, isAdmin, profilePicture);
 		newUser.save();
 		return newUser.id;
 	}
