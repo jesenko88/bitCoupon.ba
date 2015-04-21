@@ -7,10 +7,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import javafx.scene.control.Hyperlink;
+
 import javax.persistence.*;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFHyperlink;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -91,10 +96,17 @@ public class Statistic extends Model{
 		
 	}
 	
+	/**
+	 * Method creating excel file with statistic and returning created file.
+	 * File name is random UUID.
+	 * @return
+	 */
 	public static File createStatisticsFile(){
+		//TODO WHOLE APP TO USE ONE HREF.
+		final String href = "http://localhost:9000/";
 		try {
 			HSSFWorkbook workbook = new HSSFWorkbook();
-	        HSSFSheet sheet =  workbook.createSheet("FirstSheet"); 
+	        HSSFSheet sheet =  workbook.createSheet("Statistics"); 
 	        String fileName = UUID.randomUUID().toString().replace("-", "") + ".xls";
 	        //CREATING FOLDER FOR STATISTICS                
 	        new File(statsFilePath).mkdirs();
@@ -105,35 +117,61 @@ public class Statistic extends Model{
 	        HSSFCellStyle style = workbook.createCellStyle();
 	        style.setBorderTop((short) 6); 
 	        style.setBorderBottom((short) 1); 
-	        style.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+	        style.setFillBackgroundColor(HSSFColor.GREY_80_PERCENT.index);
+	        style.setFillForegroundColor(HSSFColor.GREY_80_PERCENT.index);
+	        style.setFillPattern(HSSFColor.GREY_80_PERCENT.index);
 	        
 	        HSSFFont font = workbook.createFont();
 	        font.setFontName(HSSFFont.FONT_ARIAL);
-	        font.setFontHeightInPoints((short) 20);
+	        font.setFontHeightInPoints((short) 10);
 	        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-	        font.setColor(HSSFColor.BLUE.index);
+	        font.setColor(HSSFColor.WHITE.index);	        
 	        style.setFont(font);
 	        style.setWrapText(true);
 	        
-	        //HARDCODED CELLS
-	        HSSFRow rowhead=   sheet.createRow((short)0);
-	        rowhead.setRowStyle(style);
-	        rowhead.createCell(0).setCellValue("Coupon id");
-	        rowhead.createCell(1).setCellValue("Coupon name");
-	        rowhead.createCell(2).setCellValue("Visited");
-	        rowhead.createCell(3).setCellValue("Bought");
 	        
-	        //Creating rows for each statistic.        
+	        //HARDCODED CELLS and added style !
+	        HSSFRow rowhead=   sheet.createRow((short)0);	       
+	        HSSFCell couponId = rowhead.createCell(0);
+	        couponId.setCellValue(new HSSFRichTextString("Coupon id"));
+	        couponId.setCellStyle(style);
+	       
+	        HSSFCell couponName = rowhead.createCell(1);
+	        couponName.setCellValue(new HSSFRichTextString("Coupon name"));
+	        couponName.setCellStyle(style);
+	        
+	        HSSFCell  visited = rowhead.createCell(2);
+	        visited.setCellValue(new HSSFRichTextString("Visited"));
+	        visited.setCellStyle(style);
+	        
+	        HSSFCell bought = rowhead.createCell(3);
+	        bought.setCellValue(new HSSFRichTextString("Bought"));
+	        bought.setCellStyle(style); 
+	        
+	        rowhead.setHeight((short) 0);
+	        //Creating rows for each statistic. 
+	        //Setting hyperlinks on name.
 	        int rowIndex = 1;
+	        HSSFCell temp;	      
 	        for(Statistic stat: all){
+	        	HSSFHyperlink link = new HSSFHyperlink(HSSFHyperlink.LINK_URL);
 	        	HSSFRow row=   sheet.createRow(rowIndex);
 	        	row.createCell(0).setCellValue(stat.coupon.id);
-	            row.createCell(1).setCellValue(stat.coupon.name);
+	            temp = row.createCell(1);
+	            temp.setCellValue(stat.coupon.name);
+	            link.setAddress(href + "coupon/"+stat.coupon.id);
+	            temp.setHyperlink(link);
 	            row.createCell(2).setCellValue(stat.visited);
-	            row.createCell(3).setCellValue(stat.bought); 
+	            row.createCell(3).setCellValue(stat.bought); 	            
 	            rowIndex++;
 	        }
 	        
+	        //rowhead.setRowStyle(style);
+	        //auto size columns
+	        for(int i=0; i<4; i++){
+	        	 sheet.autoSizeColumn((short) i);	        	 
+	        }	       
+	       
 	        FileOutputStream fileOut = new FileOutputStream(statistic);
 	        workbook.write(fileOut);
 	        fileOut.flush();

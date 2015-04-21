@@ -59,14 +59,6 @@ public class Application extends Controller {
 		public String name;
 	}
 	
-	public static Result test(){
-		File stats = Statistic.createStatisticsFile();
-		response().setContentType("application/x-download");  
-		response().setHeader("Content-disposition","attachment");
-		return ok(stats);
-	
-	}
-
 
 	/**
 	 * @return render the index page
