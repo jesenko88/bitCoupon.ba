@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import models.questions.Question;
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -70,6 +71,9 @@ public class Coupon extends Model {
 	
 	//@OneToOne
 	//public Statistic statistic;
+	
+	@OneToMany(mappedBy = "coupon")
+	public List<Question> questions;
 	
 	/*
 	 * public String code;
