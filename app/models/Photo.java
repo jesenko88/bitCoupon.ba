@@ -70,7 +70,7 @@ public class Photo extends Model {
 		return counter;
 	}
 	
-	public static List<Photo> photosByCoupon(Coupon c){
+	public static List<Photo> photosByCoupon(Coupon coupon){
 		List<Photo> allPhotos = finder.all();
 		List<Photo> byCoupon = new ArrayList<Photo>();
 		//In case there is no photos in DB.
@@ -78,9 +78,9 @@ public class Photo extends Model {
 			return new ArrayList<Photo>();
 		}
 		
-		for(Photo p: allPhotos){
-			if(p.coupon.id == c.id){
-				byCoupon.add(p);
+		for(Photo photo: allPhotos){
+			if(photo.coupon.id == coupon.id){
+				byCoupon.add(photo);
 			}
 		}		
 		return byCoupon;

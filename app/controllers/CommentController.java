@@ -26,10 +26,10 @@ public class CommentController extends Controller {
 	 * @return
 	 */
 	public static Result comment(long couponId){
-		DynamicForm df = Form.form().bindFromRequest();
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
 		Coupon coupon = Coupon.find(couponId);
 		User user = Sesija.getCurrentUser(ctx());
-		String comment = df.data().get("comment");
+		String comment = dynamicForm.data().get("comment");
 		Comment.create(comment, coupon, user);	
 		return redirect("/coupon/" +couponId);	
 	}
