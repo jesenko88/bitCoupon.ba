@@ -25,6 +25,7 @@ import com.google.common.io.Files;
 
 import models.Category;
 import models.comments.Comment;
+import models.questions.Question;
 import models.Company;
 import models.Coupon;
 import models.Photo;
@@ -575,9 +576,9 @@ public class CouponController extends Controller {
 
 	}
 	
-	public static Result notifications(long id) {
+	public static Result notifications(long companyID) {
 		notifications = 0;
-		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
+		List<TransactionCP> transactions = TransactionCP.allFromCompany(companyID);
 		return ok(notificationsForCompany.render(transactions));
 	}
 
