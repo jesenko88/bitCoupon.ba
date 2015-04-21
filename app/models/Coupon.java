@@ -68,8 +68,8 @@ public class Coupon extends Model {
 
 	public int status;
 	
-	@OneToOne
-	public Statistic statistic;
+	//@OneToOne
+	//public Statistic statistic;
 	
 	/*
 	 * public String code;
@@ -146,8 +146,8 @@ public class Coupon extends Model {
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark);
 		newCoupon.save();	
-		Statistic statistic = Statistic.createStatistic(newCoupon);
-		newCoupon.statistic = statistic;
+		//Statistic statistic = Statistic.createStatistic(newCoupon);
+		//newCoupon.statistic = statistic;
 		newCoupon.save();
 		//Creating statistic for each coupon created.
 				
@@ -167,8 +167,8 @@ public class Coupon extends Model {
 				category, description, remark, minOrder, maxOrder, usage,
 				seller);
 		newCoupon.save();	
-		Statistic statistic = Statistic.createStatistic(newCoupon);
-		newCoupon.statistic = statistic;
+		//Statistic statistic = Statistic.createStatistic(newCoupon);
+		//newCoupon.statistic = statistic;
 		newCoupon.save();				
 		return newCoupon.id;
 	}
@@ -187,8 +187,8 @@ public class Coupon extends Model {
 				seller);		
 		newCoupon.status = status;
 		newCoupon.save();	
-		Statistic statistic = Statistic.createStatistic(newCoupon);
-		newCoupon.statistic = statistic;
+		//Statistic statistic = Statistic.createStatistic(newCoupon);
+		//newCoupon.statistic = statistic;
 		newCoupon.save();			
 		return newCoupon.id;
 	}

@@ -91,7 +91,7 @@ public class CouponController extends Controller {
 			flash("error", "Ooops, error has occured.");
 			return redirect("/");
 		}
-		coupon.statistic.visited();;
+		//coupon.statistic.visited();;
 			return ok(coupontemplate.render(coupon));
 	}
 

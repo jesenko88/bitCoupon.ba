@@ -9,7 +9,7 @@ import play.db.ebean.Model;
  *TODO: Since its statistic and has lot of insertions in
  *		this model, we should use NoSQL DB for this model.
  */
-@Entity
+
 public class Statistic extends Model{
 	
 	@Id
