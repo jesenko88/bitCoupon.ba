@@ -68,7 +68,8 @@ public class Coupon extends Model {
 
 	public int status;
 	
-	public int numOfViews;
+	@OneToOne
+	public Statistic statistic;
 	
 	/*
 	 * public String code;
@@ -121,8 +122,7 @@ public class Coupon extends Model {
 		this.maxOrder = maxOrder;
 		this.usage = usage;
 		this.seller = seller;
-		this.status = Status.DEFAULT;
-		this.numOfViews = 0;
+		this.status = Status.DEFAULT;		
 	}
 	
 	/*TODO coupons for empty fields */
@@ -145,7 +145,12 @@ public class Coupon extends Model {
 		
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark);
+		newCoupon.save();	
+		Statistic statistic = Statistic.createStatistic(newCoupon);
+		newCoupon.statistic = statistic;
 		newCoupon.save();
+		//Creating statistic for each coupon created.
+				
 		return newCoupon.id;
 	}
 
@@ -161,7 +166,10 @@ public class Coupon extends Model {
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage,
 				seller);
-		newCoupon.save();
+		newCoupon.save();	
+		Statistic statistic = Statistic.createStatistic(newCoupon);
+		newCoupon.statistic = statistic;
+		newCoupon.save();				
 		return newCoupon.id;
 	}
 
@@ -176,10 +184,12 @@ public class Coupon extends Model {
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage,
-				seller);
-		newCoupon.numOfViews = 0;
+				seller);		
 		newCoupon.status = status;
-		newCoupon.save();
+		newCoupon.save();	
+		Statistic statistic = Statistic.createStatistic(newCoupon);
+		newCoupon.statistic = statistic;
+		newCoupon.save();			
 		return newCoupon.id;
 	}
 

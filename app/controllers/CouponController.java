@@ -79,21 +79,19 @@ public class CouponController extends Controller {
 	/**
 	 * Finds coupon using id and shows it
 	 * 
-	 * @param id
-	 *            - Coupon id
+	 * @param id  - Coupon id
 	 * @return redirect to the Coupon view
 	 */
 	public static Result showCoupon(long id) {
 		if(Sesija.companyCheck(ctx()) == true)
 			TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
-		coupon.numOfViews ++;
-		coupon.save();
-			if(coupon == null ){
-				Logger.error("error", "Coupon null at showCoupon()");
-				flash("error", "Ooops, error has occured.");
-				return redirect("/");
-			}
+		if(coupon == null ){
+			Logger.error("error", "Coupon null at showCoupon()");
+			flash("error", "Ooops, error has occured.");
+			return redirect("/");
+		}
+		coupon.statistic.visited();;
 			return ok(coupontemplate.render(coupon));
 	}
 
