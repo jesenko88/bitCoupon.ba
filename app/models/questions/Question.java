@@ -77,7 +77,7 @@ public class Question extends Model{
 	}
 	
 	
-	public static List<Question> allFromCompany(long id) {
+	public static List<Question> newQuestions(long id) {
 		List<Question> questions = find.where().eq("company", Company.findById(id)).findList();
 		if (questions == null)
 			return new ArrayList<Question>();

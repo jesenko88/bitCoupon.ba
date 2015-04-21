@@ -101,7 +101,7 @@ GET    /removeComment/:id             controllers.CommentController.removeCommen
 POST   /question/:id                  controllers.QuestionController.addQuestion(id: Long)	
 POST   /answer/:id                    controllers.QuestionController.addAnswer(id: Long)	
 GET    /deleteQuestion/:id            controllers.QuestionController.deleteQuestion(id: Long)
-GET    /coupon/:id                    controllers.QuestionController.showCoupon(id: Long)
+GET    /couponquestion/:id            controllers.QuestionController.showCoupon(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()

@@ -24,6 +24,22 @@
    <div class="container">
    
  <h2 class="title text-center">Notifications</h2> 
+ 
+     <div class="container">
+      @for(question <- Question.newQuestions(Sesija.getCurrentCompany(ctx()).id)){
+      	
+     
+         <ul class="commentList">
+		
+          <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question for coupn @question.coupon.id</a> </li>
+		</ul>
+
+      }
+      </div> 
+ 
+ 
+ 
+ <h2 class="title text-center">Sold coupons</h2> 
    <div class="container">
       @for(transaction <- transactions){
       	
@@ -48,22 +64,7 @@
    </div>
    
    
-    <div class="container">
-      @for(question <- Question.allFromCompany(Sesija.getCurrentCompany(ctx()).id)){
-      	
-      <div class="col-sm-4">
-         <div class="logo pull-left">
-            <div class="product-image-wrapper">
-               <div class="single-products">
-                  <div class="productinfo text-center">
-                     <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question</a>
-                  </div>
-               </div>
-            </div>
-         </div> 
-      </div>
-      }
-      </div>    
+   
    
    
    

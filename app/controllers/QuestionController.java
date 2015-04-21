@@ -57,7 +57,7 @@ public class QuestionController extends Controller {
 			flash("error", "Ooops, error has occured.");
 			return redirect("/");
 		}
-		return ok(coupontemplate.render(coupon));
+		return ok(coupontemplate.render(currentQuestion.coupon));
 	}
 	
 
