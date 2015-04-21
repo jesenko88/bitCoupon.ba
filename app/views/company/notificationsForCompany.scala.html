@@ -49,14 +49,14 @@
    
    
     <div class="container">
-      @for(question <- Question.NewQuestions(Sesija.getCurrentCompany(ctx()).id)){
+      @for(question <- Question.allFromCompany(Sesija.getCurrentCompany(ctx()).id)){
       	
       <div class="col-sm-4">
          <div class="logo pull-left">
             <div class="product-image-wrapper">
                <div class="single-products">
                   <div class="productinfo text-center">
-                     <a href="@routes.CouponController.showCoupon(question.coupon.id)" class="btn btn-link">New Question</a>
+                     <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question</a>
                   </div>
                </div>
             </div>

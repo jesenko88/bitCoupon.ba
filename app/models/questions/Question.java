@@ -42,6 +42,8 @@ public class Question extends Model{
 	
 	public Date answerDate;
 	
+	public boolean newQuestion;
+	
 	
 	static Finder<Long, Question> find = new Finder<Long, Question>(Long.class, Question.class);
 	
@@ -52,6 +54,7 @@ public class Question extends Model{
 		this.company = coupon.seller;
 		this.user = user;
 		this.questionDate = new Date();
+		this.newQuestion = true;
 	}
 	
 	public static long create(String question, String answer, Coupon coupon, User user){
@@ -80,7 +83,11 @@ public class Question extends Model{
 			return new ArrayList<Question>();
 		List<Question> newQuestions = new ArrayList<>();
 		for (Question question : questions){
-			newQuestions.add(question);
+			if(question.newQuestion == true){
+				newQuestions.add(question);
+//				question.newQuestion = false;
+//				question.save();
+			}
 		}
 		questions.clear();
 		return newQuestions;

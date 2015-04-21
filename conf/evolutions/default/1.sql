@@ -92,6 +92,7 @@ create table question (
   answer                    varchar(255),
   question_date             timestamp,
   answer_date               timestamp,
+  new_question              boolean,
   constraint pk_question primary key (id))
 ;
 

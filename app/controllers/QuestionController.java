@@ -3,12 +3,15 @@ package controllers;
 import java.util.Date;
 
 import models.Coupon;
+import models.TransactionCP;
 import models.User;
 import models.questions.Question;
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.coupon.coupontemplate;
 
 public class QuestionController extends Controller {
 	
@@ -44,6 +47,18 @@ public class QuestionController extends Controller {
 	}
 	
 	
+	public static Result showCoupon(long questionID) {
+		Question currentQuestion = Question.findById(questionID);
+		Coupon coupon = currentQuestion.coupon;
+		currentQuestion.newQuestion = false;
+		currentQuestion.save();
+		if (coupon == null) {
+			Logger.error("error", "Coupon null at showCoupon()");
+			flash("error", "Ooops, error has occured.");
+			return redirect("/");
+		}
+		return ok(coupontemplate.render(coupon));
+	}
 	
 
 }
