@@ -1,6 +1,7 @@
 package api;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -254,6 +255,17 @@ public class JSonOperator extends Controller {
 				Logger.error("Error at updateUser: " + e.getMessage(), e);
 				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
 			}		
+	}
+	
+	
+	public static Result showBoughtCoupons() {
+		JsonNode json = request().body().asJson();
+		String id = json.findPath("userId").textValue();
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(Long.parseLong(id));
+		if (transactions == null) {
+			return badRequest(new ArrayNode(JsonNodeFactory.instance));
+		}
+		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
 	
 }

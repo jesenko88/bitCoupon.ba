@@ -78,8 +78,8 @@ public class Report extends Model {
 	 * @param commentId
 	 */
 	public static void removeCommentReports(long commentId){
-		Comment c = Comment.findById(commentId);
-		List<Report> reports = findByComment(c);
+		Comment comment = Comment.findById(commentId);
+		List<Report> reports = findByComment(comment);
 		for(Report r: reports){
 			r.delete();
 		}

@@ -120,15 +120,15 @@ public class SubscribeController extends Controller {
 	public static Result subscribe(String email) {
 		String refererUrl = request().getHeader("referer");
 		try {
-			User u = User.findByEmail(email);
+			User user = User.findByEmail(email);
 			if (Subscriber.isSubscribed(email)) {
 				flash("warning", "That email is already subscribed");
 				return redirect("/");
 			}
 
-			if (u != null) {
-				Subscriber.subscribe(u);
-				Logger.debug("User " + u.email + " subscribed.");
+			if (user != null) {
+				Subscriber.subscribe(user);
+				Logger.debug("User " + user.email + " subscribed.");
 			} else {
 				Logger.debug("Visitor with email " + email + " subscribed.");
 				flash("success", "You are now subscribed with following email: " + email);
@@ -151,8 +151,8 @@ public class SubscribeController extends Controller {
 	 */
 	public static Result unsubscribe(String token) {
 		try {
-			Subscriber s = Subscriber.findByToken(token);
-			Subscriber.unsubscribe(s);
+			Subscriber subscriber = Subscriber.findByToken(token);
+			Subscriber.unsubscribe(subscriber);
 			flash("success", "You have been unsubscribed.");
 			return redirect("/");
 		} catch (Exception e) {
@@ -172,8 +172,8 @@ public class SubscribeController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteSubscriber(long id) {
 		try {
-			Subscriber s = Subscriber.find.byId(id);
-			Subscriber.unsubscribe(s);
+			Subscriber subscriber = Subscriber.find.byId(id);
+			Subscriber.unsubscribe(subscriber);
 			flash("success", "Subscriber has been removed");
 			return redirect("/subscribers");
 		} catch (Exception e) {
