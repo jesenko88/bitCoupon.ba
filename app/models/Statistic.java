@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,6 +76,17 @@ public class Statistic extends Model{
 		stats.visited = 0;
 		stats.bought = 0;
 		stats.save();
+	}
+	
+	/**
+	 * Returns whole coupon statistics.
+	 * @return
+	 */
+	public static List<Statistic> all(){
+		List<Statistic> all = find.all();
+		if(all == null)
+			all = new ArrayList<Statistic>();
+		return all;
 	}
 	
 	/**
