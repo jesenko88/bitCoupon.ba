@@ -1,6 +1,7 @@
 package api;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -131,15 +132,16 @@ public class JSonOperator extends Controller {
 	
 	/**
 	 * Method returns the profile page data for user as JSon data.
-	 * It receives an id as String, parses the id to long, and finds the user by id.
+	 * It receives an id as String, parses the id to long, and finds the user by email.
 	 * Finally it returns the object user in JSon format
-	 * @param id String
+	 * @param email String
 	 * @return 
 	 */
 	public static Result userProfile() {
 		JsonNode json = request().body().asJson();
-		String id = json.findPath("id").textValue();
-		User user = User.find(Long.parseLong(id));
+//		String id = json.findPath("id").textValue();
+		String email = json.findPath("email").textValue();
+		User user = User.findByEmail(email);
 		if (user != null)
 			return ok(JSonHelper.userToJSon(user));
 		return badRequest(JSonHelper.messageToJSon("erorr", "An error occured"));
@@ -147,15 +149,16 @@ public class JSonOperator extends Controller {
 	
 	/**
 	 * Method returns the profile page data for company as JSon data.
-	 * It receives an id as String, parses the id to long, and finds the company by id.
+	 * It receives an id as String, parses the id to long, and finds the company by email.
 	 * Finally it returns the object company in JSon format
-	 * @param company id String
+	 * @param company email String
 	 * @return 
 	 */
 	public static Result companyProfile() {
 		JsonNode json = request().body().asJson();
-		String id = json.findPath("id").textValue();
-		Company company = Company.findById(Long.parseLong(id));
+//		String id = json.findPath("id").textValue();
+		String email = json.findPath("email").textValue();
+		Company company = Company.findByEmail(email);
 		if (company != null)
 			return ok(JSonHelper.companyToJSon(company));
 		return badRequest(JSonHelper.messageToJSon("erorr", "An error occured"));
@@ -252,6 +255,17 @@ public class JSonOperator extends Controller {
 				Logger.error("Error at updateUser: " + e.getMessage(), e);
 				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
 			}		
+	}
+	
+	
+	public static Result showBoughtCoupons() {
+		JsonNode json = request().body().asJson();
+		String id = json.findPath("userId").textValue();
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(Long.parseLong(id));
+		if (transactions == null) {
+			return badRequest(new ArrayNode(JsonNodeFactory.instance));
+		}
+		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
 	
 }

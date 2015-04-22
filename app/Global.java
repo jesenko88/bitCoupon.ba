@@ -11,6 +11,7 @@ import models.Coupon;
 import models.EmailVerification;
 import models.FAQ;
 import models.Subscriber;
+import models.TransactionCP;
 import models.User;
 import play.Application;
 import play.GlobalSettings;
@@ -74,6 +75,9 @@ public class Global extends GlobalSettings {
 		Category sport = null;
 		Company admin = null;
 		Company bitCamp = null;
+		long ownedCoupinID1 = 0;
+		long ownedCoupinID2 = 0;
+		int status = Coupon.Status.ACTIVE;
 		
 		if ( !Company.exists("Admin")){
 			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), pic, adress, city, contact);
@@ -110,16 +114,16 @@ public class Global extends GlobalSettings {
 					"images" 
 						+ File.separator + "coupon_photos" + File.separator +1 +".jpg",
 			travel,descriptionCoupon1,
-					remarkCoupon1, 5, 25 ,new Date(), bitCamp, true);
+					remarkCoupon1, 5, 25 ,new Date(), bitCamp, status);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
-			Coupon.createCoupon(
+			ownedCoupinID1 = Coupon.createCoupon(
 					nameCoupon2,
 					40,
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
 					sport, descriptionCoupon2,
-					remarkCoupon2, 5, 20 ,new Date(), bitCamp, true);
+					remarkCoupon2, 5, 20 ,new Date(), bitCamp, status);
 		}
 		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -131,13 +135,13 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(
+			ownedCoupinID2 = Coupon.createCoupon(
 					nameCoupon3,
 					20,
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator +3 +".jpg",
 					food, descriptionCoupon3,
-					remarkCoupon3, 2, 5 ,new Date(), bitCamp, true);
+					remarkCoupon3, 2, 5 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon4) == false) {
@@ -155,7 +159,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 4 +".jpg",
 					travel, descriptionCoupon4,
-					remarkCoupon4, 5, 30 ,new Date(),bitCamp, true);
+					remarkCoupon4, 5, 30 ,new Date(),bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon5) == false) {
@@ -173,7 +177,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
 					travel, descriptionCoupon5,
-					remarkCoupon5, 5, 30 ,new Date(),bitCamp, true);
+					remarkCoupon5, 5, 30 ,new Date(),bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon6) == false) {
@@ -191,7 +195,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 6 +".jpg",
 					travel, descriptionCoupon6,
-					remarkCoupon6, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon6, 5, 30 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon7) == false) {
@@ -209,7 +213,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 7 +".jpg",
 					travel, descriptionCoupon7,
-					remarkCoupon7, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon7, 5, 30 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon8) == false) {
@@ -227,7 +231,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 8 +".jpg",
 					sport, descriptionCoupon8,
-					remarkCoupon8, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon8, 5, 30 ,new Date(), bitCamp, status);
 		}
 		
 		if (Coupon.checkByName(nameCoupon9) == false) {
@@ -245,7 +249,7 @@ public class Global extends GlobalSettings {
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 9 +".jpg",
 					travel, descriptionCoupon9,
-					remarkCoupon9, 5, 30 ,new Date(), bitCamp, true);
+					remarkCoupon9, 5, 30 ,new Date(), bitCamp, status);
 		}
 
 		if (User.check("bitcoupon@gmail.com") == false) {
@@ -256,11 +260,20 @@ public class Global extends GlobalSettings {
 		}
 		
 		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
-			User.createUser("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
+			User user = new User("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false);
+			user.save();
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();
+			Coupon c1 = Coupon.find(ownedCoupinID1);
+			Coupon c2 = Coupon.find(ownedCoupinID2);
+			TransactionCP.createTransaction("AH-324ASD", c1.price, 1,
+					c1.price, "TOKEN01010", user, c1);
+			TransactionCP.createTransaction("AH-324ASD", c2.price, 1,
+					c2.price, "TOKEN2222", user, c2);
+			
 		}
+		
 		if (User.check("vedad.zornic@bitcamp.ba") == false) {
 			User.createUser("Vedad","",new Date(), "","","", "vedad.zornic@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false);

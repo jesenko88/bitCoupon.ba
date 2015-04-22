@@ -1,0 +1,102 @@
+
+.detailBox {
+    width:70%;
+    border:1px solid #bbb;
+    margin:0px 10%;
+}
+.titleBox {
+    background-color:#fdfdfd;
+    padding:10px;
+}
+.titleBox label{
+  color:#444;
+  margin:0;
+  display:inline-block;
+}
+
+.commentBox {
+    padding:10px;
+    border-top:1px dotted #bbb;
+}
+.commentBox .form-group:first-child, .actionBox .form-group:first-child {
+    width:80%;
+}
+.commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
+    width:18%;
+}
+.actionBox .form-group * {
+    width:100%;
+}
+.taskDescription {
+    margin-top:10px 0;
+}
+.commentList {
+    padding:0;
+    list-style:none;
+    max-height:200px;
+    overflow:auto;
+}
+.commentList li {
+    margin:0;
+    margin-top:10px;
+}
+.commentList li > div {
+    display:table-cell;
+}
+.commenterImage {
+    width:30px;
+    margin-right:5px;
+    height:100%;
+    float:left;
+}
+.commenterImage img {
+    width:100%;
+    border-radius:50%;
+}
+
+.askerImage {
+    width:30px;
+    margin:5px 9px 0px 3px;
+    height:100%;
+    float:left;
+}
+
+.askerImage img {
+    width:100%;
+    border-radius:50%;
+}
+.commentText p {
+    margin:0;
+}
+.sub-text {
+    color:#aaa;
+    font-family:verdana;
+    font-size:11px;
+}
+.actionBox {
+    border-top:1px dotted #bbb;
+    padding:10px;
+}
+
+.questionRow {
+    padding:0;
+    list-style:none;
+    border: 1px solid #bbb;
+    border-radius: 9px;
+    max-height:200px;
+    overflow:auto;
+}
+
+.answerText company-color{
+	color: #FE980F;
+    margin:0;
+}
+
+.answerList li {
+    margin:0;
+    margin-top:10px;
+    margin-bottom: 40px;
+}
+
+
+

@@ -56,7 +56,7 @@ public class JSonHelper {
 		userNode.put("email", u.email);
 		userNode.put("adress", u.adress);
 		userNode.put("city", u.city);
-//		userNode.put("profilePicture", u.profilePicture);
+		userNode.put("picture", u.profilePicture);
 		return userNode;
 	}
 	
@@ -70,9 +70,7 @@ public class JSonHelper {
 		companyNode.put("adress", company.adress);
 		companyNode.put("city", company.city);
 		companyNode.put("contact", company.contact);
-//		userNode.put("logo", company.logo);
-//		userNode.put("created", company.created.toString());
-//		userNode.put("updated", company());
+		companyNode.put("logo", company.logo);
 		return companyNode;
 	}
 	

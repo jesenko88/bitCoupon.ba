@@ -53,7 +53,7 @@ public class UserController extends Controller {
 		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
-
+		
 		try {
 
 			String username = userForm.bindFromRequest().get().username;
@@ -244,16 +244,16 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result controlPanel(long id) {
-		User u = User.find(id);
-		if (u == null) {
+		User user = User.find(id);
+		if (user == null) {
 			flash("error", "Ooops, error occured. Please try again.");
 			return redirect("/");
 		}
-		if (!u.username.equals(session("name"))) {
+		if (!user.username.equals(session("name"))) {
 			return redirect("/");
 		}
 
-		return ok(adminPanel.render(u, null));
+		return ok(adminPanel.render(user, null));
 
 	}
 
@@ -323,24 +323,23 @@ public class UserController extends Controller {
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result updatePhoto(long userId) {
 		try {
-			User u = User.find(userId);
+			User user = User.find(userId);
 			String subFolder = "user_profile" + File.separator + "user_"
 					+ userId;
 			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
 					+ subFolder).isDirectory();
 			if (checkIfDirectoryExists) {
-				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug(assetsPath);
-				u.profilePicture = assetsPath;
-				u.save();
-				return redirect("/profile/@" + u.username);
+				String assetsPath = FileUpload.imageUpload(subFolder);				
+				user.profilePicture = assetsPath;
+				user.save();
+				return redirect("/profile/@" + user.username);
 			} else {
 				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
 				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug(assetsPath);
-				u.profilePicture = assetsPath;
-				u.save();
-				return redirect("/profile/@" + u.username);
+				Logger.debug("mkdir");
+				user.profilePicture = assetsPath;
+				user.save();
+				return redirect("/profile/@" + user.username);
 			}
 		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
@@ -359,30 +358,30 @@ public class UserController extends Controller {
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result createNewPassword(String id) {
 		try {
-			ResetPasword rp = ResetPasword.find.byId(id);
-			String email = rp.userEmail;
-			User u = User.findByEmail(email);
-			Company c = Company.findByEmail(email);
-			DynamicForm df = Form.form().bindFromRequest();
+			ResetPasword ressetPassword = ResetPasword.find.byId(id);
+			String email = ressetPassword.userEmail;
+			User user = User.findByEmail(email);
+			Company company = Company.findByEmail(email);
+			DynamicForm newPasswordForm = Form.form().bindFromRequest();
 
-			String newPassword = df.data().get("newPassword");
-			String confirmPassword = df.data().get("confirmPassword");
+			String newPassword = newPasswordForm.data().get("newPassword");
+			String confirmPassword = newPasswordForm.data().get("confirmPassword");
 
 			// TODO CHECK IF PASSWORDS ARE EQUAL AND OTHER THINGS ABOUT PW
 			if (!newPassword.equals(confirmPassword)) {
 				flash("error",
 						"Failed to change pw, confirm passwords dont match");
-				return redirect("/newPassword/" + rp.id);
+				return redirect("/newPassword/" + ressetPassword.id);
 			}
 
-			if (u != null) {
-				u.password = HashHelper.createPassword(newPassword);
-				u.save();
-				rp.delete();
-			} else if (c != null) {
-				c.password = HashHelper.createPassword(newPassword);
-				c.save();
-				rp.delete();
+			if (user != null) {
+				user.password = HashHelper.createPassword(newPassword);
+				user.save();
+				ressetPassword.delete();
+			} else if (company != null) {
+				company.password = HashHelper.createPassword(newPassword);
+				company.save();
+				ressetPassword.delete();
 			}
 			flash("success", "Password has been changed, please log in.");
 			return redirect("/");
@@ -406,13 +405,11 @@ public class UserController extends Controller {
 		if (transactions == null) {
 			transactions = new ArrayList<TransactionCP>();
 		}
-		if (request().accepts("text/html")) {
-			return ok(boughtCoupons.render(session("name"), transactions));
-		}
-		return ok(JSonHelper.transactionListToJSon(transactions));
+		return ok(boughtCoupons.render(session("name"), transactions));
 	}
 	
 	//TODO comment
+	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result newPin(long id) {
 		User currentUser = User.find(id);
 		Pin.generatePin(currentUser);
@@ -420,14 +417,15 @@ public class UserController extends Controller {
 	}
 	
 	//TODO comment
+	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserPage() {
-		DynamicForm df = Form.form().bindFromRequest();
-		long id = Long.parseLong(df.data().get("coupon_id"));
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
+		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
 		Coupon coupon = Coupon.find(id);
-		String pinCode = df.data().get("pin");
+		String pinCode = dynamicForm.data().get("pin");
 		User user = Pin.getPinUser(pinCode);
-		Pin p = Pin.getPin(pinCode);
-		if (user == null || !Pin.isValid(p.date)){
+		Pin pin = Pin.getPin(pinCode);
+		if (user == null || !Pin.isValid(pin.date)){
 			flash("error", "Invalid pin code");
 			return badRequest(coupontemplate.render(coupon));
 		}
@@ -435,29 +433,20 @@ public class UserController extends Controller {
 	}
 	
 	//TODO comment
+	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserExecute() {
-		DynamicForm df = Form.form().bindFromRequest();
-		long id = Long.parseLong(df.data().get("coupon_id"));
-		int quantity = Integer.parseInt(df.data().get("quantity"));
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
+		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
+		int quantity = Integer.parseInt(dynamicForm.data().get("quantity"));
 		Coupon coupon = Coupon.find(id);
-		User client = User.find(Long.parseLong(df.data().get("user_id")));
+		User client = User.find(Long.parseLong(dynamicForm.data().get("user_id")));
 		if (client == null) { return badRequest(coupontemplate.render(coupon)); }
 		double totalPrice = coupon.price * quantity;	
-		long t = TransactionCP.createTransaction( new UUID().toString().substring(0, 12),coupon.price, quantity, totalPrice, "", client, coupon);
+		TransactionCP.createTransaction( new UUID().toString().substring(0, 12),coupon.price, quantity, totalPrice, "", client, coupon);
 		CouponController.notifications ++;
+		coupon.statistic.bought(quantity); //NEW adding to statistics.
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
-	
-	/**
-	 * TODO comment
-	 * @return
-	 */
-	public static long getCurrentUserId() {
-		User u = User.findByEmail(session("email"));
-		if ( u != null)
-			return u.id;
-		return -1;
-	}
-			
+		
 }
