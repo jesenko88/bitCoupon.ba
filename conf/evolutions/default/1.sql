@@ -31,6 +31,7 @@ create table company (
   updated                   timestamp,
   logo                      varchar(255),
   contact                   varchar(255),
+  notifications             integer,
   constraint pk_company primary key (id))
 ;
 

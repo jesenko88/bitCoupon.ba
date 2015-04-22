@@ -70,6 +70,8 @@ POST   /updateCompany/:id             controllers.CompanyController.adminUpdateC
 GET    /companyProfile/:id            controllers.CompanyController.showCompanyProfile(id: Long)
 GET    /companies                     controllers.CompanyController.listCompanies()
 GET    /searchCompany                 controllers.CompanyController.searchCompany(name: String)
+GET    /notificationsForCompany       controllers.CompanyController.notifications(id: Long)
+
 
 # Coupon controller 
 GET    /couponPanel                   controllers.CouponController.addCouponView()
@@ -88,7 +90,6 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
-GET    /notificationsForCompany       controllers.CouponController.notifications(id: Long)
 
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
 GET    /report/:id                    controllers.CommentController.report(id: String)

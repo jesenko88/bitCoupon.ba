@@ -48,7 +48,6 @@ public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
-	public static int notifications;
 	static Result result;
 	/**
 	 * 
@@ -574,14 +573,6 @@ public class CouponController extends Controller {
 		return ok(searchFilter.render(coupons, categories));
 
 	}
-	
-	public static Result notifications(long id) {
-		notifications = 0;
-		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
-		return ok(notificationsForCompany.render(transactions));
-	}
-
-	
 	
 	/**
 	 * This method get string, and convert string to list of Coupons, Then

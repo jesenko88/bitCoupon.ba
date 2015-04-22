@@ -225,7 +225,9 @@ public class PayPalController extends Controller {
 							+ " is purchased. "
 							+ "To see details go to your profile. <br>"
 							+ "http://" + PATH + "/loginpage");
-			CouponController.notifications++;
+			
+			coupon.seller.notifications ++;
+			coupon.seller.save();
 			Logger.info(session("name") + " approved transaction: //TODO");
 			flash("success", "Transaction complete");
 			return ok(index.render(Coupon.all(), Category.all()));
