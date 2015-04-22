@@ -3032,3 +3032,7 @@ h2.title {
     margin:auto;
     text-align: center;
 }
+
+.error-input .form-control{
+	border-color: red;
+}

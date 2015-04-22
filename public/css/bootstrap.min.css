@@ -1903,6 +1903,10 @@ textarea.input-lg {
 	border-color: #a94442
 }
 
+.error-input .form-control{
+	border-color: red;
+}
+
 .has-success .help-block, .has-success .control-label, .has-success .radio,
 	.has-success .checkbox, .has-success .radio-inline, .has-success .checkbox-inline
 	{

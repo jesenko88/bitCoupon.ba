@@ -305,4 +305,21 @@ public class User extends SuperUser {
 	}
 	
 	
+	public String validate() {
+
+		if (username.length() < 4 || username.equals("Username") || username.length() > 20) {
+			return "Username must be at between 4 and 20 chatacters";
+		}
+		if (email.equals("Email")) {
+
+			return "Email is required for registration !";
+		}
+		if (password.length() < 6) {
+
+			return "Password must be at least 6 characters!";
+		}
+
+		return null;
+	}
+	
 }
