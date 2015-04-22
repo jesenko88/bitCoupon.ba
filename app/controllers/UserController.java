@@ -69,19 +69,7 @@ public class UserController extends Controller {
 			String confPass = userForm.bindFromRequest()
 					.field("confirmPassword").value();
 
-			if (username.length() < 4 || username.equals("Username")) {
-				flash("error", "Usernam must be at least 4 chatacters");
-				return badRequest(signup.render(submit, new Form<Company>(
-						Company.class)));
-			} else if (mail.equals("Email")) {
-				flash("error", "Email is required for registration !");
-				return badRequest(signup.render(submit, new Form<Company>(
-						Company.class)));
-			} else if (password.length() < 6) {
-				flash("error", "Password must be at least 6 characters!");
-				return badRequest(signup.render(submit, new Form<Company>(
-						Company.class)));
-			} else if (!password.equals(confPass)) {
+			if (!password.equals(confPass)) {
 				flash("error", "Passwords don't match, try again ");
 				return badRequest(signup.render(submit, new Form<Company>(
 						Company.class)));
