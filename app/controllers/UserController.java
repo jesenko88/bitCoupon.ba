@@ -11,6 +11,7 @@ import helpers.FileUpload;
 import helpers.SuperUserFilter;
 
 import java.util.List;
+
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -447,6 +448,19 @@ public class UserController extends Controller {
 		coupon.statistic.bought(quantity); //NEW adding to statistics.
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
+	}
+	
+	/**
+	 * Method returns statistic excel file as download.
+	 * @return
+	 */
+	@Security.Authenticated(AdminFilter.class)
+	public static Result getStatistic(){
+		File stats = Statistic.createStatisticsFile();
+		response().setContentType("application/x-download");  
+		response().setHeader("Content-disposition","attachment; filename=statistics.xls");
+		return ok(stats);
+	
 	}
 		
 }
