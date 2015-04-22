@@ -249,8 +249,15 @@ public class JSonHelper {
 			ObjectNode transactionNode = Json.newObject();
 			transactionNode.put("id", tran.id); 
 			transactionNode.put("couponId", tran.coupon.id);
+			transactionNode.put("name", tran.coupon.name);
+			transactionNode.put("description", tran.coupon.description);
+			transactionNode.put("price", tran.coupon.price);
+			transactionNode.put("quantity", tran.quantity);
+			transactionNode.put("picture", tran.coupon.picture);
 			transactionNode.put("totalPrice", tran.totalPrice); 
-			transactionNode.put("date", tran.date.toString()); //??
+			transactionNode.put("transactionDate", tran.date.toString());
+			transactionNode.put("paymentId", tran.payment_id);
+			transactionNode.put("token", tran.token);
 			arrayNode.add(transactionNode);
 		}
 		return arrayNode;
