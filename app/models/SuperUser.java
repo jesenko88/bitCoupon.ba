@@ -45,20 +45,20 @@ public abstract class SuperUser extends Model {
 	}
 
 	public static List<SuperUser> allSuperUsers() {
-		List<Company> allCompanies = Company.all();
-		List<User> allUsers = User.all();
+		List<Company> allComp = Company.all();
+		List<User> allUsr = User.all();
 		
 		//In case user list or company list is null.
-		if(allCompanies == null){
-			allCompanies = new ArrayList<Company>();
+		if(allComp == null){
+			allComp = new ArrayList<Company>();
 		}
-		if(allUsers == null){
-			allUsers = new ArrayList<User>();
+		if(allUsr == null){
+			allUsr = new ArrayList<User>();
 		}
 		
 		List<SuperUser> all = new ArrayList<SuperUser>();
-		all.addAll(allCompanies);
-		all.addAll(allUsers);
+		all.addAll(allComp);
+		all.addAll(allUsr);
 		return all;
 	}
 	
@@ -87,9 +87,9 @@ public abstract class SuperUser extends Model {
 	 * @return
 	 */
 	public static boolean verifyRegistration(String email) {
-		User user = User.findByEmail(email);
-		Company company = Company.findByEmail(email);
-		if (user == null && company == null) {
+		User u = User.findByEmail(email);
+		Company c = Company.findByEmail(email);
+		if (u == null && c == null) {
 			return true;
 		} else
 			return false;

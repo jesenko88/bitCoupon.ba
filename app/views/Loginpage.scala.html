@@ -31,9 +31,9 @@
          	 	 
       </script>
       <form action="@routes.Application.login" method="POST">
-         <input class="form-control" type="text" id="email" name="email" placeholder="Email" />
-         <input class="form-control" type="password" id="password" name="password" placeholder="Password" />
-         <button type="submit" id="submit-login" style="display:inline-block">Login</button>
+         <input type="text" id="email" name="email" placeholder="Email" />
+         <input type="password" id="password" name="password" placeholder="Password" />
+         <button type="submit" id="submit" style="display:inline-block">Login</button>
          <button type="button" name="answer" onclick="showDiv('toggle')" style=" border: none; display:inline-block; float:right ">Forgot password?</button> 							
       </form>
    </div>
@@ -44,7 +44,7 @@
       <!--sign up form-->
       <h2>@info</h2>
       <form action="/sendRequest" method="GET">
-         <input class="form-control" type="email" id="email" name="email" placeholder="Email" required/>            
+         <input type="email" id="email" name="email" placeholder="Email" required/>            
          <button type="submit" id="submit">Send email</button>							
       </form>
    </div>

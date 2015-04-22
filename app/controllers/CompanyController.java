@@ -42,10 +42,10 @@ public class CompanyController extends Controller {
 	 */
 	public static Result registerC() {
 
-		Form<Company> registrationForm = Form.form(Company.class).bindFromRequest();
+		Form<Company> submit = Form.form(Company.class).bindFromRequest();
 
-		if (companyForm.hasErrors() || registrationForm.hasGlobalErrors()) {
-			return ok(signup.render(new Form<User>(User.class), registrationForm));
+		if (companyForm.hasErrors() || submit.hasGlobalErrors()) {
+			return ok(signup.render(new Form<User>(User.class), submit));
 
 		}
 		// Exception handling.
@@ -64,16 +64,16 @@ public class CompanyController extends Controller {
 
 			if (name.length() < 4 || name.equals("Name")) {
 				flash("error", "Name must be at least 4 chatacters");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
+				return ok(signup.render(new Form<User>(User.class), submit));
 			} else if (mail.equals("Email")) {
 				flash("error", "Email is required for registration !");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
+				return ok(signup.render(new Form<User>(User.class), submit));
 			} else if (password.length() < 6) {
 				flash("error", "Password must be at least 6 characters!");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
+				return ok(signup.render(new Form<User>(User.class), submit));
 			} else if (!password.equals(confPass)) {
 				flash("error", "Passwords don't match, try again ");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
+				return ok(signup.render(new Form<User>(User.class), submit));
 			}
 
 			else if (Company.verifyRegistration(name, mail) == true) {
@@ -89,12 +89,12 @@ public class CompanyController extends Controller {
 				flash("success",
 						"A verification mail has been sent to your email address!");
 				Logger.info("A verification mail has been sent to email address");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
+				return ok(signup.render(new Form<User>(User.class), submit));
 
 			} else {
 				flash("error", "Username or email allready exists!");
 				Logger.info("Username or email allready exists!");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
+				return ok(signup.render(new Form<User>(User.class), submit));
 
 			}
 		} catch (Exception e) {
@@ -245,23 +245,23 @@ public class CompanyController extends Controller {
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updatePhoto(long companyId) {
 		try{
-			Company company = Company.findById(companyId);
+			Company c = Company.findById(companyId);
 			String subFolder = "company_profile" + File.separator + "company_" + companyId;
 			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
 					+ subFolder).isDirectory();
 			if (checkIfDirectoryExists) {
 				String assetsPath = FileUpload.imageUpload(subFolder);
 				Logger.debug(assetsPath);
-				company.logo = assetsPath;
-				company.save();
-				return redirect("/profile/@" + company.name);
+				c.logo = assetsPath;
+				c.save();
+				return redirect("/profile/@" + c.name);
 			} else {
 				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdirs();
 				String assetsPath = FileUpload.imageUpload(subFolder);
 				Logger.debug(assetsPath);
-				company.logo = assetsPath;
-				company.save();
-				return redirect("/profile/@" + company.name);
+				c.logo = assetsPath;
+				c.save();
+				return redirect("/profile/@" + c.name);
 			}			
 		}catch(Exception e){
 			flash("error", "Error occured while uploading photo. If you're admin please check logs.");
@@ -305,9 +305,6 @@ public class CompanyController extends Controller {
 	 */
 	public static Result listCompanies() {
 		List<Company> companies = Company.all();
-		if(companies == null)
-			companies = new ArrayList<Company>();
-		
 		if (request().accepts("text/html")){
 			return ok(searchCompany.render(companies));
 		}
@@ -317,7 +314,6 @@ public class CompanyController extends Controller {
 	/**
 	 * Search method for companies. If search is unsuccessful a flash message is
 	 * sent
-	 * TODO if list is empty, just return empty list.
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result

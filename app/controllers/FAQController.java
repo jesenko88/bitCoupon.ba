@@ -46,16 +46,16 @@ public class FAQController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addFAQ() {
 		try {
-			DynamicForm newFAQForm = Form.form().bindFromRequest();
+			DynamicForm form = Form.form().bindFromRequest();
 
-			if (newFAQForm.hasErrors() || newFAQForm.hasGlobalErrors()) {
+			if (form.hasErrors() || form.hasGlobalErrors()) {
 				Logger.debug("error in Add FAQ form");
 				flash("error", " Error! "); // TODO message
 				return ok((NewFAQ.render(session("name"))));
 			}
 
-			String question = newFAQForm.data().get("question");
-			String answer = newFAQForm.data().get("answer");
+			String question = form.data().get("question");
+			String answer = form.data().get("answer");
 
 			if (question.length() < 20 || answer.length() < 20) {
 				Logger.debug(session("name")

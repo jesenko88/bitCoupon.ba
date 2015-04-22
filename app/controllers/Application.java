@@ -94,16 +94,16 @@ public class Application extends Controller {
 	 */
 	public static Result login() {
 		
-			Form<Login> loginForm = new Form<Login>(Login.class);
-			if (loginForm.hasGlobalErrors()) {
+			Form<Login> login = new Form<Login>(Login.class);
+			if (login.hasGlobalErrors()) {
 				Logger.info("Login global error");
 				flash("error", "Login failed");
 
 				return badRequest(Loginpage.render(" "));
 			}
 			try {
-				String mail = loginForm.bindFromRequest().get().email;
-				String password = loginForm.bindFromRequest().get().password;
+				String mail = login.bindFromRequest().get().email;
+				String password = login.bindFromRequest().get().password;
 
 				if (mail.isEmpty() || password.length() < 6) {
 					Logger.info("Invalid login form, mail empty or short password");
@@ -111,25 +111,25 @@ public class Application extends Controller {
 					return badRequest(Loginpage.render(" "));
 				}
 				if (User.verifyLogin(mail, password) == true) {
-					User user = User.getUser(mail);
+					User cc = User.getUser(mail);
 					session().clear();
-					session("name", user.username);
-					session("email", user.email);
+					session("name", cc.username);
+					session("email", cc.email);
 					flash("success", "You are logged in as: " + mail);
-					Logger.info(user.username + " logged in");
+					Logger.info(cc.username + " logged in");
 					flash("success", "You are logged in as: " + mail);
 					return ok(index.render(Coupon.approvedCoupons(),
 							Category.all()));
 
 				}
 				if (Company.verifyLogin(mail, password) == true) {
-					Company company = Company.findByEmail(mail);
+					Company cc = Company.findByEmail(mail);
 					session().clear();
-					session("name", company.name);
-					session("email", company.email);
+					session("name", cc.name);
+					session("email", cc.email);
 					flash("success", "You are logged in as: " + mail);
-					Logger.info(company.name + " logged in");
-					return ok(indexC.render(company, Coupon.approvedCoupons()));
+					Logger.info(cc.name + " logged in");
+					return ok(indexC.render(cc, Coupon.approvedCoupons()));
 				}
 
 				flash("error", "Invalid email or password");
@@ -199,14 +199,14 @@ public class Application extends Controller {
 	}
 
 	public static Promise<Result> sendMail() {
-		final DynamicForm dynamicForm = DynamicForm.form().bindFromRequest();			
+		final DynamicForm temp = DynamicForm.form().bindFromRequest();			
 		Promise<Result> holder = WS
 				.url("https://www.google.com/recaptcha/api/siteverify")
 				.setContentType("application/x-www-form-urlencoded")
 				.post(String.format("secret=%s&response=%s",
 
 				Play.application().configuration().getString("recaptchaKey"),
-						dynamicForm.get("g-recaptcha-response")))
+						temp.get("g-recaptcha-response")))
 				.map(new Function<WSResponse, Result>() {
 
 					public Result apply(WSResponse response) {

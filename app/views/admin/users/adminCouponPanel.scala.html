@@ -3,7 +3,7 @@
 
 @main("Admin add coupon") {
 
-	@adminNavbar()
+	@_adminNavbar()
 	@if(Sesija.adminCheck(ctx()) == true || Sesija.companyCheck(ctx()) == true) {
 					 <div class="panel panel-default">
                         <div class="panel-heading">

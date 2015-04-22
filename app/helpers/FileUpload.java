@@ -30,13 +30,13 @@ public class FileUpload extends Controller{
 	 * @param subFolder - sub folder name
 	 * @return - String path we use to Asset. ( one we use in creation of coupon)
 	 */
-	public static String imageUpload(String subFolder) {		
+	public static String imageUpload(String subFolder) {
+		System.out.println("request.body.as ...");
 		MultipartFormData body = request().body().asMultipartFormData();
 
 		final String savePath = IMAGES_FOLDER + subFolder
 				+ File.separator;
-		new File(savePath).mkdirs();
-		
+
 		FilePart filePart = body.getFile("picture");
 		//Checking if file exists.
 		if(filePart == null){

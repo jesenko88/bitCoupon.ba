@@ -19,12 +19,13 @@ import javax.imageio.ImageIO;
 
 import org.h2.util.StringUtils;
 
+
+
 import api.JSonHelper;
 
 import com.google.common.io.Files;
 
 import models.Category;
-import models.comments.Comment;
 import models.Company;
 import models.Coupon;
 import models.Photo;
@@ -39,8 +40,8 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import scala.reflect.api.Scopes;
 import views.html.coupon.*;
-import views.html.company.*;
 import views.html.*;
 import views.html.admin.users.*;
 
@@ -50,6 +51,7 @@ public class CouponController extends Controller {
 	static List<Category> allCategories = Category.all();
 	public static int notifications;
 	static Result result;
+
 	/**
 	 * 
 	 * @return renders the view for coupon add form
@@ -65,9 +67,9 @@ public class CouponController extends Controller {
 			return redirect("/");
 		}
 		
-		User user = User.find(name);
-		if(user != null){ 
-			if(user.isAdmin){
+		User u = User.find(name);
+		if(u != null){ 
+			if(u.isAdmin){
 				return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));
 			}
 		}
@@ -85,10 +87,8 @@ public class CouponController extends Controller {
 	 */
 	public static Result showCoupon(long id) {
 		if(Sesija.companyCheck(ctx()) == true)
-			TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
+		TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
-		coupon.numOfViews ++;
-		coupon.save();
 			if(coupon == null ){
 				Logger.error("error", "Coupon null at showCoupon()");
 				flash("error", "Ooops, error has occured.");
@@ -107,8 +107,23 @@ public class CouponController extends Controller {
 	// TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		try {
-			Coupon coupon = Coupon.find(id);											
-			Logger.info(session("name") + " deleted coupon: \"" + coupon.name + "\"");			
+			Coupon c = Coupon.find(id);
+			List<Photo> photos = Photo.photosByCoupon(c);
+			if (photos != null) {
+				for (Photo photo : photos) {
+					photo.coupon = null;
+					Photo.delete(photo.id);
+				}
+			}
+			List<TransactionCP> transactions = c.buyers;
+			for(TransactionCP transaction: transactions){
+				transaction.coupon = null;				
+				transaction.save();
+			}
+			
+			c.buyers = null;						
+			Logger.info(session("name") + " deleted coupon: \"" + c.name + "\"");
+			System.out.println("DEBUGG BEFORE DELETE");
 			Coupon.delete(id);
 			return redirect("/");
 		} catch (Exception e) {
@@ -157,10 +172,10 @@ public class CouponController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result approveCoupon(long id) {
 		try {
-			Coupon coupon = Coupon.find(id);
-			coupon.status = Coupon.Status.ACTIVE;
-			coupon.save();
-			flash("succes", "Coupon " + coupon.name + " has been approved");
+			Coupon c = Coupon.find(id);
+			c.status = true;
+			c.save();
+			flash("succes", "Coupon " + c.name + " has been approved");
 			return ok(couponsAll.render(Coupon.approvedCoupons(),
 					Coupon.nonApprovedCoupons()));
 		} catch (Exception e) {
@@ -181,7 +196,7 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result updateCoupon(long id) {
-		DynamicForm updateCouponForm = Form.form().bindFromRequest();
+		DynamicForm df = Form.form().bindFromRequest();
 		try {
 			Coupon coupon = Coupon.find(id);
 			if (couponForm.hasErrors()) {
@@ -189,6 +204,7 @@ public class CouponController extends Controller {
 				return redirect("/");
 			}
 
+			List<Category> categories = Category.all();
 			List<Photo> photos = Photo.photosByCoupon(coupon);
 			coupon.name = couponForm.bindFromRequest().field("name").value();
 			if (coupon.name.length() < 4) {
@@ -201,7 +217,7 @@ public class CouponController extends Controller {
 			}
 			
 			/* price */
-			String sPrice = updateCouponForm.data().get("price");
+			String sPrice = df.data().get("price");
 			double price = Double.valueOf(sPrice);
 			
 			if (price <= 0) {
@@ -215,7 +231,7 @@ public class CouponController extends Controller {
 			 * FIX FOR DATE BUG.
 			 * */
 			Date current = new Date();
-			String sDate = updateCouponForm.data().get("dateExpire");	
+			String sDate = df.data().get("dateExpire");	
 			Date date = null;
 			//In case user did not enter date, date will stay still.
 			if(sDate.isEmpty()){
@@ -253,11 +269,11 @@ public class CouponController extends Controller {
 			if (!StringUtils.isNullOrEmpty(assetsPath)) {
 				coupon.picture = assetsPath;
 			}
-			int status;
+			boolean status;
 			if (Sesija.adminCheck(ctx()) == true) {
-				status = Coupon.Status.ACTIVE;
+				status = true;
 			} else {
-				status = Coupon.Status.DEFAULT;
+				status = false;
 			}
 			coupon.status = status;
 			
@@ -286,12 +302,13 @@ public class CouponController extends Controller {
 		//Getting only activated coupons from search result.
 		List<Coupon> coupons = new ArrayList<Coupon>();
 		for(Coupon coupon: all){
-			if(coupon.status == Coupon.Status.ACTIVE){
+			if(coupon.status){
 				coupons.add(coupon);
 			}
 		}	
 		if (coupons.isEmpty()) {
-			flash("error", "No such coupon");		
+			flash("error", "No such coupon");
+			User u = User.find(session("name"));
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
 													, Category.all()));
 		}
@@ -306,7 +323,8 @@ public class CouponController extends Controller {
 	 * @return
 	 */
 	public static Result sort(String ids) {
-		try {			
+		try {
+			Logger.debug("Ids: " + ids);
 			/*
 			 * Getting all ids of coupons and adding them to list we are going
 			 * to sort.
@@ -319,11 +337,11 @@ public class CouponController extends Controller {
 				coupons.add(currentCoupon);
 			}
 
-			DynamicForm sortForm = Form.form().bindFromRequest();
-			String orderBy = sortForm.data().get("orderby");
+			DynamicForm df = Form.form().bindFromRequest();
+			String orderBy = df.data().get("orderby");
 
 			// Getting sort method.
-			String parseMethod = sortForm.data().get("method");
+			String parseMethod = df.data().get("method");
 			int method = 0;
 			if (parseMethod.equalsIgnoreCase("ascending")) {
 				method = Coupon.SORT_ASCENDING;
@@ -373,37 +391,37 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCoupon() {
 
-		Form<Coupon> addCouponForm = Form.form(Coupon.class).bindFromRequest();
+		Form<Coupon> submit = Form.form(Coupon.class).bindFromRequest();
 		List<Category> categories = Category.all();	
 		String name = couponForm.bindFromRequest().field("name").value();
 
-		if (Sesija.companyCheck(ctx())){		
-			result = ok(couponPanel.render(session("name"), categories, addCouponForm));
+		if (Sesija.companyCheck(ctx())){
+			System.out.println("DEBUUUUUUUGGGGGG");
+			result = ok(couponPanel.render(session("name"), categories, submit));
 		}else{
-			result = ok(adminCouponPanel.render(session("name"), categories, addCouponForm));
+			result = ok(adminCouponPanel.render(session("name"), categories, submit));
 		}
 	
-		if (couponForm.hasErrors() || addCouponForm.hasGlobalErrors()) {
+		if (couponForm.hasErrors() || submit.hasGlobalErrors()) {
 			Logger.debug("Error adding coupon");
 			return result;
 		}
 
 		try{		
 			double price = couponForm.bindFromRequest().get().price;	
-			Date date = couponForm.bindFromRequest().get().dateExpire;			
+			Date date = couponForm.bindFromRequest().get().dateExpire;
+			Category category = null;
 			String newCategory = couponForm.bindFromRequest().field("newCategory").value();
-			String categoryString = couponForm.bindFromRequest().field("category").value();
+			String categoryy = couponForm.bindFromRequest().field("category").value();
 			String description = couponForm.bindFromRequest().field("description").value();
 			String remark = couponForm.bindFromRequest().field("remark").value();
 			int minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());	
 			int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
 			Date usage = couponForm.bindFromRequest().get().usage;
 			
-			Category category = Category.findByName(categoryString);
-			
-			int status = Coupon.Status.DEFAULT;
+			boolean status = false;
 			if (Sesija.adminCheck(ctx())) {
-				status = Coupon.Status.ACTIVE;
+				status = true;
 			}	
 			//In case admin posted coupon.
 			Company company = Company.find(session("name"));
@@ -460,8 +478,8 @@ public class CouponController extends Controller {
 			String savePath = FileUpload.IMAGES_FOLDER + "coupon_photos"
 					+ File.separator + "cpn" + couponId + File.separator;
 
-			Coupon coupon = Coupon.find(couponId);
-			int photos = Photo.photoStackLength(coupon);
+			Coupon cp = Coupon.find(couponId);
+			int photos = Photo.photoStackLength(cp);
 
 			/*
 			 * Checking if coupon has fulfilled his stack for photos and if user
@@ -471,7 +489,7 @@ public class CouponController extends Controller {
 				Logger.info(session("name") + " tried to add too many photos");
 				flash("error",
 						"You already fullfilled this coupons photos. Delete some to add more.");
-				return redirect("/editCoupon/" + coupon.id);
+				return redirect("/editCoupon/" + cp.id);
 			}
 			MultipartFormData body = request().body().asMultipartFormData();
 			List<FilePart> photoParts = body.getFiles();
@@ -479,7 +497,7 @@ public class CouponController extends Controller {
 				flash("error", "You selected " + photoParts.size()
 						+ " photos but you can upload only " + (4 - photos)
 						+ " more.");
-				return redirect("/editCoupon/" + coupon.id);
+				return redirect("/editCoupon/" + cp.id);
 			}
 
 			/*
@@ -517,10 +535,11 @@ public class CouponController extends Controller {
 							+ "coupon_photos" + File.separator + "cpn"
 							+ couponId + File.separator + saveFile.getName();
 
-					Photo.create(assetsPath, saveFile.getPath(), coupon);
+					Photo.create(assetsPath, saveFile.getPath(), cp);
 				}
 			}
-			flash("success", "Successfully uploaded photos.");			
+			flash("success", "Successfully uploaded photos.");
+			Coupon coupon = Coupon.find(couponId);
 			return ok(updateCouponView.render(session("name"), coupon, Photo.photosByCoupon(coupon)));
 		} catch (Exception e) {
 			flash("error", "Error occured while uploading gallery photos."
@@ -540,16 +559,16 @@ public class CouponController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deletePhoto(int id) {		
 		try {
-			Photo photo = Photo.find(id);
-			Coupon coupon = photo.coupon;
-			File image = new File(photo.savePath);
+			Photo temp = Photo.find(id);
+			Coupon cp = temp.coupon;
+			File image = new File(temp.savePath);
 			image.delete();
-			photo.delete();
-			photo.save();
+			temp.delete();
+			temp.save();
 			Logger.info(session("name") + " deleted image id:\"" + id
-					+ "\" from " + coupon.name);
+					+ "\" from " + cp.name);
 			flash("succes", "You have successfuly deleted photo.");
-			return redirect("/editCoupon/" + coupon.id);
+			return redirect("/editCoupon/" + cp.id);
 		} catch (Exception e) {
 			flash("error",
 					"Error occured while deleting photo. If you're admin please check loggs.");
@@ -606,8 +625,8 @@ public class CouponController extends Controller {
 				coupons.add(currentCoupon);
 			}
 
-			DynamicForm filterForm = Form.form().bindFromRequest();
-			String categoryChosed = filterForm.data().get("category");
+			DynamicForm df = Form.form().bindFromRequest();
+			String categoryChosed = df.data().get("category");
 			List<Coupon> list = new ArrayList<Coupon>();
 
 			for (Coupon coupon : coupons) {
@@ -652,12 +671,12 @@ public class CouponController extends Controller {
 				coupons.add(currentCoupon);
 			}
 
-			DynamicForm filterForm = Form.form().bindFromRequest();
+			DynamicForm df = Form.form().bindFromRequest();
 			List<Coupon> list = new ArrayList<Coupon>();
 
 			// PRICE Filter
-			String startP = filterForm.data().get("start_price");
-			String endP = filterForm.data().get("end_price");
+			String startP = df.data().get("start_price");
+			String endP = df.data().get("end_price");
 			double startPrice = 0;
 			double endPrice = Double.MAX_VALUE;
 
@@ -778,6 +797,4 @@ public class CouponController extends Controller {
 		}
 		return ok(JSonHelper.couponListToJson(approvedCoupons));
 	}
-	
-	
 }
