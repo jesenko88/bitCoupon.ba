@@ -13,6 +13,7 @@ POST   /api/userProfile               api.JSonOperator.userProfile()
 POST   /api/companyProfile            api.JSonOperator.companyProfile()
 POST   /api/updateUser                api.JSonOperator.updateUser()
 POST   /api/boughtCoupons             api.JSonOperator.showBoughtCoupons()
+POST   /api/boughtCouponDetails       api.JSonOperator.boughtCouponDetail()
 GET    /api/coupons                   api.JSonOperator.coupons()
 # Content negotiation
 GET    /api/categoryList              controllers.CategoryController.listCategories()
@@ -53,7 +54,7 @@ POST   /createNewPassword             controllers.UserController.createNewPasswo
 POST   /pin                           controllers.UserController.newPin(id: Long)
 POST   /buyForUser                    controllers.UserController.buyForUserExecute()
 GET    /buyForUser                    controllers.UserController.buyForUserPage()
-GET		/statisticAsFile			  controllers.UserController.getStatistic()	
+GET    /statisticAsFile               controllers.UserController.getStatistic()	
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)

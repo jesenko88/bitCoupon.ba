@@ -265,4 +265,15 @@ public class JSonOperator extends Controller {
 		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
 	
+	public static Result boughtCouponDetail() {
+		JsonNode json = request().body().asJson();	
+		String userId = json.findPath("userId").textValue();
+		long couponId = Long.parseLong(json.findPath("couponId").textValue());
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(Long.parseLong(userId));
+		if (transactions == null) {
+			return badRequest(new ArrayNode(JsonNodeFactory.instance));
+		}
+		return ok(JSonHelper.boughtCoupon(transactions, couponId));
+	}
+	
 }

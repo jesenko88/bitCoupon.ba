@@ -5,6 +5,7 @@ import java.util.List;
 
 import play.Logger;
 import play.libs.Json;
+import play.twirl.api.Content;
 import models.Category;
 import models.Company;
 import models.Coupon;
@@ -261,6 +262,27 @@ public class JSonHelper {
 			arrayNode.add(transactionNode);
 		}
 		return arrayNode;
+	}
+
+
+	public static ObjectNode boughtCoupon(List<TransactionCP> transactions, long couponId) {
+		ObjectNode transactionDetails = Json.newObject();
+		for (TransactionCP tran : transactions){
+			if ( tran.coupon.id == couponId ) {	
+				transactionDetails.put("transactionId", tran.id); 
+				transactionDetails.put("couponId", tran.coupon.id);
+				transactionDetails.put("name", tran.coupon.name);
+				transactionDetails.put("description", tran.coupon.description);
+				transactionDetails.put("price", tran.coupon.price);
+				transactionDetails.put("quantity", tran.quantity);
+				transactionDetails.put("picture", tran.coupon.picture);
+				transactionDetails.put("totalPrice", tran.totalPrice); 
+				transactionDetails.put("transactionDate", tran.date.toString());
+				transactionDetails.put("paymentId", tran.payment_id);
+				transactionDetails.put("token", tran.token);
+			}
+		}	
+		return transactionDetails;
 	}
 	
 }
