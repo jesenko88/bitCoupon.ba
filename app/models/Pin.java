@@ -52,18 +52,18 @@ public class Pin extends Model {
 	}
 
 	public static String getCode(long id) {
-		User u = User.find(id);
-		Pin p = find.where().eq("user", u).findUnique();
-		if (p != null)
-			return p.code;
+		User user = User.find(id);
+		Pin pin = find.where().eq("user", user).findUnique();
+		if (pin != null)
+			return pin.code;
 		return "";
 	}
 	
 	public static User getPinUser(String pin) {
 		try{
 			Pin userPin = find.where().eq("code", pin).findUnique();
-			User u = userPin.user;
-			return u;
+			User user = userPin.user;
+			return user;
 		}catch(Exception e){
 			Logger.error("No user for pin", e.getMessage());
 			return null;

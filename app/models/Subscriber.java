@@ -51,13 +51,13 @@ public class Subscriber extends Model{
 	
 	/**
 	 * Method which subscribe user to our newsletters.
-	 * @param subscriber
+	 * @param user
 	 * @return
 	 */
-	public static long subscribe(User subscriber){
-		Subscriber s = new Subscriber(subscriber);
-		s.save();
-		return s.id;
+	public static long subscribe(User user){
+		Subscriber subscriber = new Subscriber(user);
+		subscriber.save();
+		return subscriber.id;
 	}
 	
 	/**
@@ -65,8 +65,8 @@ public class Subscriber extends Model{
 	 * @param email
 	 */
 	public static void subscribe(String email){
-		Subscriber s = new Subscriber(email);
-		s.save();
+		Subscriber subscriber = new Subscriber(email);
+		subscriber.save();
 	}
 	
 	/**
@@ -74,8 +74,8 @@ public class Subscriber extends Model{
 	 * @param u
 	 */
 	public static void unsubscribe(User u ){
-		Subscriber s = find.where().eq("subscriber", u).findUnique();
-		s.delete();
+		Subscriber subscriber = find.where().eq("subscriber", u).findUnique();
+		subscriber.delete();
 	}
 	
 	public static void unsubscribe(Subscriber subscriber ){	
@@ -105,10 +105,10 @@ public class Subscriber extends Model{
 	 */
 	public static Subscriber findByToken(String token){
 		List<Subscriber> all = find.all();
-		for(Subscriber s: all){
-			if(s.token.equals(token)){
-				Logger.debug("Subscribers email: " +s.email);
-				return s;
+		for(Subscriber subscriber: all){
+			if(subscriber.token.equals(token)){
+				Logger.debug("Subscribers email: " +subscriber.email);
+				return subscriber;
 			}
 		}
 		 return null;
@@ -120,8 +120,8 @@ public class Subscriber extends Model{
 	 * @return
 	 */
 	public static Subscriber findByEmail(String email){
-		Subscriber temp = find.where().eq("email", email).findUnique();
-		return temp;
+		Subscriber subscriber = find.where().eq("email", email).findUnique();
+		return subscriber;
 	}
 	/**
 	 * Get token from User ( if subscribed)
@@ -129,18 +129,17 @@ public class Subscriber extends Model{
 	 * @return
 	 */
 	public static String getToken(String email){
-		Subscriber s = find.where().eq("email", email).findUnique();
-		Logger.debug(s.token);
-		return s.token;
+		Subscriber subscriber = find.where().eq("email", email).findUnique();		
+		return subscriber.token;
 	}
 	
 	/**
 	 * Check if user is subscribed.
-	 * @param u
+	 * @param user
 	 * @return
 	 */
-	public static boolean isSubscribed(User u){
-		Subscriber current = find.where().eq("subscriber", u).findUnique();
+	public static boolean isSubscribed(User user){
+		Subscriber current = find.where().eq("subscriber", user).findUnique();
 		return current != null;
 	}
 	/**

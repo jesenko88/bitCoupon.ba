@@ -51,7 +51,7 @@ public class User extends SuperUser {
 	
 	public Date updated;
 	
-	public String profilePicture;
+	public String profilePicture = "images/home/No-Logo.jpg";
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -65,7 +65,7 @@ public class User extends SuperUser {
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
 
-	public User(String username, String surname, Date dob, String gender, String adress, String city, String email, String password, boolean isAdmin) {
+	public User(String username, String surname, Date dob, String gender, String adress, String city, String email, String password, boolean isAdmin, String profilePicture) {
 		super(email, password, adress, city);
 		this.username = username;	
 		this.surname = surname;
@@ -74,6 +74,7 @@ public class User extends SuperUser {
 		this.created = new Date();
 		this.isAdmin = isAdmin;
 		this.pin = null;
+		this.profilePicture = profilePicture;
 	}
 
 	/**
@@ -88,8 +89,8 @@ public class User extends SuperUser {
 	 * @return the id of the new user (long)
 	 */
 	public static long createUser(String username, String surname, Date dob, String gender, String adress, String city, String email,
-			String password, boolean isAdmin) {
-		User newUser = new User(username, surname, dob, gender, adress, city, email, password, isAdmin);
+			String password, boolean isAdmin, String profilePicture) {
+		User newUser = new User(username, surname, dob, gender, adress, city, email, password, isAdmin, profilePicture);
 		newUser.save();
 		return newUser.id;
 	}
@@ -118,11 +119,11 @@ public class User extends SuperUser {
 	public static ArrayNode allAsJson() {
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
 		List<User> users = all();
-		for (User u : users) {
+		for (User user : users) {
 			ObjectNode userNode = Json.newObject();
-			userNode.put("username", u.username);
-			userNode.put("isAdmin", u.isAdmin);
-			userNode.put("created", u.created.toString()); // ?
+			userNode.put("username", user.username);
+			userNode.put("isAdmin", user.isAdmin);
+			userNode.put("created", user.created.toString()); // ?
 		}
 		return arrayNode;
 	}
@@ -187,8 +188,8 @@ public class User extends SuperUser {
 	public static List<String> allAdminMails(){	
 		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
 		List<String> emails = new ArrayList<String>();
-		for(User u: userList){
-			emails.add(u.email);
+		for(User user: userList){
+			emails.add(user.email);
 		}
 		return emails;
 	}
@@ -200,9 +201,9 @@ public class User extends SuperUser {
 	public static ArrayNode allAdminMailsJSon(){	
 		List<User> userList =  getFind().where().eq("isAdmin", true).findList();
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
-		for(User u: userList){
+		for(User user: userList){
 			ObjectNode mailAd = Json.newObject();
-			mailAd.put("email", u.email);
+			mailAd.put("email", user.email);
 			arrayNode.add(mailAd);
 		}
 		return arrayNode;

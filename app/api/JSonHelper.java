@@ -56,7 +56,8 @@ public class JSonHelper {
 		userNode.put("email", u.email);
 		userNode.put("adress", u.adress);
 		userNode.put("city", u.city);
-//		userNode.put("profilePicture", u.profilePicture);
+		Logger.debug("PROFILE PICTURE: " +u.profilePicture);
+		userNode.put("profilePicture", u.profilePicture);
 		return userNode;
 	}
 	
