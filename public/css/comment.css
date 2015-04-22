@@ -36,6 +36,13 @@
     max-height:200px;
     overflow:auto;
 }
+
+.questionList {
+    padding:0;
+    list-style:none;
+    max-height:200px;
+    overflow:inherit;
+}
 .commentList li {
     margin:0;
     margin-top:10px;
