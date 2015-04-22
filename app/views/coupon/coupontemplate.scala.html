@@ -128,8 +128,7 @@
                   
                <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span> 
                <label class="pull-left">Number of views @coupon.numOfViews</label>
-               
-
+                              
                </div>
             </div>
          </div>
@@ -170,6 +169,10 @@
                            <a class="report" style="color:red" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
                            </span>
                         </div>
+                        
+                        <div class="rate">
+			 				<input id="rating" value="@comment.rate" name="rating" type="number" class="rating" min=0 max=5 step=1 data-size="xs" >
+                        </div>
                      </li>                     
                      
                      
@@ -182,6 +185,7 @@
                      <div class="form-group">
                         <input class="form-control" id="comment" name="comment" type="text" placeholder="Your comments" />
                      </div>
+                     
                      <div class="form-group">
                         <button type="submit" class="btn btn-default">Comment</button>
                      </div>

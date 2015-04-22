@@ -30,7 +30,12 @@ public class CommentController extends Controller {
 		Coupon coupon = Coupon.find(couponId);
 		User user = Sesija.getCurrentUser(ctx());
 		String comment = dynamicForm.data().get("comment");
-		Comment.create(comment, coupon, user);	
+		String rate = dynamicForm.data().get("rate");
+		if(rate == null) {
+			rate = "0";
+		}
+		Integer intRate = Integer.parseInt(rate);
+		Comment.create(comment, coupon, user, intRate);	
 		return redirect("/coupon/" +couponId);	
 	}
 	

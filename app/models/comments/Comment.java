@@ -41,18 +41,20 @@ public class Comment extends Model{
 	
 	public Date date;
 	
+	public int rate;
 	
 	static Finder<Long, Comment> find = new Finder<Long, Comment>(Long.class, Comment.class);
 	
-	public Comment(String comment, Coupon coupon, User user){
+	public Comment(String comment, Coupon coupon, User user, int rate){
 		this.comment = comment;
 		this.coupon = coupon;
 		this.user = user;
 		this.date = new Date();
+		this.rate = rate;
 	}
 	
-	public static void create(String comment, Coupon coupon, User user){
-		new Comment(comment, coupon, user).save();
+	public static void create(String comment, Coupon coupon, User user, int rate){
+		new Comment(comment, coupon, user, rate).save();
 	}
 	
 	public static void delete(long id){
@@ -72,5 +74,5 @@ public class Comment extends Model{
 	public static Comment findById(long id){
 		return find.where().eq("id", id).findUnique();
 	}
-	
+
 }

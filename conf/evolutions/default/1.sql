@@ -16,6 +16,7 @@ create table comment (
   user_id                   bigint,
   coupon_id                 bigint,
   date                      timestamp,
+  rate                      integer,
   constraint pk_comment primary key (id))
 ;
 
