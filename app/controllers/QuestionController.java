@@ -28,6 +28,7 @@ public class QuestionController extends Controller {
 	 * @param coupon id long
 	 * @return
 	 */
+	
 	public static Result addQuestion(long couponId) {
 		try{
 			Coupon coupon = Coupon.find(couponId);
@@ -35,7 +36,7 @@ public class QuestionController extends Controller {
 			DynamicForm form = Form.form().bindFromRequest();
 			String question = form.data().get("question");
 			if (question.length() > 600){
-				flash("Question should not be longer than 600 characters");
+				flash("error","Question should not be longer than 600 characters");
 				return redirect("/coupon/" + coupon.id);
 			}
 			Question.create(question, "", coupon, user);
@@ -61,7 +62,7 @@ public class QuestionController extends Controller {
 			Question question = Question.findById(questionId);
 			String answer = form.data().get("answer");
 			if (answer.length() > 450){
-				flash("Answer should not be longer than 450 characters");
+				flash("error","Answer should not be longer than 450 characters");
 				return redirect("/coupon/" + question.coupon.id);
 			}
 			question.answer = answer;

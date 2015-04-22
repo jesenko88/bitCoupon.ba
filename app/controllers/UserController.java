@@ -37,7 +37,7 @@ public class UserController extends Controller {
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;
-
+	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	static Form<User> userForm = new Form<User>(User.class);
 
 	/**
@@ -95,7 +95,7 @@ public class UserController extends Controller {
 			else if (User.verifyRegistration(username, mail) == true) {
 				
 				long id = User.createUser(username, surname, dob, gender,
-						adress, city, mail, hashPass, false);
+						adress, city, mail, hashPass, false, defaultPicture);
 				String verificationEmail = EmailVerification.addNewRecord(id);
 				MailHelper.send(mail,"Click on the link below to verify your e-mail adress <br>"
 								+ "http://" + PATH + "/verifyEmail/"

@@ -15,6 +15,7 @@ import models.TransactionCP;
 import models.User;
 import play.Application;
 import play.GlobalSettings;
+import play.Play;
 
 public class Global extends GlobalSettings {
 	String nameCoupon1 = "Uživajte u dvije noći u Hotelu \"Sunce\" u Neumu za dvije osobe uz doručak!";
@@ -44,7 +45,8 @@ public class Global extends GlobalSettings {
 	String contact4 ="033/444-444";
 	String descriptionCoupon4 = "Ovo putovanje objedinjuje italijansku Ligurijsku rivijeru i francusku Azurnu obalu, fantastične predjele i nevjerovatno lijepe gradove... Pružamo Vam priliku da uživate u mirisima lovora, maslina, mora, jasmina i parfema u vazduhu...";
 
-	String pic = "images/home/No-Logo.jpg";
+
+//	String pic = "images/home/avatar.jpg";
 
 	String nameCoupon5 = "Uživajte u vrhunskim delicijama Pivnice Sarajevo uz ručak ili večeru za dvije osobe!";
 	String remarkCoupon5 = "Super cijena za ručak ili večeru za dvije osobe + dva pića po izboru u Pivnici Sarajevo";
@@ -78,14 +80,15 @@ public class Global extends GlobalSettings {
 		long ownedCoupinID1 = 0;
 		long ownedCoupinID2 = 0;
 		int status = Coupon.Status.ACTIVE;
+		String picture = Play.application().configuration().getString("defaultProfilePicture");
 		
 		if ( !Company.exists("Admin")){
-			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), pic, adress, city, contact);
+			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com", HashHelper.createPassword("bitadmin"), new Date(), picture, adress, city, contact);
 			bitCamp.save();
 		}
 		
 		if ( !Company.exists("BitCamp")){
-			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), pic, adress, city, contact);
+			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba", HashHelper.createPassword("bitcamp"), new Date(), picture, adress, city, contact);
 			bitCamp.save();
 		}
 		
@@ -254,14 +257,14 @@ public class Global extends GlobalSettings {
 
 		if (User.check("bitcoupon@gmail.com") == false) {
 			User.createUser("Admin","",new Date(), "","","", "bitcoupon@gmail.com",
-					HashHelper.createPassword("bitadmin"), true);
+					HashHelper.createPassword("bitadmin"), true, picture);
 			EmailVerification setVerified = new EmailVerification(1, true);
 			setVerified.save();
 		}
 		
 		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
 			User user = new User("John","",new Date(),"","","","jesenko.gavric@bitcamp.ba",
-					HashHelper.createPassword("johndoe"), false);
+					HashHelper.createPassword("johndoe"), false, picture);
 			user.save();
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();
@@ -276,7 +279,7 @@ public class Global extends GlobalSettings {
 		
 		if (User.check("vedad.zornic@bitcamp.ba") == false) {
 			User.createUser("Vedad","",new Date(), "","","", "vedad.zornic@bitcamp.ba",
-					HashHelper.createPassword("johndoe"), false);
+					HashHelper.createPassword("johndoe"), false, picture);
 			EmailVerification setVerified = new EmailVerification(3, true);
 			setVerified.save();
 			Subscriber sb = new Subscriber(User.findByEmail("vedad.zornic@bitcamp.ba"));
