@@ -75,4 +75,14 @@ public class Comment extends Model{
 		return find.where().eq("id", id).findUnique();
 	}
 
+	public static double progres(long id) {
+		double percent = 0;
+		Coupon coupon = Coupon.find(id);
+		List<Comment> comments = findByCoupon(coupon);
+		for(int i = 0; i < comments.size(); i++) {
+			percent = comments.get(i).rate;
+		}
+		percent = percent / comments.size();
+		return percent;
+	}
 }

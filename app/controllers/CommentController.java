@@ -32,7 +32,7 @@ public class CommentController extends Controller {
 		String comment = dynamicForm.data().get("comment");
 		String rate = dynamicForm.data().get("rate");
 		if(rate == null) {
-			rate = "0";
+			rate = "3";
 		}
 		Integer intRate = Integer.parseInt(rate);
 		Comment.create(comment, coupon, user, intRate);	
@@ -84,8 +84,6 @@ public class CommentController extends Controller {
 		Report.removeCommentReports(commentId);
 		long userId = Sesija.getCurrent(ctx()).id;
 		return UserController.controlPanel(userId);
-	}
-	
-	
+	}	
 
 }
