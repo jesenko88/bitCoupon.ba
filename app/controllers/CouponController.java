@@ -779,4 +779,13 @@ public class CouponController extends Controller {
 	}
 	
 	
+	public static int leftToSell(long couponId) {
+		Coupon coupon = Coupon.find(couponId);
+		int couponsLeft = coupon.maxOrder - coupon.minOrder;
+		if (couponsLeft > 0)
+			return couponsLeft;
+		return 0;
+	}
+	
+	
 }

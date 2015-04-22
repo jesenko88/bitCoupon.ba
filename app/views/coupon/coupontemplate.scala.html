@@ -80,9 +80,10 @@
                </form>
                }
 
-                @if(coupon.maxOrder <= 0) {
-               <label><h3>Offer succeded </h3></label>
-              	 }
+                @if(coupon.maxOrder <= coupon.minOrder) {
+	               <label><h3>Offer succeded </h3></label>
+	               <br>
+                }
 
                @if(CouponController.isExpired(coupon.id)==true) {
                <label>Coupon has expired </label>
@@ -113,12 +114,15 @@
                   <a href="/refundCoupon/@coupon.id" class="btn btn-fefault cart" onclick="return confirm('Are you sure you want to refund?);">Refund</a>
              	  }
          	   }
-			   <div>
-               <label class="pull-left" >Minimum coupons to be sold:
-               <p><h3>@coupon.minOrder</textarea></h3></p>
+         	   
+      		  @if(CouponController.isExpired(coupon.id)==false) {
+                <div class="pull-left">
+                <label  >
+               <p><h3>@CouponController.leftToSell(coupon.id)</h3> left to for offer success !</p>
                </label>	
                </div>
-               
+              }
+ 
                <div>				
                   <textarea class="focusExpiration" disabled rows="1">@coupon.getExpiration()</textarea>
                </div>

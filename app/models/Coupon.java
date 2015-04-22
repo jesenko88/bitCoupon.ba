@@ -64,7 +64,7 @@ public class Coupon extends Model {
 	public int minOrder;
 
 	public int maxOrder;
-
+		
 	public Date usage;
 
 	public int status;

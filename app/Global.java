@@ -79,6 +79,7 @@ public class Global extends GlobalSettings {
 		Company bitCamp = null;
 		long ownedCoupinID1 = 0;
 		long ownedCoupinID2 = 0;
+		int quantity = 1;
 		int status = Coupon.Status.ACTIVE;
 		String picture = Play.application().configuration().getString("defaultProfilePicture");
 		
@@ -270,10 +271,16 @@ public class Global extends GlobalSettings {
 			setVerified.save();
 			Coupon c1 = Coupon.find(ownedCoupinID1);
 			Coupon c2 = Coupon.find(ownedCoupinID2);
-			TransactionCP.createTransaction("AH-324ASD", c1.price, 1,
+			TransactionCP.createTransaction("AH-324ASD", c1.price, quantity,
 					c1.price, "TOKEN01010", user, c1);
-			TransactionCP.createTransaction("AH-324ASD", c2.price, 1,
+			c1.maxOrder = c1.maxOrder - quantity;
+			c1.statistic.bought(quantity);
+			c1.save();
+			TransactionCP.createTransaction("AH-324ASD", c2.price, quantity,
 					c2.price, "TOKEN2222", user, c2);
+			c2.maxOrder = c2.maxOrder - quantity;
+			c2.statistic.bought(quantity);
+			c2.save();
 			
 		}
 		
