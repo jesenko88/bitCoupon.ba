@@ -658,7 +658,36 @@ public class Coupon extends Model {
 		return byStatus;
 	}
 	
+	/**
+	 * Non static method checks if coupon has expired.
+	 * @return true if coupon has expired, false if it is not.
+	 */
+	public boolean hasExpired(){
+		if(dateExpire.before(new Date()))
+			return true;
+		return false;
+	}
+	/**
+	 * Method checks if selected coupon can or cannot
+	 * be deleted. 
+	 * Coupon may be deleted by company only
+	 * if if it is expired and/or has no buyers.
+	 * @param coupon
+	 * @return
+	 */
+	public  boolean isDeletable(){		
+		if(!hasExpired())
+			return false;
+		if(buyers.size() > 0)
+			return false;
+		return true;					
+	}
 	
+	/**
+	 * List of constants which
+	 * represents status of coupon.
+	 *
+	 */
 	public abstract class Status{
 		
 		public static final int ACTIVE = 1;

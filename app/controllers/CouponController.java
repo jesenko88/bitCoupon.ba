@@ -106,7 +106,19 @@ public class CouponController extends Controller {
 	// TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		try {
-			Coupon coupon = Coupon.find(id);											
+			Coupon coupon = Coupon.find(id);
+			//Check if coupon can be deleted.
+			//Only companies have this check.
+			if(Sesija.getCurrent(ctx()).isCompany()){
+				if(!coupon.isDeletable()){
+					Logger.info("Company " +session("name") 
+							+" tried to delete coupon which cannot"
+							+ " be deleted");
+					flash("error", "This coupon cannot be deleted."
+							+ " Please contact admin for more info.");
+					return showCoupon(id);
+				}					
+			}
 			Logger.info(session("name") + " deleted coupon: \"" + coupon.name + "\"");			
 			Coupon.delete(id);
 			return redirect("/");
