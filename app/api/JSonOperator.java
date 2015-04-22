@@ -25,7 +25,12 @@ public class JSonOperator extends Controller {
 	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	
 	/**
-	 * TODO comments
+	 * Method for login. Reads the values from a JsonNode by checking
+	 * the tags named: "email" and "password"
+	 * If the login is successful, user/company details are returned in JSon format.
+	 * Details returned tag names:
+	 * -for user: id, name, surname, email, address, city, picture 
+	 * -for company: id, name, email, address, city, contact, logo
 	 * @return
 	 */
 	public static Result login() {

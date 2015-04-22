@@ -55,7 +55,7 @@ public class JSonHelper {
 		userNode.put("name", u.username);
 		userNode.put("surname", u.surname);
 		userNode.put("email", u.email);
-		userNode.put("adress", u.adress);
+		userNode.put("address", u.adress);
 		userNode.put("city", u.city);
 		userNode.put("picture", u.profilePicture);
 		return userNode;
@@ -68,7 +68,7 @@ public class JSonHelper {
 		companyNode.put("id", company.id);
 		companyNode.put("name", company.name);
 		companyNode.put("email", company.email);
-		companyNode.put("adress", company.adress);
+		companyNode.put("address", company.adress);
 		companyNode.put("city", company.city);
 		companyNode.put("contact", company.contact);
 		companyNode.put("logo", company.logo);
@@ -147,6 +147,7 @@ public class JSonHelper {
 			ObjectNode companyNode = Json.newObject();
 			companyNode.put("id", company.id);
 			companyNode.put("name", company.name);
+			companyNode.put("email", company.email);
 			companyNode.put("logo", company.logo); 
 			arrayNode.add(companyNode);
 		}

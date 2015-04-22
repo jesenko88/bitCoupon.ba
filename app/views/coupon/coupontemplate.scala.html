@@ -260,13 +260,15 @@
                   
                   @if(Sesija.getCurrent(ctx()) != null){
                   @if(Sesija.getCurrent(ctx()).isUser()){
-                  <form class="form" action="@routes.QuestionController.addQuestion(coupon.id)" method="POST">
+             <!-- <form class="form" id="questionForm">   -->	
+                 <form class="form" action="@routes.QuestionController.addQuestion(coupon.id)" method="POST">   
                      <div class="form-group">
                   <!--  <input class="form-control" id="question" name="question" type="text" placeholder="Your question" />-->
                         <textarea class="form-control" rows="5" id="question" name="question" placeholder="Your question" required></textarea>
                      </div>
                      <div class="form-group">
-                        <button type="submit" class="btn btn-default">Submit question</button>
+                      <button type="submit" class="btn btn-default">Submit question</button>   
+                   <!--  			 <button type="submit" id="question-button"  class="btn btn-default">Submit question</button>    -->s
                      </div>
                   </form>    
    
@@ -299,8 +301,9 @@
 							}
 						
 			 		</script>
-														
-			              
+			 		
+			 		
+
 
 
 }
