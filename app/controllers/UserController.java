@@ -11,6 +11,7 @@ import helpers.FileUpload;
 import helpers.SuperUserFilter;
 
 import java.util.List;
+
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -43,7 +44,7 @@ public class UserController extends Controller {
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;
-
+	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	static Form<User> userForm = new Form<User>(User.class);
 
 	/**
@@ -75,19 +76,7 @@ public class UserController extends Controller {
 			String confPass = userForm.bindFromRequest()
 					.field("confirmPassword").value();
 
-			if (username.length() < 4 || username.equals("Username")) {
-				flash("error", "Usernam must be at least 4 chatacters");
-				return badRequest(signup.render(submit, new Form<Company>(
-						Company.class)));
-			} else if (mail.equals("Email")) {
-				flash("error", "Email is required for registration !");
-				return badRequest(signup.render(submit, new Form<Company>(
-						Company.class)));
-			} else if (password.length() < 6) {
-				flash("error", "Password must be at least 6 characters!");
-				return badRequest(signup.render(submit, new Form<Company>(
-						Company.class)));
-			} else if (!password.equals(confPass)) {
+			if (!password.equals(confPass)) {
 				flash("error", "Passwords don't match, try again ");
 				return badRequest(signup.render(submit, new Form<Company>(
 						Company.class)));
@@ -101,7 +90,7 @@ public class UserController extends Controller {
 			else if (User.verifyRegistration(username, mail) == true) {
 
 				long id = User.createUser(username, surname, dob, gender,
-						adress, city, mail, hashPass, false);
+						adress, city, mail, hashPass, false, defaultPicture);
 				String verificationEmail = EmailVerification.addNewRecord(id);
 				MailHelper.send(mail,
 						"Click on the link below to verify your e-mail adress <br>"
@@ -418,10 +407,7 @@ public class UserController extends Controller {
 		if (transactions == null) {
 			transactions = new ArrayList<TransactionCP>();
 		}
-		if (request().accepts("text/html")) {
-			return ok(boughtCoupons.render(session("name"), transactions));
-		}
-		return ok(JSonHelper.transactionListToJSon(transactions));
+		return ok(boughtCoupons.render(session("name"), transactions));
 	}
 
 	// TODO comment
@@ -455,6 +441,7 @@ public class UserController extends Controller {
 		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
 		int quantity = Integer.parseInt(dynamicForm.data().get("quantity"));
 		Coupon coupon = Coupon.find(id);
+
 		User client = User.find(Long.parseLong(dynamicForm.data()
 				.get("user_id")));
 		if (client == null) {
@@ -465,8 +452,21 @@ public class UserController extends Controller {
 				coupon.price, quantity, totalPrice, "", client, coupon);
 		Coupon c = Coupon.find(id);
 		c.seller.notifications++;
+		c.seller.save();
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
-
+	
+	/**
+	 * Method returns statistic excel file as download.
+	 * @return
+	 */
+	@Security.Authenticated(AdminFilter.class)
+	public static Result getStatistic(){
+		File stats = Statistic.createStatisticsFile();
+		response().setContentType("application/x-download");  
+		response().setHeader("Content-disposition","attachment; filename=statistics.xls");
+		return ok(stats);
+	
+	}
 }

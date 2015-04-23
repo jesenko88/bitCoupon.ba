@@ -25,6 +25,7 @@ import com.google.common.io.Files;
 
 import models.Category;
 import models.comments.Comment;
+import models.questions.Question;
 import models.Company;
 import models.Coupon;
 import models.Photo;
@@ -78,21 +79,19 @@ public class CouponController extends Controller {
 	/**
 	 * Finds coupon using id and shows it
 	 * 
-	 * @param id
-	 *            - Coupon id
+	 * @param id  - Coupon id
 	 * @return redirect to the Coupon view
 	 */
 	public static Result showCoupon(long id) {
 		if(Sesija.companyCheck(ctx()) == true)
 			TransactionCP.allFromCompany(Sesija.getCurrentCompany(ctx()).id).clear();
 		Coupon coupon = Coupon.find(id);
-		coupon.numOfViews ++;
-		coupon.save();
-			if(coupon == null ){
-				Logger.error("error", "Coupon null at showCoupon()");
-				flash("error", "Ooops, error has occured.");
-				return redirect("/");
-			}
+		if(coupon == null ){
+			Logger.error("error", "Coupon null at showCoupon()");
+			flash("error", "Ooops, error has occured.");
+			return redirect("/");
+		}
+		coupon.statistic.visited();;
 			return ok(coupontemplate.render(coupon));
 	}
 
@@ -106,7 +105,19 @@ public class CouponController extends Controller {
 	// TODO admin filter after determining the company rights
 	public static Result deleteCoupon(long id) {
 		try {
-			Coupon coupon = Coupon.find(id);											
+			Coupon coupon = Coupon.find(id);
+			//Check if coupon can be deleted.
+			//Only companies have this check.
+			if(Sesija.getCurrent(ctx()).isCompany()){
+				if(!coupon.isDeletable()){
+					Logger.info("Company " +session("name") 
+							+" tried to delete coupon which cannot"
+							+ " be deleted");
+					flash("error", "This coupon cannot be deleted."
+							+ " Please contact admin for more info.");
+					return showCoupon(id);
+				}					
+			}
 			Logger.info(session("name") + " deleted coupon: \"" + coupon.name + "\"");			
 			Coupon.delete(id);
 			return redirect("/");
@@ -768,6 +779,15 @@ public class CouponController extends Controller {
 			return ok(couponsAll.render(approvedCoupons, nonApprovedCoupons));
 		}
 		return ok(JSonHelper.couponListToJson(approvedCoupons));
+	}
+	
+	
+	public static int leftToSell(long couponId) {
+		Coupon coupon = Coupon.find(couponId);
+		int couponsLeft = coupon.maxOrder - coupon.minOrder;
+		if (couponsLeft > 0)
+			return couponsLeft;
+		return 0;
 	}
 	
 	

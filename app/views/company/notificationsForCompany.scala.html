@@ -1,5 +1,6 @@
 @(transactions: List[TransactionCP])
 @import helper._
+@import models.questions._
 @main("Bought coupons") {
 @*	
 <h2>@message @name</h2>
@@ -22,6 +23,22 @@
    </header>
    <div class="container">
    
+ <h2 class="title text-center">Notifications</h2> 
+ 
+     <div class="container">
+      @for(question <- Question.newQuestions(Sesija.getCurrentCompany(ctx()).id)){
+      	
+     
+         <ul class="actionBox">
+		
+          <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question for coupon ID: @question.coupon.id</a> </li>
+		</ul>
+
+      }
+      </div> 
+ 
+ 
+ 
  <h2 class="title text-center">Sold coupons</h2> 
    <div class="container">
       @for(transaction <- transactions){
@@ -46,9 +63,12 @@
       </div>
 	</ul> 
       }
-      </div>
-      
-  
-      
+      </div>    
    </div>
+   
+   
+   
+   
+   
+   
    }

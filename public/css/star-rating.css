@@ -145,16 +145,6 @@
     font-size: 2em;
 }
 
-/**
- * Clear rating button
- */
-.star-rating .clear-rating, .star-rating-rtl .clear-rating {
-    color: #aaa;
-    cursor: not-allowed;
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 60%;
-}
 
 .clear-rating-active {
     cursor: pointer !important;
@@ -166,20 +156,6 @@
 
 .star-rating .clear-rating {
     padding-right: 5px;
-}
-
-/**
- * Caption
- */
-.star-rating .caption, .star-rating-rtl .caption {
-    color: #999;
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 55%;
-}
-
-.star-rating .caption {
-    padding-left: 5px;
 }
 
 .star-rating-rtl .caption {

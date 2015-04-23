@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import models.questions.Question;
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -63,12 +64,16 @@ public class Coupon extends Model {
 	public int minOrder;
 
 	public int maxOrder;
-
+		
 	public Date usage;
 
 	public int status;
 	
-	public int numOfViews;
+	@OneToOne
+	public Statistic statistic;
+	
+	@OneToMany(mappedBy = "coupon")
+	public List<Question> questions;
 	
 	/*
 	 * public String code;
@@ -121,8 +126,7 @@ public class Coupon extends Model {
 		this.maxOrder = maxOrder;
 		this.usage = usage;
 		this.seller = seller;
-		this.status = Status.DEFAULT;
-		this.numOfViews = 0;
+		this.status = Status.DEFAULT;		
 	}
 	
 	/*TODO coupons for empty fields */
@@ -145,7 +149,12 @@ public class Coupon extends Model {
 		
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark);
+		newCoupon.save();	
+		Statistic statistic = Statistic.createStatistic(newCoupon);
+		newCoupon.statistic = statistic;
 		newCoupon.save();
+		//Creating statistic for each coupon created.
+				
 		return newCoupon.id;
 	}
 
@@ -161,7 +170,10 @@ public class Coupon extends Model {
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage,
 				seller);
-		newCoupon.save();
+		newCoupon.save();	
+		Statistic statistic = Statistic.createStatistic(newCoupon);
+		newCoupon.statistic = statistic;
+		newCoupon.save();				
 		return newCoupon.id;
 	}
 
@@ -176,10 +188,12 @@ public class Coupon extends Model {
 		// Logger.debug(category.name);
 		Coupon newCoupon = new Coupon(name, price, dateExpire, picture,
 				category, description, remark, minOrder, maxOrder, usage,
-				seller);
-		newCoupon.numOfViews = 0;
+				seller);		
 		newCoupon.status = status;
-		newCoupon.save();
+		newCoupon.save();	
+		Statistic statistic = Statistic.createStatistic(newCoupon);
+		newCoupon.statistic = statistic;
+		newCoupon.save();			
 		return newCoupon.id;
 	}
 
@@ -644,7 +658,36 @@ public class Coupon extends Model {
 		return byStatus;
 	}
 	
+	/**
+	 * Non static method checks if coupon has expired.
+	 * @return true if coupon has expired, false if it is not.
+	 */
+	public boolean hasExpired(){
+		if(dateExpire.before(new Date()))
+			return true;
+		return false;
+	}
+	/**
+	 * Method checks if selected coupon can or cannot
+	 * be deleted. 
+	 * Coupon may be deleted by company only
+	 * if if it is expired and/or has no buyers.
+	 * @param coupon
+	 * @return
+	 */
+	public  boolean isDeletable(){		
+		if(!hasExpired())
+			return false;
+		if(buyers.size() > 0)
+			return false;
+		return true;					
+	}
 	
+	/**
+	 * List of constants which
+	 * represents status of coupon.
+	 *
+	 */
 	public abstract class Status{
 		
 		public static final int ACTIVE = 1;

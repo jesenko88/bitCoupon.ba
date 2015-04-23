@@ -15,6 +15,7 @@
 			</div>		
 		</div>
 	</header>
+	
    <div id="someId" class="container">
       <div class="features_items">
          <!--features_items-->
@@ -38,12 +39,15 @@
 				 		</div>
 					</div>
 					}
+			
                   <!-- onchange="form.confirmPassword.pattern = this.value;" -->
                   <input class="form-control" value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
                   <p> <input class="form-control" value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"/></p>
 				  <p> <input class="form-control" value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "/></p>
 				  <br>
-                  <input class="form-control" value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
+              <div class="form-group">
+                  <input class='@("has-error".when(myForm("username").hasErrors)) form-control'  value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
+               </div>
                   <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	<br>
                   <br>
 
@@ -60,6 +64,8 @@
                   <br>
                   <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
                </form>
+               
+              
             </div>
             
             <!--/sign up form-->

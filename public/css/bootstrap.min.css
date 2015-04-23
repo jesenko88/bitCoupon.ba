@@ -1903,6 +1903,10 @@ textarea.input-lg {
 	border-color: #a94442
 }
 
+.error-input .form-control{
+	border-color: red;
+}
+
 .has-success .help-block, .has-success .control-label, .has-success .radio,
 	.has-success .checkbox, .has-success .radio-inline, .has-success .checkbox-inline
 	{
@@ -2370,10 +2374,12 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 	font-weight: normal;
 	line-height: 1;
 	-moz-osx-font-smoothing: grayscale
+	visibility: hidden;
 }
 
 .glyphicon:empty {
-	width: 1em
+	width: 1em;
+	visibility: hidden;
 }
 
 .glyphicon-asterisk:before {

@@ -36,6 +36,13 @@
     max-height:200px;
     overflow:auto;
 }
+
+.questionList {
+    padding:0;
+    list-style:none;
+    max-height:200px;
+    overflow:inherit;
+}
 .commentList li {
     margin:0;
     margin-top:10px;
@@ -53,6 +60,18 @@
     width:100%;
     border-radius:50%;
 }
+
+.askerImage {
+    width:30px;
+    margin:5px 9px 0px 3px;
+    height:100%;
+    float:left;
+}
+
+.askerImage img {
+    width:100%;
+    border-radius:50%;
+}
 .commentText p {
     margin:0;
 }
@@ -65,3 +84,26 @@
     border-top:1px dotted #bbb;
     padding:10px;
 }
+
+.questionRow {
+    padding:0;
+    list-style:none;
+    border: 1px solid #bbb;
+    border-radius: 9px;
+    max-height:200px;
+    overflow:auto;
+}
+
+.answerText company-color{
+	color: #FE980F;
+    margin:0;
+}
+
+.answerList li {
+    margin:0;
+    margin-top:10px;
+    margin-bottom: 40px;
+}
+
+
+

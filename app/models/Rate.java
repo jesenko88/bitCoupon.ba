@@ -82,8 +82,12 @@ public class Rate extends Model {
 		for(int i = 0; i < rates.size(); i++) {
 			progress = rates.get(i).rate;
 		}
+		if(rates.size() > 0) {
 		progress = (int)(progress / rates.size());
 		return progress;
+		} else 
+			return 0;
+		
 	}
 	
 	public static boolean alreadyRate(long userId) {

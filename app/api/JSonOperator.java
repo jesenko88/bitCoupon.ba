@@ -1,15 +1,12 @@
 package api;
 
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
-
-import javax.mail.internet.ParseException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import helpers.*;
 import models.*;
@@ -25,9 +22,15 @@ import views.html.*;
 public class JSonOperator extends Controller {
 	
 	static String PATH = Play.application().configuration().getString("PATH");
+	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	
 	/**
-	 * TODO comments
+	 * Method for login. Reads the values from a JsonNode by checking
+	 * the tags named: "email" and "password"
+	 * If the login is successful, user/company details are returned in JSon format.
+	 * Details returned tag names:
+	 * -for user: id, name, surname, email, address, city, picture 
+	 * -for company: id, name, email, address, city, contact, logo
 	 * @return
 	 */
 	public static Result login() {
@@ -97,7 +100,7 @@ public class JSonOperator extends Controller {
 			try {
 				Date dayOfBirth = DateHelper.getDate(dob);
 				String hashPass = HashHelper.createPassword(password);
-				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false);
+				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false, defaultPicture);
 				EmailVerification.makeNewRecord(id, true);
 				return ok(JSonHelper.messageToJSon("info","You are successfuly registered! "
 												+ "You can now login with the following email: " + email));
@@ -254,6 +257,28 @@ public class JSonOperator extends Controller {
 				Logger.error("Error at updateUser: " + e.getMessage(), e);
 				return badRequest(JSonHelper.messageToJSon("error","Internal server error"));
 			}		
+	}
+	
+	
+	public static Result showBoughtCoupons() {
+		JsonNode json = request().body().asJson();
+		String id = json.findPath("userId").textValue();
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(Long.parseLong(id));
+		if (transactions == null) {
+			return badRequest(new ArrayNode(JsonNodeFactory.instance));
+		}
+		return ok(JSonHelper.transactionListToJSon(transactions));
+	}
+	
+	public static Result boughtCouponDetail() {
+		JsonNode json = request().body().asJson();	
+		String userId = json.findPath("userId").textValue();
+		long couponId = Long.parseLong(json.findPath("couponId").textValue());
+		List<TransactionCP> transactions = TransactionCP.allFromBuyer(Long.parseLong(userId));
+		if (transactions == null) {
+			return badRequest(new ArrayNode(JsonNodeFactory.instance));
+		}
+		return ok(JSonHelper.boughtCoupon(transactions, couponId));
 	}
 	
 }
