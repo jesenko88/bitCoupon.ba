@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import models.User;
-import models.questions.Question;
 import play.db.ebean.Model;
 
 /**
