@@ -96,6 +96,7 @@ GET    /report/:id                    controllers.CommentController.report(id: S
 GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
 GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
 
+POST   /rate/:id                      controllers.RateController.rating(id: Long)
 
 # FAQ controller 
 POST   /addFAQ                        controllers.FAQController.addFAQ()
