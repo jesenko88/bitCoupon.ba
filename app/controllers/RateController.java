@@ -1,7 +1,10 @@
 package controllers;
 
+import java.util.List;
+
 import models.Coupon;
 import models.Rate;
+import models.TransactionCP;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -24,8 +27,9 @@ public class RateController extends Controller {
 		if(rate == null) {
 			rate = "5";
 		}
-		Integer intRate = Integer.parseInt(rate);
+		double intRate = Double.parseDouble(rate);
 		Rate.create(intRate, user, coupon);	
 		return redirect("/coupon/" +couponId);	
 	}
+
 }

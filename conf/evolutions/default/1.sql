@@ -99,7 +99,7 @@ create table question (
 
 create table rate (
   id                        bigint not null,
-  rate                      integer,
+  rate                      double,
   user_id                   bigint,
   coupon_id                 bigint,
   date                      timestamp,
