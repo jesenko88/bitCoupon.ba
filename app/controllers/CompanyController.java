@@ -335,4 +335,11 @@ public class CompanyController extends Controller {
 		return ok(searchCompany.render(searchedCompanies));
 	}
 		
+	public static Result notifications(long id) {
+		Company c = Company.findById(id);
+		c.notifications = 0;
+		c.save();
+		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
+		return ok(notificationsForCompany.render(transactions));
+	}
 }

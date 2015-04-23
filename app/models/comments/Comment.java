@@ -6,6 +6,7 @@ package models.comments;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -28,6 +29,7 @@ public class Comment extends Model{
 	public long id;
 
 	@Required
+	@Column(columnDefinition = "TEXT")
 	public String comment;
 	
 	@ManyToOne
@@ -40,8 +42,7 @@ public class Comment extends Model{
 	public Report report;
 	
 	public Date date;
-	
-	
+		
 	static Finder<Long, Comment> find = new Finder<Long, Comment>(Long.class, Comment.class);
 	
 	public Comment(String comment, Coupon coupon, User user){
@@ -51,8 +52,10 @@ public class Comment extends Model{
 		this.date = new Date();
 	}
 	
-	public static void create(String comment, Coupon coupon, User user){
-		new Comment(comment, coupon, user).save();
+	public static long create(String comment, Coupon coupon, User user){
+		Comment comm = new Comment(comment, coupon, user);
+		comm.save();
+		return comm.id;
 	}
 	
 	public static void delete(long id){
@@ -72,5 +75,4 @@ public class Comment extends Model{
 	public static Comment findById(long id){
 		return find.where().eq("id", id).findUnique();
 	}
-	
 }

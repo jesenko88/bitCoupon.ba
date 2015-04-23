@@ -40,7 +40,8 @@ public class QuestionController extends Controller {
 				return badRequest();
 			}
 			long id = Question.create(question, "", coupon, user);
-			CouponController.notifications ++;
+			coupon.seller.notifications ++;
+			coupon.seller.save();
 			return ok(questionLine.render(Question.findById(id), coupon));
 		}catch(Exception e){
 			Logger.error(e.getMessage(), e);

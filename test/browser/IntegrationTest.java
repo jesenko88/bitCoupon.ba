@@ -1,3 +1,4 @@
+package browser;
 import helpers.HashHelper;
 
 import java.text.DateFormat;
@@ -13,10 +14,9 @@ import models.Pin;
 import models.User;
 
 import org.junit.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import play.Play;
 import play.test.*;
 import play.libs.F.*;
 import static play.test.Helpers.*;
@@ -85,7 +85,8 @@ public class IntegrationTest {
 				new HtmlUnitDriver(), new Callback<TestBrowser>() {
 					public void invoke(TestBrowser browser) {
 						long id = User.createUser("steven", "hawking", new Date(),"male","adress", "city", 
-										"hawking@mail.com",HashHelper.createPassword("123456"), false);
+										"hawking@mail.com",HashHelper.createPassword("123456"), false,
+										Play.application().configuration().getString("defaultProfilePicture"));
 						EmailVerification.makeNewRecord(id, true);
 						browser.goTo("http://localhost:3333/loginpage");
 						assertThat(browser.pageSource().contains("LOGIN"));
@@ -112,12 +113,14 @@ public class IntegrationTest {
 						
 						/* creating administrator */
 						long adminId = User.createUser("nikola", "tesla", new Date(),"male","adress", "city", 
-								"tesla@mail.com",HashHelper.createPassword("123456"), true);
+								"tesla@mail.com",HashHelper.createPassword("123456"), true,
+								Play.application().configuration().getString("defaultProfilePicture"));
 						EmailVerification.makeNewRecord(adminId, true);
 						
 						/* creating regular user without admin rights*/
 						long userId = User.createUser("regUser", "hawking", new Date(),"male","adress", "city", 
-								"regUser@mail.com",HashHelper.createPassword("123456"), false);
+								"regUser@mail.com",HashHelper.createPassword("123456"), false,
+								Play.application().configuration().getString("defaultProfilePicture"));
 						EmailVerification.makeNewRecord(userId, true);
 						
 						/* loging in as regular user */
@@ -146,7 +149,7 @@ public class IntegrationTest {
 						Category category = new Category("TestCategory");
 						category.save();
 						Coupon c = new Coupon("TestCoupon", 55.4, new Date(), "picturePath", category, "description","remark");
-						c.status = true;
+						c.status = Coupon.Status.ACTIVE;
 						c.save();
 						browser.goTo("http://localhost:3333/");
 						assertThat(browser.pageSource()).contains("TestCoupon");
@@ -166,7 +169,7 @@ public class IntegrationTest {
 						Category category = new Category("TestCategory");
 						category.save();
 						Coupon c = new Coupon("TestCoupon", 55.4, new Date(), "picturePath", category, "description","remark");
-						c.status = true;
+						c.status = Coupon.Status.ACTIVE;
 						c.save();
 						Coupon.delete(c.id);
 						browser.goTo("http://localhost:3333/");
@@ -187,10 +190,10 @@ public class IntegrationTest {
 				Category category = new Category("TestCategory");
 				category.save();
             	Coupon mars = new Coupon("Mars", 55.4, new Date(), "picturePath", category, "description","remark");
-				mars.status = true;
+				mars.status = Coupon.Status.ACTIVE;
 				mars.save();
 				Coupon jupiter = new Coupon("Jupiter", 55.4, new Date(), "picturePath", category, "description","remark");
-				jupiter.status = true;
+				jupiter.status = Coupon.Status.ACTIVE;
 				jupiter.save();
                 browser.goTo("http://localhost:3333/search?q=mars");
                 assertThat(browser.pageSource()).contains("Mars");
@@ -214,13 +217,13 @@ public class IntegrationTest {
 			    company.save();
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date expiredDate = df.parse("08/10/1988");		
-				Coupon coupon = 	new Coupon("TestCoupon", 55.4, expiredDate, "picturePath",category, "description", "remark",2, 5, new Date(), company);	
-				coupon.status = true;
+				Coupon coupon = 	new Coupon("TestCoupon", 55.4, expiredDate, "picturePath",category, "Test description", "remark",2, 5, new Date(), company);	
+				coupon.status = Coupon.Status.EXPIRED;
 				coupon.save();
 				
 				browser.goTo("http://localhost:3333/coupon/" + coupon.id);              
-                assertThat(browser.pageSource()).contains("Coupon has expired ");
-                assertThat(browser.pageSource()).doesNotContain("Enter the amount of coupons");
+                assertThat(browser.pageSource()).doesNotContain("TestCoupon");
+                assertThat(browser.pageSource()).doesNotContain("Test description");
             }
         });
 		
@@ -242,7 +245,7 @@ public class IntegrationTest {
 						Date expiration = df.parse("08/10/2050");
 						Company company = new Company("Company", "email", "password", new Date(), "logo", "adress", "city", "contact");
 						company.save();
-		            	long id = Coupon.createCoupon("Hawai", 45, expiration, "pic", category, "desc", "rem", 2, maxOrder, null, company, true);
+		            	long id = Coupon.createCoupon("Hawai", 45, expiration, "pic", category, "desc", "rem", 2, maxOrder, null, company, Coupon.Status.ACTIVE);
 						browser.goTo("http://localhost:3333/coupon/" + id);
 						browser.fill("#quantity").with(invaliQuantity);
 						browser.submit("#submit-buy");
@@ -274,18 +277,20 @@ public class IntegrationTest {
 						Date expiration = df.parse("08/10/2050");
 						Company company = new Company("Company", "email", "password", new Date(), "logo", "adress", "city", "contact");
 						company.save();
-		            	long couponId = Coupon.createCoupon("Hawai", 45, expiration, "pic", category, "desc", "rem", 2, 5, new Date(), company, true);
+		            	long couponId = Coupon.createCoupon("Hawai", 45, expiration, "pic", category, "desc", "rem", 2, 5, new Date(), company, Coupon.Status.ACTIVE);
 					
 		            	//creating customer
 						User lucky = new User("buyer", "lucky", new Date(), "female", "adress", "city", 
-								"lucky@mail.com", HashHelper.createPassword("123456"), false);
+								"lucky@mail.com", HashHelper.createPassword("123456"), false,
+								Play.application().configuration().getString("defaultProfilePicture"));
 						lucky.save();
 						EmailVerification.makeNewRecord(lucky.id, true);
 						Pin pin = Pin.generatePin(lucky);
 						
 						//creating administrator
 						User admin = new User("AdminNN", "worker", new Date(), "female", "adress", "city", 
-								"adminNN@mail.com", HashHelper.createPassword("123456"), true);
+								"adminNN@mail.com", HashHelper.createPassword("123456"), true,
+								Play.application().configuration().getString("defaultProfilePicture"));
 						admin.save();
 						EmailVerification.makeNewRecord(admin.id, true);
 						

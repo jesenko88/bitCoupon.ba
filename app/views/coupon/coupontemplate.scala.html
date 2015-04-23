@@ -1,10 +1,15 @@
 @(coupon: Coupon)
-@import models.comments._
 
+@import models.comments._
+@import models._
 @import java.math.BigInteger; var i=0
 @main("Welcome to bitCoupon") {
 	
 <header id="header">
+<link href="@routes.Assets.at("css/star-rating.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
+      <script src="@routes.Assets.at("js/star-rating.js")"></script>
+      <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
    <!--header-->
    <div class="header-middle">
       <!--header-middle-->
@@ -59,15 +64,34 @@
             <span class="sr-only">Next</span>
             </a>
          </div>
+         
+                     <!-- ratings -->
+      		<br>
+            <div>
+      @if(Sesija.getCurrentUser(ctx()) != null && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
+      <label>Rate this coupon</label>
+      	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
+       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+       	<br/>
+       	<button type="submit" class="btn btn-default">Rate</button>
+  		</form>
+  		}
+  		</div>
+      
+      <!--/ratings -->
+         
       </div>
       <!-- END OF SLIDER -->	
+      
+
+
       <div class="col-sm-6">
          <div class="product-information">
             <!--/product-information-->
             <div class="col-sm-12">
                <h2> @coupon.name </h2>
                <span>
-               <span> @coupon.getPriceString() KM</span>
+               <p id="spanPrice"> @coupon.getPriceString() KM</p>
                @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false) {
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
                <label>Enter the amount of coupons </label>
@@ -127,7 +151,17 @@
                   <textarea class="focusExpiration" disabled rows="1">@coupon.getExpiration()</textarea>
                </div>
                <br>
-               <div>
+               
+                <!-- rate preview -->
+             
+				<div class="rate">
+				<label class="pull-left">Coupon rate</label>
+			       <input id="rating" value="@Rate.progres(coupon.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
+                 </div>
+				<!-- /rate preview -->
+               
+               
+               <div class="pull-left">
                   <label>Description</label>
                   <p/>@coupon.description</p>
                </div>
@@ -135,18 +169,23 @@
                <div>
                   <label class="pull-left" >Remark</label>
                   <textarea disabled rows="4">@coupon.remark</textarea>
+                  </br>
+                  </br>
                   <label class="pull-left">Published by</label>
 
-                  
-               <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span> 
-               <label class="pull-left">Number of views @coupon.statistic.visited</label>
-               
-
+               <a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a>
+               </br>
+               </br>
                </div>
-            </div>
-         </div>
+            
+               <label class="pull-left">Number of views @coupon.statistic.visited</label>           
+               </br>
+               </br>
+              
+               </div>
          <!--/product-information-->
       </div>
+
    </div>
 </div>
 <!-- COMMENTS AND QUESTIONS -->
@@ -179,9 +218,10 @@
                            <p class="">@comment.comment</p>
                            <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
                            <span style="margin-left:20px" title="Report this comment">
-                           <a class="report" style="color:red" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
+                           <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
                            </span>
                         </div>
+
                      </li>                     
                      
                      
@@ -190,9 +230,10 @@
                   <br><br><br>
                   @if(Sesija.getCurrent(ctx()) != null){
                   @if(Sesija.getCurrent(ctx()).isUser()){
+
                   <form class="form" action="@routes.CommentController.comment(coupon.id)" method="POST">
                      <div class="form-group">
-                        <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments"></textarea>
+                        <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments" required></textarea>
                      </div>
                      <div class="form-group">
                         <button type="submit" class="btn btn-default">Comment</button>
@@ -269,8 +310,9 @@
                         <textarea class="form-control" rows="5" id="question" name="question" placeholder="Your question" required></textarea>
                      </div>
                      <div class="form-group">
-                      
+    
                 	  <button type="submit" id="question-button"  class="btn btn-default">Submit question</button>    
+
                      </div>
                   </form>    
    
@@ -327,9 +369,17 @@
 				 			  });	
 						
 			 		</script>
-			 		
-			 		
-
+														
+			        <script>
+			        jQuery(document).ready(function() {
+			            $('.auto-submit-star').rating({
+			                callback: function(value, link){
+			                    alert(value);
+			                    this.rating('disable');
+			                }
+			            });
+			        });
+			        </script>
 
 
 }

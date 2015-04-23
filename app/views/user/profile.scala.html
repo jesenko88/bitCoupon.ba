@@ -110,7 +110,7 @@
                      <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
                      <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
 
-			       	<li><a href="@routes.CouponController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@CouponController.notifications</i>Notifications</a></li>
+			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i>Notifications</a></li>
                   	
                   </ul>
                </div>

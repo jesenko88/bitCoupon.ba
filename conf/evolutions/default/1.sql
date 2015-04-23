@@ -12,7 +12,7 @@ create table category (
 
 create table comment (
   id                        bigint not null,
-  comment                   varchar(255),
+  comment                   TEXT,
   user_id                   bigint,
   coupon_id                 bigint,
   date                      timestamp,
@@ -30,6 +30,7 @@ create table company (
   updated                   timestamp,
   logo                      varchar(255),
   contact                   varchar(255),
+  notifications             integer,
   constraint pk_company primary key (id))
 ;
 
@@ -94,6 +95,15 @@ create table question (
   answer_date               timestamp,
   new_question              boolean,
   constraint pk_question primary key (id))
+;
+
+create table rate (
+  id                        bigint not null,
+  rate                      integer,
+  user_id                   bigint,
+  coupon_id                 bigint,
+  date                      timestamp,
+  constraint pk_rate primary key (id))
 ;
 
 create table report (
@@ -175,6 +185,8 @@ create sequence pin_seq;
 
 create sequence question_seq;
 
+create sequence rate_seq;
+
 create sequence report_seq;
 
 create sequence reset_pasword_seq;
@@ -207,18 +219,22 @@ alter table question add constraint fk_question_company_9 foreign key (company_i
 create index ix_question_company_9 on question (company_id);
 alter table question add constraint fk_question_coupon_10 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
 create index ix_question_coupon_10 on question (coupon_id);
-alter table report add constraint fk_report_comment_11 foreign key (comment_id) references comment (id) on delete restrict on update restrict;
-create index ix_report_comment_11 on report (comment_id);
-alter table report add constraint fk_report_user_12 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_report_user_12 on report (user_id);
-alter table statistic add constraint fk_statistic_coupon_13 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_statistic_coupon_13 on statistic (coupon_id);
-alter table subscriber add constraint fk_subscriber_subscriber_14 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
-create index ix_subscriber_subscriber_14 on subscriber (subscriber_id);
-alter table transaction_cp add constraint fk_transaction_cp_buyer_15 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
-create index ix_transaction_cp_buyer_15 on transaction_cp (buyer_id);
-alter table transaction_cp add constraint fk_transaction_cp_coupon_16 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_transaction_cp_coupon_16 on transaction_cp (coupon_id);
+alter table rate add constraint fk_rate_user_11 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_rate_user_11 on rate (user_id);
+alter table rate add constraint fk_rate_coupon_12 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_rate_coupon_12 on rate (coupon_id);
+alter table report add constraint fk_report_comment_13 foreign key (comment_id) references comment (id) on delete restrict on update restrict;
+create index ix_report_comment_13 on report (comment_id);
+alter table report add constraint fk_report_user_14 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_report_user_14 on report (user_id);
+alter table statistic add constraint fk_statistic_coupon_15 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_statistic_coupon_15 on statistic (coupon_id);
+alter table subscriber add constraint fk_subscriber_subscriber_16 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
+create index ix_subscriber_subscriber_16 on subscriber (subscriber_id);
+alter table transaction_cp add constraint fk_transaction_cp_buyer_17 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_buyer_17 on transaction_cp (buyer_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_18 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_18 on transaction_cp (coupon_id);
 
 
 
@@ -243,6 +259,8 @@ drop table if exists photo;
 drop table if exists pin;
 
 drop table if exists question;
+
+drop table if exists rate;
 
 drop table if exists report;
 
@@ -275,6 +293,8 @@ drop sequence if exists photo_seq;
 drop sequence if exists pin_seq;
 
 drop sequence if exists question_seq;
+
+drop sequence if exists rate_seq;
 
 drop sequence if exists report_seq;
 

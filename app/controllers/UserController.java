@@ -32,8 +32,15 @@ import views.html.coupon.*;
 import models.*;
 
 public class UserController extends Controller {
-	
-	static String PATH = Play.application().configuration().getString("PATH");	/* TODO move all messages to conf */
+
+	static String PATH = Play.application().configuration().getString("PATH"); /*
+																				 * TODO
+																				 * move
+																				 * all
+																				 * messages
+																				 * to
+																				 * conf
+																				 */
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;
@@ -54,7 +61,7 @@ public class UserController extends Controller {
 		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
-		
+
 		try {
 
 			String username = userForm.bindFromRequest().get().username;
@@ -81,27 +88,31 @@ public class UserController extends Controller {
 			 */
 
 			else if (User.verifyRegistration(username, mail) == true) {
-				
+
 				long id = User.createUser(username, surname, dob, gender,
 						adress, city, mail, hashPass, false, defaultPicture);
 				String verificationEmail = EmailVerification.addNewRecord(id);
-				MailHelper.send(mail,"Click on the link below to verify your e-mail adress <br>"
+				MailHelper.send(mail,
+						"Click on the link below to verify your e-mail adress <br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success","A verification mail has been sent to your email address!");
+				flash("success",
+						"A verification mail has been sent to your email address!");
 				Logger.info("A verification mail has been sent to email address");
 				return ok(Loginpage.render(" "));
 
 			} else {
 				flash("error", "Username or email allready exists!");
 				Logger.info("Username or email allready exists!");
-				return badRequest(signup.render(submit, new Form<Company>(Company.class)));
+				return badRequest(signup.render(submit, new Form<Company>(
+						Company.class)));
 			}
 
 		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
 			Logger.error("Error at registration: " + e.getMessage(), e);
-			return badRequest(signup.render(submit, new Form<Company>(Company.class)));
+			return badRequest(signup.render(submit, new Form<Company>(
+					Company.class)));
 		}
 
 	}
@@ -204,8 +215,9 @@ public class UserController extends Controller {
 			cUser.adress = adress;
 			cUser.city = city;
 			cUser.email = email;
-			
-			//if admin doesn't explicitly change the users password, it stays intact
+
+			// if admin doesn't explicitly change the users password, it stays
+			// intact
 			if (newPass.length() > 5) {
 				cUser.password = HashHelper.createPassword(newPass);
 			}
@@ -276,28 +288,28 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deleteUser(long id) {
 
-		try{
+		try {
 			List<User> adminList = User.findAdmins(true);
 			User currentUser = Sesija.getCurrentUser(ctx());
-			
+
 			if (adminList.size() == 1 && id == currentUser.id) {
 				flash("error", "You are the last admin!");
 				return ok(userList.render(SuperUser.allSuperUsers()));
 			}
 			if (currentUser.id == id || Sesija.adminCheck(ctx())) {
-				User u = User.find(id);			
-				Subscriber.unsubscribe(u);			
-				User.delete(u.id);			
-				
+				User u = User.find(id);
+				Subscriber.unsubscribe(u);
+				User.delete(u.id);
+
 				if (currentUser.id == id) {
 					session().clear();
 					return redirect("/signup ");
 				}
 			}
-			return ok(userList.render(SuperUser.allSuperUsers()));		
-		}catch(Exception e){
+			return ok(userList.render(SuperUser.allSuperUsers()));
+		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
-			Logger.error("Error at deleteUser: " +e.getMessage(), e);
+			Logger.error("Error at deleteUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
 	}
@@ -318,7 +330,7 @@ public class UserController extends Controller {
 			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
 					+ subFolder).isDirectory();
 			if (checkIfDirectoryExists) {
-				String assetsPath = FileUpload.imageUpload(subFolder);				
+				String assetsPath = FileUpload.imageUpload(subFolder);
 				user.profilePicture = assetsPath;
 				user.save();
 				return redirect("/profile/@" + user.username);
@@ -354,7 +366,8 @@ public class UserController extends Controller {
 			DynamicForm newPasswordForm = Form.form().bindFromRequest();
 
 			String newPassword = newPasswordForm.data().get("newPassword");
-			String confirmPassword = newPasswordForm.data().get("confirmPassword");
+			String confirmPassword = newPasswordForm.data().get(
+					"confirmPassword");
 
 			// TODO CHECK IF PASSWORDS ARE EQUAL AND OTHER THINGS ABOUT PW
 			if (!newPassword.equals(confirmPassword)) {
@@ -396,16 +409,16 @@ public class UserController extends Controller {
 		}
 		return ok(boughtCoupons.render(session("name"), transactions));
 	}
-	
-	//TODO comment
+
+	// TODO comment
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result newPin(long id) {
 		User currentUser = User.find(id);
 		Pin.generatePin(currentUser);
 		return ok(profile.render(currentUser));
 	}
-	
-	//TODO comment
+
+	// TODO comment
 	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserPage() {
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -414,28 +427,32 @@ public class UserController extends Controller {
 		String pinCode = dynamicForm.data().get("pin");
 		User user = Pin.getPinUser(pinCode);
 		Pin pin = Pin.getPin(pinCode);
-		if (user == null || !Pin.isValid(pin.date)){
+		if (user == null || !Pin.isValid(pin.date)) {
 			flash("error", "Invalid pin code");
 			return badRequest(coupontemplate.render(coupon));
 		}
 		return ok(buyForUser.render(coupon, user));
 	}
-	
-	//TODO comment
+
+	// TODO comment
 	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserExecute() {
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
 		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
 		int quantity = Integer.parseInt(dynamicForm.data().get("quantity"));
 		Coupon coupon = Coupon.find(id);
-		User client = User.find(Long.parseLong(dynamicForm.data().get("user_id")));
-		if (client == null) { return badRequest(coupontemplate.render(coupon)); }
-		double totalPrice = coupon.price * quantity;	
-		TransactionCP.createTransaction( new UUID().toString().substring(0, 12),coupon.price, quantity, totalPrice, "", client, coupon);
-		CouponController.notifications ++;
-		coupon.statistic.bought(quantity); //NEW adding to statistics.
-		coupon.maxOrder = coupon.maxOrder - quantity;
-		coupon.save();
+
+		User client = User.find(Long.parseLong(dynamicForm.data()
+				.get("user_id")));
+		if (client == null) {
+			return badRequest(coupontemplate.render(coupon));
+		}
+		double totalPrice = coupon.price * quantity;
+		TransactionCP.createTransaction(new UUID().toString().substring(0, 12),
+				coupon.price, quantity, totalPrice, "", client, coupon);
+		Coupon c = Coupon.find(id);
+		c.seller.notifications++;
+		c.seller.save();
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
@@ -452,5 +469,4 @@ public class UserController extends Controller {
 		return ok(stats);
 	
 	}
-		
 }

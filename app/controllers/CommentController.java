@@ -30,6 +30,10 @@ public class CommentController extends Controller {
 		Coupon coupon = Coupon.find(couponId);
 		User user = Sesija.getCurrentUser(ctx());
 		String comment = dynamicForm.data().get("comment");
+		if (comment.length() > 1200){
+			flash("error","Comment should not be longer than 1200 characters");
+			return redirect("/coupon/" + couponId);
+		}
 		Comment.create(comment, coupon, user);	
 		return redirect("/coupon/" +couponId);	
 	}
@@ -79,8 +83,6 @@ public class CommentController extends Controller {
 		Report.removeCommentReports(commentId);
 		long userId = Sesija.getCurrent(ctx()).id;
 		return UserController.controlPanel(userId);
-	}
-	
-	
+	}	
 
 }

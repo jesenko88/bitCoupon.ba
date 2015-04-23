@@ -38,12 +38,18 @@ public class Report extends Model {
 		this.user = user;
 	}	
 	
-	public static void create(String message, Comment comment, User user){
-		new Report(message, comment, user).save();
+	public static long create(String message, Comment comment, User user){
+		Report report = new Report(message, comment, user);
+		report.save();
+		return report.id;
 	}
 	
 	public static void delete(long id){
 		find.where().eq("id", id).findUnique().delete();
+	}
+	
+	public static Report findById(long id){
+		return find.where().eq("id", id).findUnique();
 	}
 	
 	public static List<Report> findByComment(Comment comment){
