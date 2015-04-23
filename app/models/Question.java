@@ -1,16 +1,15 @@
-package models.questions;
+package models;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import models.Company;
-import models.Coupon;
-import models.User;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
