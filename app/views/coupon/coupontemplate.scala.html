@@ -1,10 +1,15 @@
 @(coupon: Coupon)
 @import models.comments._
+@import models._
 @import models.questions._
 @import java.math.BigInteger; var i=0
 @main("Welcome to bitCoupon") {
 	
 <header id="header">
+<link href="@routes.Assets.at("css/star-rating.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
+      <script src="@routes.Assets.at("js/star-rating.js")"></script>
+      <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
    <!--header-->
    <div class="header-middle">
       <!--header-middle-->
@@ -135,18 +140,37 @@
                <div>
                   <label class="pull-left" >Remark</label>
                   <textarea disabled rows="4">@coupon.remark</textarea>
+                  </br>
+                  </br>
                   <label class="pull-left">Published by</label>
 
-                  
-               <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span> 
-               <label class="pull-left">Number of views @coupon.statistic.visited</label>
-               
-
+               <a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a>
+               </br>
+               </br>
                </div>
-            </div>
-         </div>
+            
+               <label class="pull-left">Number of views @coupon.statistic.visited</label>           
+               </br>
+               </br>
+               <div>
+				<div class="rate">
+				<label class="pull-left">Coupon rate</label>
+			       <input id="rating" value="@Rate.progres(coupon.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
+                 </div>
+				</div>
+               </div>
          <!--/product-information-->
       </div>
+      <div>
+      @if(Sesija.getCurrentUser(ctx()) != null && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
+      <label>Rate this coupon</label>
+      	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
+       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+       	<br/>
+       	<button type="submit" class="btn btn-default">Rate</button>
+  		</form>
+  		}
+  		</div>
    </div>
 </div>
 <!-- COMMENTS AND QUESTIONS -->
@@ -182,6 +206,7 @@
                            <a class="report" style="color:red" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
                            </span>
                         </div>
+
                      </li>                     
                      
                      
@@ -190,6 +215,7 @@
                   <br><br><br>
                   @if(Sesija.getCurrent(ctx()) != null){
                   @if(Sesija.getCurrent(ctx()).isUser()){
+
                   <form class="form" action="@routes.CommentController.comment(coupon.id)" method="POST">
                      <div class="form-group">
                         <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments"></textarea>
@@ -301,9 +327,17 @@
 							}
 						
 			 		</script>
-			 		
-			 		
-
+														
+			        <script>
+			        jQuery(document).ready(function() {
+			            $('.auto-submit-star').rating({
+			                callback: function(value, link){
+			                    alert(value);
+			                    this.rating('disable');
+			                }
+			            });
+			        });
+			        </script>
 
 
 }

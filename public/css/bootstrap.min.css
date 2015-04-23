@@ -2374,10 +2374,12 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 	font-weight: normal;
 	line-height: 1;
 	-moz-osx-font-smoothing: grayscale
+	visibility: hidden;
 }
 
 .glyphicon:empty {
-	width: 1em
+	width: 1em;
+	visibility: hidden;
 }
 
 .glyphicon-asterisk:before {

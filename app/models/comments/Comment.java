@@ -40,8 +40,7 @@ public class Comment extends Model{
 	public Report report;
 	
 	public Date date;
-	
-	
+		
 	static Finder<Long, Comment> find = new Finder<Long, Comment>(Long.class, Comment.class);
 	
 	public Comment(String comment, Coupon coupon, User user){
@@ -72,5 +71,4 @@ public class Comment extends Model{
 	public static Comment findById(long id){
 		return find.where().eq("id", id).findUnique();
 	}
-	
 }

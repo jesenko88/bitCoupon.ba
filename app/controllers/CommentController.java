@@ -79,8 +79,6 @@ public class CommentController extends Controller {
 		Report.removeCommentReports(commentId);
 		long userId = Sesija.getCurrent(ctx()).id;
 		return UserController.controlPanel(userId);
-	}
-	
-	
+	}	
 
 }

@@ -37,6 +37,8 @@ public class Company  extends SuperUser{
 	
 	public String contact;
 		
+	public int notifications;
+
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	

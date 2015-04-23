@@ -40,7 +40,8 @@ public class QuestionController extends Controller {
 				return redirect("/coupon/" + coupon.id);
 			}
 			Question.create(question, "", coupon, user);
-			CouponController.notifications ++;
+			coupon.seller.notifications ++;
+			coupon.seller.save();
 			return redirect("/coupon/" + coupon.id);
 		}catch(Exception e){
 			Logger.error(e.getMessage(), e);
