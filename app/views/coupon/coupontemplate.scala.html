@@ -64,15 +64,34 @@
             <span class="sr-only">Next</span>
             </a>
          </div>
+         
+                     <!-- ratings -->
+      		<br>
+            <div>
+      @if(Sesija.getCurrentUser(ctx()) != null && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
+      <label>Rate this coupon</label>
+      	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
+       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+       	<br/>
+       	<button type="submit" class="btn btn-default">Rate</button>
+  		</form>
+  		}
+  		</div>
+      
+      <!--/ratings -->
+         
       </div>
       <!-- END OF SLIDER -->	
+      
+
+
       <div class="col-sm-6">
          <div class="product-information">
             <!--/product-information-->
             <div class="col-sm-12">
                <h2> @coupon.name </h2>
                <span>
-               <span> @coupon.getPriceString() KM</span>
+               <p id="spanPrice"> @coupon.getPriceString() KM</p>
                @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false) {
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
                <label>Enter the amount of coupons </label>
@@ -132,7 +151,17 @@
                   <textarea class="focusExpiration" disabled rows="1">@coupon.getExpiration()</textarea>
                </div>
                <br>
-               <div>
+               
+                <!-- rate preview -->
+             
+				<div class="rate">
+				<label class="pull-left">Coupon rate</label>
+			       <input id="rating" value="@Rate.progres(coupon.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
+                 </div>
+				<!-- /rate preview -->
+               
+               
+               <div class="pull-left">
                   <label>Description</label>
                   <p/>@coupon.description</p>
                </div>
@@ -152,25 +181,11 @@
                <label class="pull-left">Number of views @coupon.statistic.visited</label>           
                </br>
                </br>
-               <div>
-				<div class="rate">
-				<label class="pull-left">Coupon rate</label>
-			       <input id="rating" value="@Rate.progres(coupon.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
-                 </div>
-				</div>
+              
                </div>
          <!--/product-information-->
       </div>
-      <div>
-      @if(Sesija.getCurrentUser(ctx()) != null && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
-      <label>Rate this coupon</label>
-      	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
-       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
-       	<br/>
-       	<button type="submit" class="btn btn-default">Rate</button>
-  		</form>
-  		}
-  		</div>
+
    </div>
 </div>
 <!-- COMMENTS AND QUESTIONS -->
