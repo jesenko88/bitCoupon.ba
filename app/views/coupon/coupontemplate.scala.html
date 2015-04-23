@@ -140,18 +140,20 @@
                </br>
                </br>
 				<div class="rate">
+				<label class="pull-left">Coupon rate</label>
 			       <input id="rating" value="@Rate.progres(coupon.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs"/>
                  </div>
                </div>
          <!--/product-information-->
       </div>
-      
+      <div>
       @if(Sesija.getCurrentUser(ctx()) != null && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
       <label>Rate this coupon</label>
       	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
-       	<input id="rating" value="" name="rate" type="submit" class="rating" min=0 max=5 step=1 data-size="xs" />
+       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
   		</form>
   		}
+  		</div>
    </div>
 </div>
 <!-- COMMENTS AND QUESTIONS -->
@@ -238,7 +240,15 @@
 						
 			 		</script>
 														
-			              
+			        <script>
+			        jQuery(document).ready(function() {
+			            $('.auto-submit-star').rating({
+			                callback: function(value, link){
+			                    alert(value);
+			                }
+			            });
+			        });
+			        </script>
 
 
 }

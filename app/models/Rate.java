@@ -75,15 +75,15 @@ public class Rate extends Model {
 		return find.where().eq("user_id", userId).findUnique();
 	}
 	
-	public static double progres(long id) {
-		double percent = 0;
+	public static int progres(long id) {
+		int progress = 0;
 		Coupon coupon = Coupon.find(id);
 		List<Rate> rates = findByCoupon(coupon);
 		for(int i = 0; i < rates.size(); i++) {
-			percent = rates.get(i).rate;
+			progress = rates.get(i).rate;
 		}
-		percent = percent / rates.size();
-		return percent;
+		progress = (int)(progress / rates.size());
+		return progress;
 	}
 	
 	public static boolean alreadyRate(long userId) {
