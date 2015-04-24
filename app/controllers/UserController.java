@@ -31,6 +31,7 @@ import views.html.admin.users.*;
 import views.html.admin.blog.*;
 import views.html.coupon.*;
 import models.*;
+import models.blog.Post;
 
 public class UserController extends Controller {
 
@@ -473,5 +474,10 @@ public class UserController extends Controller {
 	
 	public static Result blog(){
 		return ok(blog.render());
+	}
+	
+	public static Result createPostOnBlog(){
+		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
+		return TODO;
 	}
 }
