@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,9 +49,11 @@
                     <li>
                         <a href="index.html">Home</a>
                     </li>                   
-                    <li>
+                    @if(Sesija.adminCheck(ctx())){
+                     <li>
                         <a href="post.html">Sample Post</a>
-                    </li>
+                    </li>	
+                    }                   
                     <li>
                         <a href="contact.html">Contact</a>
                     </li>

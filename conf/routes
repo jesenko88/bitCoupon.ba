@@ -134,6 +134,9 @@ GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
 GET    /refundCoupon/:couponId        controllers.PayPalController.refundProcessing(couponId: Long)
 
+POST   /createNewPost                 controllers.BlogController.createPost()
+GET    /createNewPost                 controllers.BlogController.createPostPage()
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
 GET    /webjars/*file                 controllers.WebJarAssets.at(file)

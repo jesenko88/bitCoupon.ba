@@ -1,12 +1,12 @@
-package models.blog;
+package models;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
 
-import models.User;
 import play.data.validation.Constraints.*;
 import play.db.ebean.Model;
 
@@ -35,6 +35,8 @@ public class Post extends Model {
 	public User creator;
 
 	public static final String NO_POST_IMAGE = "NO_IMAGE";
+	public static final String POST_IMAGE_FOLDER = "blog" + File.separator
+												   + "posts" + File.separator; 
 	public static Finder<Long, Post> find = new Finder<Long, Post>(Long.class,Post.class);
 	public Post(String title, String subtitle, String content, String image,
 			Date created, User creator) {	
