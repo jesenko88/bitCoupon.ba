@@ -2,6 +2,7 @@ package models;
 
 import java.util.Date;
 import java.util.List;
+
 import helpers.AdminFilter;
 import helpers.CurrentUserFilter;
 import helpers.HashHelper;
@@ -9,6 +10,7 @@ import helpers.MailHelper;
 
 import java.util.ArrayList;
 import java.io.File;
+
 import javax.persistence.*;
 
 import controllers.Sesija;
@@ -29,7 +31,7 @@ public class Rate extends Model {
 	public long id;
 
 	@Required
-	public int rate;
+	public double rate;
 	
 	@ManyToOne
 	public User user;
@@ -42,14 +44,14 @@ public class Rate extends Model {
 	static Finder<Long, Rate> find = new Finder<Long, Rate>(Long.class, Rate.class);
 
 	
-	public Rate(int rate, User user, Coupon coupon){
+	public Rate(double rate, User user, Coupon coupon){
 		this.rate = rate;
 		this.user = user;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
 	
-	public static void create(int rate, User user, Coupon coupon){
+	public static void create(double rate, User user, Coupon coupon){
 		new Rate(rate, user, coupon).save();
 	}
 	
@@ -75,15 +77,15 @@ public class Rate extends Model {
 		return find.where().eq("user_id", userId).findUnique();
 	}
 	
-	public static int progres(long id) {
-		int progress = 0;
+	public static double progres(long id) {
+		double progress = 0;
 		Coupon coupon = Coupon.find(id);
 		List<Rate> rates = findByCoupon(coupon);
 		for(int i = 0; i < rates.size(); i++) {
-			progress = rates.get(i).rate;
+			progress += rates.get(i).rate;
 		}
 		if(rates.size() > 0) {
-		progress = (int)(progress / rates.size());
+		progress = progress / rates.size();
 		return progress;
 		} else 
 			return 0;

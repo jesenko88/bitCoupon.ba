@@ -68,7 +68,7 @@
                      <!-- ratings -->
       		<br>
             <div>
-      @if(Sesija.getCurrentUser(ctx()) != null && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
+      @if(Sesija.getCurrentUser(ctx()) != null  && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
       <label>Rate this coupon</label>
       	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
        	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
