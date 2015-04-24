@@ -27,8 +27,12 @@ public class RateController extends Controller {
 		if(rate == null) {
 			rate = "5";
 		}
-		double intRate = Double.parseDouble(rate);
-		Rate.create(intRate, user, coupon);	
+		double doubleRate = Double.parseDouble(rate);
+		if(doubleRate < 0)
+			doubleRate = 0;
+		if(doubleRate > 5)
+			doubleRate = 5;
+		Rate.create(doubleRate, user, coupon);	
 		return redirect("/coupon/" +couponId);	
 	}
 
