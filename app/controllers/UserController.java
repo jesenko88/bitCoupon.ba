@@ -28,6 +28,7 @@ import tyrex.services.UUID;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
+import views.html.admin.blog.*;
 import views.html.coupon.*;
 import models.*;
 
@@ -468,5 +469,9 @@ public class UserController extends Controller {
 		response().setHeader("Content-disposition","attachment; filename=statistics.xls");
 		return ok(stats);
 	
+	}
+	
+	public static Result blog(){
+		return ok(blog.render());
 	}
 }
