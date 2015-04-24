@@ -1,8 +1,7 @@
 
 .detailBox {
-    width:70%;
-    border:1px solid #bbb;
-    margin:0px 10%;
+    width:80%;
+   
 }
 .titleBox {
     background-color:#fdfdfd;
@@ -40,7 +39,7 @@
 .questionList {
     padding:0;
     list-style:none;
-    max-height:200px;
+    max-height:none;
     overflow:inherit;
 }
 .commentList li {
@@ -73,6 +72,7 @@
     border-radius:50%;
 }
 .commentText p {
+	width: 60%;
     margin:0;
 }
 .sub-text {
@@ -81,7 +81,6 @@
     font-size:11px;
 }
 .actionBox {
-    border-top:1px dotted #bbb;
     padding:10px;
 }
 
@@ -91,7 +90,8 @@
     border: 1px solid #bbb;
     border-radius: 9px;
     max-height:200px;
-    overflow:auto;
+    overflow:inherit;
+    width: 64%;
 }
 
 .answerText company-color{
@@ -103,6 +103,17 @@
     margin:0;
     margin-top:10px;
     margin-bottom: 40px;
+}
+
+ .tab-quest {
+        padding-top: 15px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+        padding-left: 15px;
+        border-radius:3px;
+        box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+        background:#fff;
+        height: auto;
 }
 
 

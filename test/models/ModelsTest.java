@@ -5,7 +5,7 @@ import java.util.List;
 
 import models.comments.Comment;
 import models.comments.Report;
-import models.questions.Question;
+import models.Question;
 
 import org.junit.*;
 

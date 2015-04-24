@@ -1,7 +1,7 @@
 @(coupon: Coupon)
+
 @import models.comments._
 @import models._
-@import models.questions._
 @import java.math.BigInteger; var i=0
 @main("Welcome to bitCoupon") {
 	
@@ -205,7 +205,6 @@
             <div class="detailBox">
                <div class="titleBox">
                   <label>Comments</label>
-                  <button type="button" class="close" aria-hidden="true">&times;</button>
                </div>
                <div class="actionBox">
                   <ul class="commentList">
@@ -250,29 +249,55 @@
 			 <div class="detailBox">   
                <div class="titleBox">
                   <label>Questions</label>
-                  <button type="button" class="close" aria-hidden="true">&times;</button>
                </div>
                <div class="actionBox">
-                  <ul class="questionList">
+               
+               
+               	@if(Sesija.getCurrent(ctx()) != null){
+                 	 @if(Sesija.getCurrent(ctx()).isUser()){
+            	 		 <form class="form" id="questionForm">   	
+                
+		                     <div class="form-group">
+		                	     <textarea class="form-control" rows="5" id="question" name="question" placeholder="Your question" required></textarea>
+		                     </div>
+		                     <div class="form-group">
+		                	  <button type="submit" id="question-button"  class="btn btn-default">Submit question</button>    
+		                     </div>
+               		  	</form>    
+   
+  	                }
+                  }
+               
+               
+                  
+                  
+                  <br><br><br>
+                  
+                  
+               </div>
+            </div>
+            
+            <ul class="questionList">
                      @for(question <- Question.findByCoupon(coupon)){           	
-                     <li class="questionRow">
-                        <div class="askerImage">
-                           <img src="@routes.Assets.at(question.user.profilePicture)" />
-                        </div>
-                        <div class="commentText">
-                           <p class="">@question.question</p>
-                           <span class="date sub-text">Question by: @question.user.username on @question.questionDate</span>	
-                     </li>  
+	                     <li class="questionRow">
+	                        <div class="askerImage">
+	                           <img src="@routes.Assets.at(question.user.profilePicture)" />
+	                        </div>
+	                        <div class="commentText">
+	                           <p class="">@question.question</p>
+	                           <span class="date sub-text">Question by: @question.user.username on @question.questionDate</span>	
+	                        </div>
+	                     </li>  
+                  
                         @if(Sesija.getCurrentCompany(ctx()) == coupon.seller || Sesija.getCurrentUser(ctx()) == question.user){ 
 		                     <form action="@routes.QuestionController.deleteQuestion(question.id)">
 		                     	<button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Delete question?');"><h6>Delete question</h6></button>	
 		                     </form>	
                      	}
-                     	<br>
+                     
                      	@if(Sesija.getCurrentCompany(ctx()) == coupon.seller){
 		                     <li>
 						         <form class="form-inline" action="@routes.QuestionController.addAnswer(question.id)" method="POST">
-		                   <!--     <input class="form-control" id="answer" name="answer" type="text" placeholder="answer here" required/>  -->
 		                            <textarea class="form-control" rows="2" cols="50" id="answer" name="answer" placeholder="answer here" required></textarea>
 		                             <div class="form-group">
 		                             @if(question.answer.length() == 0){
@@ -283,44 +308,28 @@
 		                             </div>
 		                         </form>                 
 		                     </li> 
+		                     <br>
 		                 }
-		           </ul>
-		          <ul class="answerList">
+		           				
+		       		</ul>
 		                 @if(question.answer.length() > 0){
-						     <li >                                  
+						                                      
 						         <div class="answerText">
 		                           <h6><company-color>@coupon.seller.name:</company-color>  @question.answer </h6>
 		                           <span class="date sub-text">answered on @question.answerDate</span>					
 		                         </div>								
-							 </li>
+						
+						 
 					     }                	
-                   </ul>
+                   
                      }
-                  
-                  <br><br><br>
-                  
-                  @if(Sesija.getCurrent(ctx()) != null){
-                  @if(Sesija.getCurrent(ctx()).isUser()){
-             <!-- <form class="form" id="questionForm">   -->	
-                 <form class="form" action="@routes.QuestionController.addQuestion(coupon.id)" method="POST">   
-                     <div class="form-group">
-                  <!--  <input class="form-control" id="question" name="question" type="text" placeholder="Your question" />-->
-                        <textarea class="form-control" rows="5" id="question" name="question" placeholder="Your question" required></textarea>
-                     </div>
-                     <div class="form-group">
-                      <button type="submit" class="btn btn-default">Submit question</button>   
-                   <!--  			 <button type="submit" id="question-button"  class="btn btn-default">Submit question</button>    -->
-                     </div>
-                  </form>    
-   
-                  }
-                  }
-               </div>
-            </div>
+            
          </div>
       </div>
    </div>
 </div>
+
+
 
    <!-- AJAX HANDLE REPORT  -->
                 <script>						
@@ -340,6 +349,28 @@
 								  });
 										e.preventDefault();
 							}
+
+
+						$("#questionForm").submit(function(e)
+				 				{	
+				 			e.preventDefault();
+				 														
+										$.ajax({							
+											  method: "POST",
+											  url: "/question/@coupon.id",							  
+											  data : $("#questionForm").serialize()
+											}).done(function(msg) {
+												  $(".questionList").prepend(msg);				 
+											   	  alert( "You successfuly submitted this question." );
+											 }).fail(function( msg ) {
+												  console.log("FAILED");
+											   	  alert("Question should not be longer than 600 characters");
+											  });
+										e.preventDefault();
+										$("#questionForm")[0].reset();
+										return false;	
+										
+				 			  });	
 						
 			 		</script>
 														
