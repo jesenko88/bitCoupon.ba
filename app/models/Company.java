@@ -37,6 +37,8 @@ public class Company  extends SuperUser{
 	
 	public String contact;
 		
+	public int notifications;
+
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
 	
@@ -64,20 +66,20 @@ public class Company  extends SuperUser{
 	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
 		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
-		Company c = new Company(name, email, password, now, logo, adress, city, contact);
-		c.save();
-		return c.id;
+		Company company = new Company(name, email, password, now, logo, adress, city, contact);
+		company.save();
+		return company.id;
 	
 	}
 	
 	public static Company findById(long id){
-		Company c = find.byId(id);
-		return c;
+		Company company = find.byId(id);
+		return company;
 	}
 	
 	public static void delete(long id){
-		Company c = find.byId(id);
-		c.delete();
+		Company company = find.byId(id);
+		company.delete();
 	}
 	
 	public static Company findByEmail(String email) {
@@ -93,6 +95,8 @@ public class Company  extends SuperUser{
 	
 	public static List<Company> findByName(String name){
 		List<Company> byName = find.where().eq("name", name).findList();
+		if(byName == null)
+			byName = new ArrayList<Company>();
 		return byName;
 	}
 	
@@ -164,12 +168,54 @@ public class Company  extends SuperUser{
 	}
 	
 	public static List<Company> approvedCompanies() {
-		return find.where().eq("status", true)
-				.findList();
+		List<Company> approvedCompanies =  find.where().
+				eq("status", true).findList();
+		if(approvedCompanies == null)
+			approvedCompanies = new ArrayList<Company>();
+		return approvedCompanies;
+			
+			
 	}
 	
 	public static List<Company> nonApprovedCompanies() {
-		return find.where().eq("status", false).findList();
-	}	 
+		List<Company> nonApprovedCompanies = find.where().eq("status", false).findList();
+		if(nonApprovedCompanies == null)
+			nonApprovedCompanies = new ArrayList<Company>();
+		return nonApprovedCompanies;
+	}	
+	
+//	public String validate() {
+//		
+//		if ( name.length() < 4 || name.length() > 70){
+//			return "Coupon name has to be in range 4 - 70 characters";
+//		}
+//		if ( price <= 0){
+//			return "Invalid price";
+//		}
+//		if (dateExpire.before(new Date())){
+//			return "Invalid date";
+//		}
+//		if (category.name.equals("New Category")){
+//			if (Category.findByName(category.name) != null){
+//				return "Category allready exists";
+//			}
+//		}else{
+//			if (Category.findByName(category.name) == null){
+//				return "Invalid category selection";
+//			}
+//		}
+//		if (description.length() < 10 || description.length() > 999){
+//			return "Description length has to be in range 10 - 999 characters";
+//		}
+//		if (remark.length() > 150){
+//			return "Remark length has to be max 150 characters";
+//		}
+//		if ( minOrder < 0 || maxOrder < 0 || minOrder > maxOrder){
+//			return "Invalid order amount";
+//		}
+//		//TODO dateUsage ??
+//		
+//	return null;
+//}
 
 }

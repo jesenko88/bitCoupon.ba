@@ -5,6 +5,7 @@ import java.util.List;
 
 import play.Logger;
 import play.libs.Json;
+import play.twirl.api.Content;
 import models.Category;
 import models.Company;
 import models.Coupon;
@@ -54,9 +55,9 @@ public class JSonHelper {
 		userNode.put("name", u.username);
 		userNode.put("surname", u.surname);
 		userNode.put("email", u.email);
-		userNode.put("adress", u.adress);
+		userNode.put("address", u.adress);
 		userNode.put("city", u.city);
-//		userNode.put("profilePicture", u.profilePicture);
+		userNode.put("picture", u.profilePicture);
 		return userNode;
 	}
 	
@@ -67,12 +68,10 @@ public class JSonHelper {
 		companyNode.put("id", company.id);
 		companyNode.put("name", company.name);
 		companyNode.put("email", company.email);
-		companyNode.put("adress", company.adress);
+		companyNode.put("address", company.adress);
 		companyNode.put("city", company.city);
 		companyNode.put("contact", company.contact);
-//		userNode.put("logo", company.logo);
-//		userNode.put("created", company.created.toString());
-//		userNode.put("updated", company());
+		companyNode.put("logo", company.logo);
 		return companyNode;
 	}
 	
@@ -148,6 +147,7 @@ public class JSonHelper {
 			ObjectNode companyNode = Json.newObject();
 			companyNode.put("id", company.id);
 			companyNode.put("name", company.name);
+			companyNode.put("email", company.email);
 			companyNode.put("logo", company.logo); 
 			arrayNode.add(companyNode);
 		}
@@ -251,11 +251,39 @@ public class JSonHelper {
 			ObjectNode transactionNode = Json.newObject();
 			transactionNode.put("id", tran.id); 
 			transactionNode.put("couponId", tran.coupon.id);
+			transactionNode.put("name", tran.coupon.name);
+			transactionNode.put("description", tran.coupon.description);
+			transactionNode.put("price", tran.coupon.price);
+			transactionNode.put("quantity", tran.quantity);
+			transactionNode.put("picture", tran.coupon.picture);
 			transactionNode.put("totalPrice", tran.totalPrice); 
-			transactionNode.put("date", tran.date.toString()); //??
+			transactionNode.put("transactionDate", tran.date.toString());
+			transactionNode.put("paymentId", tran.payment_id);
+			transactionNode.put("token", tran.token);
 			arrayNode.add(transactionNode);
 		}
 		return arrayNode;
+	}
+
+
+	public static ObjectNode boughtCoupon(List<TransactionCP> transactions, long couponId) {
+		ObjectNode transactionDetails = Json.newObject();
+		for (TransactionCP tran : transactions){
+			if ( tran.coupon.id == couponId ) {	
+				transactionDetails.put("transactionId", tran.id); 
+				transactionDetails.put("couponId", tran.coupon.id);
+				transactionDetails.put("name", tran.coupon.name);
+				transactionDetails.put("description", tran.coupon.description);
+				transactionDetails.put("price", tran.coupon.price);
+				transactionDetails.put("quantity", tran.quantity);
+				transactionDetails.put("picture", tran.coupon.picture);
+				transactionDetails.put("totalPrice", tran.totalPrice); 
+				transactionDetails.put("transactionDate", tran.date.toString());
+				transactionDetails.put("paymentId", tran.payment_id);
+				transactionDetails.put("token", tran.token);
+			}
+		}	
+		return transactionDetails;
 	}
 	
 }

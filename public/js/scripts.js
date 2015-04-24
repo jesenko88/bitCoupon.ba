@@ -77,22 +77,15 @@ $(document).ready(function() {
 	    }
 
 	  }, false);
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 });
 
+$(document).ready(function() {
+	$('#showCoupon1').click(function(e) {
+			$('#viewCoupon1').show();
+			$('#showCoupon1').hide();
+	})
+});
+		
 $(document).ready(function() {
 	$('#companySignup').click(function(e) {
 			$('#companyRegistration').show();

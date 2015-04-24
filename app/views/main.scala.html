@@ -25,13 +25,13 @@
       <link href="@routes.Assets.at("css/responsive.css")" rel="stylesheet">
       <link href="@routes.Assets.at("css/footer.css")" rel="stylesheet">
       <link href="@routes.Assets.at("css/zmodal.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/comment.css")" rel="stylesheet">
       <script src="@routes.Assets.at("js/main.js")"></script>
       <script src="@routes.Assets.at("js/jquery.js")"></script>
       <script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
       <script src="@routes.Assets.at("js/jquery.scrollUp.min.js")"></script>
       <script src="@routes.Assets.at("js/price-range.js")"></script>
       <script src="@routes.Assets.at("js/jquery.prettyPhoto.js")"></script>
-      <script src="@routes.Assets.at("js/jquery.js")"></script>
       <script src="@routes.Assets.at("js/scripts.js")"></script>
       <script src="@routes.Assets.at("js/jquery.countdown.min.js")"></script>
       <script src="@routes.Assets.at("ckeditor/ckeditor.js")"></script>
@@ -48,7 +48,10 @@
       <link rel="stylesheet" href="/resources/demos/style.css" />
       <script>
          $(function() {
-           $( "#datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+           $(".datepicker-bit").click(function(event){
+				event.preventDefault();
+           });
+           $( ".datepicker-bit" ).datepicker({dateFormat: "yy-mm-dd"});
          });
       </script> 
    </head>

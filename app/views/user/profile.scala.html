@@ -83,7 +83,7 @@
             <li>Email: @superUser.getUser().email</li>
             <li>Date create: @superUser.getUser().created</li>
              @if(TransactionCP.allFromBuyer(superUser.getUser().id).size() > 0) {
-            <li><a href="@TransactionCP.allFromBuyer(superUser.getUser().id).size()">Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</a></li>
+            <li><a href="@routes.UserController.showBoughtCoupons(superUser.getUser().id)">Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</a></li>
            } else {
             <li>Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</li>            
             }
@@ -109,11 +109,9 @@
                   <ul class="nav navbar-nav collapse navbar-collapse">
                      <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
                      <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
-                     @if(CouponController.notifications > 0) {
-			       	<li><a href="@routes.CouponController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@CouponController.notifications</i>Notifications</a></li>
-                  } else {
-			       	<li>Notifications</li>                  
-                  } 
+
+			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i>Notifications</a></li>
+                  	
                   </ul>
                </div>
             </div>
