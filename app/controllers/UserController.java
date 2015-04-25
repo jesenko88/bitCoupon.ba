@@ -473,10 +473,6 @@ public class UserController extends Controller {
 	
 	public static Result blog(){		
 		return ok(blog.render());
-	}
-	
-	public static Result createPostOnBlog(){
-		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
-		return TODO;
-	}
+	}	
+
 }

@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -18,11 +20,11 @@ public class Post extends Model {
 	public long id;
 	
 	@Required
-	@Pattern("^[a-zA-Z0-9]+$")
+	@Pattern("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
 	public String title;
 	
 	@Required
-	@Pattern("^[a-zA-Z0-9]+$")
+	@Pattern("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
 	public String subtitle;
 	
 	@Column(columnDefinition = "TEXT")
@@ -31,7 +33,7 @@ public class Post extends Model {
 	public String image;
 	
 	@Embedded
-	@Pattern("^[a-zA-Z0-9]+$")
+	@Pattern("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
 	public String tags;	
 	
 	public Date created;	
@@ -156,5 +158,25 @@ public class Post extends Model {
 				byTag.add(post);
 		}
 		return byTag;
+	}
+	
+	/**
+	 * Method returns all tags (without duplicates)
+	 * Since tags is just a string, its possible that many
+	 * posts have same tag/tags. Converting list of all tags
+	 * to set will remove duplicates, and get it back to array list
+	 * creates List of tags without duplicates.
+	 * @return
+	 */
+	public static List<String> allTags(){
+		List<Post> all = find.all();
+		List<String> allTags = new ArrayList<String>();
+		for(Post post: all){
+			allTags.addAll(post.getTagsArray());
+		}
+		Set<String> set = new LinkedHashSet<String>(allTags);
+		allTags.clear();
+		allTags.addAll(set);
+		return allTags;
 	}
 }
