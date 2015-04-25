@@ -2,6 +2,7 @@ package models;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -90,8 +91,10 @@ public class Post extends Model {
 	 */
 	public static List<Post> all(){
 		List<Post> all = find.all();
-		if(all != null)
+		if(all != null){
+			Collections.reverse(all);
 			return all;
+		}
 		return new ArrayList<Post>();
 	}
 	
