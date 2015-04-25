@@ -55,7 +55,9 @@ public class Post extends Model {
 		this.creator = creator;
 		this.tags = tags;
 	}
-	
+		
+		
+
 	public static long createPost(String title, String subtitle, String content, String image,
 			Date created, User creator, String tags){
 		
