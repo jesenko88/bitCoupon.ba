@@ -47,6 +47,11 @@ public class TransactionCP extends Model{
 	@ManyToOne
 	public User buyer;
 	
+	/*for unregistered buyers*/
+	public String buyer_name;
+	
+	public String buyer_surname;
+	
 	@ManyToOne
 	public Coupon coupon;
 	
@@ -65,6 +70,23 @@ public class TransactionCP extends Model{
 		this.totalPrice = totalPrice;
 		this.token = token;
 		this.buyer = buyer;
+		this.buyer_name = buyer.username;
+		this.buyer_surname = buyer.surname;
+		this.coupon = coupon;
+		this.date = new Date();
+	}
+	
+	/* constructor for unregistered users */
+	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,
+			String username, String surname, Coupon coupon) {
+		this.payment_id = payment_id;
+		this.couponPrice = couponPrice;
+		this.quantity = quantity;
+		this.totalPrice = totalPrice;
+		this.token = token;
+		this.buyer = null;
+		this.buyer_name = username;
+		this.buyer_surname = surname;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
@@ -85,6 +107,27 @@ public class TransactionCP extends Model{
 		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, buyer, coupon);
 		transaction.save();
 		
+		return transaction.id;
+		
+	}
+	
+	/**
+	 * Creates a new transaction for a unregistered user.
+	 * Instead of user id, it saves the username and surname of the buyer/gift receiver
+	 * @param payment_id
+	 * @param couponPrice
+	 * @param quantity
+	 * @param totalPrice
+	 * @param token
+	 * @param username
+	 * @param surname
+	 * @param coupon
+	 * @return id of the transaction Long
+	 */
+	public static long createTransactionForUnregisteredUser(String payment_id,double couponPrice,int quantity,
+			double totalPrice, String token, String username, String surname,  Coupon coupon) {	
+		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, username, surname, coupon);
+		transaction.save();
 		return transaction.id;
 		
 	}
@@ -130,7 +173,7 @@ public class TransactionCP extends Model{
 			return "";
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		return "Expiring: " + dateFormat.format(date);
+		return dateFormat.format(date);
 
 	}
 	

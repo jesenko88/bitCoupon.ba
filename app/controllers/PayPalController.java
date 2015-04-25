@@ -43,7 +43,7 @@ public class PayPalController extends Controller {
     static String PATH = Play.application().configuration().getString("PATH");
 
 
-	static User currentUser = User.find(session("name"));
+	static User currentUser; // = User.find(session("name"));
 	static Company currentCompany = Company.find(session("name"));
 	static SuperUser su;
 	static Coupon coupon;
@@ -78,11 +78,22 @@ public class PayPalController extends Controller {
 			apiContext.setConfigurationMap(sdkConfig);
 	
 			Amount amount = new Amount();		
-			DynamicForm buyForm = Form.form().bindFromRequest();	
+			DynamicForm buyForm = Form.form().bindFromRequest();				
 			
-			
-			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
-
+			coupon = Coupon.find(Long.parseLong(buyForm.data().get("coupon_id")));
+			long userId = Long.parseLong(buyForm.data().get("user_id"));
+			/* if the received userId value is '-1', it means that the purchase is 
+			 * started as a gift for someone who doesn't exist in the database
+			 * and the form is especially submitted for the recipient details*/
+			if (userId == -1){
+				String email = buyForm.data().get("email");
+				String username = buyForm.data().get("name");
+				String surname = buyForm.data().get("surname");
+				currentUser = User.createTempUser(email, username, surname);
+				currentUser.id = -1;
+			}else{
+				currentUser = User.find(userId);
+			}
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if (quantity > coupon.maxOrder) {
 				flash("info", "There are only " + coupon.maxOrder + " left");
@@ -149,7 +160,7 @@ public class PayPalController extends Controller {
 			flash("error", "Something went wrong, please try again later");
 			return ok(index.render(Coupon.all(), Category.all()));
 
-		} catch (PayPalRESTException e) {
+		} catch (Exception e) {
 			flash("error", "Error occured while purchasing through paypal."
 					+ " If you're admin please check your logs");
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
@@ -209,12 +220,22 @@ public class PayPalController extends Controller {
 	 * @return render index page with a flash message
 	 */
 	public static Result approveTransaction() {
+		
+		System.out.println("DEBUUG EMAIIILL" + currentUser.email);
+		System.out.println("DEBUUG USER ID" + currentUser.id);
 
 		try {
 			Payment response = payment.execute(apiContext, paymentExecution);
 			
+			if(currentUser.id != -1) {
 			TransactionCP.createTransaction(paymentID, coupon.price, quantity,
 					totalPrice, response.getTransactions().get(0).getRelatedResources().get(0).getSale().getId(), currentUser, coupon);
+			}else{
+				TransactionCP.createTransactionForUnregisteredUser(paymentID, coupon.price, quantity,
+						totalPrice, token, 
+						currentUser.username, currentUser.surname, coupon);
+				System.out.println("DEBUGGGG TRANSAKCIJAAAA" );
+			}
 			coupon.statistic.bought(quantity);
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
