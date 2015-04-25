@@ -164,6 +164,9 @@
 		$(document).ready(function () {
 		    size_li = $("#myList li").size();
 		    x=3;
+		    if(x >= size_li){
+		    	$('#loadMore').hide();
+		    }
 		    $('#myList li:lt('+x+')').show();
 		    $('#loadMore').click(function () {
 		        x= (x+5 <= size_li) ? x+5 : size_li;

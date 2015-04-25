@@ -4,12 +4,17 @@ import helpers.AdminFilter;
 import helpers.FileUpload;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import models.Post;
 import models.User;
 import play.Logger;
 import play.data.Form;
+import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -28,15 +33,16 @@ public class BlogController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result createPostPage(){
 		return ok(createPost.render(new Form<Post>(Post.class)));
-	}
+	}	
+	
 	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result createPost(){
-		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
+		Form<Post> postForm = Form.form(Post.class).bindFromRequest(); 
 		if(postForm.hasErrors() || postForm.hasGlobalErrors()){
-			Logger.error("Error while editing post"
-					+postForm.globalErrors().toString()
-					+postForm.errorsAsJson().toString());
+			Logger.error("Error while creating post"
+					+"Global errors:"+postForm.globalErrors().toString()
+					+"Errors"+postForm.errorsAsJson().toString());
 			return ok(createPost.render(postForm));
 		}		
 		String title = postForm.data().get("title");

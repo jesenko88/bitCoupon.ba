@@ -2,14 +2,18 @@ package models;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 
+import play.data.Form;
+import play.data.validation.ValidationError;
 import play.data.validation.Constraints.*;
 import play.db.ebean.Model;
 
@@ -20,20 +24,23 @@ public class Post extends Model {
 	public long id;
 	
 	@Required
-	@Pattern("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+	@Pattern(value="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$", 
+			message="Title not valid, only letters and numbers alowed.")
 	public String title;
 	
 	@Required
-	@Pattern("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+	@Pattern(value = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$",
+			message="Subtitle not valid, only letters and numbers alowed."	)
 	public String subtitle;
 	
 	@Column(columnDefinition = "TEXT")
 	public String content;
 	
-	public String image;
-	
-	@Embedded
-	@Pattern("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$")
+	public String image;	
+
+	@Pattern(value = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$",
+			 message="Tags input not valid. Only characters and numbers alowed."
+			 		+ " Tags have to be separated with space.")
 	public String tags;	
 	
 	public Date created;	
@@ -178,5 +185,17 @@ public class Post extends Model {
 		allTags.clear();
 		allTags.addAll(set);
 		return allTags;
+	}
+	
+	public static List<String> errors(Form<Post> form){
+		 Collection<List<ValidationError>> errors = form.errors().values();
+		 Iterator<List<ValidationError>> it = errors.iterator();
+		 List<String> errorList = new ArrayList<String>();
+		 while(it.hasNext()){
+			 for(ValidationError ve: it.next()){
+				 errorList.add(ve.message());
+			 }
+		 }
+		 return errorList;
 	}
 }
