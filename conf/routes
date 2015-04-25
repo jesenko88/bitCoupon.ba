@@ -55,6 +55,8 @@ POST   /pin                           controllers.UserController.newPin(id: Long
 POST   /buyForUser                    controllers.UserController.buyForUserExecute()
 GET    /buyForUser                    controllers.UserController.buyForUserPage()
 GET    /statisticAsFile               controllers.UserController.getStatistic()	
+GET    /makeAGift/:id                 controllers.UserController.makeAGiftPage(id: Long)	
+GET    /giftForUser                   controllers.UserController.giftCheckoutPage()
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)

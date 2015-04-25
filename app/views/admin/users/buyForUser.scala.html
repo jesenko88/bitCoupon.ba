@@ -20,38 +20,64 @@
    </div>
 </header>
 <div class="container">
-   <div class="paypal-info">
-      <ul>
 
-      </ul>
-      
-		<h3>@user.email</h3>
-	  
-      <form class="paypal-approve" action="/buyForUser" method="POST">
-      	 <input type="text" id="user_id" name="user_id" value=@user.id hidden/>
-         <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
-      	 <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
-         <button  type="submit" id="submit-buy-for" class="btn btn-warning" >Proceed</button>
-      </form>
-   </div>
-   <div class="product-information">
-      <!--/product-information-->
-      <h2> @coupon.name </h2>
-      <span>
-      <span> @coupon.getPriceString() KM</span>
-      <div>				
-         <textarea disabled rows="1">@coupon.getExpiration()</textarea>
-      </div>
-      <br>
-      <div>
-         <label class="pull-left" >Description</label>
-         <textarea disabled rows="6" >@coupon.description</textarea>
-      </div>
-      <br>
-      <div>
-         <label class="pull-left" >Remark</label>
-         <textarea disabled rows="4">@coupon.remark</textarea>
-      </div>
-   </div>
+
+	<h2 class="title text-center"> * Gift page *</h2>
+
+<div class="table-responsive">
+   <table class="table table-striped">
+      <thead>
+         <tr>
+     
+            <th id="th-width-60">Coupon</th>
+            <th>Expiring</th>
+            <th>Price</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>   
+            <td id="td-padding-1"><img id="img-thumb-coupon" src="@routes.Assets.at(coupon.picture)"/>@coupon.name</td>
+            <td><h4>@coupon.getExpiration()</h4></td>
+            <td><h4>@coupon.price</h4></td>
+         </tr>
+      </tbody>
+   </table>
+</div>
+ 
+   		 <div class="col-sm-9">
+	      <label>Receipment details</label>
+	       
+	         <!-- form action when admin buys for user -->
+	    	 @if(Sesija.adminCheck(ctx()) == true) {
+		     	<form action="/buyForUser" method="POST">
+		     } 
+		     <!-- form action when user buys a gift for user -->
+		     @if(Sesija.getCurrent(ctx()).isUser() && Sesija.adminCheck(ctx()) == false ){     
+		        <form  action="/couponpurchase" method="POST">
+		     }       
+	         <input type="text" id="user_id" name="user_id" value=@user.id hidden/>
+	         <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
+				<table class="table table-striped">
+	    			 <thead>
+				         <tr>
+				            <th>Email</th>
+				            <th>Name</th>
+				            <th>Surname</th>
+				            <th>Quantity</th>
+				         </tr>
+			      </thead>
+				      <tbody>
+				         <tr>   
+				            <td>@user.email</td>
+				            <td>@user.username</td>
+				            <td>@user.surname</td>
+				            <td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
+				            <td>  <button  type="submit" id="submit-buy-for" class="btn btn-warning" >Proceed</button> </td>
+				         </tr>
+				      </tbody>
+	   			</table>
+		    </form>
+	   </div> 		
+   	 
 </div>					
 }

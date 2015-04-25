@@ -300,7 +300,7 @@ public class Coupon extends Model {
 			return "";
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		return "Expiring: " + dateFormat.format(dateExpire);
+		return dateFormat.format(dateExpire);
 
 	}
 

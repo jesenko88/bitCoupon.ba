@@ -43,7 +43,7 @@ public class PayPalController extends Controller {
     static String PATH = Play.application().configuration().getString("PATH");
 
 
-	static User currentUser = User.find(session("name"));
+	static User currentUser; // = User.find(session("name"));
 	static Company currentCompany = Company.find(session("name"));
 	static SuperUser su;
 	static Coupon coupon;
@@ -78,10 +78,10 @@ public class PayPalController extends Controller {
 			apiContext.setConfigurationMap(sdkConfig);
 	
 			Amount amount = new Amount();		
-			DynamicForm buyForm = Form.form().bindFromRequest();	
-			
+			DynamicForm buyForm = Form.form().bindFromRequest();				
 			
 			coupon = Coupon.find(Long.parseLong((buyForm.data().get("coupon_id"))));
+			currentUser = User.find(Long.parseLong(buyForm.data().get("user_id")));
 
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if (quantity > coupon.maxOrder) {

@@ -469,4 +469,30 @@ public class UserController extends Controller {
 		return ok(stats);
 	
 	}
+	
+	
+	// TODO comment
+	@Security.Authenticated(CurrentUserFilter.class)
+	public static Result makeAGiftPage(long couponID) {
+		Coupon coupon = Coupon.find(couponID);
+		if (coupon != null)
+			return ok(makeAGift.render(coupon));
+		flash("error", "Internal server error, please try again later");
+		return redirect("/");
+	}
+	
+	// TODO comment
+	@Security.Authenticated(CurrentUserFilter.class)
+	public static Result giftCheckoutPage() {
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
+		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
+		Coupon coupon = Coupon.find(id);
+		String email = dynamicForm.data().get("email");
+		User user = User.findByEmail(email);
+		if (user == null) {
+			flash("error", "A user with email: " + email + " doesn't exist");
+			return badRequest(makeAGift.render(coupon));
+		}
+		return ok(buyForUser.render(coupon, user));
+	}
 }

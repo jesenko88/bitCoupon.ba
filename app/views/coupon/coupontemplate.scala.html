@@ -94,15 +94,26 @@
                <p id="spanPrice"> @coupon.getPriceString() KM</p>
                @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false) {
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
-               <label>Enter the amount of coupons </label>
+               	             	
+               	               	
+        	   <label>Enter the amount of coupons </label>
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
+                  <input type="text" id="user_id" name="user_id" value=@Sesija.getCurrentUser(ctx()).id hidden/>
                   <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
                   <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
                   <button type="submit" id="submit-buy" >
                   <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
                   </button>
                </form>
-               }
+               
+               
+               <!-- proba buy for someone -->
+               	
+               	<div class="actionbox btn-buy">                                                   
+                   <a href="/makeAGift/@coupon.id" class="gift-link">or make a gift ?</a>
+				</div>
+
+                }
 
                 @if(coupon.maxOrder <= coupon.minOrder) {
 	               <label><h3>Offer succeded </h3></label>

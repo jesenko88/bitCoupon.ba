@@ -1,0 +1,67 @@
+@(coupon: Coupon)
+
+@import helper._
+
+@main("Welcome to bitCoupon") {
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+
+      </div>
+   </div>
+</header>
+<div class="container">
+
+ <h2 class="title text-center"> * Gift page *</h2>
+
+<div class="table-responsive">
+   <table class="table table-striped">
+      <thead>
+         <tr>
+     
+            <th id="th-width-60">Coupon</th>
+            <th>Expiring</th>
+            <th>Price</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>   
+            <td id="td-padding-1"><img id="img-thumb-coupon" src="@routes.Assets.at(coupon.picture)"/>@coupon.name</td>
+            <td><h4>@coupon.getExpiration()</h4></td>
+            <td><h4>@coupon.price</h4></td>
+         </tr>
+      </tbody>
+   </table>
+</div>
+
+ 	<br><br>
+   
+      <div class="col-sm-6">
+       <div class="text-center">
+      	<h4>Buy for a registrated user</h4><br>
+      	<form action="@routes.UserController.giftCheckoutPage()">
+      		 <input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
+	         <input class="form-control" id="email" name="email" type="email" placeholder="User email" required/><br><br>
+	         <button type="submit" id="buy-for" class="btn btn-default" >Search User</button> 
+      	</form>
+		</div>
+     </div>
+     <div class="col-sm-2">
+     	 <div class="text-center">
+      		<h5>or</h5>
+      	 </div>
+     </div>
+      <div class="col-sm-4">
+      	 
+      	<h4>Enter details for user</h4><br>
+
+		<form>
+	         <button type="submit" id="submit" class="btn btn-default" >Procceed to details page</button> 
+      	</form>
+     </div>
+   
+</div>					
+}

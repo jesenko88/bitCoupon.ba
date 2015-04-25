@@ -130,7 +130,7 @@ public class TransactionCP extends Model{
 			return "";
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		return "Expiring: " + dateFormat.format(date);
+		return dateFormat.format(date);
 
 	}
 	
