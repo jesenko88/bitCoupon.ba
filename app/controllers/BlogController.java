@@ -8,6 +8,7 @@ import java.util.Date;
 
 import models.Post;
 import models.User;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -32,6 +33,12 @@ public class BlogController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result createPost(){
 		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
+		if(postForm.hasErrors() || postForm.hasGlobalErrors()){
+			Logger.error("Error while editing post"
+					+postForm.globalErrors().toString()
+					+postForm.errorsAsJson().toString());
+			return ok(createPost.render(postForm));
+		}		
 		String title = postForm.data().get("title");
 		String subtitle = postForm.data().get("subtitle");
 		String content = postForm.data().get("content");
@@ -55,6 +62,10 @@ public class BlogController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result editPost(long id){
 		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
+		if(postForm.hasErrors() || postForm.hasGlobalErrors()){
+			Logger.error("Error while editing post");
+			return editPostPage(id);
+		}
 		String title = postForm.data().get("title");
 		String subtitle = postForm.data().get("subtitle");
 		String content = postForm.data().get("content");

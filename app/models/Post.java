@@ -17,9 +17,11 @@ public class Post extends Model {
 	public long id;
 	
 	@Required
+	@Pattern("^[a-zA-Z0-9]+$")
 	public String title;
 	
 	@Required
+	@Pattern("^[a-zA-Z0-9]+$")
 	public String subtitle;
 	
 	@Column(columnDefinition = "TEXT")
@@ -28,12 +30,11 @@ public class Post extends Model {
 	public String image;
 	
 	@Embedded
-	public String tags;
+	@Pattern("^[a-zA-Z0-9]+$")
+	public String tags;	
 	
-	@Required
-	public Date created;
-	
-	@Required
+	public Date created;	
+
 	@OneToOne
 	public User creator;
 
