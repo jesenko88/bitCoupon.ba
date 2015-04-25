@@ -43,40 +43,79 @@ public class Rate extends Model {
 	
 	static Finder<Long, Rate> find = new Finder<Long, Rate>(Long.class, Rate.class);
 
-	
+	/**
+	 * Constructor for Rate 
+	 * @param rate - rate of coupon
+	 * @param user - user who is rating
+	 * @param coupon - coupon which is rated
+	 */
 	public Rate(double rate, User user, Coupon coupon){
 		this.rate = rate;
 		this.user = user;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
-	
+	 /**
+	  * Creates a new rate in DB
+	  * @param rate
+	  * @param user
+	  * @param coupon
+	  */
 	public static void create(double rate, User user, Coupon coupon){
 		new Rate(rate, user, coupon).save();
 	}
 	
+	/**
+	 * Deletes rate from DB
+	 * @param id
+	 */
 	public static void delete(long id){
 		find.where().eq("id", id).findUnique().delete();
 	}
 	
-	public static void update(long id, int newRate){
+	/**
+	 * Change existing rate
+	 * @param id - id of existing rate
+	 * @param newRate - new rate
+	 */
+	public static void update(long id, double newRate){
 		Rate rate = find.where().eq("id", id).findUnique();
 		rate.rate = newRate;
 		rate.update();
 	}
 	
+	/**
+	 * Finds rate by coupon
+	 * @param coupon
+	 * @return list of rates
+	 */
 	public static List<Rate> findByCoupon(Coupon coupon){
 		return find.where().eq("coupon", coupon).findList();
 	}
 	
+	/**
+	 * Find rate by id
+	 * @param id - id of rate
+	 * @return - certain rate
+	 */
 	public static Rate findById(long id){
 		return find.where().eq("id", id).findUnique();
 	}
 
+	/**
+	 * Find rate by user
+	 * @param userId
+	 * @return certain rate
+	 */
 	public static Rate findByUser(long userId) {
 		return find.where().eq("user_id", userId).findUnique();
 	}
 	
+	/**
+	 * Method which calculate average grade of certain coupon
+	 * @param id - id of coupon
+	 * @return - average grade of coupon
+	 */
 	public static double progres(long id) {
 		double progress = 0;
 		Coupon coupon = Coupon.find(id);
@@ -92,6 +131,11 @@ public class Rate extends Model {
 		
 	}
 	
+	/**
+	 * Check if the user is already rate
+	 * @param userId
+	 * @return return true if user is already rate, else return false
+	 */
 	public static boolean alreadyRate(long userId) {
 		
 		if(Rate.findByUser(userId) != null)

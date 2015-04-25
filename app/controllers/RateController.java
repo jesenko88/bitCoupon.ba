@@ -6,6 +6,7 @@ import models.Coupon;
 import models.Rate;
 import models.TransactionCP;
 import models.User;
+//import play.modules.pdf.PDF.*;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -31,5 +32,4 @@ public class RateController extends Controller {
 		Rate.create(intRate, user, coupon);	
 		return redirect("/coupon/" +couponId);	
 	}
-
 }
