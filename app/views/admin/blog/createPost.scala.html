@@ -73,21 +73,24 @@
       <div class="container">
          <form action="@routes.BlogController.createPost" method ="POST"
             enctype="multipart/form-data" >
-            <div class="form-group">
-               <br/>
-               <label>Title<span style="color:#AB1403"> *</span></label>
-               <input  class="form-control" value='@form("title").value' type="text" name="title" id="title" minlength="4" maxlength="70" placeholder="Title" required/>
-               <br/>
-                 <label>Subtitle<span style="color:#AB1403"> *</span></label>
-               <input  class="form-control"  value='@form("subtitle").value' type="text" name="subtitle" id="subtitle"  placeholder="Subtitle" required/>
-               <br/>
-               <label> Choose your post photo</label>
+            <div class="form-group">               
+               <div class='@("form-group has-error".when(form("title").hasErrors)) form-group' >
+  					<label class="control-label" for="title">Title<span style="color:#AB1403"> *</span></label>
+ 					<input  class="form-control" value='@form("title").value' type="text" name="title" id="title" minlength="4" maxlength="70" placeholder="Title" required/>
+			   </div>
+			   <div class='@("form-group has-error".when(form("subtitle").hasErrors)) form-group' >
+  					  <label class="control-label" for="subtitle">Subtitle<span style="color:#AB1403"> *</span></label>
+              		  <input  class="form-control"  value='@form("subtitle").value' type="text" name="subtitle" id="subtitle"  placeholder="Subtitle" required/>
+                </div> 
+               <label class="control-label" for="picture"> Choose your post photo</label>
                <input class="form-control" type="file" name="picture" id="picture" placeholder="Choose your photo" />
                <br/>
-                <label> Tags </label>
-               <input  class="form-control"  value='@form("tags").value' type="text" name="tags" id="tags"  placeholder="Tags" />
-               <br/>
-               <label>Content:<span style="color:#AB1403"> *</span></label>
+                <div class='@("form-group has-error".when(form("tags").hasErrors)) form-group' >
+  					<label class="control-label" for="tags"> Tags </label>
+               		<input  class="form-control"  value='@form("tags").value' type="text" name="tags" id="tags"  placeholder="Tags" />
+                </div> 
+             <br/>
+               <labelclass="control-label" for="content">Content:<span style="color:#AB1403"> *</span></label>
                <textarea class="form-control" name="content" id="content" required></textarea>
                <br/>
                <button type="submit" class="btn btn-default" required>Create post</button>
