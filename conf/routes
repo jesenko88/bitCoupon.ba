@@ -136,6 +136,7 @@ GET    /refundCoupon/:couponId        controllers.PayPalController.refundProcess
 
 POST   /createNewPost                 controllers.BlogController.createPost()
 GET    /createNewPost                 controllers.BlogController.createPostPage()
+GET	   /post						  controllers.BlogController.postPage(id: Long)	
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)

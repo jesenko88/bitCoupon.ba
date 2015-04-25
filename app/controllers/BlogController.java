@@ -2,20 +2,25 @@ package controllers;
 
 import helpers.FileUpload;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.UUID;
 
 import models.Post;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.twirl.api.Html;
 import views.html.admin.blog.*;;;
 
 public class BlogController extends Controller {
 
 	
-	
+	public static Result postPage(long id){
+		Post currentPost = Post.find(id);
+		Html html = new Html(currentPost.content);
+		return ok(post.render(html, currentPost));
+	}
 	
 	
 	public static Result createPostPage(){
@@ -30,9 +35,11 @@ public class BlogController extends Controller {
 		String picturePath = Post.POST_IMAGE_FOLDER;
 		String picture = FileUpload.imageUpload(picturePath);
 		Date created = new Date();
-		User creator = Sesija.getCurrentUser(ctx());
+		User creator = Sesija.getCurrentUser(ctx());		
+		String[] tagsArray = postForm.data().get("tags").split(" ");	
+		String tags = Post.createCSVTags(tagsArray);
 		
-		Post.createPost(title, subtitle, content, picture, created, creator);
+		Post.createPost(title, subtitle, content, picture, created, creator,tags);
 		
 		return TODO;
 	}

@@ -90,6 +90,7 @@ create table post (
   subtitle                  varchar(255),
   content                   TEXT,
   image                     varchar(255),
+  tags                      varchar(255),
   created                   timestamp,
   creator_id                bigint,
   constraint pk_post primary key (id))

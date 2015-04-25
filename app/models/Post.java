@@ -27,6 +27,9 @@ public class Post extends Model {
 	
 	public String image;
 	
+	@Embedded
+	public String tags;
+	
 	@Required
 	public Date created;
 	
@@ -38,8 +41,9 @@ public class Post extends Model {
 	public static final String POST_IMAGE_FOLDER = "blog" + File.separator
 												   + "posts" + File.separator; 
 	public static Finder<Long, Post> find = new Finder<Long, Post>(Long.class,Post.class);
+	
 	public Post(String title, String subtitle, String content, String image,
-			Date created, User creator) {	
+			Date created, User creator, String tags) {	
 		if(image == null || image.isEmpty())
 			image = NO_POST_IMAGE;
 		
@@ -49,12 +53,15 @@ public class Post extends Model {
 		this.image = image;
 		this.created = created;
 		this.creator = creator;
+		this.tags = tags;
 	}
 	
-	public static void createPost(String title, String subtitle, String content, String image,
-			Date created, User creator){
+	public static long createPost(String title, String subtitle, String content, String image,
+			Date created, User creator, String tags){
 		
-		new Post(title, subtitle, content, image, created, creator).save();
+		Post post = new Post(title, subtitle, content, image, created, creator, tags);
+		post.save();
+		return post.id;
 	}
 	
 	public static void updatePost(Post post){
@@ -85,4 +92,63 @@ public class Post extends Model {
 		return new ArrayList<Post>();
 	}
 	
+	/**
+	 * Method returns all tags of post
+	 * as list of string.
+	 * Basicly converting from CSV into List.
+	 * @return
+	 */
+	public List<String> getTagsArray(){
+		List<String> tags = new ArrayList<String>();
+		if(this.tags == null)
+			return tags;
+		String[] splitted = this.tags.split(",");
+		for(String tag: splitted){
+			tag.replaceAll(",", "");
+			tags.add(tag);
+		}		
+		return tags;
+	}
+	
+	/**
+	 * Creating CSV representation of List<String> tags.
+	 * @param splittedValues
+	 * @return
+	 */
+	public static String createCSVTags(String[] splittedValues){
+		StringBuilder sb  = new StringBuilder();
+		for(String tag: splittedValues){
+			if(tag != null && !tag.isEmpty())
+				sb.append(tag).append(",");
+		}
+		if(sb.length() < 1)
+			return null;
+		sb.deleteCharAt(sb.length()-1);
+		return sb.toString();
+	}
+	
+	/**
+	 * Method goes through list of all posts
+	 * and returns list of posts that contains
+	 * tag sent as parameter.
+	 * @param tag
+	 * @return
+	 */
+	public static List<Post> findByTag(String tag){
+		List<Post> byTag = new ArrayList<Post>();
+		List<Post> all = find.all();
+		for(Post post: all){
+			boolean contains = false;
+			List<String> tags = post.getTagsArray();
+			for(String current: tags){
+				if(current.equalsIgnoreCase(tag)){
+					contains = true;
+					break;
+				}
+			}
+			if(contains)
+				byTag.add(post);
+		}
+		return byTag;
+	}
 }
