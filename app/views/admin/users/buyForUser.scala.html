@@ -45,8 +45,9 @@
 </div>
  
    		 <div class="col-sm-9">
-	      <label>Receipment details</label>
-	       
+      
+	      @if(user != null) {
+	         <label>Recipient details</label>
 	         <!-- form action when admin buys for user -->
 	    	 @if(Sesija.adminCheck(ctx()) == true) {
 		     	<form action="/buyForUser" method="POST">
@@ -77,6 +78,27 @@
 				      </tbody>
 	   			</table>
 		    </form>
+		  }
+		  @if(user == null){
+		  	<br>
+		  	<div class="col-sm-8 pull-right"
+		  	 <label>Recipient details</label>
+			  	<form action="/couponpurchase" method="POST">
+			  		<input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
+			  		<!-- setting the value to -1 so it can be identified as an unregistered user -->
+			  		<input type="text" id="user_id" name="user_id" value="-1" hidden/>
+		        	<input class="form-control" id="email" name="email" type="email" placeholder="User email" required/><br>
+		        	<input class="form-control" id="name" name="name" type="text" placeholder="User first name" required/><br>
+		        	<input class="form-control" id="surname" name="surname" type="text" placeholder="User last name" required/><br>
+		        	<label>Enter quantity:</label><br>
+		        	<td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
+		        	<td>  <button type="submit" id="submit-buy-for" class="btn btn-warning pull-right" >Proceed</button> </td>
+			  	</form>
+		  	</div>
+		  }
+		    
+		    
+		    
 	   </div> 		
    	 
 </div>					
