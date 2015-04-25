@@ -53,12 +53,14 @@ public class BlogController extends Controller {
 		
 		return postPage(id);
 	}
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result editPostPage(long id){
 		Post post = Post.find(id);
 		Form<Post> form = Form.form(Post.class).fill(post);	
 		return ok(editPost.render(form, post));
 	}
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result editPost(long id){
 		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
@@ -71,8 +73,7 @@ public class BlogController extends Controller {
 		String content = postForm.data().get("content");
 		String picturePath = Post.POST_IMAGE_FOLDER;
 		String picture = FileUpload.imageUpload(picturePath);		
-		String[] tagsArray = postForm.data().get("tags").split(" ");	
-		String tags = Post.createCSVTags(tagsArray);
+		
 		
 		Post editPost = Post.find(id);
 		editPost.title = title;
@@ -80,8 +81,7 @@ public class BlogController extends Controller {
 		editPost.content = content;
 		if(picture != null && !picture.isEmpty()){
 			editPost.image = picture;
-		}
-		editPost.tags = tags;
+		}		
 		editPost.update();
 		return postPage(id);
 	}
