@@ -38,7 +38,7 @@ public class Post extends Model {
 	
 	public String image;	
 
-	@Pattern(value = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$",
+	@Pattern(value = "^[A-Za-z0-9 ,_]*[A-Za-z0-9][A-Za-z0-9 ,_]*$",
 			 message="Tags input not valid. Only characters and numbers alowed."
 			 		+ " Tags have to be separated with space.")
 	public String tags;	
