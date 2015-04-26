@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import models.Post;
 import models.User;
 import play.Logger;
@@ -70,6 +73,13 @@ public class BlogController extends Controller {
 		Date created = new Date();
 		User creator = Sesija.getCurrentUser(ctx());
 		String tags = postForm.data().get("tags");
+		
+
+		content = content.replaceAll("(?i)<(/?script[^>]*)>", "");	
+		
+
+		System.out.println(content);
+		
 		System.out.println(tags);		
 		long id = Post.createPost(title, subtitle, content, picture, created, creator,tags);
 		
@@ -96,6 +106,8 @@ public class BlogController extends Controller {
 		String picturePath = Post.POST_IMAGE_FOLDER;
 		String picture = FileUpload.imageUpload(picturePath);		
 		
+		content = content.replaceAll("(?i)<(/?script[^>]*)>", "");		
+		System.out.println(content);
 		
 		Post editPost = Post.find(id);
 		editPost.title = title;
