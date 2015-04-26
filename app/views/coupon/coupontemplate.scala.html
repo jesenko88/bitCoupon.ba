@@ -94,9 +94,18 @@
                <h2> @coupon.name </h2>
                <span>
                <p id="spanPrice"> @coupon.getPriceString() KM</p>
-               @if( Sesija.getCurrent(ctx()) == null){
-               	<a href="@routes.UserController.giftCheckoutPageUnregistered(coupon.id)"><h3>KUPI</h3></a>
+               @if( Sesija.getCurrent(ctx()) == null && CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0){
+               	<a href="@routes.UserController.giftCheckoutPageUnregistered(coupon.id)"><h3>BUY NOW</h3></a>
                }
+               @if(CouponController.isExpired(coupon.id)==true) {
+               <label>Coupon has expired </label>
+               }
+                @if(coupon.maxOrder <= coupon.minOrder) {
+	               <label><h3>Offer successful </h3></label>
+	               <label><h3>Coupons left: @coupon.maxOrder </h3></label>
+	               <br>
+	               
+                }
                
                @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false && Sesija.getCurrent(ctx()) != null){
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
@@ -121,14 +130,6 @@
 
                 }
 
-                @if(coupon.maxOrder <= coupon.minOrder) {
-	               <label><h3>Offer succeded </h3></label>
-	               <br>
-                }
-
-               @if(CouponController.isExpired(coupon.id)==true) {
-               <label>Coupon has expired </label>
-              	 }
                }
                @if(Sesija.adminCheck(ctx()) == true) {
                <a href='@routes.CouponController.editCoupon(coupon.id)' class="btn btn-fefault cart">Update coupon</a>						
@@ -156,7 +157,7 @@
              	  }
          	   }
          	   
-      		  @if(CouponController.isExpired(coupon.id)==false) {
+      		  @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > coupon.minOrder) {
                 <div class="pull-left">
                 <label  >
                <p><h3>@CouponController.leftToSell(coupon.id)</h3> left to reach the offer goal !</p>

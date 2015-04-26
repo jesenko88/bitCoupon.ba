@@ -470,7 +470,9 @@ public class UserController extends Controller {
 				coupon.price, quantity, totalPrice, "", client, coupon);
 		Coupon c = Coupon.find(id);
 		c.seller.notifications++;
+		c.maxOrder = c.maxOrder - quantity;
 		c.seller.save();
+		c.save();
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
