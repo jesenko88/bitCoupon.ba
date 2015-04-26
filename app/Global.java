@@ -127,7 +127,7 @@ public class Global extends GlobalSettings {
 					40,
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
-					othergit , descriptionCoupon2,
+					other , descriptionCoupon2,
 					remarkCoupon2, 5, 20 ,new Date(), bitCamp, status);
 		}
 		/* creating a coupon that is not expired */
