@@ -188,6 +188,13 @@ public class Post extends Model {
 		return allTags;
 	}
 	
+	/**
+	 * Since getting errors ( not global errors) from form is
+	 * complicated to handle in scala this methods do all the work
+	 * and returns errors as list of strings of form sent as parameter.
+	 * @param form
+	 * @return
+	 */
 	public static List<String> errors(Form<Post> form){
 		 Collection<List<ValidationError>> errors = form.errors().values();
 		 Iterator<List<ValidationError>> it = errors.iterator();
