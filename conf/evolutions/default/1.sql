@@ -84,6 +84,18 @@ create table pin (
   constraint pk_pin primary key (id))
 ;
 
+create table post (
+  id                        bigint not null,
+  title                     varchar(255),
+  subtitle                  varchar(255),
+  content                   TEXT,
+  image                     varchar(255),
+  tags                      varchar(255),
+  created                   timestamp,
+  creator_id                bigint,
+  constraint pk_post primary key (id))
+;
+
 create table question (
   id                        bigint not null,
   question                  TEXT,
@@ -185,6 +197,8 @@ create sequence photo_seq;
 
 create sequence pin_seq;
 
+create sequence post_seq;
+
 create sequence question_seq;
 
 create sequence rate_seq;
@@ -215,28 +229,30 @@ alter table photo add constraint fk_photo_coupon_6 foreign key (coupon_id) refer
 create index ix_photo_coupon_6 on photo (coupon_id);
 alter table pin add constraint fk_pin_user_7 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_pin_user_7 on pin (user_id);
-alter table question add constraint fk_question_user_8 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_question_user_8 on question (user_id);
-alter table question add constraint fk_question_company_9 foreign key (company_id) references company (id) on delete restrict on update restrict;
-create index ix_question_company_9 on question (company_id);
-alter table question add constraint fk_question_coupon_10 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_question_coupon_10 on question (coupon_id);
-alter table rate add constraint fk_rate_user_11 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_rate_user_11 on rate (user_id);
-alter table rate add constraint fk_rate_coupon_12 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_rate_coupon_12 on rate (coupon_id);
-alter table report add constraint fk_report_comment_13 foreign key (comment_id) references comment (id) on delete restrict on update restrict;
-create index ix_report_comment_13 on report (comment_id);
-alter table report add constraint fk_report_user_14 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_report_user_14 on report (user_id);
-alter table statistic add constraint fk_statistic_coupon_15 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_statistic_coupon_15 on statistic (coupon_id);
-alter table subscriber add constraint fk_subscriber_subscriber_16 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
-create index ix_subscriber_subscriber_16 on subscriber (subscriber_id);
-alter table transaction_cp add constraint fk_transaction_cp_buyer_17 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
-create index ix_transaction_cp_buyer_17 on transaction_cp (buyer_id);
-alter table transaction_cp add constraint fk_transaction_cp_coupon_18 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
-create index ix_transaction_cp_coupon_18 on transaction_cp (coupon_id);
+alter table post add constraint fk_post_creator_8 foreign key (creator_id) references user (id) on delete restrict on update restrict;
+create index ix_post_creator_8 on post (creator_id);
+alter table question add constraint fk_question_user_9 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_question_user_9 on question (user_id);
+alter table question add constraint fk_question_company_10 foreign key (company_id) references company (id) on delete restrict on update restrict;
+create index ix_question_company_10 on question (company_id);
+alter table question add constraint fk_question_coupon_11 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_question_coupon_11 on question (coupon_id);
+alter table rate add constraint fk_rate_user_12 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_rate_user_12 on rate (user_id);
+alter table rate add constraint fk_rate_coupon_13 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_rate_coupon_13 on rate (coupon_id);
+alter table report add constraint fk_report_comment_14 foreign key (comment_id) references comment (id) on delete restrict on update restrict;
+create index ix_report_comment_14 on report (comment_id);
+alter table report add constraint fk_report_user_15 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_report_user_15 on report (user_id);
+alter table statistic add constraint fk_statistic_coupon_16 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_statistic_coupon_16 on statistic (coupon_id);
+alter table subscriber add constraint fk_subscriber_subscriber_17 foreign key (subscriber_id) references user (id) on delete restrict on update restrict;
+create index ix_subscriber_subscriber_17 on subscriber (subscriber_id);
+alter table transaction_cp add constraint fk_transaction_cp_buyer_18 foreign key (buyer_id) references user (id) on delete restrict on update restrict;
+create index ix_transaction_cp_buyer_18 on transaction_cp (buyer_id);
+alter table transaction_cp add constraint fk_transaction_cp_coupon_19 foreign key (coupon_id) references coupon (id) on delete restrict on update restrict;
+create index ix_transaction_cp_coupon_19 on transaction_cp (coupon_id);
 
 
 
@@ -259,6 +275,8 @@ drop table if exists faq;
 drop table if exists photo;
 
 drop table if exists pin;
+
+drop table if exists post;
 
 drop table if exists question;
 
@@ -293,6 +311,8 @@ drop sequence if exists faq_seq;
 drop sequence if exists photo_seq;
 
 drop sequence if exists pin_seq;
+
+drop sequence if exists post_seq;
 
 drop sequence if exists question_seq;
 

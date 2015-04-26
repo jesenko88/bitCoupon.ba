@@ -60,6 +60,7 @@ GET    /giftForUser/:couponId         controllers.UserController.giftCheckoutPag
 GET    /giftForSomeone/:couponId      controllers.UserController.giftCheckoutPageUnregistered(couponId: Long)
 
 
+
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)
 GET    /newsletter                    controllers.SubscribeController.newsletterPanel()
@@ -136,7 +137,16 @@ GET    /couponsuccess                 controllers.PayPalController.couponSuccess
 GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
 GET    /refundCoupon/:couponId        controllers.PayPalController.refundProcessing(couponId: Long)
-
+#Blog controller
+GET    /blog                          controllers.BlogController.blog()
+POST   /createNewPost                 controllers.BlogController.createPost()
+GET    /createNewPost                 controllers.BlogController.createPostPage()
+GET    /post                          controllers.BlogController.postPage(id: Long)	
+POST   /editPost                      controllers.BlogController.editPost(id: Long)
+GET    /editPost                      controllers.BlogController.editPostPage(id: Long)	
+GET	   /delete						  controllers.BlogController.deletePost(id: Long)
+GET    /blog/search                   controllers.BlogController.search(q: String)
+GET    /blog/tag                      controllers.BlogController.byTag(tag: String)
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
 GET    /webjars/*file                 controllers.WebJarAssets.at(file)

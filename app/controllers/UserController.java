@@ -28,6 +28,7 @@ import tyrex.services.UUID;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
+import views.html.admin.blog.*;
 import views.html.coupon.*;
 import models.*;
 
@@ -57,8 +58,8 @@ public class UserController extends Controller {
 	public static Result register() {
 
 		Form<User> submit = Form.form(User.class).bindFromRequest();
-
-		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
+		System.out.println("Submit has errors: " +submit.hasErrors());
+		if (submit.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
 
