@@ -470,9 +470,4 @@ public class UserController extends Controller {
 		return ok(stats);
 	
 	}
-	
-	public static Result blog(){		
-		return ok(blog.render());
-	}	
-
 }

@@ -160,6 +160,7 @@ public class Post extends Model {
 					contains = true;
 					break;
 				}
+				System.out.println("TAG" +current);
 			}
 			if(contains)
 				byTag.add(post);

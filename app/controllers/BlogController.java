@@ -36,6 +36,23 @@ public class BlogController extends Controller {
 	}	
 	
 	
+	public static Result blog(){		
+		return ok(blog.render(Post.all()));
+	}	
+	
+	public static Result search(String q, String search_param){
+		List<Post> search;
+		System.out.println("Query is: " +q +" and param is " +search_param);
+		if(search_param.equalsIgnoreCase("tags")){
+			search = Post.findByTag(q);
+		}else{
+			search = Post.find.where().
+					ilike("title","%" + q +"%").findList();	
+			System.out.println("Search size: "+search.size());
+		}
+		return ok(blog.render(search));
+	}
+	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result createPost(){
 		Form<Post> postForm = Form.form(Post.class).bindFromRequest(); 

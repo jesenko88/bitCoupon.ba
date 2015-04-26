@@ -341,7 +341,7 @@ public class Global extends GlobalSettings {
 				"Problems look mighty small from 150 miles up"
 				, post_content, "images"
 						+ File.separator + "coupon_photos" + File.separator + 4
-						+ ".jpg", new Date(), User.find(true), "");
+						+ ".jpg", new Date(), User.find(true), "no,tag");
 
 	}
 }

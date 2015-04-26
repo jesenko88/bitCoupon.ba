@@ -55,7 +55,7 @@ POST   /pin                           controllers.UserController.newPin(id: Long
 POST   /buyForUser                    controllers.UserController.buyForUserExecute()
 GET    /buyForUser                    controllers.UserController.buyForUserPage()
 GET    /statisticAsFile               controllers.UserController.getStatistic()	
-GET    /blog                          controllers.UserController.blog()
+
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
 GET    /deleteSubscriber              controllers.SubscribeController.deleteSubscriber(id: Long)
@@ -134,11 +134,13 @@ GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
 GET    /refundCoupon/:couponId        controllers.PayPalController.refundProcessing(couponId: Long)
 
+GET    /blog                          controllers.BlogController.blog()
 POST   /createNewPost                 controllers.BlogController.createPost()
 GET    /createNewPost                 controllers.BlogController.createPostPage()
-GET	   /post						  controllers.BlogController.postPage(id: Long)	
-POST	/editPost					  controllers.BlogController.editPost(id: Long)
-GET	   /editPost					  controllers.BlogController.editPostPage(id: Long)		
+GET    /post                          controllers.BlogController.postPage(id: Long)	
+POST   /editPost                      controllers.BlogController.editPost(id: Long)
+GET    /editPost                      controllers.BlogController.editPostPage(id: Long)		
+GET	   /blog/search					  controllers.BlogController.search(q: String, search_param: String)
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
 GET    /webjars/*file                 controllers.WebJarAssets.at(file)
