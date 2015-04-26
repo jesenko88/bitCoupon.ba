@@ -10,6 +10,8 @@
       <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
       <script src="@routes.Assets.at("js/star-rating.js")"></script>
       <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
+      
+      
    <!--header-->
    <div class="header-middle">
       <!--header-middle-->
@@ -68,12 +70,12 @@
                      <!-- ratings -->
       		<br>
             <div>
-      @if(Sesija.getCurrentUser(ctx()) != null  && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
+      @if(Sesija.companyCheck(ctx()) == false && RateController.canRate(Sesija.getCurrentUser(ctx()).id, coupon.id) == true) {
       <label>Rate this coupon</label>
-      	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
-       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+      	<form id="rateForm" class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
+       	<input id="rate" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
        	<br/>
-       	<button type="submit" class="btn btn-default">Rate</button>
+       	<!--  <button type="submit" class="btn btn-default">Rate</button> -->
   		</form>
   		}
   		</div>
@@ -197,7 +199,7 @@
                <label class="pull-left">Number of views @coupon.statistic.visited</label>           
                </br>
                </br>
-              
+              				
                </div>
          <!--/product-information-->
       </div>
@@ -350,9 +352,9 @@
       </div>
    </div>
 </div>
+</div> 
 
-
-
+              
    <!-- AJAX HANDLE REPORT  -->
                 <script>						
 						function report(id) {		
@@ -413,10 +415,9 @@
 										return false;	
 										
 				 			  });	
-						
-			 		</script>
-														
-			        <script>
+					</script>
+				
+					<script>	
 			        jQuery(document).ready(function() {
 			            $('.auto-submit-star').rating({
 			                callback: function(value, link){
@@ -425,7 +426,14 @@
 			                }
 			            });
 			        });
-			        </script>
-
+					</script> 
+					
+					<script>
+					$(function() {
+						   $("#rate").change(function() {
+						     $("#rateForm").submit();
+						   });
+						 })
+</script>
 
 }

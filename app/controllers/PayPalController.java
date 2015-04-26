@@ -260,6 +260,12 @@ public class PayPalController extends Controller {
 		}
 	}
 
+	/**
+	 * Method for refunding
+	 * With this method company or admin refund all buyers of certain coupon
+	 * @param couponId - coupon id
+	 * @return redirect to the index page
+	 */
 	public static Result refundProcessing(long couponId) {
 
 		try {
