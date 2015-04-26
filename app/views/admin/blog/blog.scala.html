@@ -127,11 +127,12 @@
 					<li>
 					<hr>
 					<div class="post-preview">
-						<div class="col-xs-6 col-md-3">
-	    					<a  class="thumbnail">
-	    					  <img src="@routes.Assets.at(post.image)" alt="...">
+						<div class="col-md-3">
+   								 <div class = "thumbnail">
+	    					  <img  style="max-height:100px" src="@routes.Assets.at(post.image)" alt="...">
 	   						</a>
   						</div>
+  					</div>
 						<a href="@routes.BlogController.postPage(post.id)">
 							<h2 class="post-title">@post.title</h2>
 							<h4 class="post-subtitle">@post.subtitle</h3>
