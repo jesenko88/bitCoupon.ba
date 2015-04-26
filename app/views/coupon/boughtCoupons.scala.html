@@ -4,7 +4,14 @@
 
 @if(Sesija.getCurrentUser( ctx() ) != null ){
 @main("Coupon List") {
-	
+	<header>
+	 <script src="@routes.Assets.at("js/jspdf.js")"></script>
+      <script src="@routes.Assets.at("js/jspdf.plugin.from_html.js")"></script>
+      <script src="@routes.Assets.at("js/jspdf.plugin.split_text_to_size.js")"></script>
+      <script src="@routes.Assets.at("js/jspdf.plugin.standard_fonts_metrics.js")"></script>
+      <script src="@routes.Assets.at("js/FileSaver.js")"></script>
+     <script src="@routes.Assets.at("js/FileSaver.min.js")"></script>     
+     </header>
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
 				<div class="row">
@@ -49,9 +56,12 @@
 								<div class="single-products">
 									<div class="productinfo text-center">
 									<img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
-									
+									<div id="content" class="divContent">
 										<ul class="col-md-12" style="text-align: left" >
 											<br>
+											<li><strong>Coupon name: </strong> @transaction.coupon.name</li>
+											<li><strong>Buyer: </strong> @username</li>
+											<li><strong>Seller:</strong> @transaction.coupon.seller.name</li>											
 											<li><strong>Coupon price:</strong> @transaction.coupon.getPriceString()</li>
 											<li><strong>Quantity:</strong> @transaction.quantity</li>
 											<li><strong>Total price:</strong> @transaction.totalPrice</li>
@@ -59,7 +69,8 @@
 											<li><strong>Payment id:</strong> @transaction.payment_id</li>
 											<li><strong>Token:</strong> @transaction.token</li>
 										</ul>
-									
+										</div>
+            								<button id="cmd"  class="btnCmd" style="float:left">Download as PDF</button>
 									</div>
 								</div>
 							</div>
@@ -71,6 +82,30 @@
 	</section><!--/form-->
 							</div>
 
+<script>
+
+					//var doc = new jsPDF();
+					
+
+					$('.btnCmd').each(function(){
+						$(this).click(function () {
+							var doc = new jsPDF();
+							var specialElementHandlers = {
+								    '#editor': function (element, renderer) {
+								        return true;
+								    }
+								};
+						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						        'width': 170,
+						            'elementHandlers': specialElementHandlers
+						    });
+						    doc.save('sample-file.pdf');
+						});
+					});
+
+					
+
+					</script>
 }
 } else {
 @main("Login to Complete"){
@@ -80,5 +115,6 @@
 		</div>
 	</div>
 }
+
 }
 	

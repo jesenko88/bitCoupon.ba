@@ -11,6 +11,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.coupon.commentLine;
 
 /**
  * Controller for comments.
@@ -34,8 +35,9 @@ public class CommentController extends Controller {
 			flash("error","Comment should not be longer than 1200 characters");
 			return redirect("/coupon/" + couponId);
 		}
-		Comment.create(comment, coupon, user);	
-		return redirect("/coupon/" +couponId);	
+		long id = Comment.create(comment, coupon, user);	
+//		return redirect("/coupon/" +couponId);	
+		return ok(commentLine.render(Comment.findById(id), coupon));
 	}
 	
 	/**

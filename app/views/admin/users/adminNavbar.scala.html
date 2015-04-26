@@ -19,7 +19,7 @@
                   <li><a href="#">My Profile</a></li>
                </ul>
             </li>
-            <li><a href="#"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+            <li><a href="/logout"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
          </ul>
       </div>
    </div>
@@ -42,7 +42,7 @@
             <li><a href="@routes.UserController.listUsers"><i class="glyphicon glyphicon-user"></i>  User panel</a></li>
            
            <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2">
-            <i class="glyphicon glyphicon-tag"></i> Coupon panel <i class="glyphicon glyphicon-chevron-right"></i></a>
+            <i class="glyphicon glyphicon-tag"></i> Coupon panel <i class="glyphicon glyphicon-chevron-right"> </i></a>
                <ul class="nav nav-stacked collapse" id="menu2">
                    <li><a href="@routes.CouponController.addCouponView">Add coupon</a></li>
                   <li><a href="/allCoupons">All coupons</a></li>                        
@@ -50,15 +50,15 @@
             </li>
 
             <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu3">
-           <i class="glyphicon glyphicon-tasks"></i>  Category panel <i class="glyphicon glyphicon-chevron-right"></i></a>
+           <i class="glyphicon glyphicon-tasks"></i>  Category panel <i class="glyphicon glyphicon-chevron-right"> </i></a>
                <ul class="nav nav-stacked collapse" id="menu3">
                    <li><a href="/categoryPanel"> Add category</a></li>
-                  <li><a href="@routes.CategoryController.listCategories">All categories</a></li>                        
+                  <li><a href="/categoryList">All categories</a></li>                        
                </ul>
             </li>           
             <li><a href="/newsletter"><i class="glyphicon glyphicon-gift"></i> Newsletter </a></li>  
              <li><a href="/subscribers"><i class="glyphicon glyphicon-heart"></i> Subscribers </a></li>  
-        	<li><a href="@routes.UserController.getStatistic"><i class="glyphicon glyphicon-download-alt"></i> Download statistics </a></li>  
+        	<li><a href="@routes.UserController.getStatistic"><i class="glyphicon glyphicon-download-alt"> </i> Download statistics </a></li>  
          </ul>
       </li>     
       

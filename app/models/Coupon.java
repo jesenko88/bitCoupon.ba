@@ -300,7 +300,7 @@ public class Coupon extends Model {
 			return "";
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		return "Expiring: " + dateFormat.format(dateExpire);
+		return dateFormat.format(dateExpire);
 
 	}
 
@@ -617,7 +617,7 @@ public class Coupon extends Model {
 				return "Invalid price";
 			}
 			if (dateExpire.before(new Date())){
-				return "Invalid date";
+				return "Invalid expiration date";
 			}
 			if (category.name.equals("New Category")){
 				if (Category.findByName(category.name) != null){
@@ -635,7 +635,7 @@ public class Coupon extends Model {
 				return "Remark length has to be max 150 characters";
 			}
 			if ( minOrder < 0 || maxOrder < 0 || minOrder > maxOrder){
-				return "Invalid order amount";
+				return "Invalid order quantity, minimal order can not exceed max order";
 			}
 			//TODO dateUsage ??
 			

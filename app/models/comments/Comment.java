@@ -3,6 +3,7 @@
  */
 package models.comments;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.google.common.collect.Lists;
 
 import models.*;
 import play.data.validation.Constraints.Required;
@@ -69,7 +72,10 @@ public class Comment extends Model{
 	}
 	
 	public static List<Comment> findByCoupon(Coupon coupon){
-		return find.where().eq("coupon", coupon).findList();
+		List<Comment> comments = find.where().eq("coupon", coupon).findList();
+		if (comments == null)
+			return new ArrayList<Comment>();
+		return Lists.reverse(comments);
 	}
 	
 	public static Comment findById(long id){

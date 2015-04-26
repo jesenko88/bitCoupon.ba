@@ -11,7 +11,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.coupon.coupontemplate;
-import views.html.questionLine;
+import views.html.coupon.questionLine;
 
 /**
  * Question controller class

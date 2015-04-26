@@ -2797,6 +2797,52 @@ h2.title {
 .actionbox .btn-buy:hover {
     background-position: right -102px;
 }
+
+.btn-kupi {
+  background-image: url(../images/btn-kupi.png);
+  background-repeat: no-repeat;
+  display: block;
+  height: 51px;
+  width: 112px;
+  margin-right: auto;
+  margin-left: 0px;
+  font-family: Yanone, Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  line-height: 51px;
+  color: #FFF;
+  text-decoration: none;
+  padding-right: 15px;
+  margin-bottom: 8px;
+  text-align: center;
+  background-position: right 0px;
+}
+
+#img-thumb-coupon {
+	max-width: 20%;
+	margin-right: 5%;
+}
+
+#td-padding-1 {
+	max-width: 30%;
+}
+
+#th-width-60 {
+  width:60%;
+}
+
+
+.gift-link {
+  color: #428bca;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 15px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  margin-top: 15px;
+  position: relative;
+}
+
 .pricebox .price {
    font-family: 'Roboto', sans-serif;
     font-size: 35px;
