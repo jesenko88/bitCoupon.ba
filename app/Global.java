@@ -75,6 +75,7 @@ public class Global extends GlobalSettings {
 		Category food = null;
 		Category travel = null;
 		Category sport = null;
+		Category other = null;
 		Company admin = null;
 		Company bitCamp = null;
 		long ownedCoupinID1 = 0;
@@ -109,8 +110,8 @@ public class Global extends GlobalSettings {
 			sport.save();
 		}
 		if(Category.exists("Other") == false){
-			sport = new Category("Other");
-			sport.save();
+			other = new Category("Other");
+			other.save();
 		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
@@ -126,7 +127,7 @@ public class Global extends GlobalSettings {
 					40,
 					new Date(),
 					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
-					sport, descriptionCoupon2,
+					other, descriptionCoupon2,
 					remarkCoupon2, 5, 20 ,new Date(), bitCamp, status);
 		}
 		/* creating a coupon that is not expired */
@@ -180,7 +181,7 @@ public class Global extends GlobalSettings {
 					17,
 					date,
 					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
-					travel, descriptionCoupon5,
+					food, descriptionCoupon5,
 					remarkCoupon5, 5, 30 ,new Date(),bitCamp, status);
 		}
 		
