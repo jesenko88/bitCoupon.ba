@@ -118,4 +118,10 @@ public class BlogController extends Controller {
 		editPost.update();
 		return postPage(id);
 	}
+	
+	@Security.Authenticated(AdminFilter.class)
+	public static Result deletePost(long id){
+		Post.deletePost(id);
+		return blog();
+	}
 }

@@ -49,7 +49,12 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="@routes.BlogController.editPostPage(post.id)">Edit this post</a>
-                    </li>                  
+                    </li>    
+                    <li>
+                        <a href="@routes.BlogController.deletePost(post.id)"
+                        onclick="return confirm('Are you sure you want to delete this post?');"  
+                        >Delete this post</a>
+                    </li>                
                 </ul>
                }
             </div>

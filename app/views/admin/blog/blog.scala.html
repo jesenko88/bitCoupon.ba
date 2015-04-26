@@ -106,9 +106,10 @@
 	<div class="container">
 		<div class="row clearfix">		
 		<div class="col-md-10 column">		
-			
+					
 					<ul style="list-style-type: none;" id="myList">
 					@for(post <- posts){
+					<div class="col-md-10">	
 					@if(post.image == Post.NO_POST_IMAGE){
 					<li>
 					<hr>
@@ -126,10 +127,11 @@
 					}else{
 					<li>
 					<hr>
+					
 					<div class="post-preview">
-						<div class="col-md-3">
-   								 <div class = "thumbnail">
-	    					  <img  style="max-height:100px" src="@routes.Assets.at(post.image)" alt="...">
+						<div class="col-xs-3">
+   								 <div class = "thumbnail" style="display: inline-block;">
+	    					  <img style="max-height: 180px"  src="@routes.Assets.at(post.image)" alt="...">
 	   						</a>
   						</div>
   					</div>
@@ -140,11 +142,12 @@
 						<p class="post-meta">
 							Posted by <a href="#">ADMIN</a> on @post.created
 						</p>
-						
-					</div>
+						</div>
+					
 					<hr>
 					</li>
 					}
+					</div>
 				}
 				</ul>
 				<hr>
