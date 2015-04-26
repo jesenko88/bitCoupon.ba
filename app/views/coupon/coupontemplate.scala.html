@@ -1,16 +1,17 @@
 @(coupon: Coupon)
+
 @import models.comments._
 @import models._
-@import models.questions._
 @import java.math.BigInteger; var i=0
 @main("Welcome to bitCoupon") {
 	
-   <div id="content">
 <header id="header">
 <link href="@routes.Assets.at("css/star-rating.css")" rel="stylesheet">
       <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
       <script src="@routes.Assets.at("js/star-rating.js")"></script>
       <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
+      
+      
    <!--header-->
    <div class="header-middle">
       <!--header-middle-->
@@ -69,12 +70,12 @@
                      <!-- ratings -->
       		<br>
             <div>
-      @if(Sesija.getCurrentUser(ctx()) != null  && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id) == false) {
+      @if(Sesija.companyCheck(ctx()) == false && RateController.canRate(Sesija.getCurrentUser(ctx()).id, coupon.id) == true) {
       <label>Rate this coupon</label>
-      	<form class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
-       	<input id="rating" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+      	<form id="rateForm" class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
+       	<input id="rate" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
        	<br/>
-       	<button type="submit" class="btn btn-default">Rate</button>
+       	<!--  <button type="submit" class="btn btn-default">Rate</button> -->
   		</form>
   		}
   		</div>
@@ -182,8 +183,7 @@
                <label class="pull-left">Number of views @coupon.statistic.visited</label>           
                </br>
                </br>
-              				<button id="cmd">generate PDF</button>
-              
+              				
                </div>
          <!--/product-information-->
       </div>
@@ -207,7 +207,6 @@
             <div class="detailBox">
                <div class="titleBox">
                   <label>Comments</label>
-                  <button type="button" class="close" aria-hidden="true">&times;</button>
                </div>
                <div class="actionBox">
                   <ul class="commentList">
@@ -220,7 +219,7 @@
                            <p class="">@comment.comment</p>
                            <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
                            <span style="margin-left:20px" title="Report this comment">
-                           <a class="report" style="color:red" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"></i></a> 
+                           <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
                            </span>
                         </div>
 
@@ -235,7 +234,7 @@
 
                   <form class="form" action="@routes.CommentController.comment(coupon.id)" method="POST">
                      <div class="form-group">
-                        <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments"></textarea>
+                        <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments" required></textarea>
                      </div>
                      <div class="form-group">
                         <button type="submit" class="btn btn-default">Comment</button>
@@ -252,29 +251,55 @@
 			 <div class="detailBox">   
                <div class="titleBox">
                   <label>Questions</label>
-                  <button type="button" class="close" aria-hidden="true">&times;</button>
                </div>
                <div class="actionBox">
-                  <ul class="questionList">
+               
+               
+               	@if(Sesija.getCurrent(ctx()) != null){
+                 	 @if(Sesija.getCurrent(ctx()).isUser()){
+            	 		 <form class="form" id="questionForm">   	
+                
+		                     <div class="form-group">
+		                	     <textarea class="form-control" rows="5" id="question" name="question" placeholder="Your question" required></textarea>
+		                     </div>
+		                     <div class="form-group">
+		                	  <button type="submit" id="question-button"  class="btn btn-default">Submit question</button>    
+		                     </div>
+               		  	</form>    
+   
+  	                }
+                  }
+               
+               
+                  
+                  
+                  <br><br><br>
+                  
+                  
+               </div>
+            </div>
+            
+            <ul class="questionList">
                      @for(question <- Question.findByCoupon(coupon)){           	
-                     <li class="questionRow">
-                        <div class="askerImage">
-                           <img src="@routes.Assets.at(question.user.profilePicture)" />
-                        </div>
-                        <div class="commentText">
-                           <p class="">@question.question</p>
-                           <span class="date sub-text">Question by: @question.user.username on @question.questionDate</span>	
-                     </li>  
+	                     <li class="questionRow">
+	                        <div class="askerImage">
+	                           <img src="@routes.Assets.at(question.user.profilePicture)" />
+	                        </div>
+	                        <div class="commentText">
+	                           <p class="">@question.question</p>
+	                           <span class="date sub-text">Question by: @question.user.username on @question.questionDate</span>	
+	                        </div>
+	                     </li>  
+                  
                         @if(Sesija.getCurrentCompany(ctx()) == coupon.seller || Sesija.getCurrentUser(ctx()) == question.user){ 
 		                     <form action="@routes.QuestionController.deleteQuestion(question.id)">
 		                     	<button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Delete question?');"><h6>Delete question</h6></button>	
 		                     </form>	
                      	}
-                     	<br>
+                     
                      	@if(Sesija.getCurrentCompany(ctx()) == coupon.seller){
 		                     <li>
 						         <form class="form-inline" action="@routes.QuestionController.addAnswer(question.id)" method="POST">
-		                   <!--     <input class="form-control" id="answer" name="answer" type="text" placeholder="answer here" required/>  -->
 		                            <textarea class="form-control" rows="2" cols="50" id="answer" name="answer" placeholder="answer here" required></textarea>
 		                             <div class="form-group">
 		                             @if(question.answer.length() == 0){
@@ -285,45 +310,29 @@
 		                             </div>
 		                         </form>                 
 		                     </li> 
+		                     <br>
 		                 }
-		           </ul>
-		          <ul class="answerList">
+		           				
+		       		</ul>
 		                 @if(question.answer.length() > 0){
-						     <li >                                  
+						                                      
 						         <div class="answerText">
 		                           <h6><company-color>@coupon.seller.name:</company-color>  @question.answer </h6>
 		                           <span class="date sub-text">answered on @question.answerDate</span>					
 		                         </div>								
-							 </li>
+						
+						 
 					     }                	
-                   </ul>
+                   
                      }
-                  
-                  <br><br><br>
-                  
-                  @if(Sesija.getCurrent(ctx()) != null){
-                  @if(Sesija.getCurrent(ctx()).isUser()){
-             <!-- <form class="form" id="questionForm">   -->	
-                 <form class="form" action="@routes.QuestionController.addQuestion(coupon.id)" method="POST">   
-                     <div class="form-group">
-                  <!--  <input class="form-control" id="question" name="question" type="text" placeholder="Your question" />-->
-                        <textarea class="form-control" rows="5" id="question" name="question" placeholder="Your question" required></textarea>
-                     </div>
-                     <div class="form-group">
-                      <button type="submit" class="btn btn-default">Submit question</button>   
-                   <!--  			 <button type="submit" id="question-button"  class="btn btn-default">Submit question</button>    -->s
-                     </div>
-                  </form>    
-   
-                  }
-                  }
-               </div>
-            </div>
+            
          </div>
       </div>
    </div>
 </div>
-</div>
+</div> 
+
+              
    <!-- AJAX HANDLE REPORT  -->
                 <script>						
 						function report(id) {		
@@ -342,10 +351,30 @@
 								  });
 										e.preventDefault();
 							}
-						
-			 		</script>
-														
-			        <script>
+
+
+						$("#questionForm").submit(function(e)
+				 				{	
+				 			e.preventDefault();
+				 														
+										$.ajax({							
+											  method: "POST",
+											  url: "/question/@coupon.id",							  
+											  data : $("#questionForm").serialize()
+											}).done(function(msg) {
+												  $(".questionList").prepend(msg);				 
+											 }).fail(function( msg ) {
+												  console.log("FAILED");
+											   	  alert("Question should not be longer than 600 characters");
+											  });
+										e.preventDefault();
+										$("#questionForm")[0].reset();
+										return false;	
+										
+				 			  });	
+					</script>
+				
+					<script>	
 			        jQuery(document).ready(function() {
 			            $('.auto-submit-star').rating({
 			                callback: function(value, link){
@@ -354,25 +383,14 @@
 			                }
 			            });
 			        });
-			        </script>
-
-					<script>
-					var doc = new jsPDF();
-					var specialElementHandlers = {
-					    '#editor': function (element, renderer) {
-					        return true;
-					    }
-					};
-
-					$('#cmd').click(function () {
-					    doc.fromHTML($('#content').html(), 15, 15, {
-					        'width': 170,
-					            'elementHandlers': specialElementHandlers
-					    });
-					    doc.save('sample-file.pdf');
-					});
+					</script> 
 					
-				 
-					</script>
+					<script>
+					$(function() {
+						   $("#rate").change(function() {
+						     $("#rateForm").submit();
+						   });
+						 })
+</script>
 
 }

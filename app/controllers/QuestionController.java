@@ -3,14 +3,15 @@ package controllers;
 import java.util.Date;
 
 import models.Coupon;
+import models.Question;
 import models.User;
-import models.questions.Question;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.coupon.coupontemplate;
+import views.html.questionLine;
 
 /**
  * Question controller class
@@ -36,17 +37,16 @@ public class QuestionController extends Controller {
 			DynamicForm form = Form.form().bindFromRequest();
 			String question = form.data().get("question");
 			if (question.length() > 600){
-				flash("error","Question should not be longer than 600 characters");
-				return redirect("/coupon/" + coupon.id);
+				return badRequest();
 			}
-			Question.create(question, "", coupon, user);
+			long id = Question.create(question, "", coupon, user);
 			coupon.seller.notifications ++;
 			coupon.seller.save();
-			return redirect("/coupon/" + coupon.id);
+			return ok(questionLine.render(Question.findById(id), coupon));
 		}catch(Exception e){
 			Logger.error(e.getMessage(), e);
 			flash("error", INTERNAL_SERVER_ERROR);
-			return redirect("/");
+			return badRequest();
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class QuestionController extends Controller {
 		}catch(Exception e){
 			Logger.error(e.getMessage(), e);
 			flash("error", INTERNAL_SERVER_ERROR);
-			return redirect("/");
+			return badRequest("Something went wrong, try again later");
 		}
 	}
 	

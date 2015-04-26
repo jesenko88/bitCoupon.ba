@@ -1,21 +1,32 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
+
+import models.comments.Comment;
+import models.comments.Report;
+import models.Question;
+
 import org.junit.*;
+
+import controllers.QuestionController;
+import play.Play;
 import play.test.WithApplication;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 public class ModelsTest extends WithApplication {
+
+
 	@Before
 	public void setUp() {
 		
-		fakeApplication( inMemoryDatabase()); //,fakeGlobal() ne radi u play verzijama > 2.0, uzeti u obzir admina na mjestu 1 zbog global klase
+		fakeApplication( inMemoryDatabase()); //,fakeGlobal() ne radi u play verzijama > 2.0, uzeti u obzir admina na mjestu 1 zbog global klase	
 	}
 	
 	@Test
 	public void testCreateUser() {
-		long id = User.createUser("Neil", "Armstrong", new Date(), "male", "adress", "city", "neil@mail.com", "123456", false);
+		long id = User.createUser("Neil", "Armstrong", new Date(), "male", "adress", "city", "neil@mail.com", "123456", false, "picture");
 		User u = User.find(id);
 		assertNotNull(u);
 		assertEquals(u.username, "Neil");
@@ -31,7 +42,7 @@ public class ModelsTest extends WithApplication {
 	
 	@Test
 	public void testDelete() {
-		long id = User.createUser("Jack", "Sparrow", new Date(), "male", "adress", "city", "neil@mail.com", "123456", false);
+		long id = User.createUser("Jack", "Sparrow", new Date(), "male", "adress", "city", "neil@mail.com", "123456", false, "picture");
 		User.delete(id);
 		User b = User.find(id);
 		assertNull(b);
@@ -60,7 +71,7 @@ public class ModelsTest extends WithApplication {
 		long id = Coupon.createCoupon("test", 2.22, new Date(), "testurl", mix, "description", "remark");
 		Coupon.delete(id);
 		Coupon c = Coupon.find(id);
-		assertNull(c);
+		assertEquals(c.status, Coupon.Status.DELETED);
 		
 	}
 
@@ -68,7 +79,7 @@ public class ModelsTest extends WithApplication {
 	
 	@Test
 	public void updateUser(){
-		long id = User.createUser("Jack", "Sparrow", new Date(), "male", "adress", "city", "neil@mail.com", "123456", false);
+		long id = User.createUser("Jack", "Sparrow", new Date(), "male", "adress", "city", "neil@mail.com", "123456", false, "picture");
 		User user = User.find(id);
 		user.username = "Daniels";
 		user.isAdmin = true;
@@ -144,5 +155,75 @@ public class ModelsTest extends WithApplication {
 		assertNull(test);
 	}
 	
+	@Test
+	public void createQuestion() {
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		long qid = Question.create("question", "", Coupon.find(cid), User.find(uid));
+		Question test = Question.findById(qid);
+		assertNotNull(test);
+	}
+	
+	@Test
+	public void deleteQuestion() {
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		long qid = Question.create("question", "", Coupon.find(cid), User.find(uid));
+		Question.delete(qid);
+		assertNull(Question.findById(qid));
+	}
+	
+	@Test
+	public void createComment() {
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		long commentId = Comment.create("Comment test", Coupon.find(cid), User.find(uid));
+		assertNotNull(Comment.findById(commentId));
+	}
+	
+	@Test 
+	public void deleteComment() {
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		long commentId = Comment.create("Comment test", Coupon.find(cid), User.find(uid));
+		Comment.delete(commentId);
+		assertNull(Comment.findById(commentId));
+	}
+	
+	
+	@Test
+	public void reportComment() {
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		long commentId = Comment.create("Comment test", Coupon.find(cid), User.find(uid));
+		Report report = new Report("Some report", Comment.findById(commentId), User.find(uid));
+		report.save();
+		assertEquals(report.comment, Comment.findById(commentId));
+	}
+	
+	@Test
+	public void findReportByComment(){
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		Comment comment = new Comment("Comment test", Coupon.find(cid), User.find(uid));
+		comment.save();
+		Report report = new Report("Some report", comment, User.find(uid));
+		report.save();
+		List<Report> reports = Report.findByComment(comment); 
+		assertEquals(report, reports.get(0));
+	}
+
+	@Test
+	public void deleteReport() {
+		long cid = Coupon.createCoupon("Test", 55.3, null, "", null, "", "");
+		long uid = User.createUser("Neil", "Tester", null, "", "", "", "", "", false, "");
+		long commentId = Comment.create("Comment test", Coupon.find(cid), User.find(uid));
+		long rid = Report.create("Report test", Comment.findById(commentId), User.find(uid));
+		Report.delete(rid);
+		assertNull(Report.findById(rid));	
+	}
+
+	
 	
 }
+

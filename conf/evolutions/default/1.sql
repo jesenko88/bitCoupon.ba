@@ -12,7 +12,7 @@ create table category (
 
 create table comment (
   id                        bigint not null,
-  comment                   varchar(255),
+  comment                   TEXT,
   user_id                   bigint,
   coupon_id                 bigint,
   date                      timestamp,

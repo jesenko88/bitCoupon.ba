@@ -25,7 +25,6 @@ import com.google.common.io.Files;
 
 import models.Category;
 import models.comments.Comment;
-import models.questions.Question;
 import models.Company;
 import models.Coupon;
 import models.Photo;

@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import models.questions.Question;
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;

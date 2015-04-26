@@ -89,8 +89,8 @@ public class Rate extends Model {
 	 * @param coupon
 	 * @return list of rates
 	 */
-	public static List<Rate> findByCoupon(Coupon coupon){
-		return find.where().eq("coupon", coupon).findList();
+	public static List<Rate> findByCoupon(long couponId){
+		return find.where().eq("coupon_id", couponId).findList();
 	}
 	
 	/**
@@ -105,12 +105,29 @@ public class Rate extends Model {
 	/**
 	 * Find rate by user
 	 * @param userId
-	 * @return certain rate
+	 * @return list of rates
 	 */
-	public static Rate findByUser(long userId) {
-		return find.where().eq("user_id", userId).findUnique();
+	public static List<Rate> findByUser(long userId) {
+		return find.where().eq("user_id", userId).findList();
 	}
 	
+	/**
+	 * Find rate by user id
+	 * @param couponId
+	 * @return certain rate
+	 */
+	public static Rate findByUserId(long userId) {
+		return find.where().eq("coupon_id", userId).findUnique();
+	}
+	
+	/**
+	 * Find rate by coupon id
+	 * @param couponId
+	 * @return certain rate
+	 */
+	public static Rate findByCouponId(long couponId) {
+		return find.where().eq("coupon_id", couponId).findUnique();
+	}
 	/**
 	 * Method which calculate average grade of certain coupon
 	 * @param id - id of coupon
@@ -118,8 +135,7 @@ public class Rate extends Model {
 	 */
 	public static double progres(long id) {
 		double progress = 0;
-		Coupon coupon = Coupon.find(id);
-		List<Rate> rates = findByCoupon(coupon);
+		List<Rate> rates = findByCoupon(id);
 		for(int i = 0; i < rates.size(); i++) {
 			progress += rates.get(i).rate;
 		}
@@ -136,10 +152,16 @@ public class Rate extends Model {
 	 * @param userId
 	 * @return return true if user is already rate, else return false
 	 */
-	public static boolean alreadyRate(long userId) {
-		
-		if(Rate.findByUser(userId) != null)
-			return true;
+	public static boolean alreadyRate(long userId, long couponId) {
+		List<Rate> findByUser = findByUser(userId);
+		List<Rate> findByCoupon = findByCoupon(couponId);
+		for(int i = 0; i < findByUser.size(); i++) {
+			for(int j = 0; j < findByCoupon.size(); j++) {
+				
+				if(findByCoupon != null && findByUser != null && findByCoupon.get(j).equals(findByUser.get(i)))
+					return true;
+			}
+		}
 		return false;
 	}
 }
