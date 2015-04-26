@@ -52,7 +52,12 @@
                      <h2>Price: @transaction.coupon.getPriceString() KM</h2>
                      <p>Coupon name: @transaction.coupon.name</p>
                      <p>Quantity: @transaction.quantity</p>
+                     @if(transaction.buyer != null){
                      <p>Buyer: <a href="@routes.SuperUserController.profilePage(transaction.buyer.username)">@transaction.buyer.username @transaction.buyer.surname</p>
+                     }
+                    @if(transaction.buyer == null){
+                    <p>Buyer: @transaction.buyer_name @transaction.buyer_surname</p>
+                    }
                      <a href="@routes.CouponController.showCoupon(transaction.coupon.id)" class="btn btn-default add-to-cart">View Coupon</a>
                   </div>
                </div>
