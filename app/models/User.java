@@ -2,6 +2,9 @@ package models;
 
 import helpers.HashHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,6 +68,17 @@ public class User extends SuperUser {
 	
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
+	
+	/**
+	 * Private constructor for a temporary user
+	 *  that is not saved to the database
+	 */
+	private User(String email, String username, String surname){
+		super(email, null, null, null);
+		this.username = username;
+		this.surname = surname;
+		this.email = email;
+	}
 
 	public User(String username, String surname, Date dob, String gender, String adress,
 			String city, String email, String password, boolean isAdmin, String profilePicture) {
@@ -77,6 +91,17 @@ public class User extends SuperUser {
 		this.isAdmin = isAdmin;
 		this.pin = null;
 		this.profilePicture = profilePicture;
+	}
+	
+	/**
+	 * Method creates a temporary user that is not saved in the database
+	 * @param email String
+	 * @param username String
+	 * @param surname String
+	 * @return User
+	 */
+	public static User createTempUser(String email, String username, String surname) {
+		return new User(email, username, surname);
 	}
 
 	/**
@@ -306,8 +331,19 @@ public class User extends SuperUser {
 	
 	
 	public String validate() {
+		Date maxDobDate = null;
+		try {
+			maxDobDate = new SimpleDateFormat("dd/MM/yyyy")
+			.parse(Play.application().configuration().getString("minRegistrationDOB"));
+		} catch (ParseException e) {
+			Logger.error(e.getMessage());
+		}
+		if (dob.after(maxDobDate)){
+			return "You have to be over the age of 18 in order to register";
+		}
 
-		if (username.length() < 4 || username.equals("Username") || username.length() > 20) {
+		if (username.length() < 4 || username.equals("Username")
+				|| username.length() > 20) {
 			return "Username must be at between 4 and 20 chatacters";
 		}
 		if (email.equals("Email")) {

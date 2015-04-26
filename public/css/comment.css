@@ -32,7 +32,7 @@
 .commentList {
     padding:0;
     list-style:none;
-    max-height:200px;
+    max-height:none;
     overflow:auto;
 }
 
@@ -72,7 +72,8 @@
     border-radius:50%;
 }
 .commentText p {
-	width: 60%;
+	padding-top: 2%;
+	width: 90%;
     margin:0;
 }
 .sub-text {
@@ -82,6 +83,17 @@
 }
 .actionBox {
     padding:10px;
+}
+
+.commentRow {
+    padding:0;
+    list-style:none;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    min-height:60px;
+    max-height:200px;
+    overflow:inherit;
+    width: 64%;
 }
 
 .questionRow {

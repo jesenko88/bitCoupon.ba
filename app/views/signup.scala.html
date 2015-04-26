@@ -52,7 +52,7 @@
                   <br>
 
                   <p> Date of birth </p>
-                  <input class="form-control datepicker-bit" value='@myForm("datepicker").value' id="datepicker" name="dob" type="date" onClick="this.select()"  placeholder="Date of birth" required/>
+                  <input class="form-control datepicker-bit" value='@myForm("datepicker").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
                    <span id="error" style="display:none; color:red"> You are underage of 18 </span>
                   <input class="form-control" value='@myForm("gender").value' type="radio" id="gender-male" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" checked required/>Male 
                   <input class="form-control" value='@myForm("gender").value' type="radio" id="gender-female" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female 
@@ -60,7 +60,7 @@
                   <br>      
                   <br>                            
                   <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/><br>                
-                  <input class="form-control" value='@myForm("City").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
+                  <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
                   <br>
                   <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
                </form>

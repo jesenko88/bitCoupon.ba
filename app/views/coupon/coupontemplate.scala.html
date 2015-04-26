@@ -94,17 +94,32 @@
                <h2> @coupon.name </h2>
                <span>
                <p id="spanPrice"> @coupon.getPriceString() KM</p>
-               @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false) {
+               @if( Sesija.getCurrent(ctx()) == null){
+               	<a href="@routes.UserController.giftCheckoutPageUnregistered(coupon.id)"><h3>KUPI</h3></a>
+               }
+               
+               @if(Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false && Sesija.getCurrent(ctx()) != null){
                @if(CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0) {
-               <label>Enter the amount of coupons </label>
+               	             	
+               	               	
+        	   <label>Enter the amount of coupons </label>
                <form action="/couponpurchase" method="POST" data-paypal-button="true">
+                  <input type="text" id="user_id" name="user_id" value=@Sesija.getCurrentUser(ctx()).id hidden/>
                   <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
                   <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/>
                   <button type="submit" id="submit-buy" >
                   <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
                   </button>
                </form>
-               }
+               
+               
+               <!-- proba buy for someone -->
+               	
+               	<div class="actionbox btn-buy">                                                   
+                   <a href="/makeAGift/@coupon.id" class="gift-link">or make a gift ?</a>
+				</div>
+
+                }
 
                 @if(coupon.maxOrder <= coupon.minOrder) {
 	               <label><h3>Offer succeded </h3></label>
@@ -208,31 +223,13 @@
                <div class="titleBox">
                   <label>Comments</label>
                </div>
-               <div class="actionBox">
-                  <ul class="commentList">
-                     @for(comment <- Comment.findByCoupon(coupon)){           	
-                     <li>
-                        <div class="commenterImage">
-                           <img src="@routes.Assets.at(comment.user.profilePicture)" />
-                        </div>
-                        <div class="commentText">
-                           <p class="">@comment.comment</p>
-                           <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
-                           <span style="margin-left:20px" title="Report this comment">
-                           <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
-                           </span>
-                        </div>
-
-                     </li>                     
-                     
-                     
-                     }
-                  </ul>
-                  <br><br><br>
-                  @if(Sesija.getCurrent(ctx()) != null){
+               
+               
+                           
+            	  @if(Sesija.getCurrent(ctx()) != null){
                   @if(Sesija.getCurrent(ctx()).isUser()){
 
-                  <form class="form" action="@routes.CommentController.comment(coupon.id)" method="POST">
+                  <form class="form" id="commentForm">
                      <div class="form-group">
                         <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments" required></textarea>
                      </div>
@@ -243,6 +240,30 @@
    
                   }
                   }
+               
+               
+               <div class="actionBox">
+                  <ul class="commentList">
+                     @for(comment <- Comment.findByCoupon(coupon)){           	
+                     <li class="commentRow">
+                        <div class="commenterImage">
+                           <img src="@routes.Assets.at(comment.user.profilePicture)" />
+                        </div>
+                        <div class="commentText">
+                           <p >@comment.comment</p>
+                           <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
+                           <span style="margin-left:20px" title="Report this comment">
+                           <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
+                           </span>
+                        </div>
+
+                     </li>                     
+                     <br>
+                     
+                     }
+                  </ul>
+        
+
                </div>
             </div>
          </div>
@@ -351,6 +372,27 @@
 								  });
 										e.preventDefault();
 							}
+							
+							
+							$("#commentForm").submit(function(e)
+				 				{	
+				 			e.preventDefault();
+				 														
+										$.ajax({							
+											  method: "POST",
+											  url: "/comment/@coupon.id",							  
+											  data : $("#commentForm").serialize()
+											}).done(function(msg) {
+												  $(".commentList").prepend(msg);				 
+											 }).fail(function( msg ) {
+												  console.log("FAILED");
+											   	  alert("Question should not be longer than 600 characters");
+											  });
+										e.preventDefault();
+										$("#questionForm")[0].reset();
+										return false;	
+										
+				 			  });
 
 
 						$("#questionForm").submit(function(e)
