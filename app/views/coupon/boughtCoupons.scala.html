@@ -56,7 +56,7 @@
 								<div class="single-products">
 									<div class="productinfo text-center">
 									<img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
-									<div id="content">
+									<div id="content" class="divContent">
 										<ul class="col-md-12" style="text-align: left" >
 											<br>
 											<li><strong>Coupon name: </strong> @transaction.coupon.name</li>
@@ -70,7 +70,7 @@
 											<li><strong>Token:</strong> @transaction.token</li>
 										</ul>
 										</div>
-            								<button id="cmd" style="float:left">Download as PDF</button>
+            								<button id="cmd"  class="btnCmd" style="float:left">Download as PDF</button>
 									</div>
 								</div>
 							</div>
@@ -84,20 +84,26 @@
 
 <script>
 
-					var doc = new jsPDF();
-					var specialElementHandlers = {
-					    '#editor': function (element, renderer) {
-					        return true;
-					    }
-					};
+					//var doc = new jsPDF();
+					
 
-					$('#cmd').click(function () {
-					    doc.fromHTML($('#content').html(), 15, 15, {
-					        'width': 170,
-					            'elementHandlers': specialElementHandlers
-					    });
-					    doc.save('sample-file.pdf');
+					$('.btnCmd').each(function(){
+						$(this).click(function () {
+							var doc = new jsPDF();
+							var specialElementHandlers = {
+								    '#editor': function (element, renderer) {
+								        return true;
+								    }
+								};
+						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						        'width': 170,
+						            'elementHandlers': specialElementHandlers
+						    });
+						    doc.save('sample-file.pdf');
+						});
 					});
+
+					
 
 					</script>
 }
