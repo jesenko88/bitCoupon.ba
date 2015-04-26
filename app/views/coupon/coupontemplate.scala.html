@@ -70,13 +70,15 @@
                      <!-- ratings -->
       		<br>
             <div>
-      @if(Sesija.companyCheck(ctx()) == false && RateController.canRate(Sesija.getCurrentUser(ctx()).id, coupon.id) == true) {
+      @if(Sesija.companyCheck(ctx()) == false && Sesija.getCurrentUser(ctx()) != null){
+      @if( RateController.canRate(Sesija.getCurrentUser(ctx()).id, coupon.id) == true) {
       <label>Rate this coupon</label>
       	<form id="rateForm" class="rating" action="@routes.RateController.rating(coupon.id)" method="POST">
        	<input id="rate" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
        	<br/>
-       	<!--  <button type="submit" class="btn btn-default">Rate</button> -->
+   
   		</form>
+  		}
   		}
   		</div>
       
