@@ -2,6 +2,9 @@ package models;
 
 import helpers.HashHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -328,8 +331,19 @@ public class User extends SuperUser {
 	
 	
 	public String validate() {
+		Date maxDobDate = null;
+		try {
+			maxDobDate = new SimpleDateFormat("dd/MM/yyyy")
+			.parse(Play.application().configuration().getString("minRegistrationDOB"));
+		} catch (ParseException e) {
+			Logger.error(e.getMessage());
+		}
+		if (dob.after(maxDobDate)){
+			return "You have to be over the age of 18 in order to register";
+		}
 
-		if (username.length() < 4 || username.equals("Username") || username.length() > 20) {
+		if (username.length() < 4 || username.equals("Username")
+				|| username.length() > 20) {
 			return "Username must be at between 4 and 20 chatacters";
 		}
 		if (email.equals("Email")) {
