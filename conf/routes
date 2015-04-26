@@ -140,7 +140,8 @@ GET    /createNewPost                 controllers.BlogController.createPostPage(
 GET    /post                          controllers.BlogController.postPage(id: Long)	
 POST   /editPost                      controllers.BlogController.editPost(id: Long)
 GET    /editPost                      controllers.BlogController.editPostPage(id: Long)		
-GET	   /blog/search					  controllers.BlogController.search(q: String, search_param: String)
+GET	   /blog/search					  controllers.BlogController.search(q: String)
+GET	   /blog/tag                      controllers.BlogController.byTag(tag: String)
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
 GET    /webjars/*file                 controllers.WebJarAssets.at(file)
