@@ -37,12 +37,14 @@ public class Global extends GlobalSettings {
 			+ "Hotel Brass unikatan po mnogo čemu: dizajnu, usluzi te uslužnom osoblju."
 			+ "Upravo ovakav ambijent začinit će i uljepšati Vašu romantičnu večeru.";
 
+
 	String nameCoupon4 = "Nezaboravno putovanje u najljepše gradove Mediterana!";
 	String remarkCoupon4 = "Platite samo 355 KM za šestodnevno putovanje u italijansku Ligurijsku rivijeru i francusku Azurnu obalu";
 	String adress4 = "Grbavicka 33";
 	String city4 = "Sarajevo";
 	String contact4 = "033/444-444";
 	String descriptionCoupon4 = "Ovo putovanje objedinjuje italijansku Ligurijsku rivijeru i francusku Azurnu obalu, fantastične predjele i nevjerovatno lijepe gradove... Pružamo Vam priliku da uživate u mirisima lovora, maslina, mora, jasmina i parfema u vazduhu...";
+
 
 	// String pic = "images/home/avatar.jpg";
 
@@ -92,6 +94,7 @@ public class Global extends GlobalSettings {
 		Category food = null;
 		Category travel = null;
 		Category sport = null;
+		Category other = null;
 		Company admin = null;
 		Company bitCamp = null;
 		long ownedCoupinID1 = 0;
@@ -130,9 +133,11 @@ public class Global extends GlobalSettings {
 					+ "category-photos" + File.separator + "sport.png");
 			sport.save();
 		}
-		if (Category.exists("Other") == false) {
-			sport = new Category("Other");
-			sport.save();
+
+		if(Category.exists("Other") == false){
+			other = new Category("Other");
+			other.save();
+
 		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
@@ -142,11 +147,15 @@ public class Global extends GlobalSettings {
 					new Date(), bitCamp, status);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
-			ownedCoupinID1 = Coupon.createCoupon(nameCoupon2, 40, new Date(),
-					"images" + File.separator + "coupon_photos"
-							+ File.separator + 2 + ".jpg", sport,
-					descriptionCoupon2, remarkCoupon2, 5, 20, new Date(),
-					bitCamp, status);
+
+			ownedCoupinID1 = Coupon.createCoupon(
+					nameCoupon2,
+					40,
+					new Date(),
+					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
+					other , descriptionCoupon2,
+					remarkCoupon2, 5, 20 ,new Date(), bitCamp, status);
+
 		}
 		/* creating a coupon that is not expired */
 		if (Coupon.checkByName(nameCoupon3) == false) {
@@ -189,10 +198,15 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(nameCoupon5, 17, date, "images"
-					+ File.separator + "coupon_photos" + File.separator + 5
-					+ ".jpg", travel, descriptionCoupon5, remarkCoupon5, 5, 30,
-					new Date(), bitCamp, status);
+
+			Coupon.createCoupon(
+					nameCoupon5,
+					17,
+					date,
+					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
+					food, descriptionCoupon5,
+					remarkCoupon5, 5, 30 ,new Date(),bitCamp, status);
+
 		}
 
 		if (Coupon.checkByName(nameCoupon6) == false) {

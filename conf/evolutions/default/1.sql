@@ -157,6 +157,8 @@ create table transaction_cp (
   total_price               double,
   token                     varchar(255),
   buyer_id                  bigint,
+  buyer_name                varchar(255),
+  buyer_surname             varchar(255),
   coupon_id                 bigint,
   date                      timestamp,
   constraint pk_transaction_cp primary key (id))

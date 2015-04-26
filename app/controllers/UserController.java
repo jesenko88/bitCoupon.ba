@@ -411,7 +411,14 @@ public class UserController extends Controller {
 		return ok(boughtCoupons.render(session("name"), transactions));
 	}
 
-	// TODO comment
+	/**
+	 * Method genereates a new random pin for a user.
+	 * The pin is valid for 5 minutes.
+	 * The generated pin can be used by the administrator to
+	 * buy a coupon for a user.
+	 * @param user id  long
+	 * @return renders the profile page with the generated pin
+	 */
 	@Security.Authenticated(CurrentUserFilter.class)
 	public static Result newPin(long id) {
 		User currentUser = User.find(id);
@@ -419,7 +426,13 @@ public class UserController extends Controller {
 		return ok(profile.render(currentUser));
 	}
 
-	// TODO comment
+	/**
+	 * Renders the administrator 'buy for user' page.
+	 * It gets the pin from the form and renders the 
+	 * checkout page where the admin can see the user details 
+	 * and choose the number of coupon to buy
+	 * @return 
+	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserPage() {
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -435,7 +448,12 @@ public class UserController extends Controller {
 		return ok(buyForUser.render(coupon, user));
 	}
 
-	// TODO comment
+	/**
+	 * Method finalizes the transaction. The execution process excludes
+	 * paypal in this case. The transaction details are going in the 
+	 * TransactionCP table in the database.
+	 * @return
+	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserExecute() {
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -453,7 +471,9 @@ public class UserController extends Controller {
 				coupon.price, quantity, totalPrice, "", client, coupon);
 		Coupon c = Coupon.find(id);
 		c.seller.notifications++;
+		c.maxOrder = c.maxOrder - quantity;
 		c.seller.save();
+		c.save();
 		flash("success", "Transaction complete");
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
@@ -469,5 +489,40 @@ public class UserController extends Controller {
 		response().setHeader("Content-disposition","attachment; filename=statistics.xls");
 		return ok(stats);
 	
+	}
+	
+	
+	/**
+	 * 
+	 * @param couponID
+	 * @return
+	 */
+	@Security.Authenticated(CurrentUserFilter.class)
+	public static Result makeAGiftPage(long couponID) {
+		Coupon coupon = Coupon.find(couponID);
+		if (coupon != null)
+			return ok(makeAGift.render(coupon));
+		flash("error", "Internal server error, please try again later");
+		return redirect("/");
+	}
+	
+	// TODO comment
+	@Security.Authenticated(CurrentUserFilter.class)
+	public static Result giftCheckoutPage(long id) {
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
+		Coupon coupon = Coupon.find(id);
+		String email = dynamicForm.data().get("email");
+		User user = User.findByEmail(email);
+		if (user == null) {
+			flash("info", "A user with email: " + email + " doesn't exist");
+			return badRequest(makeAGift.render(coupon));
+		}
+		return ok(buyForUser.render(coupon, user));
+	}
+	
+
+	public static Result giftCheckoutPageUnregistered(long id) {
+		Coupon coupon = Coupon.find(id);
+		return ok(buyForUser.render(coupon, null));
 	}
 }
