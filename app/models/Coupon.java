@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 
 import api.JSonHelper;
 
@@ -16,7 +18,11 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import play.Logger;
+import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.Min;
 import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.libs.Json;
 
@@ -33,15 +39,23 @@ public class Coupon extends Model {
 	@Id
 	public long id;
 
-	@MinLength(4)
+	@Required
+	@MinLength(3)
+	@MaxLength(45)
+	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+			message="Company name format is not valid."	)
 	public String name;
-
+	
+	@Required
 	public double price;
 
 	@Column(name = "created_at")
+	@NotNull
 	public Date dateCreated;
 
 	@Column(name = "expired_at")
+	@Required
+	@Future
 	public Date dateExpire;
 
 	public String picture;
@@ -50,20 +64,35 @@ public class Coupon extends Model {
 	public Category category;
 
 	@Column(columnDefinition = "TEXT")
+	@Required
+	@MinLength(10)
+	@MaxLength(1000)
+	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+			message="Company description format is not valid."	)
 	public String description;
-
+	
+	@MinLength(6)
+	@MaxLength(200)
+	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+			message="Company remark format is not valid."	)
 	public String remark;
 
 	@ManyToOne
+	@NotNull
 	public Company seller;
 
 	@OneToMany(mappedBy = "coupon")
 	public List<TransactionCP> buyers;
 
+	@Required
+	@Min(0)
 	public int minOrder;
-
+	
+	@Required
 	public int maxOrder;
-		
+	
+	@Required
+	@Future
 	public Date usage;
 
 	public int status;

@@ -14,6 +14,8 @@ import java.util.Stack;
 import java.util.UUID;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -24,7 +26,9 @@ import controllers.UserController;
 import play.Logger;
 import play.Play;
 import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.libs.Json;
@@ -40,13 +44,23 @@ import play.libs.Json;
 public class User extends SuperUser {
 
 	@Required
+	@MinLength(6)
+	@MaxLength(45)
+	@Pattern(value = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$",
+			message="Username not valid, only letters and numbers alowed."	)
 	public String username;
 	
 	@Required
+	@MinLength(4)
+	@MaxLength(65)
+	@Pattern(value = "^[A-Za-z0-9]*[A-Za-z0-9][A-Za-z0-9]*$",
+			message="Surname not valid, only letters and numbers alowed."	)
 	public String surname;
 
+	@Past
 	public Date dob;
 	
+	@NotNull
 	public String gender;
 
 	public boolean isAdmin;

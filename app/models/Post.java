@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import play.data.Form;
 import play.data.validation.ValidationError;
@@ -24,18 +25,21 @@ public class Post extends Model {
 	public long id;
 	
 	@Required
+	@MinLength(6)
 	@MaxLength(165)
 	@Pattern(value="^[A-Za-z0-9 ,.!?_]*[A-Za-z0-9][A-Za-z0-9 ,.!?_]*$", 
 			message="Title not valid, only letters and numbers alowed.")
 	public String title;
 	
 	@Required
+	@MinLength(6)
 	@MaxLength(165)
 	@Pattern(value = "^[A-Za-z0-9 ,.!?_]*[A-Za-z0-9][A-Za-z0-9 ,.!?_]*$",
 			message="Subtitle not valid, only letters and numbers alowed."	)
 	public String subtitle;
 	
 	@Column(columnDefinition = "TEXT")
+	@Required
 	public String content;
 	
 	public String image;	
@@ -48,6 +52,7 @@ public class Post extends Model {
 	public Date created;	
 
 	@OneToOne
+	@NotNull
 	public User creator;
 
 	public static final String NO_POST_IMAGE = "NO_IMAGE";

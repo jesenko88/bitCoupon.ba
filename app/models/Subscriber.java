@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.persistence.*;
 
 import play.Logger;
+import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 /**
@@ -21,11 +23,13 @@ public class Subscriber extends Model{
 	@Id
 	public long id;
 	
+	@Required
 	public String token;
 	
 	@OneToOne
 	public User subscriber;	
 	
+	@Email
 	public String email;	
 	
 	
