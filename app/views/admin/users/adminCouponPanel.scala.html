@@ -4,7 +4,7 @@
 @adminNavbar()
 @if(Sesija.adminCheck(ctx()) == true || Sesija.companyCheck(ctx()) == true) {
 <hr>
-<div class="panel panel-default" style="padding-left:1%">
+<div class="panel panel-default" >
    <div class="panel-heading">
       <div class="panel-title">
          <i class="glyphicon glyphicon-wrench pull-right"></i>
@@ -26,7 +26,7 @@
 	         </div>
 	      </div>
     	  }
-    <div class="form-group">
+    <div class="form-group" style="padding:1%">
     <!-- Input for name -->
       <div class='@("form-group has-error".when(myForm("name").hasErrors)) form-group' >
      	 <label class="control-label" for="name">Name<span style="color:#AB1403"> *</span></label>
