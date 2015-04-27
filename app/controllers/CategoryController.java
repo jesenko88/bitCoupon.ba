@@ -88,9 +88,10 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategory() {
-		if (categoryForm.hasErrors()) {
+		categoryForm = Form.form(Category.class).bindFromRequest();
+		if (categoryForm.hasErrors() || categoryForm.hasGlobalErrors()) {
 			flash("error", "Error in form.");
-			return redirect("/categoryPanel");
+			return addCategoryView();
 		}
 		//Exception handling.
 		try{
@@ -98,19 +99,18 @@ public class CategoryController extends Controller {
 			if (name.length() < 4) {
 				Logger.info(session("name") + " entered a short category name");
 				flash("error", "Name must be at least 4 characters");
-				return ok(categoryPanel.render(session("name")));
-				
+				return addCategoryView();				
 			}
 			if (name.length() > 20) {
 				Logger.info(session("name") + " entered a too long category name");
 				flash("error", "Name must be max 120 characters long");
-				return ok(categoryPanel.render(session("name")));
+				return addCategoryView();
 			}
 			if (Category.exists(name)) {
 				Logger.info(session("name")
 						+ " tried to add a existing category. (" + name + ")");
 				flash("error", "Category already exists");
-				return ok(categoryPanel.render(session("name")));
+				return addCategoryView();
 			}
 			/* If no picture is added, a default image is used */
 			String picture = FileUpload.imageUpload("category-photos");
@@ -123,11 +123,11 @@ public class CategoryController extends Controller {
 			Logger.info(session("name") + " created a new category: \"" + name
 					+ "\"");
 			flash("success", "Category " + "\"" + name + "\"" + " added");
-			return ok(categoryPanel.render(session("name")));			
+			return addCategoryView();			
 		}catch(Exception e){
 			flash("error", "Error has occured. Please try again later.");
 			Logger.error("Error at addCategory: " +e.getMessage(), e);
-			return redirect("/");
+			return addCategoryView();
 		}
 
 	}
