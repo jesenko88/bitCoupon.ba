@@ -53,7 +53,7 @@
 					 <input class="form-control" value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"/>	
 				  </div>
 		         <!-- Confirm password -->
-		          <div class='@("form-group has-error".when(myForm("confirmPassword").hasErrors)) form-group' >
+		          <div class='@("form-group has-error".when(myForm("password").hasErrors)) form-group' >
 			     	 <label class="control-label" for="confirmPassword">Confirm password<span style="color:#AB1403"> *</span></label>
  					 <input class="form-control" value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "/>	
  		          </div>
@@ -137,7 +137,7 @@
 					 <input class="form-control" value='@companyForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"/>	
 				  </div>
 		         <!-- Confirm password -->
-		          <div class='@("form-group has-error".when(companyForm("confirmPassword").hasErrors)) form-group' >
+		          <div class='@("form-group has-error".when(companyForm("password").hasErrors)) form-group' >
 			     	 <label class="control-label" for="confirmPassword">Confirm password<span style="color:#AB1403"> *</span></label>
  					 <input class="form-control" value='@companyForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "/>	
  		          </div>

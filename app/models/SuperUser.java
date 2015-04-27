@@ -32,7 +32,9 @@ public abstract class SuperUser extends Model {
 	@Email
 	public String email;
 
-	@Required
+	@Required	
+	@Pattern(value = "^[A-Za-z0-9]*[A-Za-z0-9][A-Za-z0-9]*$",
+	message="Password not valid, only letters and numbers alowed."	)
 	public String password;
 	
 	@MinLength(6)
