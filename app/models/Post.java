@@ -25,13 +25,13 @@ public class Post extends Model {
 	
 	@Required
 	@MaxLength(165)
-	@Pattern(value="^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$", 
+	@Pattern(value="^[A-Za-z0-9 ,.!?_]*[A-Za-z0-9][A-Za-z0-9 ,.!?_]*$", 
 			message="Title not valid, only letters and numbers alowed.")
 	public String title;
 	
 	@Required
 	@MaxLength(165)
-	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+	@Pattern(value = "^[A-Za-z0-9 ,.!?_]*[A-Za-z0-9][A-Za-z0-9 ,.!?_]*$",
 			message="Subtitle not valid, only letters and numbers alowed."	)
 	public String subtitle;
 	
