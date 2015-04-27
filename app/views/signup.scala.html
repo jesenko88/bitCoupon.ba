@@ -21,12 +21,13 @@
          <!--features_items-->
          <h2 class="title text-center">Registration</h2>
          <div class="col-sm-6 col-sm-offset-1">
-            <div class="signup-form">
+            
                <!--sign up form-->
                <button type="submit" id="companySignup" class="btn btn-default" onClick="registrationForm"> Register as company </button>
                <h4>Sign Up</h4>
                
                <form id="myForm" action="@routes.UserController.register" method ="POST" enctype="multipart/form-data" >
+				 <hr>
 				  @if(myForm.hasGlobalErrors){
 					<div class="panel panel-danger">
 						<div class="panel-heading">Error Submiting Form</div>
@@ -38,37 +39,66 @@
 				   			 </ul>
 				 		</div>
 					</div>
-					}
-			
-                  <!-- onchange="form.confirmPassword.pattern = this.value;" -->
-                  <input class="form-control" value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> <br>
-                  <p> <input class="form-control" value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"/></p>
-				  <p> <input class="form-control" value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "/></p>
-				  <br>
-              <div class="form-group">
-                  <input class='@("has-error".when(myForm("username").hasErrors)) form-control'  value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	<br>
-               </div>
-                  <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	<br>
-                  <br>
-
-                  <p> Date of birth </p>
-                  <input class="form-control datepicker-bit" value='@myForm("datepicker").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
-                   <span id="error" style="display:none; color:red"> You are underage of 18 </span>
-                  <input class="form-control" value='@myForm("gender").value' type="radio" id="gender-male" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" checked required/>Male 
-                  <input class="form-control" value='@myForm("gender").value' type="radio" id="gender-female" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female 
-
-                  <br>      
-                  <br>                            
-                  <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/><br>                
-                  <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>
-                  <br>
+					}				
+				 <div class="form group">
+				  <!-- onchange="form.confirmPassword.pattern = this.value;" -->
+                  <!-- Input email -->
+                   <div class='@("form-group has-error".when(myForm("email").hasErrors)) form-group' >
+			     	 <label class="control-label" for="email">Email<span style="color:#AB1403"> *</span></label>
+                 	 <input class="form-control" value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> 
+		          </div>
+		          <!-- Password -->
+                  <div class='@("form-group has-error".when(myForm("password").hasErrors)) form-group' >
+			     	 <label class="control-label" for="password">Password<span style="color:#AB1403"> *</span></label>
+					 <input class="form-control" value='@myForm("password").value' id="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password"  placeholder="Password"/>	
+				  </div>
+		         <!-- Confirm password -->
+		          <div class='@("form-group has-error".when(myForm("confirmPassword").hasErrors)) form-group' >
+			     	 <label class="control-label" for="confirmPassword">Confirm password<span style="color:#AB1403"> *</span></label>
+ 					 <input class="form-control" value='@myForm("confirmPassword").value' type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password: "/>	
+ 		          </div>
+                 <!-- Username --> 
+                <div class='@("form-group has-error".when(myForm("username").hasErrors)) form-group' >
+			     	 <label class="control-label" for="username">Username<span style="color:#AB1403"> *</span></label>
+                     <input class='@("has-error".when(myForm("username").hasErrors)) form-control'  value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	
+ 		        </div>
+ 		        <!-- Surname -->
+                <div class='@("form-group has-error".when(myForm("surname").hasErrors)) form-group' >
+			     	 <label class="control-label" for="surname">Surname<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	
+ 		        </div>
+             	<!-- Birth day -->
+                <div class='@("form-group has-error".when(myForm("dob").hasErrors)) form-group' >
+			     	 <label class="control-label" for="dob">Date of birth<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control datepicker-bit" value='@myForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
+ 		        </div> 
+ 		        <span id="error" style="display:none; color:red"> You are underage of 18 </span>
+                
+                <!-- GENDER -->
+                <label class="radio-inline">
+                   <input  value='@myForm("gender").value' type="radio" id="gender-male" name="gender"  value="male" checked /> 
+				    Male
+                </label>
+                <label class="radio-inline">
+                  <input  value='@myForm("gender").value' type="radio" id="gender-female" name="gender"  value="female" /> 
+				    Female
+                </label>
+                <br><br>
+                <!-- Adress -->
+                 <div class='@("form-group has-error".when(myForm("adress").hasErrors)) form-group' >
+			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
+ 		        </div>
+                <!-- City -->
+				<div class='@("form-group has-error".when(myForm("city").hasErrors)) form-group' >
+			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
+              	     <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
+ 		        </div>                                     
+                 
                   <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
+              	</div>
                </form>
-               
-              
-            </div>
             
-            <!--/sign up form-->
             <br>
            
          </div>
