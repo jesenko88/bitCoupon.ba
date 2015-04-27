@@ -38,13 +38,13 @@ create table coupon (
   id                        bigint not null,
   name                      varchar(255),
   price                     double,
-  created_at                timestamp,
+  created_at                timestamp not null,
   expired_at                timestamp,
   picture                   varchar(255),
   category_id               bigint,
   description               TEXT,
   remark                    varchar(255),
-  seller_id                 bigint,
+  seller_id                 bigint not null,
   min_order                 integer,
   max_order                 integer,
   usage                     timestamp,
@@ -92,7 +92,7 @@ create table post (
   image                     varchar(255),
   tags                      varchar(255),
   created                   timestamp,
-  creator_id                bigint,
+  creator_id                bigint not null,
   constraint pk_post primary key (id))
 ;
 
@@ -173,7 +173,7 @@ create table user (
   username                  varchar(255),
   surname                   varchar(255),
   dob                       timestamp,
-  gender                    varchar(255),
+  gender                    varchar(255) not null,
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,
