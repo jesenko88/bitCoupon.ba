@@ -51,7 +51,7 @@
      <div class='@("form-group has-error".when(myForm("category").hasErrors)) form-group' >
      	 <label class="control-label" for="category">Category<span style="color:#AB1403"> *</span></label>
 		 <select class="form-control"  value='@myForm("category").value'  id="category" name="category" required>
-	         <option value="" style="display:none">Select category</option>
+	         <option value='@myForm("category").value' style="display:none">Select category</option>
 	         @for(category <- categories) {
 	         <option>@category.name</option>
 	         }
@@ -64,7 +64,7 @@
      <!-- Input for description -->
      <div class='@("form-group has-error".when(myForm("description").hasErrors)) form-group' >
      	 <label class="control-label" for="description">Description<span style="color:#AB1403"> *</span></label>
-         <textarea class="form-control" name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>
+         <textarea class="form-control"  value='@myForm("description").value' name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required></textarea>
      </div>
      <!-- Input for remark -->
      <div class='@("form-group has-error".when(myForm("remark").hasErrors)) form-group' >
@@ -88,7 +88,7 @@
      	 <input class="form-control"  value='@myForm("usage").value' type="date" id="datepicker" name="usage" required>
      </div>       
       <span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
-      <button type="submit" class="btn btn-default" required>Create Coupon</button>
+      <button  type="submit" class="btn btn-default" required>Create Coupon</button>
  </div>
    </form>
 </div>

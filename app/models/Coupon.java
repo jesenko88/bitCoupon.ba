@@ -49,8 +49,7 @@ public class Coupon extends Model {
 	@Required
 	public double price;
 
-	@Column(name = "created_at")
-	@NotNull
+	@Column(name = "created_at")	
 	public Date dateCreated;
 
 	@Column(name = "expired_at")
@@ -71,14 +70,13 @@ public class Coupon extends Model {
 			message="Company description format is not valid."	)
 	public String description;
 	
-	@MinLength(6)
+	
 	@MaxLength(200)
 	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
 			message="Company remark format is not valid."	)
 	public String remark;
 
 	@ManyToOne
-	@NotNull
 	public Company seller;
 
 	@OneToMany(mappedBy = "coupon")
