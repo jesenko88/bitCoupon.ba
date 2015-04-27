@@ -91,9 +91,10 @@
                             @post.subtitle
                         </h4>                    
                   </div>               
-            </div>
-        </div>
+            </div>            
+        </div>         
     </div>    
+   
     
     <hr>
 
@@ -107,6 +108,14 @@
             </div>
         </div>
     </article>
+    <hr>
+             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align: center">
+            	<strong> Tags: </strong>
+             @for(tag <- post.getTagsArray()){
+             	<span style="margin-right:1%" class="tag label label-info"> @tag </span>
+             	
+             }
+             </div>
 
     <hr>
 
