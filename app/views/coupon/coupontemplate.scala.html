@@ -97,7 +97,7 @@
                <span>
                <p id="spanPrice"> @coupon.getPriceString() KM</p>
                @if( Sesija.getCurrent(ctx()) == null && CouponController.isExpired(coupon.id)==false && coupon.maxOrder > 0){
-               	<a href="@routes.UserController.giftCheckoutPageUnregistered(coupon.id)"><h3>BUY NOW</h3></a>
+               	<a href="@routes.UserController.checkoutPageUnregistered(coupon.id)"><h3>BUY NOW</h3></a>
                }
                @if(CouponController.isExpired(coupon.id)==true) {
                <label>Coupon has expired </label>

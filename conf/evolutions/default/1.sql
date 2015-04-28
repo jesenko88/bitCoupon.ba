@@ -152,6 +152,8 @@ create table subscriber (
 create table transaction_cp (
   id                        bigint not null,
   payment_id                varchar(255),
+  bit_payment_id            varchar(255),
+  sale_id                   varchar(255),
   coupon_price              double,
   quantity                  integer,
   total_price               double,
