@@ -92,7 +92,7 @@ create table post (
   image                     varchar(255),
   tags                      varchar(255),
   created                   timestamp,
-  creator_id                bigint,
+  creator_id                bigint not null,
   constraint pk_post primary key (id))
 ;
 
@@ -173,7 +173,7 @@ create table user (
   username                  varchar(255),
   surname                   varchar(255),
   dob                       timestamp,
-  gender                    varchar(255),
+  gender                    varchar(255) not null,
   is_admin                  boolean,
   created                   timestamp,
   updated                   timestamp,

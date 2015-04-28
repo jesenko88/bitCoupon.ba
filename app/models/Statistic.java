@@ -94,7 +94,7 @@ public class Statistic extends Model{
 	 * Created to avoid using .save() and similar things
 	 * directly in controller.
 	 */
-	public void visited(){
+	public synchronized void visited(){
 		this.visited++;
 		this.update();		
 	}
@@ -102,7 +102,7 @@ public class Statistic extends Model{
 	/**
 	 * Non static method for increasing number of purchases on this coupon.
 	 */
-	public void bought(int quantity) {
+	public synchronized void bought(int quantity) {
 		this.bought += quantity;
 		this.update();	
 		
