@@ -16,6 +16,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import play.Logger;
 import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.libs.Json;
@@ -29,11 +32,21 @@ public abstract class SuperUser extends Model {
 	@Email
 	public String email;
 
-	@Required
+	@Required	
+	@Pattern(value = "^[A-Za-z0-9]*[A-Za-z0-9][A-Za-z0-9]*$",
+	message="Password not valid, only letters and numbers alowed."	)
 	public String password;
 	
+	@MinLength(6)
+	@MaxLength(165)
+	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+			message="Adress not valid, only letters and numbers alowed."	)
 	public String adress;
 	
+	@MinLength(6)
+	@MaxLength(165)
+	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+			message="City not valid, only letters and numbers alowed."	)
 	public String city;
 	
 

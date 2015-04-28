@@ -221,21 +221,17 @@ public class PayPalController extends Controller {
 	 */
 	public static Result approveTransaction() {
 		
-		System.out.println("DEBUUG EMAIIILL" + currentUser.email);
-		System.out.println("DEBUUG USER ID" + currentUser.id);
 
 		try {
 			Payment response = payment.execute(apiContext, paymentExecution);
-			
+			String saleId = response.getTransactions().get(0).getRelatedResources().get(0).getSale().getId();
 			if(currentUser.id != -1) {
-			TransactionCP.createTransaction(paymentID, coupon.price, quantity,
-					totalPrice, response.getTransactions().get(0).getRelatedResources().get(0).getSale().getId(), currentUser, coupon);
+			TransactionCP.createTransaction(paymentID, saleId, coupon.price, quantity,
+					totalPrice, token, currentUser, coupon);
 			}else{
-				TransactionCP.createTransactionForUnregisteredUser(paymentID, coupon.price, quantity,
-						totalPrice, token, 
-						currentUser.username, currentUser.surname, coupon);
-				System.out.println("DEBUGGGG TRANSAKCIJAAAA" );
-			}
+				TransactionCP.createTransactionForUnregisteredUser(paymentID, saleId, coupon.price, quantity,
+						totalPrice, token, currentUser.username, currentUser.surname, coupon);
+			}		
 			coupon.statistic.bought(quantity);
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;

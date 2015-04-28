@@ -384,26 +384,27 @@ public class CouponController extends Controller {
 
 		Form<Coupon> addCouponForm = Form.form(Coupon.class).bindFromRequest();
 		List<Category> categories = Category.all();	
-		String name = couponForm.bindFromRequest().field("name").value();
-
-		if (Sesija.companyCheck(ctx())){		
-			result = ok(couponPanel.render(session("name"), categories, addCouponForm));
-		}else{
+		String name = addCouponForm.bindFromRequest().data().get("name");
+		
+		if (Sesija.adminCheck(ctx())){		
 			result = ok(adminCouponPanel.render(session("name"), categories, addCouponForm));
+		}else{
+			result = ok(couponPanel.render(session("name"), categories, addCouponForm));
 		}
 	
-		if (couponForm.hasErrors() || addCouponForm.hasGlobalErrors()) {
+		if (addCouponForm.hasErrors() || addCouponForm.hasGlobalErrors()) {
 			Logger.debug("Error adding coupon");
+			Logger.debug(addCouponForm.errorsAsJson().toString());
+			Logger.debug(addCouponForm.globalErrors().toString());
 			return result;
 		}
 
 		try{		
 			double price = couponForm.bindFromRequest().get().price;	
-			Date date = couponForm.bindFromRequest().get().dateExpire;			
-			String newCategory = couponForm.bindFromRequest().field("newCategory").value();
+			Date date = couponForm.bindFromRequest().get().dateExpire;		
 			String categoryString = couponForm.bindFromRequest().field("category").value();
-			String description = couponForm.bindFromRequest().field("description").value();
-			String remark = couponForm.bindFromRequest().field("remark").value();
+			String description = couponForm.bindFromRequest().data().get("description");
+			String remark = couponForm.bindFromRequest().data().get("remark");
 			int minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());	
 			int maxOrder = Integer.valueOf(couponForm.bindFromRequest().field("maxOrder").value());
 			Date usage = couponForm.bindFromRequest().get().usage;

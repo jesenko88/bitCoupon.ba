@@ -28,6 +28,7 @@ import tyrex.services.UUID;
 import views.html.*;
 import views.html.user.*;
 import views.html.admin.users.*;
+import views.html.admin.blog.*;
 import views.html.coupon.*;
 import models.*;
 
@@ -57,8 +58,8 @@ public class UserController extends Controller {
 	public static Result register() {
 
 		Form<User> submit = Form.form(User.class).bindFromRequest();
-
-		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
+		System.out.println("Submit has errors: " +submit.hasErrors());
+		if (submit.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
 
@@ -455,19 +456,20 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserExecute() {
+		String paymentId = Play.application().configuration().getString("bitPaymentId");
+		String saleId = Play.application().configuration().getString("bitSaleId");
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
 		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
 		int quantity = Integer.parseInt(dynamicForm.data().get("quantity"));
 		Coupon coupon = Coupon.find(id);
-
 		User client = User.find(Long.parseLong(dynamicForm.data()
 				.get("user_id")));
 		if (client == null) {
 			return badRequest(coupontemplate.render(coupon));
 		}
 		double totalPrice = coupon.price * quantity;
-		TransactionCP.createTransaction(new UUID().toString().substring(0, 12),
-				coupon.price, quantity, totalPrice, "", client, coupon);
+		TransactionCP.createTransaction(paymentId, saleId, coupon.price,
+				quantity, totalPrice, "", client, coupon);
 		Coupon c = Coupon.find(id);
 		c.seller.notifications++;
 		c.maxOrder = c.maxOrder - quantity;
@@ -520,7 +522,7 @@ public class UserController extends Controller {
 	}
 	
 
-	public static Result giftCheckoutPageUnregistered(long id) {
+	public static Result checkoutPageUnregistered(long id) {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
 	}

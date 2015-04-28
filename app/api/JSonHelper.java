@@ -258,7 +258,8 @@ public class JSonHelper {
 			transactionNode.put("picture", tran.coupon.picture);
 			transactionNode.put("totalPrice", tran.totalPrice); 
 			transactionNode.put("transactionDate", tran.date.toString());
-			transactionNode.put("paymentId", tran.payment_id);
+		//	transactionNode.put("paymentId", tran.payment_id);
+			transactionNode.put("bitPaymentId", tran.bitPayment_id);
 			transactionNode.put("token", tran.token);
 			arrayNode.add(transactionNode);
 		}
@@ -279,7 +280,8 @@ public class JSonHelper {
 				transactionDetails.put("picture", tran.coupon.picture);
 				transactionDetails.put("totalPrice", tran.totalPrice); 
 				transactionDetails.put("transactionDate", tran.date.toString());
-				transactionDetails.put("paymentId", tran.payment_id);
+			//	transactionDetails.put("paymentId", tran.payment_id);
+				transactionDetails.put("bitPaymentId", tran.bitPayment_id);
 				transactionDetails.put("token", tran.token);
 			}
 		}	
