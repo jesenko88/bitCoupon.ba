@@ -283,7 +283,7 @@ public class PayPalController extends Controller {
 				String totalPriceString = String.format("%1.2f", totalPrice);
 				Map<Sale, Refund> refundObject = new HashMap<Sale, Refund>();
 				Sale sale = new Sale();
-				sale.setId(transactions.get(i).token);
+				sale.setId(transactions.get(i).sale_id);
 				Refund refund = new Refund();
 				Amount amount = new Amount();
 				amount.setCurrency("USD");
@@ -303,7 +303,6 @@ public class PayPalController extends Controller {
 					sale.refund(apiContext, refund);
 				}
 			}
-
 			flash("success", "All buyers of this coupon are successfully refunded!");
 			return ok(index.render(Coupon.all(), Category.all()));
 

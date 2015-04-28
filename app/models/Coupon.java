@@ -3,6 +3,7 @@ package models;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -239,6 +240,7 @@ public class Coupon extends Model {
 		List<Coupon> coupons = find.findList();
 		if (coupons == null)
 			coupons = new ArrayList<Coupon>();
+		Collections.reverse(coupons);
 		return coupons;
 	}
 
@@ -600,6 +602,7 @@ public class Coupon extends Model {
 		List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).findList();
 		if(approvedCoupons == null)
 			approvedCoupons = new ArrayList<Coupon>();
+		Collections.reverse(approvedCoupons);
 		return approvedCoupons;
 
 	}

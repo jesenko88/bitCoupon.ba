@@ -10,6 +10,8 @@ import views.html.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -102,7 +104,7 @@ public class Application extends Controller {
 			try {
 				String mail = loginForm.bindFromRequest().get().email;
 				String password = loginForm.bindFromRequest().get().password;
-
+				List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 				if (mail.isEmpty() || password.length() < 6) {
 					Logger.info("Invalid login form, mail empty or short password");
 					flash("error", "Password incorrect");
@@ -116,7 +118,7 @@ public class Application extends Controller {
 					flash("success", "You are logged in as: " + mail);
 					Logger.info(user.username + " logged in");
 					flash("success", "You are logged in as: " + mail);
-					return ok(index.render(Coupon.approvedCoupons(),
+					return ok(index.render(approvedCoupons,
 							Category.all()));
 
 				}
@@ -127,7 +129,7 @@ public class Application extends Controller {
 					session("email", company.email);
 					flash("success", "You are logged in as: " + mail);
 					Logger.info(company.name + " logged in");
-					return ok(indexC.render(company, Coupon.approvedCoupons()));
+					return ok(indexC.render(company, approvedCoupons));
 				}
 
 				flash("error", "Invalid email or password");
