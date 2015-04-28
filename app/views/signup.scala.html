@@ -70,7 +70,7 @@
              	<!-- Birth day -->
                 <div class='@("form-group has-error".when(myForm("dob").hasErrors)) form-group' >
 			     	 <label class="control-label" for="dob">Date of birth<span style="color:#AB1403"> *</span></label>
-                     <input class="form-control datepicker-bit" value='@myForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
+                     <input class="form-control datepicker-bit min-dob" value='@myForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
  		        </div> 
  		        <span id="error" style="display:none; color:red"> You are underage of 18 </span>
                 
