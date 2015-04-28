@@ -123,12 +123,12 @@
      <!-- Input for description -->
      <div class='@("form-group has-error".when(myForm("description").hasErrors)) form-group' >
      	 <label class="control-label" for="description">Description<span style="color:#AB1403"> *</span></label>
-         <textarea class="form-control"  name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @myForm("description").value </textarea>
+         <textarea class="form-control"  name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required>@myForm("description").value</textarea>
      </div>
      <!-- Input for remark -->
      <div class='@("form-group has-error".when(myForm("remark").hasErrors)) form-group' >
      	 <label class="control-label" for="description">Remark</label>
-     	<textarea class="form-control" name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> @myForm("remark").value </textarea>
+     	<textarea class="form-control" name="remark" id="remark" rows="6" placeholder="Remark of Coupon">@myForm("remark").value</textarea>
      </div>
      <!-- Input for min order -->
   	 <div class='@("form-group has-error".when(myForm("minOrder").hasErrors)) form-group' >
