@@ -13,6 +13,7 @@ import models.FAQ;
 import models.SuperUser;
 import models.TransactionCP;
 import models.User;
+import models.comments.Comment;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -92,6 +93,7 @@ public class JSonHelper {
 		couponNode.put("remark", coupon.remark);
 		couponNode.put("seller", coupon.seller.name);
 		couponNode.put("minOrder", coupon.minOrder);
+		couponNode.put("maxOrder", coupon.maxOrder);
 		return couponNode;
 	}
 	
