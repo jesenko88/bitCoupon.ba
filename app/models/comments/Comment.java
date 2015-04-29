@@ -75,7 +75,7 @@ public class Comment extends Model{
 		List<Comment> comments = find.where().eq("coupon", coupon).findList();
 		if (comments == null)
 			return new ArrayList<Comment>();
-		return Lists.reverse(comments);
+		return comments;
 	}
 	
 	public static Comment findById(long id){
