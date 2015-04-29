@@ -53,7 +53,8 @@ public class User extends SuperUser {
 	@Required
 	@MinLength(4)
 	@MaxLength(65)
-	@Pattern(value = "^[A-Za-z0-9]*[A-Za-z0-9][A-Za-z0-9]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9]*$",
 			message="Surname not valid, only letters and numbers alowed."	)
 	public String surname;
 
