@@ -343,6 +343,13 @@ public class User extends SuperUser {
 		return "";
 	}
 	
+	public String getDob() {
+		if (dob != null){
+			return new SimpleDateFormat("MM/dd/yyyy").format(dob);
+		}
+		return "mm/dd/yyyy";
+	}
+	
 	
 	public String validate() {
 		Date maxDobDate = null;
