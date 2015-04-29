@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import nl.bitwalker.useragentutils.UserAgent;
 import models.Category;
 import models.Company;
 import models.Coupon;
@@ -20,6 +21,7 @@ import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import views.html.*;
 import views.html.coupon.*;
@@ -139,13 +141,23 @@ public class PayPalController extends Controller {
 			payment.setIntent("sale");
 			payment.setPayer(payer);
 			payment.setTransactions(transactions);
+			
+			UserAgent userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			String deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			
 			RedirectUrls redirectUrls = new RedirectUrls();
-			redirectUrls.setCancelUrl(Play.application().configuration()
-					.getString("cancelURL"));
-			redirectUrls.setReturnUrl(Play.application().configuration()
-					.getString("returnURL"));
+			if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+				redirectUrls.setCancelUrl(Play.application().configuration()
+						.getString("APIcancelURL"));
+				redirectUrls.setReturnUrl(Play.application().configuration()
+						.getString("APIreturnURL"));			
+			}else{
+				redirectUrls.setCancelUrl(Play.application().configuration()
+						.getString("cancelURL"));
+				redirectUrls.setReturnUrl(Play.application().configuration()
+						.getString("returnURL"));
+			}
 			payment.setRedirectUrls(redirectUrls);
-
 			Payment createdPayment = payment.create(apiContext);
 
 			Iterator<Links> itr = createdPayment.getLinks().iterator();
