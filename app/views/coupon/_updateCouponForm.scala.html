@@ -40,12 +40,9 @@
      <div class='@("form-group has-error".when(myForm("category").hasErrors)) form-group' >
      	 <label class="control-label" for="category">Category<span style="color:#AB1403"> *</span></label>
 		 <select class="form-control"  value='@myForm("category").value'  id="category" name="category" required>
-	         @if(myForm("category").value != null){
-	         <option select="selected" style="display:none" > @myForm("category").value </option>	         	
-	         }else{
+	        
 	         <option value='@myForm("category").value' style="display:none">Select category</option>	        
-	         }
-	       
+	        
 	         @for(category <- Category.all()) {
 	         <option>@category.name</option>
 	         }
