@@ -44,27 +44,28 @@ public class PayPalController extends Controller {
 
     static String PATH = Play.application().configuration().getString("PATH");
 
-
-	static User currentUser; // = User.find(session("name"));
-	static Company currentCompany = Company.find(session("name"));
-	static SuperUser su;
-	static Coupon coupon;
-	static List<String> details;
-	static APIContext apiContext;
-	static PaymentExecution paymentExecution;
-	static Payment payment;
-	static double totalPrice;
-	static int quantity;
-	static String paymentID, token;
-	static final String CLIENT_ID = Play.application().configuration()
+	private static User currentUser; // = User.find(session("name"));
+	private static Company currentCompany = Company.find(session("name"));
+	private static SuperUser su;
+	private static Coupon coupon;
+	private static List<String> details;
+	private static APIContext apiContext;
+	private static PaymentExecution paymentExecution;
+	private static Payment payment;
+	private static double totalPrice;
+	private static int quantity;
+	private static String paymentID, token;
+	
+	private static final String CLIENT_ID = Play.application().configuration()
 			.getString("cliendID");
-	static final String CLIENT_SECRET = Play.application().configuration()
+	private static final String CLIENT_SECRET = Play.application().configuration()
 			.getString("cliendSecret");
 
 	/**
 	 * Method starts the purchase process. First it collects the data from the
 	 * submitted form, builds up a transaction with basic details and
 	 * description. Sets the return URL-s for the 'cancel' and 'approve' case.
+	 * If the 
 	 * 
 	 * @return
 	 */
@@ -73,15 +74,14 @@ public class PayPalController extends Controller {
 		try {
 			String accessToken = new OAuthTokenCredential(CLIENT_ID,
 					CLIENT_SECRET).getAccessToken();
-
+			
 			Map<String, String> sdkConfig = new HashMap<String, String>();
 			sdkConfig.put("mode", "sandbox");
 			apiContext = new APIContext(accessToken);
 			apiContext.setConfigurationMap(sdkConfig);
-	
-			Amount amount = new Amount();		
-			DynamicForm buyForm = Form.form().bindFromRequest();				
+			Amount amount = new Amount();	
 			
+			DynamicForm buyForm = Form.form().bindFromRequest();						
 			coupon = Coupon.find(Long.parseLong(buyForm.data().get("coupon_id")));
 			long userId = Long.parseLong(buyForm.data().get("user_id"));
 			/* if the received userId value is '-1', it means that the purchase is 
@@ -96,32 +96,29 @@ public class PayPalController extends Controller {
 			}else{
 				currentUser = User.find(userId);
 			}
+			
 			quantity = Integer.parseInt(buyForm.data().get("quantity"));
 			if (quantity > coupon.maxOrder) {
 				flash("info", "There are only " + coupon.maxOrder + " left");
 				return ok(coupontemplate.render(coupon));
 			}
-
+			
 			totalPrice = coupon.price * quantity;	
 			String totalPriceString = String.format("%1.2f",totalPrice);
 			String couponName = coupon.name;
 			if (couponName.length() > 65)
 				couponName = couponName.substring(0, 65) + "...";
 			
-
 			amount.setTotal(totalPriceString);
 			amount.setCurrency("USD");
-
 			/*
 			 * Formating description to send to the PayPal checkout page
-			 * >temporary solution?<
 			 */
 			String description = String.format("Coupon: %s\n"
 					+ "Price: %s\n"
 					+ "Quantity: %d\n"
 					+ "Total: %s", couponName, coupon.price, quantity, totalPriceString);
 		
-
 			Transaction transaction = new Transaction();
 			transaction.setDescription(description);
 			transaction.setAmount(amount);
@@ -142,10 +139,15 @@ public class PayPalController extends Controller {
 			payment.setPayer(payer);
 			payment.setTransactions(transactions);
 			
+			RedirectUrls redirectUrls = new RedirectUrls();
+
 			UserAgent userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
 			String deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
 			
-			RedirectUrls redirectUrls = new RedirectUrls();
+			/*
+			 * Checking the device type in case the purchase is 
+			 * started from a web view from a mobile or tablet device
+			 */
 			if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
 				redirectUrls.setCancelUrl(Play.application().configuration()
 						.getString("APIcancelURL"));
@@ -159,7 +161,13 @@ public class PayPalController extends Controller {
 			}
 			payment.setRedirectUrls(redirectUrls);
 			Payment createdPayment = payment.create(apiContext);
-
+			
+			
+			/*Iterating through the url lists received from the paypal response
+			 * and checking if we got a approval_url
+			 * If a approval url is found, we can redirect the client to the
+			 * paypal checkout page*/
+			
 			Iterator<Links> itr = createdPayment.getLinks().iterator();
 			while (itr.hasNext()) {
 				Links link = itr.next();
@@ -181,7 +189,9 @@ public class PayPalController extends Controller {
 	}
 
 	/**
-	 * Method is called if the 'approval_url' is returned
+	 * This is the method that is processed if the "success" return url is used,
+	 * in other words, if the user continues to approve transaction during the 
+	 * paypal checkout
 	 * 
 	 * @return
 	 */
@@ -202,7 +212,9 @@ public class PayPalController extends Controller {
 			paymentExecution = new PaymentExecution();
 			paymentExecution.setPayerId(payerID);
 			
-			//su = SuperUser.getSuperUser(currentUser.email);
+			/*when the payment is built, the client is redirected to the
+			 * approval page */
+			
 			flash("info", "Approve transaction");
 			return ok(couponResult.render(currentUser, coupon, details));
 		} catch (Exception e) {
@@ -214,8 +226,9 @@ public class PayPalController extends Controller {
 	}
 
 	/**
-	 * Method renders the couponTemplate again and sends a flash notification
-	 * message if the transaction is canceled
+	 * Method renders the couponTemplate and shows a flash notification
+	 * message if the transaction is canceled during the procedure on the
+	 * paypal page. It's called with the "fail" return url
 	 * 
 	 * @return
 	 */
@@ -225,15 +238,16 @@ public class PayPalController extends Controller {
 	}
 
 	/**
-	 * Method is called after the PayPal process is successful and if the user
-	 * approves the transaction on the couponResult page. It executes the
-	 * payment and finalizes the transaction.
+	 * Method is if the user approves the transaction on the couponResult page.
+	 *  It executes the payment and finalizes the transaction.
+	 *  For registered users, the transaction details contains a transacition.buyer
+	 *  value, otherwise, if the user is "-1", it means the user is a unregistered user,
+	 *  a transaction with name and surname is made and the transaction.buyer is set to null.
 	 * 
 	 * @return render index page with a flash message
 	 */
 	public static Result approveTransaction() {
 		
-
 		try {
 			Payment response = payment.execute(apiContext, paymentExecution);
 			String saleId = response.getTransactions().get(0).getRelatedResources().get(0).getSale().getId();
