@@ -263,12 +263,13 @@ public class CouponController extends Controller {
 				coupon.picture = assetsPath;
 			}
 			int status;
-			if (Sesija.adminCheck(ctx()) == true) {
-				status = Coupon.Status.ACTIVE;
-			} else {
-				status = Coupon.Status.DEFAULT;
-			}
-			coupon.status = status;
+			/* kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ? */
+//			if (Sesija.adminCheck(ctx()) == true) {
+//				status = Coupon.Status.ACTIVE;
+//			} else {
+//				status = Coupon.Status.DEFAULT;
+//			}
+//			coupon.status = status;
 			
 			Coupon.updateCoupon(coupon);
 			Logger.info(session("name") + " updated coupon: " + coupon.id);

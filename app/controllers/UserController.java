@@ -135,21 +135,20 @@ public class UserController extends Controller {
 			return redirect("/updateUser ");
 		}
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			String username = updateForm.data().get("username");
 			String surname = updateForm.data().get("surname");
-			Date dob = null;
-			dob = sdf.parse(updateForm.data().get("dob"));
-			String gender = updateForm.data().get("gender");
+			String dobString = updateForm.data().get("dob");
 			String adress = updateForm.data().get("adress");
 			String city = updateForm.data().get("city");
 			String email = updateForm.data().get("email");
-
+			Date dob = null;
 			User cUser = User.find(id);
+			if (!dobString.isEmpty()){
+				dob = new SimpleDateFormat("yy-mm-dd").parse(dobString);
+				cUser.dob = dob;
+			}
 			cUser.username = username;
 			cUser.surname = surname;
-			cUser.dob = dob;
-			cUser.gender = gender;
 			cUser.adress = adress;
 			cUser.city = city;
 			cUser.updated = new Date();

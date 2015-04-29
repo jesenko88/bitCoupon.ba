@@ -32,15 +32,15 @@
                         <form action="@routes.UserController.updateUser(superUser.getUser().id)" method ="POST" >
                            <input type="text" name="email" id="email" placeholder=Email value="@superUser.getUser().email" required/>
                            <input type="text" name="username" id="username" placeholder="Username" value="@superUser.getUser().username" required/>
-                           <input type="text" id="surname" name="surname"  placeholder="Surname"  value="@superUser.getUser().surname" required/>	<br>
+                           <input type="text" id="surname" name="surname"  placeholder="Surname"  value="@superUser.getUser().surname" />	<br>
                            <h6> Date of birth </h6>
-                            <input type="date" id="datepicker" name="dob" value="@superUser.getUser().dob" >
+                            <input class="form-control datepicker-bit" type="date" id="dob-update" name="dob" / >
                            <span id="error" style="display:none; color:red"> You are underage of 18 </span>
                            <p></p>                                           
                            <h6> Adress </h6>
-                           <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" value="@superUser.getUser().adress" required/>	<br>                
+                           <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" value="@superUser.getUser().adress" />	<br>                
                            <h6> City </h6>
-                           <input type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" value="@superUser.getUser().city" required/>	<br>                                           
+                           <input type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" value="@superUser.getUser().city" />	<br>                                           
                            <button type="submit" class="btn btn-fefault cart" style="margin-left:0px;" >Update user</button>			
                         </form>
                      </div>
@@ -143,4 +143,13 @@
    <br>
    <br>
 </body>
+
+ <!-- 
+ 	 <script>
+         $(function() {
+           $( "#dob-update" ).datepicker({dateFormat: "yy-mm-dd"});
+           $( "#dob-update" ).datepicker('setDate', '1998/01/01');
+         });
+      </script> 
+ -->
 }
