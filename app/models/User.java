@@ -2,7 +2,6 @@ package models;
 
 import helpers.HashHelper;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ import play.libs.Json;
 public class User extends SuperUser {
 
 	@Required
-	@MinLength(6)
+	@MinLength(4)
 	@MaxLength(45)
 	@Pattern(value = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$",
 			message="Username not valid, only letters and numbers alowed."	)
@@ -343,14 +342,14 @@ public class User extends SuperUser {
 			return pin.code;
 		return "";
 	}
-	
+	/*
 	public String getDob() {
 		if (dob != null){
 			return new SimpleDateFormat("MM/dd/yyyy").format(dob);
 		}
 		return "mm/dd/yyyy";
 	}
-	
+	*/
 	
 	public String validate() {
 		Date maxDobDate = null;

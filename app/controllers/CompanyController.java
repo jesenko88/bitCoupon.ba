@@ -130,6 +130,7 @@ public class CompanyController extends Controller {
 			String newPass = updateForm.data().get("newPassword");
 			
 			Company company = Company.findById(id);
+			Form<Company> companyForm = Form.form(Company.class).fill(company);
 			company.name = name;
 			// cUser.email = email;
 			company.updated = new Date();
@@ -145,14 +146,14 @@ public class CompanyController extends Controller {
 				flash("success",
 						"A new verification email has been sent to this e-mail: "
 								+ email);
-				return ok(userUpdate.render(company));
+				return ok(userUpdate.render(null, companyForm, company));
 			}
 			company.email = email;
 			company.save();
 			flash("success", "Profile updated!");
 			Logger.info(company.name + " is updated");
 			session("name", company.name); 
-			return ok(userUpdate.render(company));			
+			return ok(userUpdate.render(null, companyForm, company));			
 		}catch(Exception e){
 			flash("error","Error while updateing company. If you're admin please check logs.");
 			Logger.error("Error at company update: " +e.getMessage());
