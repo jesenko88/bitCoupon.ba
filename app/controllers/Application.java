@@ -37,6 +37,7 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import models.*;
+import nl.bitwalker.useragentutils.UserAgent;
 import api.JSonHelper;
 
 import com.ckeditor.CKEditorConfig;
@@ -69,7 +70,7 @@ public class Application extends Controller {
 		name = session("name");
 		List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 		List<Category> categories = Category.all();
-		
+
 		//Handling exceptions
 		if(approvedCoupons == null || categories == null){
 			flash("warning", "Ooops error occured.");

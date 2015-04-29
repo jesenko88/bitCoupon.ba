@@ -17,6 +17,7 @@ import api.JSonHelper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 
 import play.Logger;
 import play.data.validation.Constraints.MaxLength;
@@ -42,8 +43,9 @@ public class Coupon extends Model {
 
 	@Required
 	@MinLength(3)
-	@MaxLength(45)
-	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+	@MaxLength(200)
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*$",
 			message="Company name format is not valid."	)
 	public String name;
 	
@@ -67,13 +69,15 @@ public class Coupon extends Model {
 	@Required
 	@MinLength(10)
 	@MaxLength(1000)
-	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,+\"'!?+\"'()_]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?()_]*$",
 			message="Company description format is not valid."	)
 	public String description;
 	
 	
 	@MaxLength(200)
-	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*$",
 			message="Company remark format is not valid."	)
 	public String remark;
 
@@ -599,12 +603,11 @@ public class Coupon extends Model {
 	}
 
 	public static List<Coupon> approvedCoupons() {
+		//List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).orderBy().desc("dateCreated").findList();
 		List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).findList();
 		if(approvedCoupons == null)
 			approvedCoupons = new ArrayList<Coupon>();
-		Collections.reverse(approvedCoupons);
 		return approvedCoupons;
-
 	}
 	
 	/**
