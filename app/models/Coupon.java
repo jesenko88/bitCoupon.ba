@@ -17,6 +17,7 @@ import api.JSonHelper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 
 import play.Logger;
 import play.data.validation.Constraints.MaxLength;
@@ -599,12 +600,11 @@ public class Coupon extends Model {
 	}
 
 	public static List<Coupon> approvedCoupons() {
+		//List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).orderBy().desc("dateCreated").findList();
 		List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).findList();
 		if(approvedCoupons == null)
 			approvedCoupons = new ArrayList<Coupon>();
-		Collections.reverse(approvedCoupons);
 		return approvedCoupons;
-
 	}
 	
 	/**
