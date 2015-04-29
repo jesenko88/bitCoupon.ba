@@ -80,13 +80,9 @@
 			</div>
 		</div>
 	</section><!--/form-->
-							</div>
+</div>
 
-<script>
-
-					//var doc = new jsPDF();
-					
-
+					<script>
 					$('.btnCmd').each(function(){
 						$(this).click(function () {
 							var doc = new jsPDF();
@@ -99,12 +95,9 @@
 						        'width': 170,
 						            'elementHandlers': specialElementHandlers
 						    });
-						    doc.save('sample-file.pdf');
+						    doc.save('bought-coupon.pdf');
 						});
 					});
-
-					
-
 					</script>
 }
 } else {

@@ -201,7 +201,9 @@
                <label class="pull-left">Number of views @coupon.statistic.visited</label>           
                </br>
                </br>
-              				
+               @if(Sesija.companyCheck(ctx()) == true && coupon.buyers.size() > 0) {
+               	<a href="@routes.CouponController.listOfBuyers(coupon.id)" style="float:left">Buyers: @coupon.buyers.size()</a>
+              	}			
                </div>
          <!--/product-information-->
       </div>
