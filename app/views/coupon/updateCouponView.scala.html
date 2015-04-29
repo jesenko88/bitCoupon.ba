@@ -1,4 +1,4 @@
-@(username: String)(coupon: Coupon)(photos : List[Photo])
+@(myForm: Form[Coupon])(coupon: Coupon)(photos : List[Photo])
 @import helper._
 @main("Coupon Panel") {
 <header id="header">
@@ -23,45 +23,10 @@
          <h2 class="title text-center">Coupon Update</h2>
          <div class="row">
             <div class="col-sm-7">
-               <h4> Coupon: "@coupon.name" </h4>
-               <div class="signup-form">
+               <h4> Coupon: @myForm("name").value </h4>
+               <div class="signup-form">Integer
                   <!--sign up form-->
-                  <form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST" enctype="multipart/form-data">
-                     <label> Title: </label>
-                     <input type="text" name="name" id="name" placeholder="Title" minlength="4" maxlength="70" value="@coupon.name" required/>
-                     <label> Published by: </label>
-                     <input type="text" name="seller" id="seller" placeholder="Company name" minlength="4" maxlength="70" value="@coupon.seller.name" required/>
-                     <label> Price: </label>
-                     <input type="number" name="price" id="price" min="1" step="any" value="@coupon.getPriceString()" required/>
-                     <p> Expiration date: @coupon.dateExpire </p>
-                    <input class="form-control datepicker-bit" type="date" id="datepicker" name="dateExpire">
-                     <label> Update coupon photo? </label>
-                     <input type="file" name="picture" id="picture" placeholder="Choose your photo" />
-                     <label> Category </label>
-                     <select id="category" name="category" >
-                        <option  style="display:none">@coupon.getCategoryName()</option>
-                        @for(category <- Category.all()) {
-                        <option value="@category.name">@category.name</option>
-                        }
-                        <option >New Category</option>
-                     </select>
-                     <input type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
-                     <textarea name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required> @coupon.description </textarea>
-                     <p></p>
-                     <textarea name="remark" id="remark" rows="6" placeholder="Remark of Coupon"> "@coupon.remark" </textarea>
-                       <p></p>
-                     <input type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" value="@coupon.minOrder"required/>
-                     <input type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" value="@coupon.maxOrder"required/>
-                     <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>
-                      <p> Usage date: @coupon.usage </p>  
-                    <input type="date" id="usage" name="usage"/>
-                     <span id="error1" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>                         
-                     <button type="submit" class="btn btn-default">Update Coupon</button>
-                     <p></p>
-                     <p></p>
-                     <p></p>
-                     <p></p>
-                  </form>
+                  @_updateCouponForm(myForm, coupon.id)
                </div>
 
             </div>
@@ -70,7 +35,7 @@
             <h4>Add photos to coupon gallery </h4>
             <br>
             <div class="signup-form">
-               <form action="@routes.CouponController.galleryUpload(coupon.id)" enctype="multipart/form-data" method="post">
+               <form action='@routes.CouponController.galleryUpload(coupon.id)' enctype="multipart/form-data" method="post">
                   <input name="photo" type="file" multiple="multiple" max-uploads=3/>
                   <button type="submit" class="btn btn-default">Submit</button>
                </form>
