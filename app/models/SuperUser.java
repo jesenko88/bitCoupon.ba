@@ -39,13 +39,15 @@ public abstract class SuperUser extends Model {
 	
 	@MinLength(6)
 	@MaxLength(165)
-	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$",
 			message="Adress not valid, only letters and numbers alowed."	)
 	public String adress;
 	
 	@MinLength(6)
 	@MaxLength(165)
-	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$",
 			message="City not valid, only letters and numbers alowed."	)
 	public String city;
 	

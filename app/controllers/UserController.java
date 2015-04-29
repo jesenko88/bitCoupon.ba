@@ -131,7 +131,10 @@ public class UserController extends Controller {
 	public static Result updateUser(long id) {
 
 		DynamicForm updateForm = Form.form().bindFromRequest();
-		if (updateForm.hasErrors()) {
+		Form<User> userForm = Form.form(User.class).bindFromRequest();
+		if (userForm.hasGlobalErrors() ) {
+			flash("error","Error at update user");
+			Logger.debug("Error at update user");	
 			return redirect("/updateUser ");
 		}
 		try {
@@ -143,10 +146,13 @@ public class UserController extends Controller {
 			String email = updateForm.data().get("email");
 			Date dob = null;
 			User cUser = User.find(id);
+			
 			if (!dobString.isEmpty()){
 				dob = new SimpleDateFormat("yy-mm-dd").parse(dobString);
 				cUser.dob = dob;
-			}
+			}			
+		
+			Logger.debug(dob.toString());
 			cUser.username = username;
 			cUser.surname = surname;
 			cUser.adress = adress;
@@ -165,14 +171,14 @@ public class UserController extends Controller {
 				flash("success",
 						"A new verification email has been sent to this e-mail: "
 								+ email);
-				return ok(userUpdate.render(cUser));
+				return ok(userUpdate.render(userForm, null, cUser));
 			}
 			cUser.email = email;
 			cUser.save();
 			flash("success", "Profile updated!");
 			Logger.info(cUser.username + " is updated");
 			session("name", cUser.username);
-			return ok(userUpdate.render(cUser));
+			return ok(userUpdate.render(userForm, null, cUser));
 		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
 			Logger.error("Error at updateUser: " + e.getMessage(), e);

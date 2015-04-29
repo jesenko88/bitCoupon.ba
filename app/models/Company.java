@@ -32,15 +32,16 @@ public class Company  extends SuperUser{
 	@Required
 	@MinLength(3)
 	@MaxLength(45)
-	@Pattern(value = "^[A-Za-z0-9 ,_]*[A-Za-z0-9][A-Za-z0-9 ,_]*$",
-			message="Category name format is not valid."	)
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$",
+			message="Company contact format is not valid."	)
 	public String name;	
 	
 	public Date created;
 	
 	public Date updated;
 	
-	public String logo;
+	public String logo;	
 	
 	public String contact;
 		
