@@ -13,9 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.google.common.collect.Lists;
-
-import models.*;
+import models.Coupon;
+import models.User;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 

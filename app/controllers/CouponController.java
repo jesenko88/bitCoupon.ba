@@ -2,7 +2,6 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
-import helpers.HashHelper;
 import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
@@ -17,41 +16,44 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import org.h2.util.StringUtils;
-
-import api.JSonHelper;
-
-import com.google.common.io.Files;
-
 import models.Category;
-import models.comments.Comment;
 import models.Company;
 import models.Coupon;
 import models.Photo;
-import models.SuperUser;
 import models.TransactionCP;
 import models.User;
+
+import org.h2.util.StringUtils;
+
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import views.html.coupon.*;
-import views.html.company.*;
-import views.html.*;
-import views.html.admin.users.*;
+import play.mvc.Security;
+import views.html.index;
+import views.html.searchFilter;
+import views.html.admin.users.adminCouponPanel;
+import views.html.admin.users.couponsAll;
+import views.html.company.listOfBuyers;
+import views.html.coupon.couponPanel;
+import views.html.coupon.coupontemplate;
+import views.html.coupon.updateCouponView;
+import api.JSonHelper;
+
+import com.google.common.io.Files;
 
 public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
 	static Result result;
+	
 	/**
-	 * 
-	 * @return renders the view for coupon add form
+	 * Renders the 'add coupon' page
+	 * @return
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
@@ -62,15 +64,11 @@ public class CouponController extends Controller {
 		if(categories == null || name == null){
 			flash("error", "Ooops, error has occured. Please try again later.");
 			return redirect("/");
-		}
-		
+		}	
 		User user = User.find(name);
-		if(user != null){ 
-			if(user.isAdmin){
-				return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));
-			}
+		if(user != null && user.isAdmin){ 
+			return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));	
 		}
-
 		return ok(couponPanel.render(session("name"), categories, new Form<Coupon>(Coupon.class)));
 
 	}
@@ -262,8 +260,8 @@ public class CouponController extends Controller {
 			if (!StringUtils.isNullOrEmpty(assetsPath)) {
 				coupon.picture = assetsPath;
 			}
-			int status;
-			/* kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ? */
+			//TODO check:  kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ?
+//			int status;
 //			if (Sesija.adminCheck(ctx()) == true) {
 //				status = Coupon.Status.ACTIVE;
 //			} else {
@@ -342,7 +340,7 @@ public class CouponController extends Controller {
 			} else {
 				Logger.debug("Method went wrong");
 			}
-
+			
 			List<Coupon> sorted;
 
 			if (orderBy.equalsIgnoreCase("Category")) {
@@ -791,6 +789,13 @@ public class CouponController extends Controller {
 		return 0;
 	}
 	
+	/**
+	 * Renders the buyers list page
+	 * Receives a couponId and finds all buyers for the
+	 * specified coupon
+	 * @param couponId
+	 * @return
+	 */
 	public static Result listOfBuyers(long couponId) {
 		Coupon c = Coupon.find(couponId);
 		if(c.buyers == null)

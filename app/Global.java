@@ -1,10 +1,10 @@
+import helpers.HashHelper;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import helpers.FileUpload;
-import helpers.HashHelper;
 import models.Category;
 import models.Company;
 import models.Coupon;

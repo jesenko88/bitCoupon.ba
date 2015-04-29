@@ -1,30 +1,20 @@
 package models;
 
-import helpers.AdminFilter;
-import helpers.CurrentUserFilter;
 import helpers.HashHelper;
-import helpers.MailHelper;
 
 import java.util.ArrayList;
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
-import controllers.Sesija;
 import play.Logger;
-import play.data.DynamicForm;
-import play.data.Form;
-import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-import play.mvc.Result;
-import play.mvc.Security;
 
 @Entity
 public class Company  extends SuperUser{	

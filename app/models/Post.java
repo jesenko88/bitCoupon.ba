@@ -10,12 +10,18 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import play.data.Form;
+import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
+import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
-import play.data.validation.Constraints.*;
 import play.db.ebean.Model;
 
 @Entity

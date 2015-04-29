@@ -2,17 +2,17 @@ package helpers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import java.util.List;
 import java.util.Scanner;
+
+import models.Coupon;
+import models.Subscriber;
+import models.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import models.Coupon;
-import models.Subscriber;
-import models.User;
 import play.Logger;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerPlugin;

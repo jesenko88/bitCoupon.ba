@@ -1,12 +1,9 @@
 package controllers;
 
-import java.util.List;
-
 import models.Coupon;
 import models.Rate;
 import models.TransactionCP;
 import models.User;
-import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;

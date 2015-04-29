@@ -1,25 +1,32 @@
 package controllers;
 
 import helpers.AdminFilter;
-import helpers.CurrentCompanyFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
+import helpers.SuperUserFilter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import models.*;
-import helpers.*;
+import models.Company;
+import models.EmailVerification;
+import models.ResetPasword;
+import models.SuperUser;
+import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
+import views.html.verifyEmail;
+import views.html.verifyEmailUpdate;
+import views.html.admin.users.adminEditUser;
+import views.html.admin.users.userList;
+import views.html.user.newPassword;
+import views.html.user.profile;
+import views.html.user.userUpdate;
 
 public class SuperUserController extends Controller {
 

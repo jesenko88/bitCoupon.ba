@@ -1,12 +1,9 @@
 package controllers;
 
-import java.util.List;
-
 import models.Coupon;
 import models.User;
 import models.comments.Comment;
 import models.comments.Report;
-import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -36,7 +33,6 @@ public class CommentController extends Controller {
 			return redirect("/coupon/" + couponId);
 		}
 		long id = Comment.create(comment, coupon, user);	
-//		return redirect("/coupon/" +couponId);	
 		return ok(commentLine.render(Comment.findById(id), coupon));
 	}
 	
@@ -54,7 +50,6 @@ public class CommentController extends Controller {
 	}
 	
 	public static Result report(String id){
-		Logger.debug("IN STRING REPORT WITH ID " +id);
 		long commentId = Long.valueOf(id);
 		Comment comment = Comment.findById(commentId);
 		User user = Sesija.getCurrentUser(ctx());

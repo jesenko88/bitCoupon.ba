@@ -3,26 +3,21 @@ package controllers;
 import helpers.AdminFilter;
 import helpers.FileUpload;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import models.Post;
 import models.User;
 import play.Logger;
 import play.data.Form;
-import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import play.twirl.api.Html;
-import views.html.admin.blog.*;;;
+import views.html.admin.blog.blog;
+import views.html.admin.blog.createPost;
+import views.html.admin.blog.editPost;
+import views.html.admin.blog.post;
 
 public class BlogController extends Controller {
 

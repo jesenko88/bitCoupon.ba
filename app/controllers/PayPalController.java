@@ -2,20 +2,17 @@ package controllers;
 
 import helpers.MailHelper;
 
-import java.awt.ItemSelectable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import nl.bitwalker.useragentutils.UserAgent;
 import models.Category;
-import models.Company;
 import models.Coupon;
-import models.SuperUser;
 import models.TransactionCP;
 import models.User;
+import nl.bitwalker.useragentutils.UserAgent;
 import play.Logger;
 import play.Play;
 import play.data.DynamicForm;
@@ -23,11 +20,11 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
-import views.html.*;
-import views.html.coupon.*;
+import views.html.index;
+import views.html.coupon.couponResult;
+import views.html.coupon.coupontemplate;
 
 import com.paypal.api.payments.Amount;
-import com.paypal.api.payments.Details;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payer;
 import com.paypal.api.payments.Payment;
@@ -45,8 +42,6 @@ public class PayPalController extends Controller {
     static String PATH = Play.application().configuration().getString("PATH");
 
 	private static User currentUser; // = User.find(session("name"));
-	private static Company currentCompany = Company.find(session("name"));
-	private static SuperUser su;
 	private static Coupon coupon;
 	private static List<String> details;
 	private static APIContext apiContext;

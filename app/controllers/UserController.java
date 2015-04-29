@@ -1,47 +1,51 @@
 package controllers;
 
+import helpers.AdminFilter;
+import helpers.CurrentUserFilter;
+import helpers.FileUpload;
+import helpers.HashHelper;
+import helpers.MailHelper;
+
 import java.io.File;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import helpers.AdminFilter;
-import helpers.FileUpload;
-import helpers.SuperUserFilter;
-
 import java.util.List;
 
-import api.JSonHelper;
-
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import helpers.*;
-import play.*;
+import models.Category;
+import models.Company;
+import models.Coupon;
+import models.EmailVerification;
+import models.Pin;
+import models.ResetPasword;
+import models.Statistic;
+import models.Subscriber;
+import models.SuperUser;
+import models.TransactionCP;
+import models.User;
+import play.Logger;
+import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.libs.Json;
-import play.mvc.*;
-import tyrex.services.UUID;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
-import views.html.admin.blog.*;
-import views.html.coupon.*;
-import models.*;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
+import views.html.Loginpage;
+import views.html.index;
+import views.html.signup;
+import views.html.admin.users.adminPanel;
+import views.html.admin.users.buyForUser;
+import views.html.admin.users.userList;
+import views.html.coupon.boughtCoupons;
+import views.html.coupon.coupontemplate;
+import views.html.coupon.makeAGift;
+import views.html.user.profile;
+import views.html.user.userUpdate;
+import api.JSonHelper;
 
 public class UserController extends Controller {
 
-	static String PATH = Play.application().configuration().getString("PATH"); /*
-																				 * TODO
-																				 * move
-																				 * all
-																				 * messages
-																				 * to
-																				 * conf
-																				 */
+	static String PATH = Play.application().configuration().getString("PATH"); 
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;
@@ -499,8 +503,9 @@ public class UserController extends Controller {
 	
 	
 	/**
-	 * 
-	 * @param couponID
+	 * Renders the page for buying a coupon for another user
+	 * as a gift
+	 * @param id of the coupon to buy
 	 * @return
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
@@ -512,11 +517,18 @@ public class UserController extends Controller {
 		return redirect("/");
 	}
 	
-	// TODO comment
+	/**
+	 * Method binds data from request that is submitted from the
+	 * make a gift page. It searches the database for a user by checking
+	 * the provided email. If the user is found, method redirects to the buyForUser page.
+	 * If no user us found, the makeAGift page is reloaded again. 
+	 * @param id of the coupon as a parameter
+	 * @return
+	 */
 	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result giftCheckoutPage(long id) {
+	public static Result giftCheckoutPage(long couponId) {
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
-		Coupon coupon = Coupon.find(id);
+		Coupon coupon = Coupon.find(couponId);
 		String email = dynamicForm.data().get("email");
 		User user = User.findByEmail(email);
 		if (user == null) {
@@ -526,7 +538,11 @@ public class UserController extends Controller {
 		return ok(buyForUser.render(coupon, user));
 	}
 	
-
+	/**
+	 * Renders the checkout page for unregistered users.
+	 * @param id of the coupon to buy
+	 * @return
+	 */
 	public static Result checkoutPageUnregistered(long id) {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
