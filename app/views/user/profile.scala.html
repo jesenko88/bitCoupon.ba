@@ -109,9 +109,11 @@
                   <ul class="nav navbar-nav collapse navbar-collapse">
                      <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
                      <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
-
+					@if(superUser.getCompany().notifications > 0) {
 			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i>Notifications</a></li>
-                  	
+                  	} else {
+			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)">Notifications</a></li>                  	
+                  	}
                   </ul>
                </div>
             </div>
