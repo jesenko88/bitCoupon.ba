@@ -1,7 +1,7 @@
-@(myForm: Form[Coupon], couponId: Long)
+@(myForm: Form[Coupon], coupon: Coupon)
 
 
- <form action="@routes.CouponController.updateCoupon(couponId)" method ="POST"
+ <form action="@routes.CouponController.updateCoupon(coupon.id)" method ="POST"
       enctype="multipart/form-data" >
 	      @if(myForm.hasGlobalErrors){
 	      <div class="panel panel-danger">
@@ -40,9 +40,11 @@
      <div class='@("form-group has-error".when(myForm("category").hasErrors)) form-group' >
      	 <label class="control-label" for="category">Category<span style="color:#AB1403"> *</span></label>
 		 <select class="form-control"  value='@myForm("category").value'  id="category" name="category" required>
-	        
-	         <option value='@myForm("category").value' style="display:none">Select category</option>	        
-	        
+	         @if(coupon.category != null){
+	         <option select="selected" style="display:none" > @coupon.category.name </option>	         	
+	         }else{
+	         <option value='@myForm("category").value' style="display:none">Select category</option>	         
+	         }
 	         @for(category <- Category.all()) {
 	         <option>@category.name</option>
 	         }
