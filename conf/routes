@@ -99,6 +99,7 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
+GET    /listOfBuyers                  controllers.CouponController.listOfBuyers(id: Long)
 
 # Comment controller
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	

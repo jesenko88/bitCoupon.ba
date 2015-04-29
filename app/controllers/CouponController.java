@@ -791,5 +791,12 @@ public class CouponController extends Controller {
 		return 0;
 	}
 	
+	public static Result listOfBuyers(long couponId) {
+		Coupon c = Coupon.find(couponId);
+		if(c.buyers == null)
+			return ok(listOfBuyers.render(new ArrayList<>()));
+		else
+			return ok(listOfBuyers.render(c.buyers));
+	}
 	
 }
