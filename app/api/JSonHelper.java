@@ -2,10 +2,8 @@ package api;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import play.Logger;
 import play.libs.Json;
-import play.twirl.api.Content;
 import models.Category;
 import models.Company;
 import models.Coupon;
@@ -13,8 +11,6 @@ import models.FAQ;
 import models.SuperUser;
 import models.TransactionCP;
 import models.User;
-import models.comments.Comment;
-
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,9 +19,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * A helper class for converting provided parameters to JSon
  *
  */
-
- //TODO complete this helper after the used models are finished
-
 public class JSonHelper {
 	
 	
@@ -49,6 +42,12 @@ public class JSonHelper {
 	}
 	
 	
+	/**
+	 * Returns a user in json format with the following tags:
+	 * id, name, surname, email, address, city, picture
+	 * @param u User
+	 * @return ObjectNode
+	 */
 	public static ObjectNode userToJSon(User u) {
 		
 		ObjectNode userNode = Json.newObject();
@@ -62,7 +61,12 @@ public class JSonHelper {
 		return userNode;
 	}
 	
-	
+	/**
+	 * Returns a company in json format with the following tags:
+	 * id, name, email, address, city, contact, logo
+	 * @param company Company
+	 * @return ObjectNode
+	 */
 	public static ObjectNode companyToJSon(Company company) {
 		
 		ObjectNode companyNode = Json.newObject();
@@ -76,7 +80,13 @@ public class JSonHelper {
 		return companyNode;
 	}
 	
-	
+	/**
+	 * Returns a coupon in json format, with following tags:
+	 * id, name, price, expiration, picture, categoryName, description, remark, seller,
+	 * minOrder, maxOrder
+	 * @param coupon
+	 * @return
+	 */
 	public static ObjectNode couponToJSon(Coupon coupon) {
 		if (coupon == null){
 			Logger.error("error","Coupon null at couponToJSon()");
@@ -268,7 +278,15 @@ public class JSonHelper {
 		return arrayNode;
 	}
 
-
+	/**
+	 * Receives a transaction list that belongs to a specific user, and a coupon id.
+	 * Returns a Coupon in json format with the following tags:
+	 * transactionId, couponId, name, description, price, quantity, picture, totalPrice,
+	 * transactionDate, bitPaymentId, token
+	 * @param transactions List<TransactionCP>
+	 * @param couponId long
+	 * @return ObjectNode
+	 */
 	public static ObjectNode boughtCoupon(List<TransactionCP> transactions, long couponId) {
 		ObjectNode transactionDetails = Json.newObject();
 		for (TransactionCP tran : transactions){
