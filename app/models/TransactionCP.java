@@ -1,6 +1,5 @@
 package models;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,16 +7,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import controllers.CouponController;
-import controllers.PayPalController;
-import controllers.Sesija;
 import play.Play;
-import play.api.mvc.Session;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-import scala.Array;
 
 /**
  * 

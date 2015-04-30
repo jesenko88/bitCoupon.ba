@@ -3,25 +3,15 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.libs.Json;
 
 @MappedSuperclass
 public abstract class SuperUser extends Model {
@@ -39,13 +29,15 @@ public abstract class SuperUser extends Model {
 	
 	@MinLength(6)
 	@MaxLength(165)
-	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$",
 			message="Adress not valid, only letters and numbers alowed."	)
 	public String adress;
 	
 	@MinLength(6)
 	@MaxLength(165)
-	@Pattern(value = "^[A-Za-z0-9 ,._]*[A-Za-z0-9][A-Za-z0-9 ,._]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$",
 			message="City not valid, only letters and numbers alowed."	)
 	public String city;
 	

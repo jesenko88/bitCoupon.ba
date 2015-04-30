@@ -1,25 +1,32 @@
 package controllers;
 
 import helpers.AdminFilter;
-import helpers.CurrentCompanyFilter;
 import helpers.HashHelper;
 import helpers.MailHelper;
+import helpers.SuperUserFilter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import models.*;
-import helpers.*;
+import models.Company;
+import models.EmailVerification;
+import models.ResetPasword;
+import models.SuperUser;
+import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
+import views.html.verifyEmail;
+import views.html.verifyEmailUpdate;
+import views.html.admin.users.adminEditUser;
+import views.html.admin.users.userList;
+import views.html.user.newPassword;
+import views.html.user.profile;
+import views.html.user.userUpdate;
 
 public class SuperUserController extends Controller {
 
@@ -40,24 +47,21 @@ public class SuperUserController extends Controller {
 					&& !oldPass.isEmpty()) {
 				flash("error", "If you want to change your password,"
 						+ " please fill out both fields");
-				return badRequest(userUpdate.render(superUser));
+				return redirect("/updateUser ");
 			}
 			/* if there was a input in password fields */
 			if (!oldPass.isEmpty() && !newPass.isEmpty()) {
 				if (HashHelper.checkPass(oldPass, superUser.password) == false) {
 					flash("error", "You're old password is incorrect!");
-					return badRequest(userUpdate.render(superUser));
-				}
+					return redirect("/updateUser ");				}
 				if (newPass.length() < 6) {
 					flash("error", "The password must be at least 6 characters");
-					return badRequest(userUpdate.render(superUser));
-				}
+					return redirect("/updateUser ");				}
 				superUser.password = HashHelper.createPassword(newPass);
 			}
 			if (!newPass.equals(confPass)) {
 				flash("error", "Passwords don't match, try again ");
-				return badRequest(userUpdate.render(superUser));
-			}
+				return redirect("/updateUser ");			}
 			User user;
 			Company company;
 			if (superUser.isUser()) {
@@ -119,9 +123,11 @@ public class SuperUserController extends Controller {
 		User currentUser = User.findByEmail(session("email"));
 		Company currentCompany = Company.findByEmail(session("email"));
 		if(currentUser == null){
-			return ok(userUpdate.render(currentCompany));
+			Form<Company> companyForm = Form.form(Company.class).fill(currentCompany);
+			return ok(userUpdate.render(null, companyForm, currentCompany));
 		}else if(currentCompany == null){
-			return ok(userUpdate.render(currentUser));
+			Form<User> userForm = Form.form(User.class).fill(currentUser);
+			return ok(userUpdate.render(userForm, null, currentUser));
 		}else{
 			flash("error", "Oops, error has occured. Please try again.");
 			Logger.error("Error at userUpdateView");
@@ -132,7 +138,7 @@ public class SuperUserController extends Controller {
 	
 	/**
 	 * Receives a user id, initializes the user, and renders the adminEditUser
-	 * passing the user to the view
+	 * passing @_updateUserForm(userForm, superUser) the user to the view
 	 * TODO: Handle exceptions.
 	 * @param id
 	 *            of the User (long)
@@ -144,15 +150,16 @@ public class SuperUserController extends Controller {
 		List<User> adminList = User.findAdmins(true);		
 		User userToUpdate = User.findByEmail(email);
 		Company companyToUpdate = Company.findByEmail(email);
-		
 		if(userToUpdate != null){
+			Form<User> userForm = Form.form(User.class).fill(userToUpdate);
 			Logger.debug("In user edit");
 			return ok(adminEditUser
-					.render(userToUpdate, adminList));
+					.render(userToUpdate, adminList, userForm, null));
 		}else if(companyToUpdate != null){
 			Logger.debug("In company edit");
+			Form<Company> companyForm = Form.form(Company.class).fill(companyToUpdate);
 			return ok(adminEditUser
-					.render(companyToUpdate, adminList));
+					.render(companyToUpdate, adminList, null, companyForm));
 		}else{
 			return TODO;
 		}

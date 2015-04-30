@@ -1,6 +1,7 @@
 package helpers;
 
 import org.mindrot.jbcrypt.BCrypt;
+
 import play.Logger;
 
 public class HashHelper {

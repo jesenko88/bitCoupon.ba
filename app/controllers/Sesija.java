@@ -87,7 +87,11 @@ public class Sesija extends Security.Authenticator {
 		return null;
 	}
 	
-	
+	/**
+	 * Returns current superUser, whether it is a company or user
+	 * @param ctx
+	 * @return
+	 */
 	public static SuperUser getCurrent(Context ctx){
 		Company c = getCurrentCompany(ctx);
 		User u = getCurrentUser(ctx);

@@ -103,7 +103,6 @@ public class QuestionController extends Controller {
 	public static Result showCoupon(long questionID) {
 		try {
 			Question currentQuestion = Question.findById(questionID);
-			Coupon coupon = currentQuestion.coupon;
 			currentQuestion.newQuestion = false;
 			currentQuestion.save();
 			return ok(coupontemplate.render(currentQuestion.coupon));

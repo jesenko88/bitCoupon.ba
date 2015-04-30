@@ -1,25 +1,13 @@
 package controllers;
 
-import models.*;
-import play.*;
-import play.data.Form;
-import play.data.validation.Constraints.Email;
-import play.data.validation.Constraints.Required;
-import play.mvc.*;
-import views.html.*;
+import helpers.MailHelper;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import play.twirl.api.Html;
-
-import org.jsoup.Jsoup;
-
-import helpers.MailHelper;
+import models.Category;
+import models.Company;
+import models.Coupon;
+import models.Login;
 import models.User;
 import play.Logger;
 import play.Play;
@@ -32,16 +20,14 @@ import play.libs.F.Promise;
 import play.libs.ws.WS;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
-import play.mvc.Http.RequestBody;
 import play.mvc.Result;
-import models.*;
-import api.JSonHelper;
+import views.html.Loginpage;
+import views.html.contact;
+import views.html.index;
+import views.html.indexC;
+import views.html.loginToComplete;
+import views.html.signup;
 
-import com.ckeditor.CKEditorConfig;
-import com.ckeditor.CKEditorReplaceAllTag;
-import com.ckeditor.CKEditorReplaceTag;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Application extends Controller {
@@ -69,7 +55,7 @@ public class Application extends Controller {
 		name = session("name");
 		List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 		List<Category> categories = Category.all();
-		
+
 		//Handling exceptions
 		if(approvedCoupons == null || categories == null){
 			flash("warning", "Ooops error occured.");

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javafx.scene.control.Hyperlink;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;

@@ -1,10 +1,9 @@
 package helpers;
 
-import models.Company;
 import models.SuperUser;
 import play.Logger;
-import play.mvc.Result;
 import play.mvc.Http.Context;
+import play.mvc.Result;
 import play.mvc.Security;
 
 public class SuperUserFilter extends Security.Authenticator{

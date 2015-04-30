@@ -5,9 +5,7 @@ import helpers.FileUpload;
 
 import java.util.List;
 
-import api.JSonHelper;
 import models.Category;
-import models.Company;
 import models.Coupon;
 import models.User;
 import play.Logger;
@@ -15,11 +13,12 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.admin.users.*;
+import views.html.admin.users.adminCategoryPanel;
 import views.html.category.CategoriesList;
 import views.html.category.categoryPage;
 import views.html.category.categoryPanel;
 import views.html.category.editCategory;
+import api.JSonHelper;
 
 public class CategoryController extends Controller {
 

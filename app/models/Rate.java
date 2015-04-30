@@ -3,26 +3,12 @@ package models;
 import java.util.Date;
 import java.util.List;
 
-import helpers.AdminFilter;
-import helpers.CurrentUserFilter;
-import helpers.HashHelper;
-import helpers.MailHelper;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import java.util.ArrayList;
-import java.io.File;
-
-import javax.persistence.*;
-
-import controllers.Sesija;
-import play.Logger;
-import play.data.DynamicForm;
-import play.data.Form;
-import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-import play.mvc.Result;
-import play.mvc.Security;
 
 @Entity
 public class Rate extends Model {

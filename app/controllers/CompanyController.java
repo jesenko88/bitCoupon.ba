@@ -1,31 +1,37 @@
 package controllers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import api.JSonHelper;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
-import views.html.coupon.*;
-import views.html.company.*;
 import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.FileUpload;
 import helpers.HashHelper;
 import helpers.MailHelper;
-import models.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import models.Company;
+import models.Coupon;
+import models.EmailVerification;
+import models.SuperUser;
+import models.TransactionCP;
+import models.User;
 import play.Logger;
 import play.Play;
-import play.api.mvc.Session;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.db.ebean.Model.Finder;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.searchCompany;
+import views.html.signup;
+import views.html.admin.users.userList;
+import views.html.company.companyPanel;
+import views.html.company.companyProfile;
+import views.html.company.notificationsForCompany;
+import views.html.user.userUpdate;
+import api.JSonHelper;
 
 public class CompanyController extends Controller {
 
@@ -130,6 +136,7 @@ public class CompanyController extends Controller {
 			String newPass = updateForm.data().get("newPassword");
 			
 			Company company = Company.findById(id);
+			Form<Company> companyForm = Form.form(Company.class).fill(company);
 			company.name = name;
 			// cUser.email = email;
 			company.updated = new Date();
@@ -145,14 +152,14 @@ public class CompanyController extends Controller {
 				flash("success",
 						"A new verification email has been sent to this e-mail: "
 								+ email);
-				return ok(userUpdate.render(company));
+				return ok(userUpdate.render(null, companyForm, company));
 			}
 			company.email = email;
 			company.save();
 			flash("success", "Profile updated!");
 			Logger.info(company.name + " is updated");
 			session("name", company.name); 
-			return ok(userUpdate.render(company));			
+			return ok(userUpdate.render(null, companyForm, company));			
 		}catch(Exception e){
 			flash("error","Error while updateing company. If you're admin please check logs.");
 			Logger.error("Error at company update: " +e.getMessage());
@@ -270,6 +277,11 @@ public class CompanyController extends Controller {
 		}
 	}	
 
+	/**
+	 * Renders the companyPanel page
+	 * @param id of the company
+	 * @return
+	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result companyPanel(long id) {
 		Company company = Company.findById(id);
@@ -283,7 +295,9 @@ public class CompanyController extends Controller {
 	}
 
 	/**
-	 * TODO json
+	 * Shows the company profile page
+	 * @param id of the company
+	 * @return
 	 */
 	public static Result showCompanyProfile(long id) {
 		Company current = Company.findById(id);
@@ -317,7 +331,6 @@ public class CompanyController extends Controller {
 	/**
 	 * Search method for companies. If search is unsuccessful a flash message is
 	 * sent
-	 * TODO if list is empty, just return empty list.
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result
@@ -329,12 +342,18 @@ public class CompanyController extends Controller {
 
 		if ((searchedCompanies.isEmpty())) {
 			flash("error", "No resoult for this search");
-			return badRequest(searchCompany.render(searchedCompanies));
+			return badRequest(searchCompany.render(new ArrayList<Company>()));
 		}
 		Logger.info(session("name") + " searched for: \"" + name + "\"");
 		return ok(searchCompany.render(searchedCompanies));
 	}
 		
+	/**
+	 * Renders the company notifications view.
+	 * Before redirecting, the notifications counter is being reset
+	 * @param id of the Company
+	 * @return
+	 */
 	public static Result notifications(long id) {
 		Company c = Company.findById(id);
 		c.notifications = 0;

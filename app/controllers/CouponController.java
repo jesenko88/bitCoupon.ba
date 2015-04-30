@@ -2,7 +2,6 @@ package controllers;
 
 import helpers.AdminFilter;
 import helpers.FileUpload;
-import helpers.HashHelper;
 import helpers.SuperUserFilter;
 
 import java.awt.image.BufferedImage;
@@ -17,41 +16,44 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import org.h2.util.StringUtils;
-
-import api.JSonHelper;
-
-import com.google.common.io.Files;
-
 import models.Category;
-import models.comments.Comment;
 import models.Company;
 import models.Coupon;
 import models.Photo;
-import models.SuperUser;
 import models.TransactionCP;
 import models.User;
+
+import org.h2.util.StringUtils;
+
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import views.html.coupon.*;
-import views.html.company.*;
-import views.html.*;
-import views.html.admin.users.*;
+import play.mvc.Security;
+import views.html.index;
+import views.html.searchFilter;
+import views.html.admin.users.adminCouponPanel;
+import views.html.admin.users.couponsAll;
+import views.html.company.listOfBuyers;
+import views.html.coupon.couponPanel;
+import views.html.coupon.coupontemplate;
+import views.html.coupon.updateCouponView;
+import api.JSonHelper;
+
+import com.google.common.io.Files;
 
 public class CouponController extends Controller {
 
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
 	static Result result;
+	
 	/**
-	 * 
-	 * @return renders the view for coupon add form
+	 * Renders the 'add coupon' page
+	 * @return
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
@@ -62,15 +64,11 @@ public class CouponController extends Controller {
 		if(categories == null || name == null){
 			flash("error", "Ooops, error has occured. Please try again later.");
 			return redirect("/");
-		}
-		
+		}	
 		User user = User.find(name);
-		if(user != null){ 
-			if(user.isAdmin){
-				return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));
-			}
+		if(user != null && user.isAdmin){ 
+			return ok(adminCouponPanel.render(name, categories, new Form<Coupon>(Coupon.class)));	
 		}
-
 		return ok(couponPanel.render(session("name"), categories, new Form<Coupon>(Coupon.class)));
 
 	}
@@ -138,11 +136,9 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result editCoupon(long id) {
-		Coupon coupon = Coupon.find(id);
-		List<Category> categories = Category.all();
-		String name = session("name");
+		Coupon coupon = Coupon.find(id);			
 		//Exception handling.
-		if(coupon == null || categories == null || name == null){
+		if(coupon == null ){
 			flash("error", "Oops, error has occured. Please try again later");
 			return redirect("/");
 		}
@@ -151,7 +147,8 @@ public class CouponController extends Controller {
 			flash("error", "Ooops, error has occured. Please try again later.");
 			return redirect("/");
 		}
-		return ok(updateCouponView.render(name, coupon, photosByCoupon));
+		Form<Coupon> form = Form.form(Coupon.class).fill(coupon);
+		return ok(updateCouponView.render(form, coupon,  photosByCoupon));
 
 	}
 
@@ -191,22 +188,23 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result updateCoupon(long id) {
 		DynamicForm updateCouponForm = Form.form().bindFromRequest();
+		Form<Coupon> form = Form.form(Coupon.class).bindFromRequest();
+		Coupon coupon = Coupon.find(id);
+		List<Photo> photos = Photo.photosByCoupon(coupon);
 		try {
-			Coupon coupon = Coupon.find(id);
-			if (couponForm.hasErrors()) {
+			if (form.hasErrors() || form.hasGlobalErrors()) {
 				Logger.info("Coupon update error");
-				return redirect("/");
+				return ok(updateCouponView.render(form, coupon, photos));
 			}
 
-			List<Photo> photos = Photo.photosByCoupon(coupon);
 			coupon.name = couponForm.bindFromRequest().field("name").value();
 			if (coupon.name.length() < 4) {
 				Logger.info(session("name")+ "entered a short coupon name in coupon update");
-				return ok(updateCouponView.render(session("name"), coupon, photos));
+				return ok(updateCouponView.render(form, coupon, photos));
 			}
 			if (coupon.name.length() > 120) {
 				Logger.info(session("name") + "entered a too long coupon name in coupon update");
-				return ok(updateCouponView.render(session("name"), coupon, photos));
+				return ok(updateCouponView.render(form, coupon, photos));
 			}
 			
 			/* price */
@@ -216,7 +214,7 @@ public class CouponController extends Controller {
 			if (price <= 0) {
 				Logger.info(session("name")	+ " entered a invalid price in coupon update");
 				flash("error", "Enter a valid price");
-				return badRequest(updateCouponView.render(session("name"),
+				return badRequest(updateCouponView.render(form,
 						coupon, photos));
 			}
 			coupon.price = price;
@@ -238,7 +236,7 @@ public class CouponController extends Controller {
 				if (date.before(current)) {
 					flash("error", "Enter a valid expiration date");
 					Logger.info(session("name")	+ " entered a invalid date in coupon update");
-					return ok(updateCouponView.render(session("name"), coupon,  photos));
+					return ok(updateCouponView.render(form, coupon,  photos));
 			}
 				coupon.dateExpire = date;
 			}
@@ -250,7 +248,7 @@ public class CouponController extends Controller {
 			} else {
 				if (newCategory.isEmpty()) {
 					flash("error", "Enter new Category name");
-					return ok(updateCouponView.render(session("name"), coupon, photos));
+					return ok(updateCouponView.render(form, coupon, photos));
 				}
 				coupon.category = Category.find(Category.createCategory(newCategory));
 			}
@@ -262,18 +260,19 @@ public class CouponController extends Controller {
 			if (!StringUtils.isNullOrEmpty(assetsPath)) {
 				coupon.picture = assetsPath;
 			}
-			int status;
-			if (Sesija.adminCheck(ctx()) == true) {
-				status = Coupon.Status.ACTIVE;
-			} else {
-				status = Coupon.Status.DEFAULT;
-			}
-			coupon.status = status;
+			//TODO check:  kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ?
+//			int status;
+//			if (Sesija.adminCheck(ctx()) == true) {
+//				status = Coupon.Status.ACTIVE;
+//			} else {
+//				status = Coupon.Status.DEFAULT;
+//			}
+//			coupon.status = status;
 			
 			Coupon.updateCoupon(coupon);
 			Logger.info(session("name") + " updated coupon: " + coupon.id);
 			flash("success", "Coupon updated");
-			return ok(updateCouponView.render(session("name"), coupon, photos));
+			return ok(updateCouponView.render(form, coupon, photos));
 		} catch (Exception e) {
 			flash("error", "Error while updating coupon. If you're admin please check logs");
 			Logger.error("Error at updateCoupon: " + e.getMessage(), e);
@@ -341,7 +340,7 @@ public class CouponController extends Controller {
 			} else {
 				Logger.debug("Method went wrong");
 			}
-
+			
 			List<Coupon> sorted;
 
 			if (orderBy.equalsIgnoreCase("Category")) {
@@ -472,7 +471,7 @@ public class CouponController extends Controller {
 
 			Coupon coupon = Coupon.find(couponId);
 			int photos = Photo.photoStackLength(coupon);
-
+			Form<Coupon> form = Form.form(Coupon.class).fill(coupon);
 			/*
 			 * Checking if coupon has fulfilled his stack for photos and if user
 			 * has chosen more then available number of photos.
@@ -531,7 +530,7 @@ public class CouponController extends Controller {
 				}
 			}
 			flash("success", "Successfully uploaded photos.");			
-			return ok(updateCouponView.render(session("name"), coupon, Photo.photosByCoupon(coupon)));
+			return ok(updateCouponView.render(form, coupon, Photo.photosByCoupon(coupon)));
 		} catch (Exception e) {
 			flash("error", "Error occured while uploading gallery photos."
 					+ " If you're admin please check logs.");
@@ -790,5 +789,19 @@ public class CouponController extends Controller {
 		return 0;
 	}
 	
+	/**
+	 * Renders the buyers list page
+	 * Receives a couponId and finds all buyers for the
+	 * specified coupon
+	 * @param couponId
+	 * @return
+	 */
+	public static Result listOfBuyers(long couponId) {
+		Coupon c = Coupon.find(couponId);
+		if(c.buyers == null)
+			return ok(listOfBuyers.render(new ArrayList<>()));
+		else
+			return ok(listOfBuyers.render(c.buyers));
+	}
 	
 }

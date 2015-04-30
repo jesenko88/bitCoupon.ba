@@ -1,4 +1,4 @@
-@(superUser: SuperUser)(admins: List[User])
+@(superUser: SuperUser)(admins: List[User])(userForm: Form[User])(companyForm: Form[Company])
 @import helper._
 @main("User Panel") {
   <header id="header">
@@ -30,33 +30,70 @@
       <h2 class="title text-center">Edit User</h2>
       <div class="col-sm-6 col-sm-offset-1">
          <h5>Edit user: @superUser.getUser().username</h5>
-         <div class="signup-form">
-            <!--sign up form-->
+       
             <form action="@routes.UserController.adminUpdateUser(superUser.getUser().id)" method ="POST" >
-               <input type="text" name="username" id="username" placeholder="Name" value=@superUser.getUser().username required/>
-               <input type="text" id="surname" name="surname"  placeholder="Surname"  value=@superUser.getUser().surname required/>	<br>
-               <input type="date" id="datepicker" name="dob"  placeholder="Date of birth" value=@superUser.getUser().dob required/>	<br>
-               <span id="error" style="display:none; color:red"> You are underage of 18 </span>
-               <input type="checkbox" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="male" required/>Male 
-               <input type="checkbox" id="gender" name="gender" style=" border: 0px;width: 5%;height: 1em;" value="female" required/>Female                                              
-               <input type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>	<br>                
-               <input type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>	<br>                 
-               <input type="text" name="email" id="email" placeholder=Email value=@superUser.getUser().email required/>
-               <input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />                 
-               @if((!superUser.getUser().equals(admins.get(0)) && admins.size() >= 1) || (superUser.getUser().equals(admins.get(0)) && admins.size() > 1)) {
-               <label for="isAdmin">Option for promoting user to administrator. Option "false" for removing user from Administrators and option "true" for adding user to Administrator group.</label>
-               <select id="isAdmin" name="isAdmin" value=@superUser.getUser().isAdmin>
-                  <option selected="selected">@superUser.getUser().isAdmin</option>
-                  @if( superUser.getUser().isAdmin == true ){
-                  <option>false</option>
-                  } else{
-                  <option>true</option>
-                  }					     							
-               </select>
-               }
-               <button type="submit" class="btn btn-default">Update user</button>
+               <hr>
+				  @if(userForm.hasGlobalErrors){
+					<div class="panel panel-danger">
+						<div class="panel-heading">Error Submiting Form</div>
+				  		<div class="panel-body">
+				   			 <ul>
+				   			 @for(err <- userForm.globalErrors){
+				  				<li> @err.message </li>
+				   			 }
+				   			 </ul>
+				 		</div>
+					</div>
+					}				
+				 <div class="form group">
+				  <!-- onchange="form.confirmPassword.pattern = this.value;" -->
+                  <!-- Input email -->
+                   <div class='@("form-group has-error".when(userForm("email").hasErrors)) form-group' >
+			     	 <label class="control-label" for="email">Email<span style="color:#AB1403"> *</span></label>
+                 	 <input class="form-control" value='@userForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> 
+		          </div>		         
+                 <!-- Username --> 
+                <div class='@("form-group has-error".when(userForm("username").hasErrors)) form-group' >
+			     	 <label class="control-label" for="username">Username<span style="color:#AB1403"> *</span></label>
+                     <input class='@("has-error".when(userForm("username").hasErrors)) form-control'  value='@userForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	
+ 		        </div>
+ 		        <!-- Surname -->
+                <div class='@("form-group has-error".when(userForm("surname").hasErrors)) form-group' >
+			     	 <label class="control-label" for="surname">Surname<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control" value='@userForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	
+ 		        </div>
+             	<!-- Birth day -->
+                <div class='@("form-group has-error".when(userForm("dob").hasErrors)) form-group' >
+			     	 <label class="control-label" for="dob">Date of birth<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control datepicker-bit " value='@userForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
+ 		        </div> 
+ 		        <span id="error" style="display:none; color:red"> You are underage of 18 </span>
+                
+                <!-- GENDER -->
+                <label class="radio-inline">
+                   <input  value='@userForm("gender").value' type="radio" id="gender-male" name="gender"  value="male" checked /> 
+				    Male
+                </label>
+                <label class="radio-inline">
+                  <input  value='@userForm("gender").value' type="radio" id="gender-female" name="gender"  value="female" /> 
+				    Female
+                </label>
+                <br><br>
+                <!-- Adress -->
+                 <div class='@("form-group has-error".when(userForm("adress").hasErrors)) form-group' >
+			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control" value='@userForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
+ 		        </div>
+                <!-- City -->
+				<div class='@("form-group has-error".when(userForm("city").hasErrors)) form-group' >
+			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
+              	     <input class="form-control" value='@userForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
+ 		        </div>                                     
+                 
+                  <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
+              	</div>
             </form>
-         </div>
+        
       </div>
    </div>
 </div>
@@ -68,18 +105,56 @@
       <h2 class="title text-center">Edit Company</h2>
       <div class="col-sm-6 col-sm-offset-1">
          <h5>Edit company: @superUser.getCompany().name</h5>
-         <div class="signup-form">
-            <!--sign up form-->
+         
             <form action="@routes.CompanyController.adminUpdateCompany(superUser.getCompany().id)" method ="POST" >
-               <input type="text" name="name" id="name" placeholder="Username" value=@superUser.getCompany().name required/>
-               <input type="text" name="email" id="email" placeholder=Email value=@superUser.getCompany().email required/>
-               <input type="text" name="adress" id="adress" placeholder="Company Adress" value=@superUser.getCompany().adress required/>
-               <input type="text" name="city" id="city" placeholder=City value=@superUser.getCompany().city required/>
-               <input type="text" name="contact" id="contact" placeholder="Company contact" value=@superUser.getCompany().contact required/>
-               <input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
-               <button type="submit" class="btn btn-default">Update company</button>
+               <hr>
+				  @if(companyForm.hasGlobalErrors){
+					<div class="panel panel-danger">
+						<div class="panel-heading">Error Submiting Form</div>
+				  		<div class="panel-body">
+				   			 <ul>
+				   			 @for(err <- companyForm.globalErrors){
+				  				<li> @err.message </li>
+				   			 }
+				   			 </ul>
+				 		</div>
+					</div>
+					}
+                  <!-- Input email -->
+                   <div class='@("form-group has-error".when(companyForm("email").hasErrors)) form-group' >
+			     	 <label class="control-label" for="email">Email<span style="color:#AB1403"> *</span></label>
+                 	 <input class="form-control" value='@companyForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> 
+		          </div>
+		          
+ 		          <!-- Name -->
+ 		          <div class='@("form-group has-error".when(companyForm("name").hasErrors)) form-group' >
+			     	 <label class="control-label" for="name">Name<span style="color:#AB1403"> *</span></label>
+                  	 <input class="form-control" value='@companyForm("name").value' type="text" id="name-c" name="name"  onClick="this.select()"  placeholder="Company name" required/>	
+		          </div>
+		          <!-- Contact -->
+ 		          <div class='@("form-group has-error".when(companyForm("contact").hasErrors)) form-group' >
+			     	 <label class="control-label" for="contact">Contact<span style="color:#AB1403"> *</span></label>
+               	     <input class="form-control" value='@companyForm("contact").value' type="text" id="contact-c" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>
+		          </div>
+		          <!-- Logo -->
+		          <div class='@("form-group has-error".when(companyForm("logo").hasErrors)) form-group' >
+			     	 <label class="control-label" for="logo">Logo<span style="color:#AB1403"> *</span></label>
+                  	 <input class="form-control" value='@companyForm("logo").value' type="text" id="logo-c" name="logo" onClick="this.select()" placeholder="Logo" required/> 
+		          </div>
+ 		          <!-- Adress -->
+                 <div class='@("form-group has-error".when(companyForm("adress").hasErrors)) form-group' >
+			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control" value='@companyForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
+ 		        </div>
+                <!-- City -->
+				<div class='@("form-group has-error".when(companyForm("city").hasErrors)) form-group' >
+			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
+              	     <input class="form-control" value='@companyForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
+ 		        </div>   
+                  <button type="submit" id="submit-company" class="btn btn-default" >Submit</button>
+              
             </form>
-         </div>
+       
       </div>
    </div>
 </div>
