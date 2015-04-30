@@ -50,7 +50,13 @@ public class Question extends Model{
 	
 	static Finder<Long, Question> find = new Finder<Long, Question>(Long.class, Question.class);
 	
-	
+	/**
+	 * Constructor for Question
+	 * @param question
+	 * @param answer
+	 * @param coupon
+	 * @param user
+	 */
 	public Question(String question, String answer, Coupon coupon, User user){
 		this.question = question;
 		this.answer = answer;
@@ -76,6 +82,10 @@ public class Question extends Model{
 	}
 	
 	
+	/**
+	 * Method which delete question
+	 * @param id
+	 */
 	public static void delete(long id){
 		find.where().eq("id", id).findUnique().delete();
 	}

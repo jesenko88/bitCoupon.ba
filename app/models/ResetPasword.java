@@ -24,18 +24,32 @@ public class ResetPasword extends Model {
 	
 	public static Finder<String, ResetPasword> find = new Finder<String, ResetPasword>(String.class, ResetPasword.class);
 	
+	/**
+	 * Constructor for ResetPassword
+	 * @param userEmail
+	 */
 	public ResetPasword(String userEmail){
 		this.id = UUID.randomUUID().toString();
 		this.userEmail = userEmail;
 		this.date = new Date();
 	}
 	
+	/**
+	 * Method for creating request for reseting password
+	 * @param userEmail 
+	 * @return id
+	 */
 	public static String createRequest(String userEmail){
 		ResetPasword ressetPassword = new ResetPasword(userEmail);
 		ressetPassword.save();
 		return ressetPassword.id;		
 	}
 	
+	/**
+	 * Method which finds email by id
+	 * @param id of email
+	 * @return email
+	 */
 	public static String findByID(String id){
 		Logger.debug(id);
 		String email = "";

@@ -42,9 +42,6 @@ public class EmailVerification extends Model {
 	static Finder<String, EmailVerification> find = new Finder<String, EmailVerification>(
 			String.class, EmailVerification.class);
 
-//	public EmailVerification(String recordId) {
-//	}
-
 	/**
 	 * Add verification e-mail to user and sets it to nonverified
 	 * @param userId - user id

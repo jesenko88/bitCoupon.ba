@@ -32,30 +32,62 @@ public class Report extends Model {
 	
 	static Finder<Long, Report> find = new Finder<Long, Report>(Long.class, Report.class);
 	
+	/**
+	 * Constructor for Report
+	 * @param message
+	 * @param comment
+	 * @param user
+	 */
 	public Report(String message, Comment comment, User user){
 		this.message = message;
 		this.comment = comment;
 		this.user = user;
 	}	
 	
+	/**
+	 * Method for report creating
+	 * @param message
+	 * @param comment
+	 * @param user
+	 * @return
+	 */
 	public static long create(String message, Comment comment, User user){
 		Report report = new Report(message, comment, user);
 		report.save();
 		return report.id;
 	}
 	
+	/**
+	 * Method which delete certain report from DB
+	 * @param id
+	 */
 	public static void delete(long id){
 		find.where().eq("id", id).findUnique().delete();
 	}
 	
+	/**
+	 * This method finds certain report in DB
+	 * @param id
+	 * @return
+	 */
 	public static Report findById(long id){
 		return find.where().eq("id", id).findUnique();
 	}
 	
+	/**
+	 * This method finds report list of certain comment
+	 * @param comment
+	 * @return list of reports
+	 */
 	public static List<Report> findByComment(Comment comment){
 		return find.where().eq("comment", comment).findList();
 	}
 	
+	/**
+	 * This method finds report list of certain user
+	 * @param user
+	 * @return list of reports
+	 */
 	public static List<Report> findByUser(User user){
 		return find.where().eq("user", user).findList();				
 	}

@@ -42,6 +42,13 @@ public abstract class SuperUser extends Model {
 	public String city;
 	
 
+	/**
+	 * Constructor for SuperUser
+	 * @param email
+	 * @param password
+	 * @param adress
+	 * @param city
+	 */
 	public SuperUser(String email, String password, String adress, String city) {
 		this.email = email;
 		this.password = password;
@@ -49,6 +56,10 @@ public abstract class SuperUser extends Model {
 		this.city = city;
 	}
 
+	/**
+	 * Method which finds all super users in DB
+	 * @return
+	 */
 	public static List<SuperUser> allSuperUsers() {
 		List<Company> allCompanies = Company.all();
 		List<User> allUsers = User.all();
@@ -67,20 +78,35 @@ public abstract class SuperUser extends Model {
 		return all;
 	}
 	
-	
+	/**
+	 * Method which checks if the SuperUser is user
+	 * @return
+	 */
 	public boolean isUser() {
 		return (this instanceof User);
 	}
 
+	/**
+	 * Method which checks if the SuperUser is company
+	 * @return
+	 */
 	public boolean isCompany() {
 		return (this instanceof Company);
 	}
 
+	/**
+	 * Method which returns user
+	 * @return
+	 */
 	public User getUser() {
 		User u = (User) this;
 		return u;
 	}
 
+	/**
+	 * Method which returns company
+	 * @return
+	 */
 	public Company getCompany() {
 		return (Company) this;
 	}

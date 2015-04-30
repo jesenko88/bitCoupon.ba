@@ -66,6 +66,16 @@ public class Post extends Model {
 												   + "posts" + File.separator; 
 	public static Finder<Long, Post> find = new Finder<Long, Post>(Long.class,Post.class);
 	
+	/**
+	 * Constructor for Post
+	 * @param title
+	 * @param subtitle
+	 * @param content
+	 * @param image
+	 * @param created
+	 * @param creator
+	 * @param tags
+	 */
 	public Post(String title, String subtitle, String content, String image,
 			Date created, User creator, String tags) {	
 		if(image == null || image.isEmpty())
@@ -82,6 +92,17 @@ public class Post extends Model {
 		
 		
 
+	/**
+	 * Method for creating post
+	 * @param title
+	 * @param subtitle
+	 * @param content
+	 * @param image
+	 * @param created
+	 * @param creator
+	 * @param tags
+	 * @return
+	 */
 	public static long createPost(String title, String subtitle, String content, String image,
 			Date created, User creator, String tags){
 		
@@ -90,14 +111,27 @@ public class Post extends Model {
 		return post.id;
 	}
 	
+	/**
+	 * Method which updates post
+	 * @param post
+	 */
 	public static void updatePost(Post post){
 		post.update();
 	}
 	
+	/**
+	 * Method which delete post from DB
+	 * @param id of post
+	 */
 	public static void deletePost(long id){
 		find.byId(id).delete();
 	}
 	
+	/**
+	 * Method which finds post by id in DB
+	 * @param id of post
+	 * @return post
+	 */
 	public static Post find(long id){
 		return find.byId(id);
 	}
