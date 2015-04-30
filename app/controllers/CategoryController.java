@@ -23,10 +23,10 @@ import api.JSonHelper;
 
 public class CategoryController extends Controller {
 	
-	static final String ERROR_MSG_00 = Messages.get("errorMsg00");
-	static final String ERROR_MSG_01 = Messages.get("errorMsg01");
-	static final String SHORT_NAME = Messages.get("shortNameError4");
-	static final String LONG_NAME = Messages.get("longNameError20");
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+	static final String SHORT_NAME = Messages.get("category.shortName");
+	static final String LONG_NAME = Messages.get("category.longName");
 
 	static Form<Category> categoryForm = new Form<Category>(Category.class);
 
@@ -41,7 +41,7 @@ public class CategoryController extends Controller {
 		List<Coupon> byCategory = Coupon.listByCategory(categoryName);
 		//Exception handling.
 		if(byCategory == null || categoryName == null){
-			flash("error", ERROR_MSG_01);
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(categoryPage.render(user, byCategory, categoryName));
@@ -57,7 +57,7 @@ public class CategoryController extends Controller {
 		String name = session("name");
 		//Exception handling.
 		if(name == null){
-			flash("error", ERROR_MSG_01);
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		User user = User.find(name);
@@ -77,7 +77,7 @@ public class CategoryController extends Controller {
 		String name = session("name");
 		List<Category> allCategories = Category.all();
 		if (name == null || allCategories == null) {
-			flash("error", ERROR_MSG_01);
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		if (request().accepts("text/html")) {
@@ -95,7 +95,7 @@ public class CategoryController extends Controller {
 	public static Result addCategory() {
 		categoryForm = Form.form(Category.class).bindFromRequest();
 		if (categoryForm.hasErrors() || categoryForm.hasGlobalErrors()) {
-			flash("error", Messages.get("formError"));
+			flash("error", Messages.get("error.form"));
 			return addCategoryView();
 		}
 		//Exception handling.
@@ -114,7 +114,7 @@ public class CategoryController extends Controller {
 			if (Category.exists(name)) {
 				Logger.info(session("name")
 						+ " tried to add a existing category. (" + name + ")");
-				flash("error", Messages.get("categoryExistsError"));
+				flash("error", Messages.get("category.alreadyExists"));
 				return addCategoryView();
 			}
 			/* If no picture is added, a default image is used */
@@ -127,10 +127,10 @@ public class CategoryController extends Controller {
 			
 			Logger.info(session("name") + " created a new category: \"" + name
 					+ "\"");
-			flash("success", Messages.get("categoryAdded", name));
+			flash("success", Messages.get("category.Added", name));
 			return addCategoryView();			
 		}catch(Exception e){
-			flash("error", ERROR_MSG_00);
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at addCategory: " +e.getMessage(), e);
 			return addCategoryView();
 		}
@@ -159,10 +159,10 @@ public class CategoryController extends Controller {
 			Logger.info(session("name") + " deleted category: \"" + category.name
 					+ "\"");
 			Category.delete(id);
-			flash("success", Messages.get("deleteSuccess"));
+			flash("success", Messages.get("delete.success"));
 			return ok(CategoriesList.render(session("name"), Category.all()));
 		} catch (Exception e) {
-			flash("error", ERROR_MSG_00);
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error while deleting category: " + e.getMessage());
 			return redirect("/");
 
@@ -183,7 +183,7 @@ public class CategoryController extends Controller {
 		Category category = Category.findByName(name);
 		//Exception handling.
 		if(username == null || category == null || name == null){
-			flash("error", ERROR_MSG_01);
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(editCategory.render(name, category));
@@ -202,7 +202,7 @@ public class CategoryController extends Controller {
 			Category category = Category.find(id);
 			
 			if (categoryForm.hasErrors()) {
-				flash("error", ERROR_MSG_01);
+				flash("error", ERROR_MSG_CLIENT);
 				return redirect("/editCategory");
 			}
 			
@@ -228,10 +228,10 @@ public class CategoryController extends Controller {
 			category.save();
 			Logger.info(session("name") + " updated category \"" + category.name
 					+ "\"");
-			flash("success", Messages.get("categoryUpdated", name));
+			flash("success", Messages.get("category.Updated", name));
 			return ok(editCategory.render(session("name"), category));			
 		}catch(Exception e){
-			flash("error", ERROR_MSG_00);
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at updateCategory: " +e.getMessage(), e);
 			return redirect("/");
 		}

@@ -58,7 +58,7 @@ public class BlogController extends Controller {
 			Logger.error("Error while creating post"
 					+"Global errors:"+postForm.globalErrors().toString()
 					+"Errors"+postForm.errorsAsJson().toString());
-			flash("error", Messages.get("postCreateError"));
+			flash("error", Messages.get("post.CreateError"));
 			return ok(createPost.render(postForm));
 		}		
 		String title = postForm.data().get("title");
@@ -94,7 +94,7 @@ public class BlogController extends Controller {
 		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
 		if(postForm.hasErrors() || postForm.hasGlobalErrors()){
 			Logger.error("Error while editing post");
-			flash("error", Messages.get("postEditError"));
+			flash("error", Messages.get("post.EditError"));
 			return editPostPage(id);
 		}
 		String title = postForm.data().get("title");
@@ -120,6 +120,7 @@ public class BlogController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deletePost(long id){
 		Post.deletePost(id);
+		flash("success", Messages.get("delete.success"));
 		return blog();
 	}
 }
