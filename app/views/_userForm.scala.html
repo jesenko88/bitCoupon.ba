@@ -49,7 +49,7 @@
 			     	 <label class="control-label" for="confirmPassword">Confirm password<span style="color:#AB1403"> *</span></label>
  					 <input class="form-control" value='@myForm("confirmPassword").value' type="password" 
  					 		required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword"
- 							ng-model="confirmPassword" ng-minlength="6" ng-maxlength="20" placeholder="Confirm Password: "/>	
+ 							ng-model="user.confirmPassword" ng-minlength="6" ng-maxlength="20" placeholder="Confirm Password: "/>	
  					
  					<p ng-show="userForm.confirmPassword.$error.minlength" class="help-block">Min length is 6.</p>
 		           <p ng-show="userForm.confirmPassword.$error.maxlength" class="help-block">Max length is 20.</p>
@@ -58,20 +58,42 @@
  		          </div>
  		          
                  <!-- Username --> 
-                <div class='@("form-group has-error".when(myForm("username").hasErrors)) form-group' >
+                <div class='@("form-group has-error".when(myForm("username").hasErrors)) form-group' 
+               		 ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }" >
+			     	
 			     	 <label class="control-label" for="username">Username<span style="color:#AB1403"> *</span></label>
-                     <input class='@("has-error".when(myForm("username").hasErrors)) form-control'  value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	
+                     <input class='@("has-error".when(myForm("username").hasErrors)) form-control'
+                     		value='@myForm("username").value' type="text" id="username" name="username"
+                     		ng-model="user.username" ng-minlength="4" ng-maxlength="45" pattern="(^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$)"
+                     		placeholder="Name" required/>	
+                   <p ng-show="userForm.username.$error.minlength" class="help-block">Min length is 4.</p>
+		           <p ng-show="userForm.username.$error.maxlength" class="help-block">Max length is 45.</p>
+		           <p ng-show="userForm.username.$error.pattern" class="help-block">
+		            Only letters and numbers alowed.</p>			
  		        </div>
  		        
- 		        <!-- Surname -->
-                <div class='@("form-group has-error".when(myForm("surname").hasErrors)) form-group' >
+ 		        <!-- Surname PTERN NOT WORKING FINE-->
+                <div class='@("form-group has-error".when(myForm("surname").hasErrors)) form-group'
+                	 ng-class="{ 'has-error' : userForm.surname.$invalid && !userForm.surname.$pristine }" >
 			     	 <label class="control-label" for="surname">Surname<span style="color:#AB1403"> *</span></label>
-                     <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	
+                     <input class="form-control" value='@myForm("surname").value' type="text" id="surname" 
+                    		ng-model="user.surname" ng-minlength="4" ng-maxlength=45"
+                     		pattern="(^[A-Za-z\\u00A1-\\uFFFF0-9]*[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9]*$)"
+                     		name="surname"  onClick="this.select()"  placeholder="Surname" required/>	
+                   <p ng-show="userForm.surname.$error.minlength" class="help-block">Min length is 4.</p>
+		           <p ng-show="userForm.surname.$error.maxlength" class="help-block">Max length is 45.</p>
+		           <p ng-show="userForm.surname.$error.pattern" class="help-block">
+		            Only letters allowed.</p>
  		        </div>
              	<!-- Birth day -->
-                <div class='@("form-group has-error".when(myForm("dob").hasErrors)) form-group' >
+                <div class='@("form-group has-error".when(myForm("dob").hasErrors)) form-group' 
+                	  ng-class="{ 'has-error' : userForm.dob.$invalid && !userForm.dob.$pristine }" >
 			     	 <label class="control-label" for="dob">Date of birth<span style="color:#AB1403"> *</span></label>
-                     <input class="form-control datepicker-bit min-dob" value='@myForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
+                     <input class="form-control datepicker-bit min-dob" value='@myForm("dob").value' id="datepicker"
+                      name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth"
+                      ng-model="user.dob" required/>
+                      <p ng-show="userForm.dob.$error.date" class="help-block">Date you provided is not alowed</p>
+ 		        	  <p ng-show="userForm.dob.$error.max" class="help-block">You must be older then 18.</p>
  		        </div> 
  		        <span id="error" style="display:none; color:red"> You are underage of 18 </span>
                 
@@ -86,14 +108,28 @@
                 </label>
                 <br><br>
                 <!-- Adress -->
-                 <div class='@("form-group has-error".when(myForm("adress").hasErrors)) form-group' >
+                 <div class='@("form-group has-error".when(myForm("adress").hasErrors)) form-group'
+                 	  ng-class="{ 'has-error' : userForm.adress.$invalid && !userForm.adress.$pristine }" >
 			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
-                     <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
+                     <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"
+                            pattern="(^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$)" 
+                            ng-model="user.adress" ng-minlength="6" ng-maxlength="165" placeholder="Adress" required/>  
+                    <p ng-show="userForm.adress.$error.minlength" class="help-block">Min length is 6.</p>
+		            <p ng-show="userForm.adress.$error.maxlength" class="help-block">Max length is 165.</p>
+		            <p ng-show="userForm.adress.$error.pattern" class="help-block">
+		             Only letters and numbers allowed.</p>                     
  		        </div>
                 <!-- City -->
-				<div class='@("form-group has-error".when(myForm("city").hasErrors)) form-group' >
+				<div class='@("form-group has-error".when(myForm("city").hasErrors)) form-group'
+					 ng-class="{ 'has-error' : userForm.city.$invalid && !userForm.city.$pristine }"  >
 			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
-              	     <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
+              	     <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city" 
+              	     		pattern="(^[A-Za-z\\u00A1-\\uFFFF0-9 .,]*[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,]*$)"
+              	      		ng-model="user.city" ng-minlength="6" ng-maxlength="165" placeholder="City" required/>
+              	     <p ng-show="userForm.city.$error.minlength" class="help-block">Min length is 6.</p>
+		            <p ng-show="userForm.city.$error.maxlength" class="help-block">Max length is 165.</p>
+		            <p ng-show="userForm.city.$error.pattern" class="help-block">
+		             Only letters and numbers allowed.</p> 
  		        </div>                                     
                  
                   <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
