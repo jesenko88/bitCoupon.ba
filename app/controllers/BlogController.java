@@ -10,6 +10,7 @@ import models.Post;
 import models.User;
 import play.Logger;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -57,6 +58,7 @@ public class BlogController extends Controller {
 			Logger.error("Error while creating post"
 					+"Global errors:"+postForm.globalErrors().toString()
 					+"Errors"+postForm.errorsAsJson().toString());
+			flash("error", Messages.get("postCreateError"));
 			return ok(createPost.render(postForm));
 		}		
 		String title = postForm.data().get("title");
@@ -92,6 +94,7 @@ public class BlogController extends Controller {
 		Form<Post> postForm = Form.form(Post.class).bindFromRequest();
 		if(postForm.hasErrors() || postForm.hasGlobalErrors()){
 			Logger.error("Error while editing post");
+			flash("error", Messages.get("postEditError"));
 			return editPostPage(id);
 		}
 		String title = postForm.data().get("title");
