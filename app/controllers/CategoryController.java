@@ -5,23 +5,28 @@ import helpers.FileUpload;
 
 import java.util.List;
 
-import api.JSonHelper;
 import models.Category;
-import models.Company;
 import models.Coupon;
 import models.User;
 import play.Logger;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.admin.users.*;
+import views.html.admin.users.adminCategoryPanel;
 import views.html.category.CategoriesList;
 import views.html.category.categoryPage;
 import views.html.category.categoryPanel;
 import views.html.category.editCategory;
+import api.JSonHelper;
 
 public class CategoryController extends Controller {
+	
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+	static final String SHORT_NAME = Messages.get("category.shortName");
+	static final String LONG_NAME = Messages.get("category.longName");
 
 	static Form<Category> categoryForm = new Form<Category>(Category.class);
 
@@ -36,7 +41,7 @@ public class CategoryController extends Controller {
 		List<Coupon> byCategory = Coupon.listByCategory(categoryName);
 		//Exception handling.
 		if(byCategory == null || categoryName == null){
-			flash("error", "Error has occured, please try again alter.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(categoryPage.render(user, byCategory, categoryName));
@@ -52,7 +57,7 @@ public class CategoryController extends Controller {
 		String name = session("name");
 		//Exception handling.
 		if(name == null){
-			flash("error", "Error has occured, please try again.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		User user = User.find(name);
@@ -72,7 +77,7 @@ public class CategoryController extends Controller {
 		String name = session("name");
 		List<Category> allCategories = Category.all();
 		if (name == null || allCategories == null) {
-			flash("error", "Ooops, error has occured. Please try again.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		if (request().accepts("text/html")) {
@@ -88,29 +93,29 @@ public class CategoryController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result addCategory() {
-		if (categoryForm.hasErrors()) {
-			flash("error", "Error in form.");
-			return redirect("/categoryPanel");
+		categoryForm = Form.form(Category.class).bindFromRequest();
+		if (categoryForm.hasErrors() || categoryForm.hasGlobalErrors()) {
+			flash("error", Messages.get("error.form"));
+			return addCategoryView();
 		}
 		//Exception handling.
 		try{
 			String name = categoryForm.bindFromRequest().field("name").value();
 			if (name.length() < 4) {
 				Logger.info(session("name") + " entered a short category name");
-				flash("error", "Name must be at least 4 characters");
-				return ok(categoryPanel.render(session("name")));
-				
+				flash("error", SHORT_NAME);
+				return addCategoryView();				
 			}
 			if (name.length() > 20) {
 				Logger.info(session("name") + " entered a too long category name");
-				flash("error", "Name must be max 120 characters long");
-				return ok(categoryPanel.render(session("name")));
+				flash("error", LONG_NAME);
+				return addCategoryView();
 			}
 			if (Category.exists(name)) {
 				Logger.info(session("name")
 						+ " tried to add a existing category. (" + name + ")");
-				flash("error", "Category already exists");
-				return ok(categoryPanel.render(session("name")));
+				flash("error", Messages.get("category.alreadyExists"));
+				return addCategoryView();
 			}
 			/* If no picture is added, a default image is used */
 			String picture = FileUpload.imageUpload("category-photos");
@@ -122,12 +127,12 @@ public class CategoryController extends Controller {
 			
 			Logger.info(session("name") + " created a new category: \"" + name
 					+ "\"");
-			flash("success", "Category " + "\"" + name + "\"" + " added");
-			return ok(categoryPanel.render(session("name")));			
+			flash("success", Messages.get("category.Added", name));
+			return addCategoryView();			
 		}catch(Exception e){
-			flash("error", "Error has occured. Please try again later.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at addCategory: " +e.getMessage(), e);
-			return redirect("/");
+			return addCategoryView();
 		}
 
 	}
@@ -154,10 +159,10 @@ public class CategoryController extends Controller {
 			Logger.info(session("name") + " deleted category: \"" + category.name
 					+ "\"");
 			Category.delete(id);
+			flash("success", Messages.get("delete.success"));
 			return ok(CategoriesList.render(session("name"), Category.all()));
 		} catch (Exception e) {
-			flash("error",
-					"Error occured while deleting category. Please check logs");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error while deleting category: " + e.getMessage());
 			return redirect("/");
 
@@ -178,7 +183,7 @@ public class CategoryController extends Controller {
 		Category category = Category.findByName(name);
 		//Exception handling.
 		if(username == null || category == null || name == null){
-			flash("Ooops, error occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(editCategory.render(name, category));
@@ -197,18 +202,19 @@ public class CategoryController extends Controller {
 			Category category = Category.find(id);
 			
 			if (categoryForm.hasErrors()) {
+				flash("error", ERROR_MSG_CLIENT);
 				return redirect("/editCategory");
 			}
 			
 			String name = categoryForm.bindFromRequest().field("name").value();
 			
 			if (name.length() < 4) {
-				flash("error", "Name must be at least 4 characters");
+				flash("error", SHORT_NAME);
 				return ok(editCategory.render(session("name"), category));
 			}
 			
 			if (name.length() > 20) {
-				flash("error", "Name must be max 120 characters long");
+				flash("error", LONG_NAME);
 				return ok(editCategory.render(session("name"), category));
 			}
 			
@@ -222,10 +228,10 @@ public class CategoryController extends Controller {
 			category.save();
 			Logger.info(session("name") + " updated category \"" + category.name
 					+ "\"");
-			flash("success", "Category " + "\"" + name + "\"" + " updated");
+			flash("success", Messages.get("category.Updated", name));
 			return ok(editCategory.render(session("name"), category));			
 		}catch(Exception e){
-			flash("Error has occured, please try again later.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at updateCategory: " +e.getMessage(), e);
 			return redirect("/");
 		}

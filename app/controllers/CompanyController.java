@@ -1,37 +1,47 @@
 package controllers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import api.JSonHelper;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
-import views.html.coupon.*;
-import views.html.company.*;
 import helpers.AdminFilter;
 import helpers.CurrentCompanyFilter;
 import helpers.FileUpload;
 import helpers.HashHelper;
 import helpers.MailHelper;
-import models.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import models.Company;
+import models.Coupon;
+import models.EmailVerification;
+import models.SuperUser;
+import models.TransactionCP;
+import models.User;
 import play.Logger;
 import play.Play;
-import play.api.mvc.Session;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.db.ebean.Model.Finder;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.searchCompany;
+import views.html.signup;
+import views.html.admin.users.userList;
+import views.html.company.companyPanel;
+import views.html.company.companyProfile;
+import views.html.company.notificationsForCompany;
+import views.html.user.userUpdate;
+import api.JSonHelper;
 
 public class CompanyController extends Controller {
 
 	static String PATH = Play.application().configuration().getString("PATH");
 	static Form<Company> companyForm = new Form<Company>(Company.class);
 	public static final Company COMPANY_ADMIN = Company.findById(1);
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -63,16 +73,13 @@ public class CompanyController extends Controller {
 			String contact = companyForm.bindFromRequest().get().contact;
 
 			if (name.length() < 4 || name.equals("Name")) {
-				flash("error", "Name must be at least 4 chatacters");
-				return ok(signup.render(new Form<User>(User.class), registrationForm));
-			} else if (mail.equals("Email")) {
-				flash("error", "Email is required for registration !");
+				flash("error", Messages.get("company.longName"));
 				return ok(signup.render(new Form<User>(User.class), registrationForm));
 			} else if (password.length() < 6) {
-				flash("error", "Password must be at least 6 characters!");
+				flash("error", Messages.get("password.shortPassword"));
 				return ok(signup.render(new Form<User>(User.class), registrationForm));
 			} else if (!password.equals(confPass)) {
-				flash("error", "Passwords don't match, try again ");
+				flash("error", Messages.get("password.dontMatch"));
 				return ok(signup.render(new Form<User>(User.class), registrationForm));
 			}
 
@@ -82,23 +89,21 @@ public class CompanyController extends Controller {
 						adress, city, contact);
 				String verificationEmail = EmailVerification.addNewRecord(id);
 
-				MailHelper.send(mail,
-						"Click on the link below to verify your e-mail adress <br>"
+				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success",
-						"A verification mail has been sent to your email address!");
+				flash("success", Messages.get("registration.mail.flash.verification"));
 				Logger.info("A verification mail has been sent to email address");
 				return ok(signup.render(new Form<User>(User.class), registrationForm));
 
 			} else {
-				flash("error", "Username or email allready exists!");
+				flash("error", Messages.get("registration.emailAlreadyExists"));
 				Logger.info("Username or email allready exists!");
 				return ok(signup.render(new Form<User>(User.class), registrationForm));
 
 			}
 		} catch (Exception e) {
-			flash("Error occured. If you are admin, please check logs.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at registration: " + e.getMessage());
 			return redirect("companySignup");
 
@@ -118,43 +123,38 @@ public class CompanyController extends Controller {
 	public static Result updateCompany(long id) {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		if (updateForm.hasErrors()) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/updateCompany");
 		}
 		try{
 			
 			String name = updateForm.data().get("name");
 			String email = updateForm.data().get("email");
-			String logo = updateForm.data().get("logo");
-			String oldPass = updateForm.data().get("password");
-			String newPass = updateForm.data().get("newPassword");
 			
 			Company company = Company.findById(id);
+			Form<Company> companyForm = Form.form(Company.class).fill(company);
 			company.name = name;
-			// cUser.email = email;
 			company.updated = new Date();
 			
 			if (!company.email.equals(email)) {
 				String verificationEmail = EmailVerification.addNewRecord(company.id);
 				MailHelper.send(email,
-						"Click on the link below to verify your e-mail adress <br>"
+						Messages.get("registration.mail.verificationLinkText") + "<br>"
 								+ "http://"+ PATH + "/verifyEmailUpdate/"
 								+ verificationEmail);
 				company.email = email;
 				company.save();
-				flash("success",
-						"A new verification email has been sent to this e-mail: "
-								+ email);
-				return ok(userUpdate.render(company));
+				flash("success", Messages.get("registration.mail.flash.verification") + email);
+				return ok(userUpdate.render(null, companyForm, company));
 			}
 			company.email = email;
 			company.save();
-			flash("success", "Profile updated!");
+			flash("success", Messages.get("profile.updated"));
 			Logger.info(company.name + " is updated");
 			session("name", company.name); 
-			return ok(userUpdate.render(company));			
+			return ok(userUpdate.render(null, companyForm, company));			
 		}catch(Exception e){
-			flash("error","Error while updateing company. If you're admin please check logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at company update: " +e.getMessage());
 			return redirect("updateCompany");
 		}
@@ -179,14 +179,13 @@ public class CompanyController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateCompany(long id) {
 		if (companyForm.hasErrors()) {
-			flash("error", "Oops, error has occured. Please try again later.");
-			return redirect("/@editUser/:" + id); // provjeriti
+			flash("error", ERROR_MSG_CLIENT);
+			return redirect("/@editUser/:" + id);
 		}
 		try{			
 			String name = companyForm.bindFromRequest().field("name").value();
 			String email = companyForm.bindFromRequest().field("email").value();
-			String newPass = companyForm.bindFromRequest().field("newPassword")
-					.value();
+			String newPass = companyForm.bindFromRequest().field("newPassword").value();
 			
 			Company company = Company.findById(id);
 			company.name = name;
@@ -200,11 +199,11 @@ public class CompanyController extends Controller {
 			}
 			company.updated = new Date();
 			company.save();
-			flash("success", "Company " + company.name + " updated!");
+			flash("success", Messages.get("Company") + company.name + Messages.get("updated"));
 			Logger.info(session("name") + " updated company: " + company.name);
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		}catch(Exception e){
-			flash("Error occured while updating company, please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at updateing company: " +e.getMessage());
 			return redirect("/@editUser" +id);
 		}
@@ -224,13 +223,13 @@ public class CompanyController extends Controller {
 		try{
 			Company currentCompany = Company.findById(id);
 			if ( currentCompany == null){
-				flash("error", "Company with id: " + id + " doesnt exists!");
+				flash("error", Messages.get("company.notExist"));
 				return badRequest(userList.render(SuperUser.allSuperUsers()));
 			}
 			Company.delete(id);	
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		}catch(Exception e){
-			flash("error", "Error occured while deleting company. Please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at delete company: " +e.getMessage());
 			return redirect("/");
 		}			
@@ -254,6 +253,7 @@ public class CompanyController extends Controller {
 				Logger.debug(assetsPath);
 				company.logo = assetsPath;
 				company.save();
+				flash("success", Messages.get("company.updatePhoto"));
 				return redirect("/profile/@" + company.name);
 			} else {
 				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdirs();
@@ -261,36 +261,44 @@ public class CompanyController extends Controller {
 				Logger.debug(assetsPath);
 				company.logo = assetsPath;
 				company.save();
+				flash("success", Messages.get("company.updatePhoto"));
 				return redirect("/profile/@" + company.name);
 			}			
 		}catch(Exception e){
-			flash("error", "Error occured while uploading photo. If you're admin please check logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at update photo: " +e.getMessage());
 			return redirect("/");
 		}
 	}	
 
+	/**
+	 * Renders the companyPanel page
+	 * @param id of the company
+	 * @return
+	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result companyPanel(long id) {
 		Company company = Company.findById(id);
 		List<Coupon> ownedCoupons = Coupon.ownedCoupons(company.id);
 		//Exception handling.
 		if(company == null || ownedCoupons == null){
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(companyPanel.render(company, ownedCoupons ) );
 	}
 
 	/**
-	 * TODO json
+	 * Shows the company profile page
+	 * @param id of the company
+	 * @return
 	 */
 	public static Result showCompanyProfile(long id) {
 		Company current = Company.findById(id);
 		List<Coupon> coupons = current.coupons;
 		//Exception handling.
 		if(current == null || coupons == null){
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(companyProfile.render( current, coupons));
@@ -317,7 +325,6 @@ public class CompanyController extends Controller {
 	/**
 	 * Search method for companies. If search is unsuccessful a flash message is
 	 * sent
-	 * TODO if list is empty, just return empty list.
 	 * @param string
 	 * @return renders index with matching coupons //TODO render a different
 	 *         view for search result
@@ -328,13 +335,19 @@ public class CompanyController extends Controller {
 				.ilike("name", "%" + name + "%").findList();
 
 		if ((searchedCompanies.isEmpty())) {
-			flash("error", "No resoult for this search");
-			return badRequest(searchCompany.render(searchedCompanies));
+			flash("error", Messages.get("search.noResult"));
+			return badRequest(searchCompany.render(new ArrayList<Company>()));
 		}
 		Logger.info(session("name") + " searched for: \"" + name + "\"");
 		return ok(searchCompany.render(searchedCompanies));
 	}
 		
+	/**
+	 * Renders the company notifications view.
+	 * Before redirecting, the notifications counter is being reset
+	 * @param id of the Company
+	 * @return
+	 */
 	public static Result notifications(long id) {
 		Company c = Company.findById(id);
 		c.notifications = 0;

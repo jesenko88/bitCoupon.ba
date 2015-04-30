@@ -1,0 +1,61 @@
+@(transactions: List[TransactionCP])
+
+@main("List of buyers") {
+
+   <header id="header">
+   <script src="@routes.Assets.at("js/jspdf.js")"></script>
+      <script src="@routes.Assets.at("js/jspdf.plugin.from_html.js")"></script>
+      <script src="@routes.Assets.at("js/jspdf.plugin.split_text_to_size.js")"></script>
+      <script src="@routes.Assets.at("js/jspdf.plugin.standard_fonts_metrics.js")"></script>
+      <script src="@routes.Assets.at("js/FileSaver.js")"></script>
+     <script src="@routes.Assets.at("js/FileSaver.min.js")"></script>     
+      <div class="col-sm-12">
+         <!--header-middle-->
+         <div class="container">
+            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            
+            <div class="logo pull-right">
+           		
+            </div>
+            <div class="logo pull-right">
+               
+            </div>
+         </div>
+      </div>	
+   </header>
+   <div class="container">
+   
+ <h2 class="title text-center">Buyers</h2> 
+ 
+     <div class="container">
+      @for(buyer <- transactions){
+     
+     <div id="content" class="divContent">
+         <label style="color:#FF6600"><h3>@buyer.coupon.name</h3></label>
+         <ol>
+		<!--<li><a href="@routes.SuperUserController.profilePage(buyer.buyer_name)" class="btn btn-link">@buyer.buyer_name</a> </li> -->
+          <li><label><h4>@buyer.buyer_name @buyer.buyer_surname</h4></label></li>
+		</ol>
+	</div>
+      }
+      <button id="cmd"  class="btnCmd" >Download as PDF</button>
+      </div>
+      <style type="text/css">.center { text-align: center; list-style-position:inside;}</style>
+ 					<script>
+					$('.btnCmd').each(function(){
+						$(this).click(function () {
+							var doc = new jsPDF();
+							var specialElementHandlers = {
+								    '#editor': function (element, renderer) {
+								        return true;
+								    }
+								};
+						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						        'width': 170,
+						            'elementHandlers': specialElementHandlers
+						    });
+						    doc.save('list-of-buyers.pdf');
+						});
+					});
+					</script>
+   }

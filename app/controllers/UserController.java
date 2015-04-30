@@ -1,46 +1,51 @@
 package controllers;
 
+import helpers.AdminFilter;
+import helpers.CurrentUserFilter;
+import helpers.FileUpload;
+import helpers.HashHelper;
+import helpers.MailHelper;
+
 import java.io.File;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import helpers.AdminFilter;
-import helpers.FileUpload;
-import helpers.SuperUserFilter;
-
 import java.util.List;
 
-import api.JSonHelper;
-
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import helpers.*;
-import play.*;
+import models.Category;
+import models.Company;
+import models.Coupon;
+import models.EmailVerification;
+import models.Pin;
+import models.ResetPasword;
+import models.Statistic;
+import models.Subscriber;
+import models.SuperUser;
+import models.TransactionCP;
+import models.User;
+import play.Logger;
+import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.libs.Json;
-import play.mvc.*;
-import tyrex.services.UUID;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
-import views.html.coupon.*;
-import models.*;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
+import views.html.Loginpage;
+import views.html.index;
+import views.html.signup;
+import views.html.admin.users.adminPanel;
+import views.html.admin.users.buyForUser;
+import views.html.admin.users.userList;
+import views.html.coupon.boughtCoupons;
+import views.html.coupon.coupontemplate;
+import views.html.coupon.makeAGift;
+import views.html.user.profile;
+import views.html.user.userUpdate;
+import api.JSonHelper;
 
 public class UserController extends Controller {
 
-	static String PATH = Play.application().configuration().getString("PATH"); /*
-																				 * TODO
-																				 * move
-																				 * all
-																				 * messages
-																				 * to
-																				 * conf
-																				 */
+	static String PATH = Play.application().configuration().getString("PATH"); 
 	static String message = "Welcome ";
 	static String bitName = "bitCoupon";
 	static String name = null;
@@ -57,8 +62,8 @@ public class UserController extends Controller {
 	public static Result register() {
 
 		Form<User> submit = Form.form(User.class).bindFromRequest();
-
-		if (userForm.hasErrors() || submit.hasGlobalErrors()) {
+		System.out.println("Submit has errors: " +submit.hasErrors());
+		if (submit.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
 
@@ -130,25 +135,30 @@ public class UserController extends Controller {
 	public static Result updateUser(long id) {
 
 		DynamicForm updateForm = Form.form().bindFromRequest();
-		if (updateForm.hasErrors()) {
+		Form<User> userForm = Form.form(User.class).bindFromRequest();
+		if (userForm.hasGlobalErrors() ) {
+			flash("error","Error at update user");
+			Logger.debug("Error at update user");	
 			return redirect("/updateUser ");
 		}
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			String username = updateForm.data().get("username");
 			String surname = updateForm.data().get("surname");
-			Date dob = null;
-			dob = sdf.parse(updateForm.data().get("dob"));
-			String gender = updateForm.data().get("gender");
+			String dobString = updateForm.data().get("dob");
 			String adress = updateForm.data().get("adress");
 			String city = updateForm.data().get("city");
 			String email = updateForm.data().get("email");
-
+			Date dob = null;
 			User cUser = User.find(id);
+			
+			if (!dobString.isEmpty()){
+				dob = new SimpleDateFormat("yy-mm-dd").parse(dobString);
+				cUser.dob = dob;
+			}			
+		
+			Logger.debug(dob.toString());
 			cUser.username = username;
 			cUser.surname = surname;
-			cUser.dob = dob;
-			cUser.gender = gender;
 			cUser.adress = adress;
 			cUser.city = city;
 			cUser.updated = new Date();
@@ -165,14 +175,14 @@ public class UserController extends Controller {
 				flash("success",
 						"A new verification email has been sent to this e-mail: "
 								+ email);
-				return ok(userUpdate.render(cUser));
+				return ok(userUpdate.render(userForm, null, cUser));
 			}
 			cUser.email = email;
 			cUser.save();
 			flash("success", "Profile updated!");
 			Logger.info(cUser.username + " is updated");
 			session("name", cUser.username);
-			return ok(userUpdate.render(cUser));
+			return ok(userUpdate.render(userForm, null, cUser));
 		} catch (Exception e) {
 			flash("error", "Ooops, error has occured. Please try again later.");
 			Logger.error("Error at updateUser: " + e.getMessage(), e);
@@ -455,19 +465,20 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result buyForUserExecute() {
+		String paymentId = Play.application().configuration().getString("bitPaymentId");
+		String saleId = Play.application().configuration().getString("bitSaleId");
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
 		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
 		int quantity = Integer.parseInt(dynamicForm.data().get("quantity"));
 		Coupon coupon = Coupon.find(id);
-
 		User client = User.find(Long.parseLong(dynamicForm.data()
 				.get("user_id")));
 		if (client == null) {
 			return badRequest(coupontemplate.render(coupon));
 		}
 		double totalPrice = coupon.price * quantity;
-		TransactionCP.createTransaction(new UUID().toString().substring(0, 12),
-				coupon.price, quantity, totalPrice, "", client, coupon);
+		TransactionCP.createTransaction(paymentId, saleId, coupon.price,
+				quantity, totalPrice, "", client, coupon);
 		Coupon c = Coupon.find(id);
 		c.seller.notifications++;
 		c.maxOrder = c.maxOrder - quantity;
@@ -492,8 +503,9 @@ public class UserController extends Controller {
 	
 	
 	/**
-	 * 
-	 * @param couponID
+	 * Renders the page for buying a coupon for another user
+	 * as a gift
+	 * @param id of the coupon to buy
 	 * @return
 	 */
 	@Security.Authenticated(CurrentUserFilter.class)
@@ -505,11 +517,18 @@ public class UserController extends Controller {
 		return redirect("/");
 	}
 	
-	// TODO comment
+	/**
+	 * Method binds data from request that is submitted from the
+	 * make a gift page. It searches the database for a user by checking
+	 * the provided email. If the user is found, method redirects to the buyForUser page.
+	 * If no user us found, the makeAGift page is reloaded again. 
+	 * @param id of the coupon as a parameter
+	 * @return
+	 */
 	@Security.Authenticated(CurrentUserFilter.class)
-	public static Result giftCheckoutPage(long id) {
+	public static Result giftCheckoutPage(long couponId) {
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
-		Coupon coupon = Coupon.find(id);
+		Coupon coupon = Coupon.find(couponId);
 		String email = dynamicForm.data().get("email");
 		User user = User.findByEmail(email);
 		if (user == null) {
@@ -519,8 +538,12 @@ public class UserController extends Controller {
 		return ok(buyForUser.render(coupon, user));
 	}
 	
-
-	public static Result giftCheckoutPageUnregistered(long id) {
+	/**
+	 * Renders the checkout page for unregistered users.
+	 * @param id of the coupon to buy
+	 * @return
+	 */
+	public static Result checkoutPageUnregistered(long id) {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
 	}

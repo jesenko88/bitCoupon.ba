@@ -3,12 +3,15 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
+import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 /**
  * Entity class for category
@@ -22,6 +25,10 @@ public class Category extends Model{
 	public long id;
 	
 	@Required
+	@MinLength(3)
+	@MaxLength(45)
+	@Pattern(value = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$",
+			message="Category name format is not valid."	)
 	public String name;
 	
 	//Default photo for this category coupons.

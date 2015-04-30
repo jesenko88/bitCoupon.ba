@@ -1,11 +1,10 @@
 package helpers;
 
 import models.User;
-import controllers.routes;
 import play.Logger;
+import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
-import play.mvc.Http.Context;
 /**
  * This class is a controller filter and ensures that only
  * a logged in user can perform certain actions.

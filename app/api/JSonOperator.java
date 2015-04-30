@@ -1,28 +1,30 @@
 package api;
 
 
+import helpers.DateHelper;
+import helpers.HashHelper;
+
 import java.util.Date;
 import java.util.List;
+
+import models.Company;
+import models.Coupon;
+import models.EmailVerification;
+import models.TransactionCP;
+import models.User;
+import play.Logger;
+import play.Play;
+import play.mvc.Controller;
+import play.mvc.Result;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-import helpers.*;
-import models.*;
-import play.Logger;
-import play.Play;
-import play.data.DynamicForm;
-import play.data.Form;
-import play.libs.Json;
-import play.mvc.Controller;
-import play.mvc.Result;
-import views.html.*;
-
 public class JSonOperator extends Controller {
 	
 	static String PATH = Play.application().configuration().getString("PATH");
-	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
+	static final String DEFAULT_PICTURE = Play.application().configuration().getString("defaultProfilePicture");
 	
 	/**
 	 * Method for login. Reads the values from a JsonNode by checking
@@ -100,7 +102,7 @@ public class JSonOperator extends Controller {
 			try {
 				Date dayOfBirth = DateHelper.getDate(dob);
 				String hashPass = HashHelper.createPassword(password);
-				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false, defaultPicture);
+				long id = User.createUser(username, surname, dayOfBirth,"", "", "", email, hashPass, false, DEFAULT_PICTURE);
 				EmailVerification.makeNewRecord(id, true);
 				return ok(JSonHelper.messageToJSon("info","You are successfuly registered! "
 												+ "You can now login with the following email: " + email));
@@ -141,7 +143,6 @@ public class JSonOperator extends Controller {
 	 */
 	public static Result userProfile() {
 		JsonNode json = request().body().asJson();
-//		String id = json.findPath("id").textValue();
 		String email = json.findPath("email").textValue();
 		User user = User.findByEmail(email);
 		if (user != null)
@@ -158,7 +159,6 @@ public class JSonOperator extends Controller {
 	 */
 	public static Result companyProfile() {
 		JsonNode json = request().body().asJson();
-//		String id = json.findPath("id").textValue();
 		String email = json.findPath("email").textValue();
 		Company company = Company.findByEmail(email);
 		if (company != null)
@@ -185,6 +185,12 @@ public class JSonOperator extends Controller {
 
 	}
 	
+	/**
+	 * Method for searching coupon.
+	 * Receives a JsonNode with a tag: "name" and searches
+	 * for a specific coupon ignoring upper/lower case
+	 * @return Json array of coupons (ArrayNode)
+	 */
 	public static Result searchCoupon() {
 		JsonNode json = request().body().asJson();
 		String name = json.findPath("name").textValue();
@@ -228,26 +234,11 @@ public class JSonOperator extends Controller {
 			String id = json.findPath("id").textValue();
 			String username = json.findPath("username").textValue();
 			String surname = json.findPath("surname").textValue();
-		//	String email = json.findPath("email").textValue();
-
 			try {
 				User cUser = User.find(Long.parseLong(id));
 				cUser.username = username;
 				cUser.surname = surname;
 				cUser.updated = new Date();
-
-			/*	if (!cUser.email.equals(email)) {
-					String verificationEmail = EmailVerification
-							.addNewRecord(cUser.id);
-					MailHelper.send(email,"Click on the link below to verify your e-mail adress <br>"
-							+ "http://" + PATH
-							+ "/verifyEmail/" + verificationEmail);
-					cUser.email = email;
-					cUser.save();
-					Logger.info("A verification mail has been sent to this email: " + email);
-					return ok(JSonHelper.messageToJSon("info","Update successful, a verification mail has been sent to this address: " + email));
-				}
-				cUser.email = email;  */
 				cUser.save();
 				flash("success", "Profile updated!");
 				Logger.info(cUser.username + " updated profile from mobile app");
@@ -259,7 +250,12 @@ public class JSonOperator extends Controller {
 			}		
 	}
 	
-	
+	/**
+	 * Returns a json array of bought coupons.
+	 * It parses a JsonNode from a request, finds the tag: "userId", 
+	 * finds all transactions from that user and returns a json array of bought coupons.
+	 * @return ArrayNode
+	 */
 	public static Result showBoughtCoupons() {
 		JsonNode json = request().body().asJson();
 		String id = json.findPath("userId").textValue();
@@ -270,6 +266,12 @@ public class JSonOperator extends Controller {
 		return ok(JSonHelper.transactionListToJSon(transactions));
 	}
 	
+	/**
+	 * Method receives a JsonNode with "userId" and "couponId",
+	 * and returns transaction details for the bough coupon.
+	 * 
+	 * @return JsonNode
+	 */
 	public static Result boughtCouponDetail() {
 		JsonNode json = request().body().asJson();	
 		String userId = json.findPath("userId").textValue();

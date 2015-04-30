@@ -1,24 +1,30 @@
 package models;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.Future;
 
+import play.Logger;
+import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.Min;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
 import api.JSonHelper;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import play.Logger;
-import play.data.validation.Constraints.MinLength;
-import play.db.ebean.Model;
-import play.libs.Json;
 
 /**
  * 
@@ -33,15 +39,23 @@ public class Coupon extends Model {
 	@Id
 	public long id;
 
-	@MinLength(4)
+	@Required
+	@MinLength(3)
+	@MaxLength(200)
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*$",
+			message="Company name format is not valid."	)
 	public String name;
-
+	
+	@Required
 	public double price;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at")	
 	public Date dateCreated;
 
 	@Column(name = "expired_at")
+	@Required
+	@Future
 	public Date dateExpire;
 
 	public String picture;
@@ -50,8 +64,19 @@ public class Coupon extends Model {
 	public Category category;
 
 	@Column(columnDefinition = "TEXT")
+	@Required
+	@MinLength(10)
+	@MaxLength(1000)
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,+\"'!?+\"'()_]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?()_]*$",
+			message="Company description format is not valid."	)
 	public String description;
-
+	
+	
+	@MaxLength(200)
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*$",
+			message="Company remark format is not valid."	)
 	public String remark;
 
 	@ManyToOne
@@ -60,10 +85,15 @@ public class Coupon extends Model {
 	@OneToMany(mappedBy = "coupon")
 	public List<TransactionCP> buyers;
 
+	@Required
+	@Min(0)
 	public int minOrder;
-
+	
+	@Required
 	public int maxOrder;
-		
+	
+	@Required
+	@Future
 	public Date usage;
 
 	public int status;
@@ -212,6 +242,7 @@ public class Coupon extends Model {
 		List<Coupon> coupons = find.findList();
 		if (coupons == null)
 			coupons = new ArrayList<Coupon>();
+		Collections.reverse(coupons);
 		return coupons;
 	}
 
@@ -570,11 +601,11 @@ public class Coupon extends Model {
 	}
 
 	public static List<Coupon> approvedCoupons() {
+		//List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).orderBy().desc("dateCreated").findList();
 		List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).findList();
 		if(approvedCoupons == null)
 			approvedCoupons = new ArrayList<Coupon>();
 		return approvedCoupons;
-
 	}
 	
 	/**

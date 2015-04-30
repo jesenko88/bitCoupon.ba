@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -22,10 +24,16 @@ public class FAQ extends Model {
 	public int id;
 	
 	@Required
+	@MinLength(4)	
+	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+			 message="Question format is not valid."	)
 	public String question;
 	
 	@Required
+	@MinLength(6)
 	@Column(columnDefinition = "TEXT")
+	@Pattern(value = "^[A-Za-z0-9 .,!?()_]*[A-Za-z0-9][A-Za-z0-9 .,!?()_]*$",
+			 message="Answer  format is not valid."	)
 	public String answer;
 	
 	static Finder<Integer, FAQ> find = new Finder<Integer, FAQ>(Integer.class, FAQ.class);

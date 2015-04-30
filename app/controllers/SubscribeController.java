@@ -4,14 +4,9 @@ import helpers.AdminFilter;
 import helpers.MailHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import com.ckeditor.CKEditorConfig;
-import com.ckeditor.CKEditorReplaceTag;
 
 import models.Coupon;
 import models.Subscriber;
@@ -19,11 +14,11 @@ import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.mvc.*;
-import views.html.*;
-import views.html.user.*;
-import views.html.admin.users.*;
-import views.html.helper.checkbox;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
+import views.html.admin.users.Newsletter;
+import views.html.admin.users.subscribers;
 
 public class SubscribeController extends Controller {
 

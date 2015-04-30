@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.Logger;
+import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 /**
@@ -21,11 +25,13 @@ public class Subscriber extends Model{
 	@Id
 	public long id;
 	
+	@Required
 	public String token;
 	
 	@OneToOne
 	public User subscriber;	
 	
+	@Email
 	public String email;	
 	
 	

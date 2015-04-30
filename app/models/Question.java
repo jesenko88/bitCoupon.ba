@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.google.common.collect.Lists;
-
-import akka.util.Collections;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+
+import com.google.common.collect.Lists;
 
 /**
  * Entity for the coupon questions and answers

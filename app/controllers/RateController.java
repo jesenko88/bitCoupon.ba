@@ -1,12 +1,9 @@
 package controllers;
 
-import java.util.List;
-
 import models.Coupon;
 import models.Rate;
 import models.TransactionCP;
 import models.User;
-import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -45,11 +42,13 @@ public class RateController extends Controller {
 	 */
 	public static boolean canRate(long userId, long couponId) {
 		Coupon coupon = Coupon.find(couponId);
-		if(Sesija.getCurrentUser(ctx()) != null  
+		if(Sesija.getCurrentUser(ctx()) != null 
 		&& Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id, couponId) == false
 		&& TransactionCP.allBoughtCoupons(Sesija.getCurrentUser(ctx()).id).contains(coupon))
 			return true;
-		if(Sesija.adminCheck(ctx()) == true && Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id, couponId) == false)
+		if(Sesija.getCurrentUser(ctx()) != null && Sesija.adminCheck(ctx()) == true 
+				&& Rate.alreadyRate(Sesija.getCurrentUser(ctx()).id, couponId) == false 
+				&& TransactionCP.allBoughtCoupons(Sesija.getCurrentUser(ctx()).id).contains(coupon))
 			return true;
 		else
 		return false;

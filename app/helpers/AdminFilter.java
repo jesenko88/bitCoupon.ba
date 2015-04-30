@@ -2,8 +2,8 @@ package helpers;
 
 import models.User;
 import play.Logger;
-import play.mvc.Result;
 import play.mvc.Http.Context;
+import play.mvc.Result;
 import play.mvc.Security;
 
 /**

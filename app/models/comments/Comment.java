@@ -13,9 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.google.common.collect.Lists;
-
-import models.*;
+import models.Coupon;
+import models.User;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -75,7 +74,7 @@ public class Comment extends Model{
 		List<Comment> comments = find.where().eq("coupon", coupon).findList();
 		if (comments == null)
 			return new ArrayList<Comment>();
-		return Lists.reverse(comments);
+		return comments;
 	}
 	
 	public static Comment findById(long id){

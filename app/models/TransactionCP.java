@@ -1,21 +1,18 @@
 package models;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import controllers.CouponController;
-import controllers.PayPalController;
-import controllers.Sesija;
-import play.api.mvc.Session;
+import play.Play;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-import scala.Array;
 
 /**
  * 
@@ -30,11 +27,17 @@ import scala.Array;
 @Entity
 public class TransactionCP extends Model{
 	
+	private static final String BIT_PAYMENT_PREFIX = Play.application().configuration().getString("bitPaymentPrefix");
+	
 
 	@Id
 	public long id;
 	
 	public String payment_id; //zasada
+	
+	public String bitPayment_id; 
+	
+	public String sale_id;
 	
 	public double couponPrice;
 	
@@ -62,9 +65,11 @@ public class TransactionCP extends Model{
 			TransactionCP.class);
 	
 	/* constructor */
-	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,
+	public TransactionCP(String payment_id, String saleId, double couponPrice,int quantity, double totalPrice, String token,
 			User buyer, Coupon coupon) {
 		this.payment_id = payment_id;
+		this.bitPayment_id = BIT_PAYMENT_PREFIX + UUID.randomUUID().toString().substring(0, 7);
+		this.sale_id = saleId;
 		this.couponPrice = couponPrice;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
@@ -77,9 +82,11 @@ public class TransactionCP extends Model{
 	}
 	
 	/* constructor for unregistered users */
-	public TransactionCP(String payment_id,double couponPrice,int quantity, double totalPrice, String token,
+	public TransactionCP(String payment_id, String saleId, double couponPrice,int quantity, double totalPrice, String token,
 			String username, String surname, Coupon coupon) {
 		this.payment_id = payment_id;
+		this.bitPayment_id = BIT_PAYMENT_PREFIX + UUID.randomUUID().toString().substring(0, 7);
+		this.sale_id = saleId;
 		this.couponPrice = couponPrice;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
@@ -101,10 +108,10 @@ public class TransactionCP extends Model{
 	 * @param coupon Coupon
 	 * @return id of the created transaction (long)
 	 */
-	public static long createTransaction(String payment_id,double couponPrice,int quantity,
+	public static long createTransaction(String payment_id, String saleId, double couponPrice,int quantity,
 			double totalPrice, String token, User buyer,  Coupon coupon) {
 		
-		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, buyer, coupon);
+		TransactionCP transaction = new TransactionCP(payment_id, saleId, couponPrice, quantity,totalPrice, token, buyer, coupon);
 		transaction.save();
 		
 		return transaction.id;
@@ -124,9 +131,9 @@ public class TransactionCP extends Model{
 	 * @param coupon
 	 * @return id of the transaction Long
 	 */
-	public static long createTransactionForUnregisteredUser(String payment_id,double couponPrice,int quantity,
+	public static long createTransactionForUnregisteredUser(String payment_id, String saleId, double couponPrice,int quantity,
 			double totalPrice, String token, String username, String surname,  Coupon coupon) {	
-		TransactionCP transaction = new TransactionCP(payment_id, couponPrice, quantity,totalPrice, token, username, surname, coupon);
+		TransactionCP transaction = new TransactionCP(payment_id, saleId, couponPrice, quantity,totalPrice, token, username, surname, coupon);
 		transaction.save();
 		return transaction.id;
 		

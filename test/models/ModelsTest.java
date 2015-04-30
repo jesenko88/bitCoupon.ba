@@ -1,19 +1,21 @@
 package models;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.inMemoryDatabase;
+
 import java.util.Date;
 import java.util.List;
 
 import models.comments.Comment;
 import models.comments.Report;
-import models.Question;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import controllers.QuestionController;
-import play.Play;
 import play.test.WithApplication;
-import static org.junit.Assert.*;
-import static play.test.Helpers.*;
 
 public class ModelsTest extends WithApplication {
 

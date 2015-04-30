@@ -1,17 +1,17 @@
 package controllers;
 
-import java.util.List;
-
-import api.JSonHelper;
 import helpers.AdminFilter;
 import models.FAQ;
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import play.Logger;
-import views.html.admin.faq.*;
+import views.html.admin.faq.EditFAQ;
+import views.html.admin.faq.FAQview;
+import views.html.admin.faq.NewFAQ;
+import api.JSonHelper;
 
 public class FAQController extends Controller {
 
@@ -50,8 +50,8 @@ public class FAQController extends Controller {
 
 			if (newFAQForm.hasErrors() || newFAQForm.hasGlobalErrors()) {
 				Logger.debug("error in Add FAQ form");
-				flash("error", " Error! "); // TODO message
-				return ok((NewFAQ.render(session("name"))));
+				flash("error", " Something went wrong! ");
+				return ok(NewFAQ.render(session("name")));
 			}
 
 			String question = newFAQForm.data().get("question");
@@ -60,9 +60,7 @@ public class FAQController extends Controller {
 			if (question.length() < 20 || answer.length() < 20) {
 				Logger.debug(session("name")
 						+ " entered a too short question/answer");
-				flash("error",
-						"Please, fill out both fields with valid a form! "
-								+ "Each field should contain at least 20 characters.");
+				flash("error","Each field should contain at least 20 characters.");
 				return ok((NewFAQ.render(session("name"))));
 			}
 
@@ -88,7 +86,7 @@ public class FAQController extends Controller {
 	public static Result editFAQView(int id) {
 		FAQ question = FAQ.find(id);
 		String name = session("name");
-		if(name == null || question == null){
+		if (name == null || question == null) {
 			flash("error", "Ooops, error occured. Please try again later.");
 			return redirect("/");
 		}
@@ -106,24 +104,18 @@ public class FAQController extends Controller {
 		try {
 			DynamicForm form = Form.form().bindFromRequest();
 			FAQ FAQToUpdate = FAQ.find(id);
-
 			if (form.hasErrors() || form.hasGlobalErrors()) {
 				Logger.debug("error in edit FAQ form");
 				flash("error", " Form has errors! ");
 				return ok((EditFAQ.render(session("name"), FAQToUpdate)));
 			}
-
 			String question = form.data().get("question");
 			String answer = form.data().get("answer");
-
 			if (question.length() < 20 || answer.length() < 20) {
-				Logger.debug(session("name")
-						+ " entered a too short question/answer in 'updateFAQ' ");
-				flash("error",
-						"Each field should contain at least 20 characters.");
+				Logger.debug(session("name")+ " entered a too short question/answer in 'updateFAQ' ");
+				flash("error","Each field should contain at least 20 characters.");
 				return ok((EditFAQ.render(session("name"), FAQToUpdate)));
 			}
-
 			FAQToUpdate.question = question;
 			FAQToUpdate.answer = answer;
 			FAQ.update(FAQToUpdate);
@@ -132,8 +124,7 @@ public class FAQController extends Controller {
 			flash("success", " Update Successful! ");
 			return ok(EditFAQ.render(session("name"), FAQToUpdate));
 		} catch (Exception e) {
-			flash("error",
-					"Error occured while updating FAQ. Please check your logs.");
+			flash("error","Error occured while updating FAQ. Please check your logs.");
 			Logger.error("Error at updateFAQ" + e.getMessage());
 			return redirect("/");
 		}

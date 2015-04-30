@@ -1,0 +1,71 @@
+#error messagess
+error.msg.00 = Error occurred!
+error.msg.01 = Oops. Error occurred, please try again later
+error.captcha =  An error occurred! You need to fill in the captcha!
+error.form = Form error occurred!
+
+delete.success = Delete successful
+profile.updated = Profile updated successfully!
+updated = updated
+
+login.Error01 = Login failed
+login.IncorrectPasword = Password incorrect
+login.InvalidEmailOrPassword = Invalid email or password
+login.Success = You are logged in as: 
+login.SuccessLogger = logged in
+
+logoutSuccess = You are logged out!
+loginToComplete = Login to complete this action
+
+mail.MissingSecretKey = Secret key missing!
+mail.InvalidSecretKey = Invalid secret key!
+mail.MissingResponseParameter = You're response parameter is missing
+mail.MalformedParameter = The response parameter is invalid or malformed
+
+registration.mail.flash.verification = A verification mail has been sent to your email address!
+registration.mail.verificationLinkText = "Click on the link below to verify your e-mail adress 
+registration.emailAlreadyExists = Email already exists!
+
+post.CreateError = Error while creating post
+post.EditError = Error while editing post
+
+category.Added = Category %s 
+category.Updated = Category %s updated
+category.alreadyExists = Category already exists
+category.shortName = Name must be at least 4 characters long!
+category.longName = Name must be max 120 characters long
+
+comment.tooLong = Comment should not be longer than 1200 characters
+
+company.longName = Name must be at least 4 characters
+company = Company
+company.notExist = Company doesn't exists
+company.updatePhoto = Photo updated successfully
+
+password.shortPassword = "Password must be at least 6 characters!"
+password.dontMatch = ""Passwords don't match, try again"
+
+search.noResult = No result for this search
+
+filter.noResult = No new result
+filter.price.invalid = Please enter correct values
+filter.date.invalid = Please enter a valid expiration date 
+
+coupon = Coupon
+coupon.hasBeenApproved = has been approved
+coupon.cannotDelete = This coupon cannot be deleted. Please contact admin for more info.
+coupon.shortName = Coupon name must be at least 4 characters
+coupon.longName = Coupon name can be max 120 characters
+coupon.expirationDate.invalid = Please enter a valid expiration date
+coupon.category.newEmpty = Please enter new Category name
+coupon.update.success = Coupon updated successfully
+coupon.create.success = Coupon successfully created
+coupon.create.withoutImage = Coupon created without image
+coupon.photos.full = You already fulfilled this coupons photos. Delete some to add more
+coupon.photos.freeSpace = You have space for %s more photos
+coupon.photos.upload.success = You have successfully uploaded you're images.
+
+price.invalid = Please enter a valid price
+
+
+

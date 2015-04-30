@@ -19,6 +19,7 @@ GET    /api/coupons                   api.JSonOperator.coupons()
 GET    /api/categoryList              controllers.CategoryController.listCategories()
 GET    /api/companies                 controllers.CompanyController.listCompanies()
 GET    /api/faq                       controllers.FAQController.showFAQ()
+POST   /api/couponpurchase            controllers.PayPalController.purchaseProcessing()
 
 # Home page
 GET    /                              controllers.Application.index()
@@ -57,7 +58,8 @@ GET    /buyForUser                    controllers.UserController.buyForUserPage(
 GET    /statisticAsFile               controllers.UserController.getStatistic()	
 GET    /makeAGift/:id                 controllers.UserController.makeAGiftPage(id: Long)	
 GET    /giftForUser/:couponId         controllers.UserController.giftCheckoutPage(couponId: Long)
-GET    /giftForSomeone/:couponId      controllers.UserController.giftCheckoutPageUnregistered(couponId: Long)
+GET    /checkoutDetails/:couponId     controllers.UserController.checkoutPageUnregistered(couponId: Long)
+
 
 
 GET    /subscribers                   controllers.SubscribeController.subscribers()
@@ -97,6 +99,7 @@ GET    /searchFilter                  controllers.CouponController.searchPage()
 POST   /filterCategory                controllers.CouponController.filterCategory(ids: String)
 POST   /filterPrice                   controllers.CouponController.filterPrice(ids: String)
 POST   /filterDate                    controllers.CouponController.filterDate(ids: String)
+GET    /listOfBuyers                  controllers.CouponController.listOfBuyers(id: Long)
 
 # Comment controller
 POST   /comment/:id                   controllers.CommentController.comment(id: Long)	
@@ -136,7 +139,16 @@ GET    /couponsuccess                 controllers.PayPalController.couponSuccess
 GET    /couponfail                    controllers.PayPalController.couponFail()
 GET    /approveTransaction            controllers.PayPalController.approveTransaction()
 GET    /refundCoupon/:couponId        controllers.PayPalController.refundProcessing(couponId: Long)
-
+#Blog controller
+GET    /blog                          controllers.BlogController.blog()
+POST   /createNewPost                 controllers.BlogController.createPost()
+GET    /createNewPost                 controllers.BlogController.createPostPage()
+GET    /post                          controllers.BlogController.postPage(id: Long)	
+POST   /editPost                      controllers.BlogController.editPost(id: Long)
+GET    /editPost                      controllers.BlogController.editPostPage(id: Long)	
+GET    /delete                        controllers.BlogController.deletePost(id: Long)
+GET    /blog/search                   controllers.BlogController.search(q: String)
+GET    /blog/tag                      controllers.BlogController.byTag(tag: String)
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                  controllers.Assets.at(path="/public", file)
 GET    /webjars/*file                 controllers.WebJarAssets.at(file)
