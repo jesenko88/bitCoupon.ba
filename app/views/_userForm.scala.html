@@ -1,6 +1,6 @@
 @(myForm: Form[User])
 
-<form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate enctype="multipart/form-data" >
+<form name="userForm" action="/register" method="POST" novalidate enctype="multipart/form-data" >
 				 <hr>
 				  @if(myForm.hasGlobalErrors){
 					<div class="panel panel-danger">
@@ -132,6 +132,6 @@
 		             Only letters and numbers allowed.</p> 
  		        </div>                                     
                  
-                  <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
+                  <button type="submit" id="submit-user" ng-disabled="!submitForm(userForm.$valid)" class="btn btn-default" >Submit</button>
               	</div>
                </form>

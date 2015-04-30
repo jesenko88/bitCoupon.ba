@@ -9,7 +9,7 @@ validationApp.controller('movieController', function($scope) {
 
         // check to make sure the form is completely valid
         if (isValid) { 
-            alert('our form is amazing');
+        	return true;           
         }
 
     };

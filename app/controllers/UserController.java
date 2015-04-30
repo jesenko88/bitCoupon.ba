@@ -62,7 +62,7 @@ public class UserController extends Controller {
 	public static Result register() {
 
 		Form<User> submit = Form.form(User.class).bindFromRequest();
-		System.out.println("Submit has errors: " +submit.hasErrors());
+		System.out.println("Submit has errors: " +submit.hasErrors() +submit.errorsAsJson());
 		if (submit.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
