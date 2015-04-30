@@ -198,6 +198,13 @@ public class Application extends Controller {
 		}
 	}
 
+	/**
+	 * This method is used for sending e-mail.
+	 * First, checks if the recaptcha key is filled properly,
+	 * if it's not filled properly, or if it's missing, user get flash error message,
+	 * else method sends e-mail.
+	 * @return holder(Promise of type Result)
+	 */
 	public static Promise<Result> sendMail() {
 		final DynamicForm dynamicForm = DynamicForm.form().bindFromRequest();			
 		Promise<Result> holder = WS
