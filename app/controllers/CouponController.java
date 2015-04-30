@@ -28,6 +28,7 @@ import org.h2.util.StringUtils;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -50,6 +51,8 @@ public class CouponController extends Controller {
 	static Form<Coupon> couponForm = new Form<Coupon>(Coupon.class);
 	static List<Category> allCategories = Category.all();
 	static Result result;
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
 	
 	/**
 	 * Renders the 'add coupon' page
@@ -58,11 +61,10 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result addCouponView() {
 		List<Category> categories = Category.all();
-
 		String name = session("name");
 		//Exception handling.
 		if(categories == null || name == null){
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_ADMIN);
 			return redirect("/");
 		}	
 		User user = User.find(name);
@@ -85,7 +87,7 @@ public class CouponController extends Controller {
 		Coupon coupon = Coupon.find(id);
 		if(coupon == null ){
 			Logger.error("error", "Coupon null at showCoupon()");
-			flash("error", "Ooops, error has occured.");
+			flash("error", ERROR_MSG_ADMIN);
 			return redirect("/");
 		}
 		coupon.statistic.visited();;
@@ -110,8 +112,7 @@ public class CouponController extends Controller {
 					Logger.info("Company " +session("name") 
 							+" tried to delete coupon which cannot"
 							+ " be deleted");
-					flash("error", "This coupon cannot be deleted."
-							+ " Please contact admin for more info.");
+					flash("error", Messages.get("coupon.cannotDelete"));
 					return showCoupon(id);
 				}					
 			}
@@ -119,8 +120,7 @@ public class CouponController extends Controller {
 			Coupon.delete(id);
 			return redirect("/");
 		} catch (Exception e) {
-			flash("error",
-					"Error occured while deleting coupon. Please check logs");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at delete coupon: " + e.getMessage());
 			return redirect("/");
 		}
@@ -139,12 +139,12 @@ public class CouponController extends Controller {
 		Coupon coupon = Coupon.find(id);			
 		//Exception handling.
 		if(coupon == null ){
-			flash("error", "Oops, error has occured. Please try again later");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		List<Photo> photosByCoupon = Photo.photosByCoupon(coupon);
 		if(photosByCoupon == null){
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		Form<Coupon> form = Form.form(Coupon.class).fill(coupon);
@@ -166,11 +166,11 @@ public class CouponController extends Controller {
 			Coupon coupon = Coupon.find(id);
 			coupon.status = Coupon.Status.ACTIVE;
 			coupon.save();
-			flash("succes", "Coupon " + coupon.name + " has been approved");
+			flash("succes", Messages.get("coupon") + coupon.name + " " +  Messages.get("coupon.hasBeenApproved"));
 			return ok(couponsAll.render(Coupon.approvedCoupons(),
 					Coupon.nonApprovedCoupons()));
 		} catch (Exception e) {
-			flash("Error occured while approving coupon. Please check your logs");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at approveCoupon: " + e.getMessage());
 			return redirect("/");
 		}
@@ -194,16 +194,19 @@ public class CouponController extends Controller {
 		try {
 			if (form.hasErrors() || form.hasGlobalErrors()) {
 				Logger.info("Coupon update error");
+				flash("error", Messages.get("error.form"));
 				return ok(updateCouponView.render(form, coupon, photos));
 			}
 
 			coupon.name = couponForm.bindFromRequest().field("name").value();
 			if (coupon.name.length() < 4) {
 				Logger.info(session("name")+ "entered a short coupon name in coupon update");
+				flash("error", Messages.get("coupon.shortName "));
 				return ok(updateCouponView.render(form, coupon, photos));
 			}
 			if (coupon.name.length() > 120) {
 				Logger.info(session("name") + "entered a too long coupon name in coupon update");
+				flash("error", Messages.get("coupon.longName "));
 				return ok(updateCouponView.render(form, coupon, photos));
 			}
 			
@@ -213,7 +216,7 @@ public class CouponController extends Controller {
 			
 			if (price <= 0) {
 				Logger.info(session("name")	+ " entered a invalid price in coupon update");
-				flash("error", "Enter a valid price");
+				flash("error", Messages.get("price.invalid"));
 				return badRequest(updateCouponView.render(form,
 						coupon, photos));
 			}
@@ -234,7 +237,7 @@ public class CouponController extends Controller {
 			
 			if (date != null) {
 				if (date.before(current)) {
-					flash("error", "Enter a valid expiration date");
+					flash("error", Messages.get("coupon.expirationDate.invalid"));
 					Logger.info(session("name")	+ " entered a invalid date in coupon update");
 					return ok(updateCouponView.render(form, coupon,  photos));
 			}
@@ -247,7 +250,7 @@ public class CouponController extends Controller {
 				coupon.category = Category.findByName(category);
 			} else {
 				if (newCategory.isEmpty()) {
-					flash("error", "Enter new Category name");
+					flash("error", Messages.get("coupon.category.newEmpty"));
 					return ok(updateCouponView.render(form, coupon, photos));
 				}
 				coupon.category = Category.find(Category.createCategory(newCategory));
@@ -271,10 +274,10 @@ public class CouponController extends Controller {
 			
 			Coupon.updateCoupon(coupon);
 			Logger.info(session("name") + " updated coupon: " + coupon.id);
-			flash("success", "Coupon updated");
+			flash("success", Messages.get("coupon.update.success"));
 			return ok(updateCouponView.render(form, coupon, photos));
 		} catch (Exception e) {
-			flash("error", "Error while updating coupon. If you're admin please check logs");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at updateCoupon: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -299,7 +302,7 @@ public class CouponController extends Controller {
 			}
 		}	
 		if (coupons.isEmpty()) {
-			flash("error", "No such coupon");		
+			flash("error", Messages.get("search.noResult"));		
 			return badRequest(searchFilter.render(Coupon.approvedCoupons()
 													, Category.all()));
 		}
@@ -351,13 +354,12 @@ public class CouponController extends Controller {
 				sorted = Coupon.sortByDate(coupons, method);
 			} else {
 				Logger.error("Wrong orderby type");
-				flash("warning", "Something went wrong, try again.");
+				flash("warning", ERROR_MSG_CLIENT);
 				return redirect("/");
 			}
 			return ok(index.render(sorted, Category.all()));
 		} catch (Exception e) {
-			flash("error",
-					"Error occured while sorting results. If you're admin please check logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at sort: " + e.getMessage());
 			return redirect("/");
 		}
@@ -395,6 +397,7 @@ public class CouponController extends Controller {
 			Logger.debug("Error adding coupon");
 			Logger.debug(addCouponForm.errorsAsJson().toString());
 			Logger.debug(addCouponForm.globalErrors().toString());
+			flash("error", Messages.get("error.form"));
 			return result;
 		}
 
@@ -428,12 +431,12 @@ public class CouponController extends Controller {
 				long id = Coupon.createCoupon(name, price, date, assetsPath,
 						category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id);
-				flash("success", "Coupon successfuly created.");
+				flash("success", Messages.get("coupon.create.success"));
 				return redirect("/couponPanel");
 			} else {
 				//In case user didn't upload photo of coupon
 				//we add default photo of this category for this coupon.
-				flash("success", "Coupon created without image");
+				flash("success", Messages.get("coupon.create.withoutImage"));
 				long id = Coupon.createCoupon(name, price, date,
 						category.picture,category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id
@@ -441,8 +444,8 @@ public class CouponController extends Controller {
 				return redirect("/couponPanel");
 			}
 		}catch(Exception e){
-		flash("error", "Error occured while adding coupon. If you're admin please check logs.");
-		Logger.error("Error att addCoupon: " + e.getMessage(), e);
+		flash("error", ERROR_MSG_ADMIN);
+		Logger.error("Error at addCoupon: " + e.getMessage(), e);
 		return result;
 	   }
 
@@ -478,16 +481,13 @@ public class CouponController extends Controller {
 			 */
 			if (photos >= 4) {
 				Logger.info(session("name") + " tried to add too many photos");
-				flash("error",
-						"You already fullfilled this coupons photos. Delete some to add more.");
+				flash("error", Messages.get("coupon.photos.full"));
 				return redirect("/editCoupon/" + coupon.id);
 			}
 			MultipartFormData body = request().body().asMultipartFormData();
 			List<FilePart> photoParts = body.getFiles();
 			if (photoParts.size() > (4 - photos)) {
-				flash("error", "You selected " + photoParts.size()
-						+ " photos but you can upload only " + (4 - photos)
-						+ " more.");
+				flash("error", Messages.get("coupon.photos.freeSpace ", (4 - photos)) );
 				return redirect("/editCoupon/" + coupon.id);
 			}
 
@@ -529,11 +529,10 @@ public class CouponController extends Controller {
 					Photo.create(assetsPath, saveFile.getPath(), coupon);
 				}
 			}
-			flash("success", "Successfully uploaded photos.");			
+			flash("success", Messages.get("coupon.photos.upload.success"));			
 			return ok(updateCouponView.render(form, coupon, Photo.photosByCoupon(coupon)));
 		} catch (Exception e) {
-			flash("error", "Error occured while uploading gallery photos."
-					+ " If you're admin please check logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at galleryUpload: " + e.getMessage());
 			return redirect("/");
 		}
@@ -557,11 +556,10 @@ public class CouponController extends Controller {
 			photo.save();
 			Logger.info(session("name") + " deleted image id:\"" + id
 					+ "\" from " + coupon.name);
-			flash("succes", "You have successfuly deleted photo.");
+			flash("succes", Messages.get("delete.success"));
 			return redirect("/editCoupon/" + coupon.id);
 		} catch (Exception e) {
-			flash("error",
-					"Error occured while deleting photo. If you're admin please check loggs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at deletePhoto " + e.getMessage());
 			return redirect("/");
 		}
@@ -577,7 +575,7 @@ public class CouponController extends Controller {
 		List<Category> categories = Category.all();	
 		//Handling exceptions.
 		if(coupons == null || categories == null ){
-			flash("error", "Ooops, error has occured. Plealse try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 		return ok(searchFilter.render(coupons, categories));
@@ -617,14 +615,13 @@ public class CouponController extends Controller {
 				}
 			}
 			if (list.isEmpty()) {
-				flash("error", "No new result");
+				flash("error", Messages.get("filter.noResult"));
 				return ok(index.render(Coupon.all(), Category.all()));
 			}
 
 			return ok(index.render(list, Category.all()));
 		} catch (Exception e) {
-			flash("error", "Error occured while filtrering categories."
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at filterCategory: " + e.getMessage());
 			return redirect("/");
 		}
@@ -671,7 +668,7 @@ public class CouponController extends Controller {
 			}
 
 			if (startPrice > endPrice) {
-				flash("error", "Please input correct values");
+				flash("error", Messages.get("filter.price.invalid"));
 				return ok(index.render(Coupon.all(), Category.all()));
 			}
 
@@ -682,14 +679,13 @@ public class CouponController extends Controller {
 			}
 
 			if (list.isEmpty()) {
-				flash("error", "No new result");
+				flash("error", Messages.get("filter.noResult"));
 				return ok(index.render(Coupon.all(), Category.all()));
 			}
 
 			return ok(index.render(list, Category.all()));
 		} catch (Exception e) {
-			flash("error", "Error occured while filtrering by price."
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at filterPrice: " + e.getMessage());
 			return redirect("/");
 		}
@@ -726,13 +722,13 @@ public class CouponController extends Controller {
 			Date current = new Date();
 
 			if (date == null) {
-				flash("error", "Enter a valid expiration date");
+				flash("error", Messages.get("filter.date.invalid"));
 				return badRequest(index.render(list, Category.all()));
 			}
 
 			if (date.before(current)) {
 				Logger.info("entered a invalid date");
-				flash("error", "Enter a valid expiration date");
+				flash("error", Messages.get("filter.date.invalid"));
 				return badRequest(index.render(list, Category.all()));
 			}
 
@@ -744,15 +740,14 @@ public class CouponController extends Controller {
 			}
 
 			if (list.isEmpty()) {
-				flash("error", "No new result");
+				flash("error", Messages.get("filter.noResult"));
 				return ok(index.render(Coupon.all(), Category.all()));
 			}
 
 			return ok(index.render(list, Category.all()));
 
 		} catch (Exception e) {
-			flash("error", "Error occured while filtrering by date."
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at filterDate: " + e.getMessage());
 			return redirect("/");
 		}

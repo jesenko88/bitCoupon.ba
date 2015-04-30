@@ -6,6 +6,7 @@ import models.comments.Comment;
 import models.comments.Report;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.coupon.commentLine;
@@ -29,7 +30,7 @@ public class CommentController extends Controller {
 		User user = Sesija.getCurrentUser(ctx());
 		String comment = dynamicForm.data().get("comment");
 		if (comment.length() > 1200){
-			flash("error","Comment should not be longer than 1200 characters");
+			flash("error",Messages.get("comment.tooLong"));
 			return redirect("/coupon/" + couponId);
 		}
 		long id = Comment.create(comment, coupon, user);	
@@ -38,7 +39,6 @@ public class CommentController extends Controller {
 	
 	/**
 	 * Method for reporting comment.
-	 * TODO ajax on this method.
 	 * @param commentId
 	 * @return
 	 */

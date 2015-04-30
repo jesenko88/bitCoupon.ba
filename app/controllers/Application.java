@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class Application extends Controller {
 
 	static String name = null;
-	static String loginSucces = Messages.get("loginSuccess");
+	static String loginSuccess = Messages.get("login.Success");
 	
 	public static class Contact {
 
@@ -59,7 +59,7 @@ public class Application extends Controller {
 
 		//Handling exceptions
 		if(approvedCoupons == null || categories == null){
-			flash("warning", Messages.get("errorMsg01"));
+			flash("warning", Messages.get("error.msg.01"));
 			return redirect("/");
 		}		
 		if (name == null) {
@@ -84,7 +84,7 @@ public class Application extends Controller {
 			Form<Login> loginForm = new Form<Login>(Login.class);
 			if (loginForm.hasGlobalErrors()) {
 				Logger.info("Login global error");
-				flash("error", Messages.get("loginError01"));
+				flash("error", Messages.get("login.Error01"));
 
 				return badRequest(Loginpage.render(" "));
 			}
@@ -94,7 +94,7 @@ public class Application extends Controller {
 				List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 				if (mail.isEmpty() || password.length() < 6) {
 					Logger.info("Invalid login form, mail empty or short password");
-					flash("error", Messages.get("loginErrorIncorrectPasword"));
+					flash("error", Messages.get("login.IncorrectPasword"));
 					return badRequest(Loginpage.render(" "));
 				}
 				if (User.verifyLogin(mail, password) == true) {
@@ -103,7 +103,7 @@ public class Application extends Controller {
 					session("name", user.username);
 					session("email", user.email);
 					Logger.info(user.username + " logged in");
-					flash("success", loginSucces + " " + mail);
+					flash("success", loginSuccess + " " + mail);
 					return ok(index.render(approvedCoupons,
 							Category.all()));
 
@@ -113,17 +113,17 @@ public class Application extends Controller {
 					session().clear();
 					session("name", company.name);
 					session("email", company.email);
-					flash("success", loginSucces + " " + mail);
+					flash("success", loginSuccess + " " + mail);
 					Logger.info(company.name + " logged in");
 					return ok(indexC.render(company, approvedCoupons));
 				}
 
-				flash("error", Messages.get("loginErrorEmailOrPassword"));
+				flash("error", Messages.get("login.InvalidEmailOrPassword"));
 				Logger.info("User tried to login with invalid email or password");
 				return badRequest(Loginpage.render(" "));
 
 			} catch (Exception e) {
-				flash("error", Messages.get("errorMsg01"));
+				flash("error", Messages.get("error.msg.01"));
 				Logger.error("Error has occured at login: " + e.getMessage(), e);
 				return redirect("/");
 			}
@@ -133,7 +133,6 @@ public class Application extends Controller {
 	 * @return renders the loginpage view
 	 */
 	public static Result loginpage() {
-		Logger.info("Log in successful");	
 		return ok(Loginpage.render(" "));
 	}
 
@@ -146,7 +145,7 @@ public class Application extends Controller {
 		String name = session("name");
 		//Handling exceptions
 		if(name == null){
-			flash("errorMsg01");
+			flash("error.msg.01");
 			return redirect("/");
 		}
 		Logger.info(name + " has logged out");
@@ -219,33 +218,33 @@ public class Application extends Controller {
 
 						if (json.findValue("error-codes").toString()
 								.equals("missing-input-secret")) {
-							flash("error", Messages.get("mailMissingSecretKey"));
+							flash("error", Messages.get("mail.MissingSecretKey"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
 						if (json.findValue("error-codes").toString()
 								.equals("invalid-input-secret")) {
-							flash("error", Messages.get("mailInvalidSecretKey"));
+							flash("error", Messages.get("mail.InvalidSecretKey"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
 						if (json.findValue("error-codes").toString()
 								.equals("missing-input-response")) {
-							flash("error", Messages.get("mailMissingResponseParameter"));
+							flash("error", Messages.get("mail.MissingResponseParameter"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
 						if (json.findValue("error-codes").toString()
 								.equals("invalid-input-response")) {
-							flash("error", Messages.get("mailMalformedParameter"));
+							flash("error", Messages.get("mail.MalformedParameter"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
-						flash("error", Messages.get("captchaError"));
+						flash("error", Messages.get("error.captcha"));
 						User currentUser = User.find(name);
 						return ok(contact.render(currentUser, submit));
 					}
