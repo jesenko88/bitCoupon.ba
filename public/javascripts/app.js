@@ -2,6 +2,7 @@
 var validationApp = angular.module('movieApp', []);
 
 // create angular controller
+//This controller isnt used anymore.
 validationApp.controller('movieController', function($scope) {
 
     // function to submit the form after all validation has occurred            
@@ -15,6 +16,7 @@ validationApp.controller('movieController', function($scope) {
     };    
     
 });
+
 
 validationApp.directive('passwordMatch', [function () {
     return {

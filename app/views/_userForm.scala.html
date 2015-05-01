@@ -136,8 +136,9 @@
 		            <p ng-show="userForm.city.$error.pattern" class="help-block">
 		             Only letters and numbers allowed.</p> 
  		        </div>                                     
-                 
-                  <button type="submit" id="submit-user" ng-disabled="!submitForm(userForm.$valid)" class="btn btn-success" >Submit</button>
-              	 
+                  
+                  <button type="submit" id="submit-user" ng-disabled="userForm.$invalid" class="btn btn-block btn-success" >Submit</button>
+              	  <p ng-show="userForm.$invalid" class="help-block">Please make sure you filled all fields correctly.</p>
+              	  
               	</div>
                </form>
