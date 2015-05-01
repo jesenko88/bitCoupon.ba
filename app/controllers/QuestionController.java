@@ -8,6 +8,7 @@ import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.coupon.coupontemplate;
@@ -21,6 +22,8 @@ import views.html.coupon.questionLine;
 public class QuestionController extends Controller {
 	
 	private static final String INTERNAL_SERVER_ERROR = "Internal server error";
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+
 	
 	/**
 	 * Method for adding a new question for a coupon
@@ -37,7 +40,8 @@ public class QuestionController extends Controller {
 			DynamicForm form = Form.form().bindFromRequest();
 			String question = form.data().get("question");
 			if (question.length() > 600){
-				return badRequest();
+				flash("error", Messages.get("coupon.question.length"));
+				return badRequest("/coupon/" + couponId);
 			}
 			long id = Question.create(question, "", coupon, user);
 			coupon.seller.notifications ++;
@@ -45,8 +49,8 @@ public class QuestionController extends Controller {
 			return ok(questionLine.render(Question.findById(id), coupon));
 		}catch(Exception e){
 			Logger.error(e.getMessage(), e);
-			flash("error", INTERNAL_SERVER_ERROR);
-			return badRequest();
+			flash("error", ERROR_MSG_CLIENT);
+			return badRequest("/coupon/" + couponId);
 		}
 	}
 	
@@ -58,13 +62,14 @@ public class QuestionController extends Controller {
 	 * @return
 	 */
 	public static Result addAnswer(long questionId) {
+			Question question = null;
 		try{
 			DynamicForm form = Form.form().bindFromRequest();
-			Question question = Question.findById(questionId);
+			question = Question.findById(questionId);
 			String answer = form.data().get("answer");
 			if (answer.length() > 450){
-				flash("error","Answer should not be longer than 450 characters");
-				return redirect("/coupon/" + question.coupon.id);
+				flash("error",Messages.get("coupon.question.answer.length"));
+				return badRequest("/coupon/" + question.coupon.id);
 			}
 			question.answer = answer;
 			question.answerDate = new Date();
@@ -72,8 +77,8 @@ public class QuestionController extends Controller {
 			return redirect("/coupon/" + question.coupon.id);
 		}catch(Exception e){
 			Logger.error(e.getMessage(), e);
-			flash("error", INTERNAL_SERVER_ERROR);
-			return badRequest("Something went wrong, try again later");
+			flash("error", ERROR_MSG_CLIENT);
+			return badRequest("/coupon/" + question.coupon.id);
 		}
 	}
 	
@@ -88,7 +93,7 @@ public class QuestionController extends Controller {
 			Question.delete(questionID);
 			return redirect("/coupon/" + coupon.id);
 		}
-		flash("error", INTERNAL_SERVER_ERROR);
+		flash("error", ERROR_MSG_CLIENT);
 		return redirect("/");
 	}
 	
@@ -108,7 +113,7 @@ public class QuestionController extends Controller {
 			return ok(coupontemplate.render(currentQuestion.coupon));
 		} catch (Exception e) {
 			Logger.error(e.getMessage(), e);
-			flash("error",INTERNAL_SERVER_ERROR);
+			flash("error",ERROR_MSG_CLIENT);
 			return redirect("/");
 		}
 	}

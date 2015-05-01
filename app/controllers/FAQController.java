@@ -5,6 +5,7 @@ import models.FAQ;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -14,6 +15,8 @@ import views.html.admin.faq.NewFAQ;
 import api.JSonHelper;
 
 public class FAQController extends Controller {
+	
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
 
 	/**
 	 * Show FAQ page with list of all Frequently Asked Questions If current user
@@ -50,7 +53,7 @@ public class FAQController extends Controller {
 
 			if (newFAQForm.hasErrors() || newFAQForm.hasGlobalErrors()) {
 				Logger.debug("error in Add FAQ form");
-				flash("error", " Something went wrong! ");
+				flash("error", Messages.get("error.msg.01"));
 				return ok(NewFAQ.render(session("name")));
 			}
 
@@ -58,18 +61,17 @@ public class FAQController extends Controller {
 			String answer = newFAQForm.data().get("answer");
 
 			if (question.length() < 20 || answer.length() < 20) {
-				Logger.debug(session("name")
-						+ " entered a too short question/answer");
-				flash("error","Each field should contain at least 20 characters.");
+				Logger.debug(session("name") + " entered a too short question/answer");
+				flash("error", Messages.get("faq.shortLength"));
 				return ok((NewFAQ.render(session("name"))));
 			}
 
 			FAQ.createFAQ(question, answer);
 			Logger.debug(session("name") + " added a new FAQ");
-			flash("success", "New Question added");
+			flash("success", Messages.get("faq.QuestineAdded"));
 			return ok(NewFAQ.render(session("name")));
 		} catch (Exception e) {
-			flash("error", "Error while adding new FAQ. Please check you logs");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at addFAQ: " + e.getMessage());
 			return redirect("/");
 		}
@@ -87,7 +89,7 @@ public class FAQController extends Controller {
 		FAQ question = FAQ.find(id);
 		String name = session("name");
 		if (name == null || question == null) {
-			flash("error", "Ooops, error occured. Please try again later.");
+			flash("error", Messages.get("error.msg.01"));
 			return redirect("/");
 		}
 		return ok(EditFAQ.render(name, question));
@@ -106,14 +108,14 @@ public class FAQController extends Controller {
 			FAQ FAQToUpdate = FAQ.find(id);
 			if (form.hasErrors() || form.hasGlobalErrors()) {
 				Logger.debug("error in edit FAQ form");
-				flash("error", " Form has errors! ");
+				flash("error", Messages.get("error.form"));
 				return ok((EditFAQ.render(session("name"), FAQToUpdate)));
 			}
 			String question = form.data().get("question");
 			String answer = form.data().get("answer");
 			if (question.length() < 20 || answer.length() < 20) {
 				Logger.debug(session("name")+ " entered a too short question/answer in 'updateFAQ' ");
-				flash("error","Each field should contain at least 20 characters.");
+				flash("error", Messages.get("faq.shortLength"));
 				return ok((EditFAQ.render(session("name"), FAQToUpdate)));
 			}
 			FAQToUpdate.question = question;
@@ -121,10 +123,10 @@ public class FAQController extends Controller {
 			FAQ.update(FAQToUpdate);
 
 			Logger.info(session("name") + " updated FAQ: " + id);
-			flash("success", " Update Successful! ");
+			flash("success", Messages.get("updateSuccess"));
 			return ok(EditFAQ.render(session("name"), FAQToUpdate));
 		} catch (Exception e) {
-			flash("error","Error occured while updating FAQ. Please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at updateFAQ" + e.getMessage());
 			return redirect("/");
 		}
@@ -142,11 +144,10 @@ public class FAQController extends Controller {
 		try {
 			FAQ.delete(id);
 			Logger.info(session("name") + " deleted FAQ: " + id);
-			flash("success", "Question deleted!");
+			flash("success", Messages.get("delete.success"));
 			return ok(FAQview.render(session("name"), FAQ.all()));
 		} catch (Exception e) {
-			flash("error",
-					"Error occured while deleting FAQ. Please check your logs");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at deleteFAQ: " + e.getMessage());
 			return redirect("/");
 		}
