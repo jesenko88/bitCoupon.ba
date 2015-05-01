@@ -53,12 +53,8 @@
  					 <input class="form-control" value='@myForm("confirmPassword").value' type="password" 
  					 		required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword"
  							ng-model='user.confirmPassword' ng-minlength="6" ng-maxlength="20"
- 							placeholder="Confirm Password: "/>	
- 					
- 				   <p ng-show="userForm.confirmPassword.$error.minlength" class="help-block">Min length is 6.</p>
-		           <p ng-show="userForm.confirmPassword.$error.maxlength" class="help-block">Max length is 20.</p>
-		           <p ng-show="userForm.confirmPassword.$error.pattern" class="help-block">
-		           		 Password must contain upper case, lower case and number</p>	
+ 							 password-match="user.password" placeholder="Confirm Password: "/>	
+ 					 <p ng-show="userForm.confirmPassword.$error.passwordMatch && !userForm.confirmPassword.$pristine" class="help-block"> Passwords do not match.</p>	
  		          </div>
  		          
                  <!-- Username --> 
@@ -141,7 +137,7 @@
 		             Only letters and numbers allowed.</p> 
  		        </div>                                     
                  
-                  <button type="submit" id="submit-user" ng-disabled="!submitForm(userForm.$valid)" class="btn btn-default" >Submit</button>
+                  <button type="submit" id="submit-user" ng-disabled="!submitForm(userForm.$valid)" class="btn btn-success" >Submit</button>
               	 
               	</div>
                </form>
