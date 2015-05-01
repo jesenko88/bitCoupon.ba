@@ -17,6 +17,7 @@ import play.Logger;
 import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -40,6 +41,8 @@ import com.paypal.base.rest.PayPalRESTException;
 public class PayPalController extends Controller {
 
     static String PATH = Play.application().configuration().getString("PATH");
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
 
 	private static User currentUser; // = User.find(session("name"));
 	private static Coupon coupon;
@@ -120,8 +123,8 @@ public class PayPalController extends Controller {
 
 			/* details to render in the success view */
 			details = new ArrayList<String>();
-			details.add("Quantity: " + Integer.toString(quantity));
-			details.add("Total price: " + totalPriceString);
+			details.add(Messages.get("quantity") + " " + Integer.toString(quantity));
+			details.add(Messages.get("priceTotal") + " " + totalPriceString);
 
 			List<Transaction> transactions = new ArrayList<Transaction>();
 			transactions.add(transaction);
@@ -172,12 +175,11 @@ public class PayPalController extends Controller {
 			}
 			Logger.debug(createdPayment.toJSON());
 
-			flash("error", "Something went wrong, please try again later");
+			flash("error", ERROR_MSG_CLIENT);
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (Exception e) {
-			flash("error", "Error occured while purchasing through paypal."
-					+ " If you're admin please check your logs");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
 			return redirect("/");
 		}
@@ -210,11 +212,10 @@ public class PayPalController extends Controller {
 			/*when the payment is built, the client is redirected to the
 			 * approval page */
 			
-			flash("info", "Approve transaction");
+			flash("info", Messages.get("transaction.approve"));
 			return ok(couponResult.render(currentUser, coupon, details));
 		} catch (Exception e) {
-			flash("error",
-					"Error occoured. If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.debug("Error at couponSucess: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -228,7 +229,7 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result couponFail() {
-		flash("error", "Transaction canceled");
+		flash("error", Messages.get("transaction.canceled"));
 		return badRequest(coupontemplate.render(coupon));
 	}
 
@@ -266,12 +267,11 @@ public class PayPalController extends Controller {
 			coupon.seller.notifications ++;
 			coupon.seller.save();
 			Logger.info(session("name") + " approved transaction: //TODO");
-			flash("success", "Transaction complete");
+			flash("success", Messages.get("transaction.complete"));
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (PayPalRESTException e) {
-			flash("error", "Error occured while approving transaction. "
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.debug("Error at approveTransaction: " + e.getMessage() + e);
 			return redirect("/");
 		}
@@ -324,12 +324,11 @@ public class PayPalController extends Controller {
 					sale.refund(apiContext, refund);
 				}
 			}
-			flash("success", "All buyers of this coupon are successfully refunded!");
+			flash("success", Messages.get("transaction.refund.success"));
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (PayPalRESTException e) {
-			flash("error", "Error occured while purchasing through paypal."
-					+ " If you're admin please check your logs");
+			flash("error", Messages.get("error.msg.02"));
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
 			return redirect("/");
 		}

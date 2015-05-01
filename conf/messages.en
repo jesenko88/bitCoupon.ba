@@ -1,56 +1,3 @@
-#error messagess
-error.msg.00 = Error occurred!
-error.msg.01 = Oops. Error occurred, please try again later
-error.captcha =  An error occurred! You need to fill in the captcha!
-error.form = Form error occurred!
-
-delete.success = Delete successful
-profile.updated = Profile updated successfully!
-updated = updated
-
-login.Error01 = Login failed
-login.IncorrectPasword = Password incorrect
-login.InvalidEmailOrPassword = Invalid email or password
-login.Success = You are logged in as: 
-login.SuccessLogger = logged in
-
-logoutSuccess = You are logged out!
-loginToComplete = Login to complete this action
-
-mail.MissingSecretKey = Secret key missing!
-mail.InvalidSecretKey = Invalid secret key!
-mail.MissingResponseParameter = You're response parameter is missing
-mail.MalformedParameter = The response parameter is invalid or malformed
-
-registration.mail.flash.verification = A verification mail has been sent to your email address!
-registration.mail.verificationLinkText = "Click on the link below to verify your e-mail adress 
-registration.emailAlreadyExists = Email already exists!
-
-post.CreateError = Error while creating post
-post.EditError = Error while editing post
-
-category.Added = Category %s 
-category.Updated = Category %s updated
-category.alreadyExists = Category already exists
-category.shortName = Name must be at least 4 characters long!
-category.longName = Name must be max 120 characters long
-
-comment.tooLong = Comment should not be longer than 1200 characters
-
-company.longName = Name must be at least 4 characters
-company = Company
-company.notExist = Company doesn't exists
-company.updatePhoto = Photo updated successfully
-
-password.shortPassword = "Password must be at least 6 characters!"
-password.dontMatch = ""Passwords don't match, try again"
-
-search.noResult = No result for this search
-
-filter.noResult = No new result
-filter.price.invalid = Please enter correct values
-filter.date.invalid = Please enter a valid expiration date 
-
 coupon = Coupon
 coupon.hasBeenApproved = has been approved
 coupon.cannotDelete = This coupon cannot be deleted. Please contact admin for more info.
@@ -64,8 +11,109 @@ coupon.create.withoutImage = Coupon created without image
 coupon.photos.full = You already fulfilled this coupons photos. Delete some to add more
 coupon.photos.freeSpace = You have space for %s more photos
 coupon.photos.upload.success = You have successfully uploaded you're images.
+coupon.question.length = Question should not be longer than 600 characters
+coupon.question.answer.length = Answer should not be longer than 450 characters
+coupon.newsletter.maxselected = Number of selected coupons must be exactly 3
+category.Added = Category %s 
+category.Updated = Category %s updated
+category.alreadyExists = Category already exists
+category.shortName = Name must be at least 4 characters long!
+category.longName = Name must be max 120 characters long
+company.longName = Name must be at least 4 characters
+company = Company
+company.notExist = Company doesn't exists
+company.updatePhoto = Photo updated successfully
+comment.tooLong = Comment should not be longer than 1200 characters
+clean = Clean
+contact = Contact
 
+delete.success = Delete successful
+
+error.msg.00 = Error occurred!
+error.msg.01 = Oops. Error occurred, please try again later
+error.msg.02 = Error occurred ! Please contact the administrator.
+error.captcha =  An error occurred! You need to fill in the captcha!
+error.form = Form error occurred!
+email = Email
+
+faq.shortLength = Each field should contain at least 20 characters
+faq.QuestineAdded = New question added
+
+filter.noResult = No new result
+filter.price.invalid = Please enter correct values
+filter.date.invalid = Please enter a valid expiration date 
+
+login.Error01 = Login failed
+login.IncorrectPasword = Password incorrect
+login.InvalidEmailOrPassword = Invalid email or password
+login.Success = You are logged in as: 
+login.SuccessLogger = logged in
+logoutSuccess = You are logged out!
+loginToComplete = Login to complete this action
+
+mail.MissingSecretKey = Secret key missing!
+mail.InvalidSecretKey = Invalid secret key!
+mail.MissingResponseParameter = You're response parameter is missing
+mail.MalformedParameter = The response parameter is invalid or malformed
+
+nameAndSurname = Name and Surname
+
+phoneNumber = Phone number
+post.CreateError = Error while creating post
+post.EditError = Error while editing post
+profile.updated = Profile updated successfully!
+profile.email.updated = Your profile is updated. To go to the profile page click on the button below"
+password.shortPassword = Password must be at least 6 characters!
+password.dontMatch = Passwords don't match, try again"
+password.change.emptyField = If you want to change your password, please fill out both fields
+password.old.incorrect = You're old password is incorrect
+password.changed = Password changed successfully
+password.reset.expired = Password reset expired or invalid request
+password.reset.invalidEmail = User with provided email does not exist
+password.reset.requestSuccess = Request for password has been sent on this email: 
 price.invalid = Please enter a valid price
+priceTotal = Total price 
+
+quantity = Quantity 
+
+registration.mail.flash.verification = A verification mail has been sent to your email address!
+registration.mail.verificationLinkText = Click on the link below to verify your e-mail address 
+registration.emailAlreadyExists = Email already exists!
+registration.mail.verified = Your e-mail is now verified. To login click on the button below
+registration.mail.expired = Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'
+
+search.noResult = No result for this search
+scripts.restriction = No scripts allowed
+send = Send
+submit = Submit
+subscribe.allreadySubscribed = This email is already subscribed
+subscribe.newsletter.sent = Newsletter has been sent
+subscribe.confirmation = You are now subscribed with following email: 
+subscribe.unsubscribe = You have been unsubscribed
+subscribe.removeSubscriber = Subscriber has been removed
+
+transaction.approve = Approve transaction
+transaction.canceled = Transaction canceled
+transaction.complete = Transaction complete
+transaction.refund.success = All buyers of this coupon are successfully refunded
+
+updated = updated
+updateSuccess = Update successful
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
