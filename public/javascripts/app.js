@@ -12,6 +12,6 @@ validationApp.controller('movieController', function($scope) {
         	return true;           
         }
 
-    };
-
+    };    
+    
 });
