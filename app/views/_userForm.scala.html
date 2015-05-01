@@ -32,7 +32,8 @@
 		          
 		          <!-- Password -->
                   <div class='@("form-group has-error".when(myForm("password").hasErrors)) form-group'
-                   	   ng-class="{ 'has-error' : userForm.password.$invalid && !userForm.password.$pristine }"	 >
+                   	   ng-class="{ 'has-error' : userForm.password.$invalid && !userForm.password.$pristine,
+                   	   				'has-success': userForm.password.$valid }"	 >
 			     	 <label class="control-label" for="password">Password<span style="color:#AB1403"> *</span></label>
 					 <input class="form-control" value='@myForm("password").value' id="password" type="password"
 					        ng-model="user.password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" 
@@ -46,7 +47,8 @@
 				  
 		         <!-- Confirm password -->
 		          <div class='@("form-group has-error".when(myForm("password").hasErrors)) form-group'
-		          	   ng-class="{ 'has-error' : userForm.confirmPassword.$invalid && !userForm.confirmPassword.$pristine}" >
+		          	   ng-class="{ 'has-error' : userForm.confirmPassword.$invalid && !userForm.confirmPassword.$pristine,
+		          	   				'has-success': userForm.confirmPassword.$valid}" >
 			     	 <label class="control-label" for="confirmPassword">Confirm password<span style="color:#AB1403"> *</span></label>
  					 <input class="form-control" value='@myForm("confirmPassword").value' type="password" 
  					 		required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword" id="confirmPassword"
@@ -140,5 +142,6 @@
  		        </div>                                     
                  
                   <button type="submit" id="submit-user" ng-disabled="!submitForm(userForm.$valid)" class="btn btn-default" >Submit</button>
+              	 
               	</div>
                </form>

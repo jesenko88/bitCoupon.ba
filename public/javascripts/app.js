@@ -15,3 +15,4 @@ validationApp.controller('movieController', function($scope) {
     };    
     
 });
+
