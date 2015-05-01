@@ -79,9 +79,9 @@
                 	 			  'has-success': userForm.surname.$valid  }" >
 			     	 <label class="control-label" for="surname">Surname<span style="color:#AB1403"> *</span></label>
                      <input class="form-control" value='@myForm("surname").value' type="text" id="surname" 
-                    		ng-model="user.surname" ng-minlength="4" ng-maxlength=45"
+                    		ng-model="user.surname" ng-minlength="4" ng-maxlength="45" 
                      		pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w ]+|[\_]+/ig, )"
-                     		name="surname"  onClick="this.select()"  placeholder="Surname" required />	
+                     		name="surname"  placeholder="Surname" required />	
                    <p ng-show="userForm.surname.$error.minlength" class="help-block">Min length is 4.</p>
 		           <p ng-show="userForm.surname.$error.maxlength" class="help-block">Max length is 45.</p>
 		           <p ng-show="userForm.surname.$error.pattern" class="help-block">
@@ -138,7 +138,7 @@
  		        </div>                                     
                   
                   <button type="submit" id="submit-user" ng-disabled="userForm.$invalid" class="btn btn-block btn-success" >Submit</button>
-              	  <p ng-show="userForm.$invalid" class="help-block">Please make sure you filled all fields correctly.</p>
+              	  <p ng-show="userForm.$invalid" class="help-block" style="text-align:center">Please make sure you filled all fields correctly.</p>
               	  
               	</div>
                </form>
