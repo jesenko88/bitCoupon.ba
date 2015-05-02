@@ -12,9 +12,7 @@ validationApp.controller('movieController', function($scope) {
         if (isValid) { 
         	return true;           
         }
-
-    };    
-    
+    };      
 });
 
 
