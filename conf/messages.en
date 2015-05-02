@@ -1,3 +1,5 @@
+admin.last.info = You are the last administrator!
+
 coupon = Coupon
 coupon.hasBeenApproved = has been approved
 coupon.cannotDelete = This coupon cannot be deleted. Please contact admin for more info.
@@ -68,11 +70,13 @@ password.dontMatch = Passwords don't match, try again"
 password.change.emptyField = If you want to change your password, please fill out both fields
 password.old.incorrect = You're old password is incorrect
 password.changed = Password changed successfully
+password.changed.login = Password has been changed, please log in
 password.reset.expired = Password reset expired or invalid request
 password.reset.invalidEmail = User with provided email does not exist
 password.reset.requestSuccess = Request for password has been sent on this email: 
 price.invalid = Please enter a valid price
 priceTotal = Total price 
+pin.code.invalid = Invalid or expired pin code
 
 quantity = Quantity 
 
@@ -98,7 +102,15 @@ transaction.complete = Transaction complete
 transaction.refund.success = All buyers of this coupon are successfully refunded
 
 updated = updated
+updatedSuccessfully = updated successfully
 updateSuccess = Update successful
+
+user.photo.uploaded = You uploaded you're photo!
+user.photo.updated = You updated you're photo!
+user.with.email = A user with email: 
+user.notExists = doesn't exists
+
+
 
 
 
