@@ -150,9 +150,9 @@
                    	  @("form-group has-error".when(myForm("maxOrder").hasErrors)) }"  >
      	 <label class="control-label" for="maxOrder">Maximum orders<span style="color:#AB1403"> *</span></label>
      	 <input class="form-control" value='@myForm("maxOrder").value' type="number" name="maxOrder" 
-     	 		id="maxOrder" min="1" placeholder="Maximal order" ng-model="coupon.maxOrder" 
+     	 		id="maxOrder" ng-min="coupon.minOrder" placeholder="Maximal order" ng-model="coupon.maxOrder" 
      	 		ng-init="coupon.maxOrder='@myForm("maxOrder").value'" required/>
-     	 <p ng-show="couponForm.maxOrder.$error.min" class="help-block">Min order is 1.</p>		
+     	 <p ng-show="couponForm.maxOrder.$error.min" class="help-block">Min order is {{coupon.minOrder}}.</p>		
 		 <p ng-show="couponForm.maxOrder.$error.number" class="help-block">
 		           Only numbers allowed.</p>			
      </div>     
