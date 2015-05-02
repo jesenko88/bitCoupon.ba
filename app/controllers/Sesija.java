@@ -1,6 +1,9 @@
 package controllers;
+import java.util.List;
+
 import models.Company;
 import models.SuperUser;
+import models.TransactionCP;
 import models.User;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -118,4 +121,24 @@ public class Sesija extends Security.Authenticator {
 		return true;
 	}
 	
+	/**
+	 * Checks if the current user is a buyer from a company.
+	 * Method receives a company id as a parameter and finds all
+	 * transactions of that company.
+	 * Checks for every transaction in the list if there exists a
+	 * email of the user as buyer_email
+	 * @param companyId
+	 * @return
+	 */
+	public static boolean buyerCheck(Context ctx, long companyId) {
+	    List<TransactionCP> transactions = TransactionCP.allFromCompany(companyId);
+	    User currentUser = Sesija.getCurrentUser(ctx);
+	    if(transactions == null || currentUser == null)
+	    	return false;
+	    for(TransactionCP t : transactions){
+	    	if(t.buyer_email == currentUser.email)
+	    		return true;
+	    }
+		return false;
+	}
 }

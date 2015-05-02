@@ -252,7 +252,7 @@ public class PayPalController extends Controller {
 					totalPrice, token, currentUser, coupon);
 			}else{
 				TransactionCP.createTransactionForUnregisteredUser(paymentID, saleId, coupon.price, quantity,
-						totalPrice, token, currentUser.username, currentUser.surname, coupon);
+						totalPrice, token, currentUser.username, currentUser.surname, currentUser.email, coupon);
 			}		
 			coupon.statistic.bought(quantity);
 			/* decrementing available coupons */

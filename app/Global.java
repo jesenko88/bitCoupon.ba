@@ -278,7 +278,7 @@ public class Global extends GlobalSettings {
 		}
 
 		if (User.check("jesenko.gavric@bitcamp.ba") == false) {
-			User user = new User("John", "", new Date(), "", "", "",
+			User user = new User("Jesenko", "Gavric", new Date(), "", "", "",
 					"jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false, picture);
 			user.save();
@@ -300,7 +300,7 @@ public class Global extends GlobalSettings {
 		}
 
 		if (User.check("vedad.zornic@bitcamp.ba") == false) {
-			User.createUser("Vedad", "", new Date(), "", "", "",
+			User.createUser("Vedad", "Zornic", new Date(), "", "", "",
 					"vedad.zornic@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false, picture);
 			EmailVerification setVerified = new EmailVerification(3, true);

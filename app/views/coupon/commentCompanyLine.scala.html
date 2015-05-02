@@ -1,0 +1,17 @@
+@(comment: models.comments.CommentCompany)
+
+<li class="commentRow">
+      <div class="commenterImage">
+           <img src="@routes.Assets.at(comment.user.profilePicture)" />
+      </div>
+      <div class="commentText">
+         <p class="">@comment.comment</p>
+         <span class="date sub-text">
+           		Comment by: @comment.user.username on @comment.date
+         </span>					
+         <span style="margin-left:20px" title="Report this comment">
+           		<a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
+         </span>
+      </div>
+
+</li>         

@@ -107,6 +107,12 @@ GET    /report/:id                    controllers.CommentController.report(id: S
 GET    /removeReport/:id              controllers.CommentController.removeReport(id: Long)
 GET    /removeComment/:id             controllers.CommentController.removeComment(id: Long)
 
+POST   /commentCompany/:id            controllers.CommentController.commentCompany(id: Long)	
+GET    /reportComentCompany/:id       controllers.CommentController.reportCommentCompany(id: String)
+GET    /removeCommentCompany/:id      controllers.CommentController.removeCommentCompany(id: Long)
+GET    /removeCommentReport/:id       controllers.CommentController.removeReportCommentCompany(id: Long)
+
+
 # Rate controller
 POST   /rate/:id                      controllers.RateController.rating(id: Long)
 
