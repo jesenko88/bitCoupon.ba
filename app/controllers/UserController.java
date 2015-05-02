@@ -328,25 +328,11 @@ public class UserController extends Controller {
 	public static Result updatePhoto(long userId) {
 		try {
 			User user = User.find(userId);
-			String subFolder = "user_profile" + File.separator + "user_"
-					+ userId;
-			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
-					+ subFolder).isDirectory();
-			if (checkIfDirectoryExists) {
-				String assetsPath = FileUpload.imageUpload(subFolder);
-				user.profilePicture = assetsPath;
-				user.save();
-				flash("success", "user.photo.uploaded");
-				return redirect("/profile/@" + user.username);
-			} else {
-				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
-				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug("mkdir");
-				user.profilePicture = assetsPath;
-				user.save();
-				flash("success", "user.photo.updated");
-				return redirect("/profile/@" + user.username);
-			}
+			String assetsPath = FileUpload.imageUpload();
+			user.profilePicture = assetsPath;
+			user.save();
+			flash("success", "user.photo.uploaded");
+			return redirect("/profile/@" + user.username);
 		} catch (Exception e) {
 			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at updatePhoto: " + e.getMessage(), e);
