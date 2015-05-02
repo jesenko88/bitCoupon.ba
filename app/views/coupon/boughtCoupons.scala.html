@@ -57,17 +57,17 @@
 									<div class="productinfo text-center">
 									<img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
 									<div id="content" class="divContent">
-										<ul class="col-md-12" style="text-align: left" >
+										<ul class="col-md-12" style="text-align: left;list-style: none;" >
 											<br>
-											<li><strong>Coupon name: </strong> @transaction.coupon.name</li>
-											<li><strong>Buyer: </strong> @username</li>
-											<li><strong>Seller:</strong> @transaction.coupon.seller.name</li>											
-											<li><strong>Coupon price:</strong> @transaction.coupon.getPriceString()</li>
-											<li><strong>Quantity:</strong> @transaction.quantity</li>
-											<li><strong>Total price:</strong> @transaction.totalPrice</li>
-											<li><strong>Transaction date:</strong> @transaction.getDateString</li>
-											<li><strong>Payment id:</strong> @transaction.payment_id</li>
-											<li><strong>Token:</strong> @transaction.token</li>
+											<p><strong>Coupon name: </strong> @transaction.coupon.name</p>
+											<p><strong>Buyer: </strong> @username</p>
+											<p><strong>Seller:</strong> @transaction.coupon.seller.name</p>											
+											<p><strong>Coupon price:</strong> @transaction.coupon.getPriceString()</p>
+											<p><strong>Quantity:</strong> @transaction.quantity</p>
+											<p><strong>Total price:</strong> @transaction.totalPrice</p>
+											<p><strong>Transaction date:</strong> @transaction.getDateString</p>
+											<p><strong>Payment id:</strong> @transaction.payment_id</p>
+											<p><strong>Token:</strong> @transaction.token</p>
 										</ul>
 										</div>
             								<button id="cmd"  class="btnCmd" style="float:left">Download as PDF</button>
@@ -91,7 +91,7 @@
 								        return true;
 								    }
 								};
-						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 0, 0, {
 						        'width': 170,
 						            'elementHandlers': specialElementHandlers
 						    });
