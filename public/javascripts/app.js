@@ -1,9 +1,9 @@
 // create angular app
-var validationApp = angular.module('movieApp', []);
+var validationApp = angular.module('formApp', []);
 
 // create angular controller
 //This controller isnt used anymore.
-validationApp.controller('movieController', function($scope) {
+validationApp.controller('formController', function($scope) {
 
     // function to submit the form after all validation has occurred            
     $scope.submitForm = function(isValid) {
