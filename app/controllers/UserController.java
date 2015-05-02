@@ -153,8 +153,6 @@ public class UserController extends Controller {
 				dob = new SimpleDateFormat("yy-mm-dd").parse(dobString);
 				cUser.dob = dob;
 			}			
-		
-			Logger.debug(dob.toString());
 			cUser.username = username;
 			cUser.surname = surname;
 			cUser.adress = adress;
