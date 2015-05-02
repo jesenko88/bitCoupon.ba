@@ -69,9 +69,15 @@
 		          </div>
 		          
 		          <!-- Contact -->
- 		          <div class='@("form-group has-error".when(companyForm("contact").hasErrors)) form-group' >
+ 		          <div class='@("form-group has-error".when(companyForm("contact").hasErrors)) form-group'
+ 		          		ng-class="{ 'has-error' : companyForm.contact.$invalid && !companyForm.contact.$pristine,
+                   					'has-success': companyForm.contact.$valid }"  >
 			     	 <label class="control-label" for="contact">Contact<span style="color:#AB1403"> *</span></label>
-               	     <input class="form-control" value='@companyForm("contact").value' type="text" id="contact-c" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>
+               	     <input class="form-control" value='@companyForm("contact").value' type="text"
+               	     		 id="contact-c" name="contact"  onClick="this.select()" 
+               	     		 ng-model="company.contact" pattern="(^\d{9}$)" placeholder="Company contact" required/>
+               	     <p ng-show="companyForm.contact.$error.pattern" class="help-block"> Contact must be in format 123456789</p> 
+               	     		 
 		          </div>
 		          
 		         
