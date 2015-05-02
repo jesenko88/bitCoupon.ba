@@ -27,6 +27,7 @@ import play.Logger;
 import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -46,8 +47,8 @@ import api.JSonHelper;
 public class UserController extends Controller {
 
 	static String PATH = Play.application().configuration().getString("PATH"); 
-	static String message = "Welcome ";
-	static String bitName = "bitCoupon";
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
 	static String name = null;
 	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	static Form<User> userForm = new Form<User>(User.class);
@@ -62,7 +63,6 @@ public class UserController extends Controller {
 	public static Result register() {
 
 		Form<User> submit = Form.form(User.class).bindFromRequest();
-		System.out.println("Submit has errors: " +submit.hasErrors());
 		if (submit.hasErrors() || submit.hasGlobalErrors()) {
 			return ok(signup.render(submit, new Form<Company>(Company.class)));
 		}
@@ -82,7 +82,7 @@ public class UserController extends Controller {
 					.field("confirmPassword").value();
 
 			if (!password.equals(confPass)) {
-				flash("error", "Passwords don't match, try again ");
+				flash("error", Messages.get("password.dontMatch"));
 				return badRequest(signup.render(submit, new Form<Company>(
 						Company.class)));
 			}
@@ -97,24 +97,22 @@ public class UserController extends Controller {
 				long id = User.createUser(username, surname, dob, gender,
 						adress, city, mail, hashPass, false, defaultPicture);
 				String verificationEmail = EmailVerification.addNewRecord(id);
-				MailHelper.send(mail,
-						"Click on the link below to verify your e-mail adress <br>"
+				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success",
-						"A verification mail has been sent to your email address!");
-				Logger.info("A verification mail has been sent to email address");
+				flash("success", Messages.get("registration.mail.flash.verification "));
+				Logger.info("A verification mail has been sent to email address: " + mail);
 				return ok(Loginpage.render(" "));
 
 			} else {
-				flash("error", "Username or email allready exists!");
-				Logger.info("Username or email allready exists!");
+				flash("error", Messages.get("registration.emailAlreadyExists"));
+				Logger.info("Email allready exists!");
 				return badRequest(signup.render(submit, new Form<Company>(
 						Company.class)));
 			}
 
 		} catch (Exception e) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at registration: " + e.getMessage(), e);
 			return badRequest(signup.render(submit, new Form<Company>(
 					Company.class)));
@@ -137,7 +135,7 @@ public class UserController extends Controller {
 		DynamicForm updateForm = Form.form().bindFromRequest();
 		Form<User> userForm = Form.form(User.class).bindFromRequest();
 		if (userForm.hasGlobalErrors() ) {
-			flash("error","Error at update user");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.debug("Error at update user");	
 			return redirect("/updateUser ");
 		}
@@ -166,25 +164,22 @@ public class UserController extends Controller {
 			if (!cUser.email.equals(email)) {
 				String verificationEmail = EmailVerification
 						.addNewRecord(cUser.id);
-				MailHelper.send(email,
-						"Click on the link below to verify your e-mail adress <br>"
+				MailHelper.send(email, Messages.get("registration.mail.verificationLinkText ") + "<br>"
 								+ "http://" + PATH + "/verifyEmailUpdate/"
 								+ verificationEmail);
 				cUser.email = email;
 				cUser.save();
-				flash("success",
-						"A new verification email has been sent to this e-mail: "
-								+ email);
+				flash("success", Messages.get("registration.mail.flash.verification") + " " + email);
 				return ok(userUpdate.render(userForm, null, cUser));
 			}
 			cUser.email = email;
 			cUser.save();
-			flash("success", "Profile updated!");
+			flash("success", Messages.get("profile.updated"));
 			Logger.info(cUser.username + " is updated");
 			session("name", cUser.username);
 			return ok(userUpdate.render(userForm, null, cUser));
 		} catch (Exception e) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at updateUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -236,11 +231,11 @@ public class UserController extends Controller {
 			}
 			cUser.updated = new Date();
 			cUser.save();
-			flash("success", "User " + cUser.username + " updated!");
+			flash("success", cUser.username + Messages.get("updatedSuccessfully"));
 			Logger.info(session("name") + " updated user: " + cUser.username);
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		} catch (Exception e) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at adminUpdateUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -257,7 +252,7 @@ public class UserController extends Controller {
 	public static Result controlPanel(long id) {
 		User user = User.find(id);
 		if (user == null) {
-			flash("error", "Ooops, error occured. Please try again.");
+			flash("error", ERROR_MSG_ADMIN);
 			return redirect("/");
 		}
 		if (!user.username.equals(session("name"))) {
@@ -277,7 +272,7 @@ public class UserController extends Controller {
 	public static Result listUsers() {
 		List<SuperUser> all = SuperUser.allSuperUsers();
 		if (all == null) {
-			flash("error", "Ooops, error occured. Please try again.");
+			flash("error", ERROR_MSG_ADMIN);
 			return redirect("/");
 		}
 		/* content negotiation */
@@ -303,7 +298,7 @@ public class UserController extends Controller {
 			User currentUser = Sesija.getCurrentUser(ctx());
 
 			if (adminList.size() == 1 && id == currentUser.id) {
-				flash("error", "You are the last admin!");
+				flash("error", Messages.get("admin.last.info"));
 				return ok(userList.render(SuperUser.allSuperUsers()));
 			}
 			if (currentUser.id == id || Sesija.adminCheck(ctx())) {
@@ -318,7 +313,7 @@ public class UserController extends Controller {
 			}
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		} catch (Exception e) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at deleteUser: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -343,6 +338,7 @@ public class UserController extends Controller {
 				String assetsPath = FileUpload.imageUpload(subFolder);
 				user.profilePicture = assetsPath;
 				user.save();
+				flash("success", "user.photo.uploaded");
 				return redirect("/profile/@" + user.username);
 			} else {
 				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdir();
@@ -350,10 +346,11 @@ public class UserController extends Controller {
 				Logger.debug("mkdir");
 				user.profilePicture = assetsPath;
 				user.save();
+				flash("success", "user.photo.updated");
 				return redirect("/profile/@" + user.username);
 			}
 		} catch (Exception e) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at updatePhoto: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -376,13 +373,10 @@ public class UserController extends Controller {
 			DynamicForm newPasswordForm = Form.form().bindFromRequest();
 
 			String newPassword = newPasswordForm.data().get("newPassword");
-			String confirmPassword = newPasswordForm.data().get(
-					"confirmPassword");
-
-			// TODO CHECK IF PASSWORDS ARE EQUAL AND OTHER THINGS ABOUT PW
+			String confirmPassword = newPasswordForm.data().get("confirmPassword");
+			
 			if (!newPassword.equals(confirmPassword)) {
-				flash("error",
-						"Failed to change pw, confirm passwords dont match");
+				flash("error", Messages.get("password.dontMatch") );
 				return redirect("/newPassword/" + ressetPassword.id);
 			}
 
@@ -395,10 +389,10 @@ public class UserController extends Controller {
 				company.save();
 				ressetPassword.delete();
 			}
-			flash("success", "Password has been changed, please log in.");
+			flash("success", Messages.get("password.changed.login"));
 			return redirect("/");
 		} catch (Exception e) {
-			flash("error", "Ooops, error has occured. Please try again later.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at createNewPassword: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -451,7 +445,7 @@ public class UserController extends Controller {
 		User user = Pin.getPinUser(pinCode);
 		Pin pin = Pin.getPin(pinCode);
 		if (user == null || !Pin.isValid(pin.date)) {
-			flash("error", "Invalid pin code");
+			flash("error", Messages.get("pin.code.invalid"));
 			return badRequest(coupontemplate.render(coupon));
 		}
 		return ok(buyForUser.render(coupon, user));
@@ -471,9 +465,9 @@ public class UserController extends Controller {
 		long id = Long.parseLong(dynamicForm.data().get("coupon_id"));
 		int quantity = Integer.parseInt(dynamicForm.data().get("quantity"));
 		Coupon coupon = Coupon.find(id);
-		User client = User.find(Long.parseLong(dynamicForm.data()
-				.get("user_id")));
+		User client = User.find(Long.parseLong(dynamicForm.data().get("user_id")));
 		if (client == null) {
+			flash("error", ERROR_MSG_CLIENT);
 			return badRequest(coupontemplate.render(coupon));
 		}
 		double totalPrice = coupon.price * quantity;
@@ -484,7 +478,7 @@ public class UserController extends Controller {
 		c.maxOrder = c.maxOrder - quantity;
 		c.seller.save();
 		c.save();
-		flash("success", "Transaction complete");
+		flash("success", Messages.get("transaction.complete"));
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
 	
@@ -513,7 +507,7 @@ public class UserController extends Controller {
 		Coupon coupon = Coupon.find(couponID);
 		if (coupon != null)
 			return ok(makeAGift.render(coupon));
-		flash("error", "Internal server error, please try again later");
+		flash("error", ERROR_MSG_CLIENT);
 		return redirect("/");
 	}
 	
@@ -532,7 +526,7 @@ public class UserController extends Controller {
 		String email = dynamicForm.data().get("email");
 		User user = User.findByEmail(email);
 		if (user == null) {
-			flash("info", "A user with email: " + email + " doesn't exist");
+			flash("info", Messages.get("user.with.email") + " " + email + " " + Messages.get("user.noExists"));
 			return badRequest(makeAGift.render(coupon));
 		}
 		return ok(buyForUser.render(coupon, user));
