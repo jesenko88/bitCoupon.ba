@@ -15,6 +15,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
+import play.i18n.Messages;
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.ws.WS;
@@ -32,8 +33,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Application extends Controller {
 
-	static String loginMsg = "Login to your account";
 	static String name = null;
+	static String loginSuccess = Messages.get("login.Success");
 	
 	public static class Contact {
 
@@ -58,7 +59,7 @@ public class Application extends Controller {
 
 		//Handling exceptions
 		if(approvedCoupons == null || categories == null){
-			flash("warning", "Ooops error occured.");
+			flash("warning", Messages.get("error.msg.01"));
 			return redirect("/");
 		}		
 		if (name == null) {
@@ -83,7 +84,7 @@ public class Application extends Controller {
 			Form<Login> loginForm = new Form<Login>(Login.class);
 			if (loginForm.hasGlobalErrors()) {
 				Logger.info("Login global error");
-				flash("error", "Login failed");
+				flash("error", Messages.get("login.Error01"));
 
 				return badRequest(Loginpage.render(" "));
 			}
@@ -93,7 +94,7 @@ public class Application extends Controller {
 				List<Coupon> approvedCoupons = Coupon.approvedCoupons();
 				if (mail.isEmpty() || password.length() < 6) {
 					Logger.info("Invalid login form, mail empty or short password");
-					flash("error", "Password incorrect");
+					flash("error", Messages.get("login.IncorrectPasword"));
 					return badRequest(Loginpage.render(" "));
 				}
 				if (User.verifyLogin(mail, password) == true) {
@@ -101,9 +102,8 @@ public class Application extends Controller {
 					session().clear();
 					session("name", user.username);
 					session("email", user.email);
-					flash("success", "You are logged in as: " + mail);
 					Logger.info(user.username + " logged in");
-					flash("success", "You are logged in as: " + mail);
+					flash("success", loginSuccess + " " + mail);
 					return ok(index.render(approvedCoupons,
 							Category.all()));
 
@@ -113,17 +113,17 @@ public class Application extends Controller {
 					session().clear();
 					session("name", company.name);
 					session("email", company.email);
-					flash("success", "You are logged in as: " + mail);
+					flash("success", loginSuccess + " " + mail);
 					Logger.info(company.name + " logged in");
 					return ok(indexC.render(company, approvedCoupons));
 				}
 
-				flash("error", "Invalid email or password");
+				flash("error", Messages.get("login.InvalidEmailOrPassword"));
 				Logger.info("User tried to login with invalid email or password");
 				return badRequest(Loginpage.render(" "));
 
 			} catch (Exception e) {
-				flash("error", "Ooops. Error occured, please try again later.");
+				flash("error", Messages.get("error.msg.01"));
 				Logger.error("Error has occured at login: " + e.getMessage(), e);
 				return redirect("/");
 			}
@@ -133,7 +133,6 @@ public class Application extends Controller {
 	 * @return renders the loginpage view
 	 */
 	public static Result loginpage() {
-		Logger.info("Log in successful");	
 		return ok(Loginpage.render(" "));
 	}
 
@@ -146,12 +145,12 @@ public class Application extends Controller {
 		String name = session("name");
 		//Handling exceptions
 		if(name == null){
-			flash("Ooops. Error has occured.");
+			flash("error.msg.01");
 			return redirect("/");
 		}
 		Logger.info(name + " has logged out");
 		session().clear();
-		flash("success","You are logged out!");
+		flash("success",Messages.get("logoutSuccess"));
 		return redirect("/");
 	}
 
@@ -164,7 +163,7 @@ public class Application extends Controller {
 	public static Result loginToComplete() {
 		Logger.info("Login to complete page previewed");
 		return badRequest(loginToComplete
-				.render("Login to complete this action"));
+				.render(Messages.get("loginToComplete")));
 	}
 
 	/**
@@ -219,35 +218,33 @@ public class Application extends Controller {
 
 						if (json.findValue("error-codes").toString()
 								.equals("missing-input-secret")) {
-							flash("error", "You are missing secret key!");
+							flash("error", Messages.get("mail.MissingSecretKey"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
 						if (json.findValue("error-codes").toString()
 								.equals("invalid-input-secret")) {
-							flash("error", "INVALID SECRET KEY!");
+							flash("error", Messages.get("mail.InvalidSecretKey"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
 						if (json.findValue("error-codes").toString()
 								.equals("missing-input-response")) {
-							flash("error", "The response parameter is missing.");
+							flash("error", Messages.get("mail.MissingResponseParameter"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
 						if (json.findValue("error-codes").toString()
 								.equals("invalid-input-response")) {
-							flash("error",
-									"The response parameter is invalid or malformed.");
+							flash("error", Messages.get("mail.MalformedParameter"));
 							User currentUser = User.find(name);
 							return ok(contact.render(currentUser, submit));
 						}
 
-						flash("error",
-								"WARNING! An error occured! You need to fill in the captcha!");
+						flash("error", Messages.get("error.captcha"));
 						User currentUser = User.find(name);
 						return ok(contact.render(currentUser, submit));
 					}

@@ -25,22 +25,22 @@
 <div class="container">
    <div class="features_items">
       <!--features_items-->
-      <h2 class="title text-center">Contact</h2>
+      <h2 class="title text-center">@Messages("contact")</h2>
       <div class="col-sm-6 col-sm-offset-1">
          <!-- Contact form -->
          <div class="signup-form">
             <form action="@routes.Application.sendMail"  method ="POST" >
-               <label for="name">Name and surname:</label>
+               <label for="name">@Messages("nameAndSurname")</label>
                <input type="text" name="name" id="name" placeholder="John Doe" maxlength="30" 
                   class='@("error-input".when(contactForm("name").hasErrors)) form-control' 
                   value='@contactForm("name").value' required/> 
-               <label for="email">Email:</label>
+               <label for="email">@Messages("email")</label>
                <input type="email" name="email" id="email" placeholder="youremail@@mail.com"
                   class='@("error-input".when(contactForm("email").hasErrors)) form-control' 
                   value='@contactForm("email").value'  required/>
                <!-- <input type="text" name="phone" id="phone" placeholder="Your phone number" -->
                <!-- <input type='tel' pattern='[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}' title='Phone Number (Format: +99(99)9999-9999)' -->
-               <label for="phonenum">Phone Number:</label>
+               <label for="phonenum">@Messages("phoneNumber")</label>
                <input name="phone" type="text" pattern="\d{3}[- ]?\d{3}[- ]?\d{3,4}" placeholder="Format: xxx xxx xxx" title='Phone Number Format: xxx xxx xxx(no dashes!)'
                   class='@("error-input".when(contactForm("phone").hasErrors)) form-control' 
                   value='@contactForm("phone").value' required/> 
@@ -57,10 +57,10 @@
                <br></br>
                <div class="btn-toolbar" role="toolbar">
                   <div class="btn-group">
-                     <button type="submit" value="Send message" class="btn btn-default">Send</button>
+                     <button type="submit" value="Send message" class="btn btn-default">@Messages("send")</button>
                   </div>
                   <div class="btn-group">
-                     <button type="reset" value="Clean" class="btn btn-default">Clean</button>
+                     <button type="reset" value="Clean" class="btn btn-default">@Messages("clean")</button>
                   </div>
                </div>
             </form>
