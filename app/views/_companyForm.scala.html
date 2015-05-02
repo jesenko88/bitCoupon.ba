@@ -109,5 +109,7 @@
 		            <p ng-show="companyForm.city.$error.pattern" class="help-block">
 		             Only letters and numbers allowed.</p> 		
  		        </div>   
-                  <button type="submit" id="submit-company" class="btn btn-default" >Submit</button>
+                  <button type="submit" id="submit-company" ng-disabled="companyForm.$invalid" class="btn btn-block btn-success" >Submit</button>
+              	  <p ng-show="companyForm.$invalid" class="help-block" style="text-align:center">Please make sure you filled all fields correctly.</p>
+              	  
                </form>
