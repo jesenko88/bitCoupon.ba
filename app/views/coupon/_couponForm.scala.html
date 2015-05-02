@@ -152,7 +152,7 @@
      	 <input class="form-control" value='@myForm("maxOrder").value' type="number" name="maxOrder" 
      	 		id="maxOrder" ng-min="coupon.minOrder" placeholder="Maximal order" ng-model="coupon.maxOrder" 
      	 		ng-init="coupon.maxOrder='@myForm("maxOrder").value'" required/>
-     	 <p ng-show="couponForm.maxOrder.$error.min" class="help-block">Min order is {{coupon.minOrder}}.</p>		
+     	 <p ng-show="couponForm.maxOrder.$error.min" class="help-block">This field must be equal or greater then {{coupon.minOrder}}.</p>		
 		 <p ng-show="couponForm.maxOrder.$error.number" class="help-block">
 		           Only numbers allowed.</p>			
      </div>     
@@ -166,9 +166,10 @@
                    	   >
      	 <label class="control-label" for="usage">Usage date<span style="color:#AB1403"> *</span></label>
      	 <input class="form-control datepicker-bit"  value='@myForm("usage").value' type="date" id="datepicker"
-     	 		ng-model="coupon.usage" name="usage" ng-init="coupon.usage='@myForm("usage").value'" required>
-     	 <p ng-show="couponForm.usage.$error.date" class="help-block">
-		       Invalid date.</p>  			
+     	 		ng-model="coupon.usage" name="usage" ng-init="coupon.usage='@myForm("usage").value'" 
+     	 		ng-min="coupon.dateExpire" required>
+     	 <p ng-show="couponForm.usage.$error.date" class="help-block"> Invalid date.</p>  
+     	 <p ng-show="couponForm.usage.$error.min" class="help-block"> Usage date must be equal or greater then expire date.</p>  			
      </div>       
       <span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
       <button  type="submit" class="btn btn-block btn-success" ng-disabled="couponForm.$invalid" required>Create Coupon</button>
