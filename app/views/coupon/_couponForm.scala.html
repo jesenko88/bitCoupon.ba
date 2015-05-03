@@ -165,7 +165,7 @@
                    	  @("form-group has-error".when(myForm("usage").hasErrors)) }"
                    	   >
      	 <label class="control-label" for="usage">Usage date<span style="color:#AB1403"> *</span></label>
-     	 <input class="form-control datepicker-bit"  value='@myForm("usage").value' type="date" id="datepicker"
+     	 <input class="form-control datepicker-bit datepicker"   type="date" 
      	 		ng-model="coupon.usage" name="usage" ng-init="coupon.usage='@myForm("usage").value'" 
      	 		ng-min="coupon.dateExpire" required>
      	 <p ng-show="couponForm.usage.$error.date" class="help-block"> Invalid date.</p>  
