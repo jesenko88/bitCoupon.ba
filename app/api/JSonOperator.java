@@ -10,6 +10,7 @@ import java.util.List;
 import models.Company;
 import models.Coupon;
 import models.EmailVerification;
+import models.LoginData;
 import models.TransactionCP;
 import models.User;
 import play.Logger;
@@ -31,8 +32,10 @@ public class JSonOperator extends Controller {
 	 * the tags named: "email" and "password"
 	 * If the login is successful, user/company details are returned in JSon format.
 	 * Details returned tag names:
-	 * -for user: id, name, surname, email, address, city, picture 
+	 * -for user: id, name, surname, email, address, city, picture, updates
 	 * -for company: id, name, email, address, city, contact, logo
+	 * If there are new coupons from the last time the user logged in, "updates" is set to "true",
+	 * by default it's false.
 	 * @return
 	 */
 	public static Result login() {
@@ -57,17 +60,25 @@ public class JSonOperator extends Controller {
 			return badRequest(JSonHelper.messageToJSon("error", "Password length less then 6 chars"));
 			
 		} else if (User.verifyLogin(mail, password) == true) {
-			User cc = User.getUser(mail);
-			Logger.info(cc.username + " logged in");
-			session("name", cc.username);
-			session("email", cc.email);
-			System.out.println("DEBUG ********** LOGIN ");
-			return ok(JSonHelper.userToJSon(cc));
+			User user = User.getUser(mail);
+			Logger.info(user.username + " logged in");
+			session("name", user.username);
+			session("email", user.email);
+			LoginData loginData = LoginData.findByUserId(user.id);
+			boolean updates = false;
+			if(loginData != null){
+				updates = checkForUpdates(user);
+				loginData.updateRecord(new Date(), Coupon.approvedCoupons().size());
+			}else{ 
+				updates = true;
+				new LoginData(user.id, new Date(), Coupon.approvedCoupons().size());
+			}
+			return ok(JSonHelper.loginResponse(user, updates));
 			
 		} else if (Company.verifyLogin(mail, password) == true) {
-			Company cc = Company.findByEmail(mail);
-			Logger.info(cc.name + " logged in");
-			return ok(JSonHelper.companyToJSon(cc));
+			Company company = Company.findByEmail(mail);
+			Logger.info(company.name + " logged in");
+			return ok(JSonHelper.companyToJSon(company));
 		}
 		Logger.info("User tried to login with invalid email or password");
 		return badRequest(JSonHelper.messageToJSon("error", "Invalid email or password"));
@@ -146,7 +157,7 @@ public class JSonOperator extends Controller {
 		String email = json.findPath("email").textValue();
 		User user = User.findByEmail(email);
 		if (user != null)
-			return ok(JSonHelper.userToJSon(user));
+			return ok(JSonHelper.loginResponse(user, checkForUpdates(user)));
 		return badRequest(JSonHelper.messageToJSon("erorr", "An error occured"));
 	}
 	
@@ -281,6 +292,15 @@ public class JSonOperator extends Controller {
 			return badRequest(new ArrayNode(JsonNodeFactory.instance));
 		}
 		return ok(JSonHelper.boughtCoupon(transactions, couponId));
+	}
+	
+	
+	private static boolean checkForUpdates(User u) {
+		LoginData loginData = LoginData.findByUserId(u.id);
+		if(loginData.activeCoupons < Coupon.approvedCoupons().size()) {
+			return true;
+		}
+		return false;
 	}
 	
 }

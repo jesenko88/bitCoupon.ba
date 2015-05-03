@@ -78,6 +78,14 @@ create table faq (
   constraint pk_faq primary key (id))
 ;
 
+create table login_data (
+  id                        bigint not null,
+  user_id                   bigint,
+  last_login                timestamp,
+  active_coupons            integer,
+  constraint pk_login_data primary key (id))
+;
+
 create table photo (
   id                        integer not null,
   path                      varchar(255),
@@ -216,6 +224,8 @@ create sequence email_verification_seq;
 
 create sequence faq_seq;
 
+create sequence login_data_seq;
+
 create sequence photo_seq;
 
 create sequence pin_seq;
@@ -307,6 +317,8 @@ drop table if exists email_verification;
 
 drop table if exists faq;
 
+drop table if exists login_data;
+
 drop table if exists photo;
 
 drop table if exists pin;
@@ -346,6 +358,8 @@ drop sequence if exists coupon_seq;
 drop sequence if exists email_verification_seq;
 
 drop sequence if exists faq_seq;
+
+drop sequence if exists login_data_seq;
 
 drop sequence if exists photo_seq;
 
