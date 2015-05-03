@@ -188,6 +188,11 @@ public class TransactionCP extends Model{
 
 	}
 	
+	/**
+	 * Method which return all transactions of all coupons owned by certain company
+	 * @param id of company
+	 * @return list of transactions
+	 */
 	public static List<TransactionCP> allFromCompany(long id) {
 		List<Coupon> coupons = Coupon.ownedCoupons(id);
 		List<TransactionCP> ids = TransactionCP.find.all();

@@ -89,6 +89,19 @@ public class User extends SuperUser {
 		this.email = email;
 	}
 
+	/**
+	 * Constructor for User
+	 * @param username
+	 * @param surname
+	 * @param dob
+	 * @param gender
+	 * @param adress
+	 * @param city
+	 * @param email
+	 * @param password
+	 * @param isAdmin
+	 * @param profilePicture
+	 */
 	public User(String username, String surname, Date dob, String gender, String adress,
 			String city, String email, String password, boolean isAdmin, String profilePicture) {
 		super(email, password, adress, city);
@@ -116,12 +129,9 @@ public class User extends SuperUser {
 	/**
 	 * Creates a new User and saves it to the database
 	 * 
-	 * @param username
-	 *            String
-	 * @param email
-	 *            String
-	 * @param password
-	 *            String
+	 * @param username  String
+	 * @param email String
+	 * @param password String
 	 * @return the id of the new user (long)
 	 */
 	public static long createUser(String username, String surname, Date dob, String gender, String adress, String city, String email,
@@ -131,7 +141,10 @@ public class User extends SuperUser {
 		return newUser.id;
 	}
 
-	/* Return all users */
+	/**
+	 * Method which return all users from DB
+	 * @return
+	 */
 	public static List<User> all() {
 		List<User> all = getFind().all();
 		if(all == null)
@@ -148,9 +161,9 @@ public class User extends SuperUser {
 		return users;
 	}
 	
-	//TODO
-	/*
-	 *  
+	/**
+	 * Method which puts attributes of all users to JSON object
+	 * @return 
 	 */
 	public static ArrayNode allAsJson() {
 		ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
@@ -164,7 +177,10 @@ public class User extends SuperUser {
 		return arrayNode;
 	}
 	
-	
+	/**
+	 * Method which set user as admin
+	 * @param isAdmin
+	 */
 	public void setAdmin(boolean isAdmin){
 		this.isAdmin = isAdmin;
 		save();
@@ -245,8 +261,10 @@ public class User extends SuperUser {
 		return arrayNode;
 	}
 
-	/*
-	 * Return user by mail
+	/**
+	 * Method which find user by email in DB
+	 * @param mail of user
+	 * @return user
 	 */
 	public static User getUser(String mail) {
 		User user = getFind().where().eq("email", mail).findUnique();
@@ -254,6 +272,11 @@ public class User extends SuperUser {
 		return user;
 	}
 	
+	/**
+	 * Method which puts attributes of certain user to JSON
+	 * @param mail of user
+	 * @return JSON object
+	 */
 	public static ObjectNode getUserJson(String mail) {
 		User user = getFind().where().eq("email", mail).findUnique();
 		ObjectNode userJson = Json.newObject();
@@ -267,37 +290,54 @@ public class User extends SuperUser {
 		return userJson;
 	}
 	
-	/*
-	 * Delete user by id
+	/**
+	 * Method which deleting user from DB
+	 * @param id of user
 	 */
 	public static void delete(long id) {
 		getFind().byId(id).delete();
 	}
 
-	/*
-	 * Find user by ID
-	 */
+	/**
+	 * Method which finds certain user by id in DB
+	 * @param id of user
+	 * @return user
+	 */ 
 	public static User find(long id) {
 		return getFind().byId(id);
 	}
 
+	/**
+	 * Method which finds admin in DB
+	 * @param isAdmin status-is admin
+	 * @return certain user-admin
+	 */
 	public static User find(boolean isAdmin) {
 		return getFind().where().eq("isAdmin", isAdmin).findUnique();
 	}
-	/*
-	 * Find and return list of admins
+	/**
+	 * Method which finds all admins in DB
+	 * @param isAdmin status-is admin
+	 * @return list of all admins
 	 */
 	public static List<User>findAdmins(boolean isAdmin){
 		return getFind().where().eq("isAdmin",isAdmin).findList();//proba-provjeriti
 	}
 
-	/* 
-	 * Find and return user by username 
+	/**
+	 * Method which finds user by username
+	 * @param username of user
+	 * @return user
 	 */
 	public static User find(String username) {
 		return getFind().where().eq("username", username).findUnique();
 	}
 
+	/**
+	 * Method which checks by email if the user exists in DB
+	 * @param mail of user
+	 * @return true if exists, else return false
+	 */
 	public static boolean check(String mail) {
 		return getFind().where().eq("email", mail).findUnique() != null;
 	}
@@ -328,27 +368,29 @@ public class User extends SuperUser {
 		User.find = find;
 	}
 	
+	/**
+	 * Method which finds user by email
+	 * @param email
+	 * @return
+	 */
 	public static User findByEmail(String email){
 		return find.where().eq("email", email).findUnique();
 	}
 
+	/**
+	 * Method which returns pin code
+	 * @return
+	 */
 	public String getPin() {
 		if (pin != null)
 			return pin.code;
 		return "";
 	}
-	/*
-	public String getDob() {
-		if (dob != null){
-			return new SimpleDateFormat("MM/dd/yyyy").format(dob);
-		}
-		return "mm/dd/yyyy";
-	}
-	*/
 	
-	
-
-	
+	/**
+	 * Method for validating user registration form
+	 * @return
+	 */
 	public String validate() {
 		Date maxDobDate = null;
 		try {
