@@ -26,12 +26,22 @@ public class Pin extends Model {
 	private static Finder<Integer, Pin> find = new Finder<Integer, Pin>(Integer.class,
 			Pin.class);
 
+	/**
+	 * Private constructor for Pin
+	 * @param u
+	 * @param pin
+	 */
 	private Pin(User u, String pin) {
 		this.user = u;
 		this.code = pin;
 		this.date = new Date();
 	}
 
+	/**
+	 * Method which generate pin
+	 * @param user 
+	 * @return pin
+	 */
 	public static Pin generatePin(User user) {
 		if (user.pin != null)
 			user.pin.delete();
@@ -41,6 +51,11 @@ public class Pin extends Model {
 		return pin;
 	}
 
+	/**
+	 * Method which checks if the pin is valid
+	 * @param generated - date when pin is generated
+	 * @return true if the pin is valid, else return false
+	 */
 	public static boolean isValid(Date generated) {
 		Date currentDate = new Date();//****
 		long difference = Math.abs(generated.getTime() - currentDate.getTime());
@@ -50,6 +65,11 @@ public class Pin extends Model {
 		return false;
 	}
 
+	/**
+	 * Method which finds pin by user
+	 * @param id of user
+	 * @return user pin
+	 */
 	public static String getCode(long id) {
 		User user = User.find(id);
 		Pin pin = find.where().eq("user", user).findUnique();
@@ -58,6 +78,11 @@ public class Pin extends Model {
 		return "";
 	}
 	
+	/**
+	 * Method which finds User by user pin
+	 * @param pin - code of pin
+	 * @return user
+	 */
 	public static User getPinUser(String pin) {
 		try{
 			Pin userPin = find.where().eq("code", pin).findUnique();
@@ -69,6 +94,10 @@ public class Pin extends Model {
 		}
 	}
 	
+	/**Method which finds pin by code
+	 * @param pin code of pin
+	 * @return pin
+	 */
 	public static Pin getPin(String pin) {
 		try{
 			Pin p = find.where().eq("code", pin).findUnique();

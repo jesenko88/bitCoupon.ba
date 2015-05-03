@@ -126,6 +126,16 @@ public class Coupon extends Model {
 	 * public long response_company_id;
 	 */
 
+	/**
+	 * Constructor for Coupon
+	 * @param name
+	 * @param price
+	 * @param dateExpire
+	 * @param picture
+	 * @param category
+	 * @param description
+	 * @param remark
+	 */
 	public Coupon(String name, double price, Date dateExpire, String picture,
 			Category category, String description, String remark) {
 
@@ -139,6 +149,20 @@ public class Coupon extends Model {
 		this.remark = remark;
 	}
 
+	/**
+	 * Constructor for Coupon
+	 * @param name
+	 * @param price
+	 * @param dateExpire
+	 * @param picture
+	 * @param category
+	 * @param description
+	 * @param remark
+	 * @param minOrder
+	 * @param maxOrder
+	 * @param usage
+	 * @param seller
+	 */
 	public Coupon(String name, double price, Date dateExpire, String picture,
 			Category category, String description, String remark, int minOrder,
 			int maxOrder, Date usage, Company seller) {
@@ -158,6 +182,11 @@ public class Coupon extends Model {
 		this.status = Status.DEFAULT;		
 	}
 	
+	/**
+	 * Constructor for Coupon
+	 * @param name
+	 * @param picture
+	 */
 	/*TODO coupons for empty fields */
 	public Coupon(String name, String picture) {
 		this.name = name;
@@ -173,6 +202,17 @@ public class Coupon extends Model {
 	 * @return the id of the new Coupon (long)
 	 */
 
+	/**
+	 * Method for creating coupon
+	 * @param name
+	 * @param price
+	 * @param dateExpire
+	 * @param picture
+	 * @param category
+	 * @param description
+	 * @param remark
+	 * @return
+	 */
 	public static long createCoupon(String name, double price, Date dateExpire,
 			String picture, Category category, String description, String remark) {
 		
@@ -580,6 +620,11 @@ public class Coupon extends Model {
 	}	
 
 
+	/**
+	 * Method which finds all bought coupons of certain user
+	 * @param userId
+	 * @return list of coupons
+	 */
 	public static List<Coupon> userBoughtCoupons(long userId) {
 		List<Coupon> coupons = find.where().eq("buyer_id", userId).findList();
 		if (coupons == null) {
@@ -600,6 +645,10 @@ public class Coupon extends Model {
 		return false;
 	}
 
+	/**
+	 * Method which finds all approved coupons in DB
+	 * @return
+	 */
 	public static List<Coupon> approvedCoupons() {
 		//List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).orderBy().desc("dateCreated").findList();
 		List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).findList();
@@ -622,7 +671,11 @@ public class Coupon extends Model {
 		return 0;
 	}	
 
-		public static List<Coupon> nonApprovedCoupons() {
+	/**
+	 * Method which finds all nonApproved coupon in DB
+	 * @return list of nonApproved coupons
+	 */
+	public static List<Coupon> nonApprovedCoupons() {
 			
 			List<Coupon> nonApprovedCoupons = find.where().eq("status", Status.DEFAULT).findList();
 			if(nonApprovedCoupons == null)
@@ -630,6 +683,11 @@ public class Coupon extends Model {
 			return nonApprovedCoupons;
 		}
 
+	/**
+	 * Method which finds all coupons owned by certain company
+	 * @param companyID
+	 * @return list of coupons
+	 */
 	public static List<Coupon> ownedCoupons(long companyID) {		
 		 
 		List<Coupon> ownedByCompany = find.where().eq("seller_id", companyID).findList();
@@ -638,7 +696,10 @@ public class Coupon extends Model {
 		return ownedByCompany;	
 	}
 	
-	
+	/**
+	 * Method for validating coupon
+	 * @return
+	 */
 	public String validate() {
 		
 			if ( name.length() < 4 || name.length() > 70){

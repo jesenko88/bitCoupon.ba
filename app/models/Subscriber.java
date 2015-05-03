@@ -84,6 +84,10 @@ public class Subscriber extends Model{
 		subscriber.delete();
 	}
 	
+	/**
+	 * Method for removing subscriber from our subscribers list.
+	 * @param subscriber
+	 */
 	public static void unsubscribe(Subscriber subscriber ){	
 		subscriber.delete();
 	}

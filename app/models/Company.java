@@ -61,6 +61,18 @@ public class Company  extends SuperUser{
 		this.logo = "images/home/company-default.jpg";
 		this.contact = contact;	
 	}
+	
+	/**
+	 * Method which creates company
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param logo
+	 * @param adress
+	 * @param city
+	 * @param contact
+	 * @return company id
+	 */
 	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
 		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
@@ -70,20 +82,38 @@ public class Company  extends SuperUser{
 	
 	}
 	
+	/**
+	 * Method which finds company by id
+	 * @param id of company
+	 * @return company
+	 */
 	public static Company findById(long id){
 		Company company = find.byId(id);
 		return company;
 	}
 	
+	/**
+	 * Method for deleting company
+	 * @param id of company
+	 */
 	public static void delete(long id){
 		Company company = find.byId(id);
 		company.delete();
 	}
 	
+	/**
+	 * Method which finds certain company by email adress
+	 * @param email of company
+	 * @return company
+	 */
 	public static Company findByEmail(String email) {
 		return getFind().where().eq("email", email).findUnique();
 	}
 	
+	/**
+	 * Method which finds list of all companies in DB
+	 * @return
+	 */
 	public static List<Company> all(){
 		List<Company> all = find.all();
 		if(all == null)
@@ -91,6 +121,11 @@ public class Company  extends SuperUser{
 		return all;
 	}
 	
+	/**
+	 * Method which finds list of companies by name 
+	 * @param name of companies
+	 * @return list of companies
+	 */
 	public static List<Company> findByName(String name){
 		List<Company> byName = find.where().eq("name", name).findList();
 		if(byName == null)
@@ -165,6 +200,10 @@ public class Company  extends SuperUser{
 		return getFind().where().eq("name", name).findUnique() != null;
 	}
 	
+	/**
+	 * Method which finds all approved companies in DB
+	 * @return list of approved companies
+	 */
 	public static List<Company> approvedCompanies() {
 		List<Company> approvedCompanies =  find.where().
 				eq("status", true).findList();
@@ -175,6 +214,10 @@ public class Company  extends SuperUser{
 			
 	}
 	
+	/**
+	 * Method which finds all nonApproved companies in DB
+	 * @return list of nonApproved companies
+	 */
 	public static List<Company> nonApprovedCompanies() {
 		List<Company> nonApprovedCompanies = find.where().eq("status", false).findList();
 		if(nonApprovedCompanies == null)

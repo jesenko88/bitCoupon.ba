@@ -30,6 +30,12 @@ public class Photo extends Model {
 	
 	static Finder<Integer, Photo> finder = new Finder<Integer, Photo>(Integer.class, Photo.class);
 	
+	/**
+	 * Constructor for Photo
+	 * @param path
+	 * @param savePath
+	 * @param cp
+	 */
 	public Photo(String path,String savePath, Coupon cp){
 		this.path = path;
 		this.coupon = cp;
@@ -37,14 +43,29 @@ public class Photo extends Model {
 	}
 	
 	
+	/**
+	 * Method for creating photo
+	 * @param path
+	 * @param savePath
+	 * @param cp
+	 */
 	public static void create(String path,String savePath, Coupon cp){
 		new Photo(path,savePath, cp).save();
 	}
 	
+	/**
+	 * Method for deleting photo
+	 * @param id
+	 */
 	public static void delete(int id){
 		finder.byId(id).delete();
 	}
 	
+	/**
+	 * Method which finds certain photo by id
+	 * @param id of photo
+	 * @return photo
+	 */
 	public static Photo find(int id){
 		return finder.byId(id);
 	}
@@ -70,6 +91,11 @@ public class Photo extends Model {
 		return counter;
 	}
 	
+	/**
+	 * Method which finds all photos of one certain coupon
+	 * @param coupon
+	 * @return list of photos
+	 */
 	public static List<Photo> photosByCoupon(Coupon coupon){
 		List<Photo> allPhotos = finder.all();
 		List<Photo> byCoupon = new ArrayList<Photo>();

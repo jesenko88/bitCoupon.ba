@@ -100,7 +100,7 @@ public class UserController extends Controller {
 				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success", Messages.get("registration.mail.flash.verification "));
+				flash("success", Messages.get("registration.mail.flash.verification"));
 				Logger.info("A verification mail has been sent to email address: " + mail);
 				return ok(Loginpage.render(" "));
 
@@ -525,4 +525,5 @@ public class UserController extends Controller {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
 	}
+	
 }
