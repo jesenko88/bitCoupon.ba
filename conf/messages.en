@@ -82,7 +82,7 @@ quantity = Quantity
 
 registration.mail.flash.verification = A verification mail has been sent to your email address!
 registration.mail.verificationLinkText = Click on the link below to verify your e-mail address 
-registration.emailAlreadyExists = Email already exists!
+registration.emailAlreadyExists = Username or Email already exists!
 registration.mail.verified = Your e-mail is now verified. To login click on the button below
 registration.mail.expired = Verification period is expired. If you want to receive a new verification mail, click on the button 'Resend'
 
