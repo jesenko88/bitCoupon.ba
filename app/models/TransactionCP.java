@@ -55,6 +55,8 @@ public class TransactionCP extends Model{
 	
 	public String buyer_surname;
 	
+	public String buyer_email;
+	
 	@ManyToOne
 	public Coupon coupon;
 	
@@ -77,13 +79,14 @@ public class TransactionCP extends Model{
 		this.buyer = buyer;
 		this.buyer_name = buyer.username;
 		this.buyer_surname = buyer.surname;
+		this.buyer_email = buyer.email;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
 	
 	/* constructor for unregistered users */
 	public TransactionCP(String payment_id, String saleId, double couponPrice,int quantity, double totalPrice, String token,
-			String username, String surname, Coupon coupon) {
+			String username, String surname, String email, Coupon coupon) {
 		this.payment_id = payment_id;
 		this.bitPayment_id = BIT_PAYMENT_PREFIX + UUID.randomUUID().toString().substring(0, 7);
 		this.sale_id = saleId;
@@ -94,6 +97,7 @@ public class TransactionCP extends Model{
 		this.buyer = null;
 		this.buyer_name = username;
 		this.buyer_surname = surname;
+		this.buyer_email = email;
 		this.coupon = coupon;
 		this.date = new Date();
 	}
@@ -132,8 +136,8 @@ public class TransactionCP extends Model{
 	 * @return id of the transaction Long
 	 */
 	public static long createTransactionForUnregisteredUser(String payment_id, String saleId, double couponPrice,int quantity,
-			double totalPrice, String token, String username, String surname,  Coupon coupon) {	
-		TransactionCP transaction = new TransactionCP(payment_id, saleId, couponPrice, quantity,totalPrice, token, username, surname, coupon);
+			double totalPrice, String token, String username, String surname, String email, Coupon coupon) {	
+		TransactionCP transaction = new TransactionCP(payment_id, saleId, couponPrice, quantity,totalPrice, token, username, surname,email, coupon);
 		transaction.save();
 		return transaction.id;
 		

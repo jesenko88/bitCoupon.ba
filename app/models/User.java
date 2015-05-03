@@ -388,7 +388,7 @@ public class User extends SuperUser {
 	}
 	
 	/**
-	 * Method for validating user registration
+	 * Method for validating user registration form
 	 * @return
 	 */
 	public String validate() {

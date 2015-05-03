@@ -1,6 +1,7 @@
 @(company: Company)(coupons: List[Coupon])
 
 @import helper._
+@import models.comments._
 @import java.math.BigInteger; var i=0
 
 @main("Company profile") {
@@ -45,6 +46,74 @@
       </div>
    </div>
    
+   
+   <h2 class="title text-center">Company comments</h2>
+   
+   
+   <!--  COMMENTS   -->
+   
+<div class="container">
+   <div class="tabbable" id="tabs-706598">
+      <ul class="nav nav-tabs">
+         <li class="active">
+            <a href="#panel-935988" data-toggle="tab">Comments</a>
+         </li>
+      </ul>
+      <div class="tab-content">
+         <div class="tab-pane active" id="panel-935988">
+            <!-- comments -->   
+            <div class="detailBox">
+               <div class="titleBox">
+                  <label>Comments</label>
+               </div>
+  
+               <div class="actionBox">
+                  <ul class="commentList">
+                     @for(comment <- CommentCompany.findByCompany(company)){           	
+                     <li class="commentRow">
+                        <div class="commenterImage">
+                           <img src="@routes.Assets.at(comment.user.profilePicture)" />
+                        </div>
+                        <div class="commentText">
+                           <p >@comment.comment</p>
+                           <span class="date sub-text">Comment by: @comment.user.username on @comment.date</span>					
+                           <span style="margin-left:20px" title="Report this comment">
+                           <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
+                           </span>
+                        </div>
+
+                     </li>                     
+                     <br>
+                     
+                     }
+                  </ul>
+        
+          @if(Sesija.getCurrent(ctx()) != null){
+                  @if(Sesija.buyerCheck(ctx(), company.id) == true){
+
+                  <form class="form" id="commentForm">
+                     <div class="form-group">
+                        <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments" required></textarea>
+                     </div>
+                     <div class="form-group">
+                        <button type="submit" class="btn btn-default">Comment</button>
+                     </div>
+                  </form>    
+   
+                  }
+                  }
+
+               </div>
+            </div>
+         </div>
+
+      </div>
+   </div>
+</div>
+   
+   <!-- END OF COMMENTS -->
+   
+   
    <h2 class="title text-center">Company coupons:</h2>
    @for(coupon <- coupons){
    <div class="col-sm-4">
@@ -71,5 +140,69 @@
    </div>
    }
 </div>
+
+
+   <!-- AJAX HANDLE REPORT  -->
+                <script>						
+						function report(id) {		
+							$.ajax({					
+								  method: "GET",
+								  url: "/reportComentCompany/" +id,							  
+								  
+								}).done(function(msg) {
+									 console.log("FAILED");								 
+								   	  alert( "You successfuly reported this comment." );
+								 }).fail(function( msg ) {
+									  console.log("FAILED");
+									  console.log(msg);
+									  console.log("ID IS "+id)
+								   	  alert( "Reporting failed, please try again later." );
+								  });
+										e.preventDefault();
+							}
+							
+							
+							$("#commentForm").submit(function(e)
+				 				{	
+				 			e.preventDefault();
+				 														
+										$.ajax({							
+											  method: "POST",
+											  url: "/commentCompany/@company.id",							  
+											  data : $("#commentForm").serialize()
+											}).done(function(msg) {
+												  $(".commentList").append(msg);				 
+											 }).fail(function( msg ) {
+												  console.log("FAILED");
+											   	  alert("Question should not be longer than 600 characters");
+											  });
+										e.preventDefault();
+										$("#commentForm")[0].reset();
+										return false;	
+										
+				 			  });
+	
+					</script>
+				
+					<script>	
+			        jQuery(document).ready(function() {
+			            $('.auto-submit-star').rating({
+			                callback: function(value, link){
+			                    alert(value);
+			                    this.rating('disable');
+			                }
+			            });
+			        });
+					</script> 
+					
+					<script>
+					$(function() {
+						   $("#rate").change(function() {
+						     $("#rateForm").submit();
+						   });
+						 })
+		</script>
+
+
 }
 	
