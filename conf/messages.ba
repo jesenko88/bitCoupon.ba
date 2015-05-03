@@ -76,6 +76,29 @@ updated = azuriran
 
 
 
+#HTML----------------------------
+footerProjectBitCoupon = Projekt BITCoupon klon stranice eKupon
+building = Zgrada
+bih = Bosna i Hercegovina
+subscribe = Pretplati me
+unsubscribe = Iskljuci pretplatu
+subscribe.successful = Sada ste pretplaceni sa ovom e-mail adresom:
+searchFilter = Filter pretrage
+searchCompany = Pretraga kompanija
+selectCategory = Izaberite kategoriju
+orderBy = Soritraj po:
+ascending = Rastuce
+descending = Opadajuce
+availableCoupons = Dostupni kuponi
+only = Samo
+currency = KM
+viewCoupon = Pogledaj kupon
+expiring = Ističe:
+bitCoupon = BitKupon
+placeForCoupon = Mjesto za vaš kupon
+
+
+
 
 
 

@@ -53,7 +53,7 @@ create table coupon (
   picture                   varchar(255),
   category_id               bigint,
   description               TEXT,
-  remark                    varchar(255),
+  remark                    TEXT,
   seller_id                 bigint,
   min_order                 integer,
   max_order                 integer,
@@ -76,6 +76,14 @@ create table faq (
   question                  varchar(255),
   answer                    TEXT,
   constraint pk_faq primary key (id))
+;
+
+create table login_data (
+  id                        bigint not null,
+  user_id                   bigint,
+  last_login                timestamp,
+  active_coupons            integer,
+  constraint pk_login_data primary key (id))
 ;
 
 create table photo (
@@ -102,7 +110,7 @@ create table post (
   image                     varchar(255),
   tags                      varchar(255),
   created                   timestamp,
-  creator_id                bigint not null,
+  creator_id                bigint,
   constraint pk_post primary key (id))
 ;
 
@@ -216,6 +224,8 @@ create sequence email_verification_seq;
 
 create sequence faq_seq;
 
+create sequence login_data_seq;
+
 create sequence photo_seq;
 
 create sequence pin_seq;
@@ -307,6 +317,8 @@ drop table if exists email_verification;
 
 drop table if exists faq;
 
+drop table if exists login_data;
+
 drop table if exists photo;
 
 drop table if exists pin;
@@ -346,6 +358,8 @@ drop sequence if exists coupon_seq;
 drop sequence if exists email_verification_seq;
 
 drop sequence if exists faq_seq;
+
+drop sequence if exists login_data_seq;
 
 drop sequence if exists photo_seq;
 

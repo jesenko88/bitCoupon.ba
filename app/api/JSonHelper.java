@@ -7,6 +7,7 @@ import models.Category;
 import models.Company;
 import models.Coupon;
 import models.FAQ;
+import models.LoginData;
 import models.SuperUser;
 import models.TransactionCP;
 import models.User;
@@ -50,8 +51,7 @@ public class JSonHelper {
 	 * @param u User
 	 * @return ObjectNode
 	 */
-	public static ObjectNode userToJSon(User u) {
-		
+	public static ObjectNode loginResponse(User u, boolean newUpdates) {	
 		ObjectNode userNode = Json.newObject();
 		userNode.put("id", u.id);
 		userNode.put("name", u.username);
@@ -60,8 +60,10 @@ public class JSonHelper {
 		userNode.put("address", u.adress);
 		userNode.put("city", u.city);
 		userNode.put("picture", u.profilePicture);
+		userNode.put("updates", newUpdates);
 		return userNode;
 	}
+
 	
 	/**
 	 * Returns a company in json format with the following tags:

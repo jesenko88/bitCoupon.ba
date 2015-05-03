@@ -33,7 +33,7 @@
     
     
    </div>
- <h2 class="title text-center">Search Result</h2>
+ <h2 class="title text-center">@Messages("searchResult")</h2>
    
    <div class="container">
       
@@ -46,12 +46,12 @@
                               <img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
                   
                      <h2>@company.name</h2>
-                    <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
+                    <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">@Messages("viewCompany")</a>
                   </div>
                   <div class="product-overlay">
                      <div class="overlay-content">
                         <p>@company.name</p>
-                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">View Company</a>
+                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">@Messages("viewCompany")</a>
                      </div>
                   </div>
                </div>

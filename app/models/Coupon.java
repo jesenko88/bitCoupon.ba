@@ -67,15 +67,15 @@ public class Coupon extends Model {
 	@Required
 	@MinLength(10)
 	@MaxLength(1000)
-	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,+\"'!?+\"'()_]*"
-			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?()_]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .:,+\"'!?+\"'()_-]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .:,!?()_-]*$",
 			message="Company description format is not valid."	)
 	public String description;
 	
-	
-	@MaxLength(200)
-	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*"
-			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*$",
+	@Column(columnDefinition = "TEXT")
+	@MaxLength(1000)
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .:,!?+\"'()_-]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .:,!?+\"'()_-]*$",
 			message="Company remark format is not valid."	)
 	public String remark;
 
@@ -702,7 +702,7 @@ public class Coupon extends Model {
 	 */
 	public String validate() {
 		
-			if ( name.length() < 4 || name.length() > 70){
+			if ( name.length() < 3 || name.length() > 200){
 				return "Coupon name has to be in range 4 - 70 characters";
 			}
 			if ( price <= 0){
@@ -723,7 +723,7 @@ public class Coupon extends Model {
 			if (description.length() < 10 || description.length() > 999){
 				return "Description length has to be in range 10 - 999 characters";
 			}
-			if (remark.length() > 150){
+			if (remark.length() > 999){
 				return "Remark length has to be max 150 characters";
 			}
 			if ( minOrder < 0 || maxOrder < 0 || minOrder > maxOrder){
