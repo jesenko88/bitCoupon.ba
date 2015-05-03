@@ -111,12 +111,36 @@ user.with.email = A user with email:
 user.notExists = doesn't exists
 
 
-
-
-
-
-
-
+#HTML----------------------------
+footerProjectBitCoupon = Project BITCoupon mirror site of eKupon
+building = Building
+bih = Bosnia and Herzegovina
+subscribe = Subscribe
+unsubscribe = Unsubscribe
+subscribe.successful = You are now subscribed with this email:
+searchFilter = Search filter
+searchCompany = Search company
+selectCategory = Select category
+orderBy = Order by:
+ascending = Ascending
+descending = Descending
+availableCoupons = Available Coupons
+only = Only
+currency = KM
+viewCoupon = View Coupon
+expiring = Expiring:
+bitCoupon = BitCoupon
+placeForCoupon = Place for your coupon
+category = Category
+price = Price
+date = Date
+login = Login
+logout = Logout
+forgotPassword = Forgot password?
+sendEmail = Send email
+menu = Menu
+editProfile = Edit profile
+adminPanel = Admin Panel
 
 
 
