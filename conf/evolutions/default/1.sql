@@ -43,7 +43,7 @@ create table coupon (
   picture                   varchar(255),
   category_id               bigint,
   description               TEXT,
-  remark                    varchar(255),
+  remark                    TEXT,
   seller_id                 bigint,
   min_order                 integer,
   max_order                 integer,
