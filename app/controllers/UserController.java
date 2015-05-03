@@ -540,25 +540,4 @@ public class UserController extends Controller {
 		return ok(buyForUser.render(coupon, null));
 	}
 	
-	/**
-	 * Checks if the current user is a buyer from a company.
-	 * Method receives a company id as a parameter and finds all
-	 * transactions of that company.
-	 * Checks for every transaction in the list if there exists a
-	 * email of the user as buyer_email
-	 * @param companyId
-	 * @return
-	 */
-	public static boolean isBuyer(long companyId) {
-	    List<TransactionCP> transactions = TransactionCP.allFromCompany(companyId);
-	    User currentUser = Sesija.getCurrentUser(ctx());
-	    if(transactions == null || currentUser == null)
-	    	return false;
-	    for(TransactionCP t : transactions){
-	    	if(t.buyer_email == currentUser.email)
-	    		return true;
-	    }
-		return false;
-	}
-	
 }
