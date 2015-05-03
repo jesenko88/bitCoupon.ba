@@ -78,7 +78,8 @@
       <!-- Input for usage date -->
        <div class='@("form-group has-error".when(myForm("usage").hasErrors)) form-group' >
      	 <label class="control-label" for="usage">Usage date<span style="color:#AB1403"> *</span></label>
-     	 <input class="form-control datepicker-bit"  value='@myForm("usage").value' type="date" id="datepicker" name="usage" required>
+     	 <input class="form-control datepicker-bit datepicker"  value='@myForm("usage").value' type="date" 
+     	 		 name="usage" required>
      </div>       
       <span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
       <button  type="submit" class="btn btn-default" required>Edit Coupon</button>

@@ -1,7 +1,7 @@
 @(myForm: Form[Coupon])
 
-
- <form action="@routes.CouponController.addCoupon" method ="POST"
+<div >
+ <form name="couponForm" action="@routes.CouponController.addCoupon" method ="POST"
       enctype="multipart/form-data" >
 	      @if(myForm.hasGlobalErrors){
 	      <div class="panel panel-danger">
@@ -15,31 +15,64 @@
 	         </div>
 	      </div>
     	  }
-    <div class="form-group" style="padding:1%">
+    <div class="form-group" style="padding:1%" >
     <!-- Input for name -->
-      <div class='@("form-group has-error".when(myForm("name").hasErrors)) form-group' >
+      <div class='@("form-group has-error".when(myForm("name").hasErrors)) form-group'
+      	   ng-class="{ 'has-error' : couponForm.name.$invalid && !couponForm.name.$pristine,
+                   		'has-success': couponForm.name.$valid,
+                      @("form-group has-error".when(myForm("name").hasErrors)) }" >
      	 <label class="control-label" for="name">Name<span style="color:#AB1403"> *</span></label>
-     	 <input class="form-control"  value='@myForm("name").value' type="text" name="name" id="name" minlength="4" maxlength="70" placeholder="Name" required/>
+     	 <input class="form-control"  value='@myForm("name").value' type="text" name="name" id="name"
+     	 		ng-model="coupon.name" ng-minlength="3" ng-maxlength="200" placeholder="Name" 
+     	 		pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w .,!?+'()]+|[\_]+/ig, )" 
+     	 		ng-init="coupon.name='@myForm("name").value'" required/>
+     	 <p ng-show="couponForm.name.$error.minlength" class="help-block">Min length is 3.</p>
+		 <p ng-show="couponForm.name.$error.maxlength" class="help-block">Max length is 200.</p>
+		 <p ng-show="couponForm.name.$error.pattern" class="help-block">
+		           Name contains invalid character.</p>               		
      </div>
+     
      <!-- Input for price -->
-      <div class='@("form-group has-error".when(myForm("price").hasErrors)) form-group' >
+      <div class='@("form-group has-error".when(myForm("price").hasErrors)) form-group' 
+      		ng-class="{ 'has-error' : couponForm.price.$invalid && !couponForm.price.$pristine,
+                   		'has-success': couponForm.price.$valid,
+                   		 @("form-group has-error".when(myForm("price").hasErrors))}">
      	 <label class="control-label" for="price">Price<span style="color:#AB1403"> *</span></label>
-         <input class="form-control"  value='@myForm("price").value' type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
+         <input class="form-control"  value='@myForm("price").value' type="number" name="price" 
+         		id="price" min="1" step="any" placeholder="Price"
+         		ng-model="coupon.price" ng-init="coupon.price='@myForm("price").value'" required/>
+         <p ng-show="couponForm.price.$error.min" class="help-block">Min price is 1.</p>		
+		 <p ng-show="couponForm.price.$error.number" class="help-block">
+		           Only numbers allowed.</p>     
       </div>
+      
      <!-- Input for expiration date --> 
-      <div class='@("form-group has-error".when(myForm("dateExpire").hasErrors)) form-group' >
+      <div class='@("form-group has-error".when(myForm("dateExpire").hasErrors)) form-group' 
+      		ng-class="{ 'has-error' : couponForm.dateExpire.$invalid && !couponForm.dateExpire.$pristine,
+                   		'has-success': couponForm.dateExpire.$valid,
+                   		@("form-group has-error".when(myForm("dateExpire").hasErrors)) }">
      	 <label class="control-label" for="dateExpire">Date<span style="color:#AB1403"> *</span></label>
-		 <input class="form-control datepicker-bit"   value='@myForm("dateExpire").value' type="date" id="datepicker" name="dateExpire" required>
+		 <input class="form-control datepicker-bit"   value='@myForm("dateExpire").value' type="date"
+		 		ng-model="coupon.dateExpire" id="datepicker" name="dateExpire"
+		 		ng-init="coupon.dateExpire='@myForm("dateExpire").value'" required>
+		 <p ng-show="couponForm.dateExpire.$error.date" class="help-block">
+		       Invalid date.</p>  		
       </div>
+      
      <!-- Input for photo -->     
      <div class='@("form-group has-error".when(myForm("picture").hasErrors)) form-group' >
      	 <label class="control-label" for="picture">Picture</label>
 		 <input class="form-control"  type="file" name="picture" id="picture" placeholder="Choose your photo" />
      </div>
+     
      <!-- Input for category -->
-     <div class='@("form-group has-error".when(myForm("category").hasErrors)) form-group' >
+     <div class='@("form-group has-error".when(myForm("category").hasErrors)) form-group'
+     	  ng-class="{ 'has-error' : couponForm.category.$invalid && !couponForm.category.$pristine,
+                   	  'has-success': couponForm.category.$valid,
+                   	  @("form-group has-error".when(myForm("category").hasErrors)) }" >
      	 <label class="control-label" for="category">Category<span style="color:#AB1403"> *</span></label>
-		 <select class="form-control"  value='@myForm("category").value'  id="category" name="category" required>
+		 <select class="form-control"  value='@myForm("category").value'  id="category" name="category"
+		 		ng-model="coupon.category" required>
 	         @if(myForm("category").value != null){
 	         <option select="selected" style="display:none" > @myForm("category").value </option>	         	
 	         }else{
@@ -53,35 +86,95 @@
 	         <option >New Category</option>
 	         }
       </select>	
-      <input class="form-control"  type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
+      <input class="form-control"  type="text" name="newCategory" style="margin-top:10px; display:none;"
+      		 ng-minlength="3" ng-maxlength="45" id="newCategory"
+      		 pattern="(^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$)" placeholder="New Category ?" />
+      <p ng-show="couponForm.category.$error.minlength" class="help-block">Min length is 3.</p>
+	  <p ng-show="couponForm.category.$error.maxlength" class="help-block">Max length is 45.</p>
+	  <p ng-show="couponForm.category.$error.pattern" class="help-block">
+		           Invalid category name.</p>      		 
      </div> 
+     
      <!-- Input for description -->
-     <div class='@("form-group has-error".when(myForm("description").hasErrors)) form-group' >
+     <div class='@("form-group has-error".when(myForm("description").hasErrors)) form-group' 
+     	  ng-class="{ 'has-error' : couponForm.description.$invalid && !couponForm.description.$pristine,
+                   	  'has-success': couponForm.description.$valid,
+                   	  @("form-group has-error".when(myForm("description").hasErrors)) }">
      	 <label class="control-label" for="description">Description<span style="color:#AB1403"> *</span></label>
-         <textarea class="form-control"  name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required>@myForm("description").value</textarea>
+         <textarea class="form-control"  name="description" id="description" rows="6" style="margin-top:10px" 
+         			placeholder="Description of Coupon" ng-model="coupon.description" ng-minlength="10"
+         			ng-maxlength="1000" pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w .,!?+'()]+|[\_]+/ig, )" 
+         			ng-init="coupon.description='@myForm("description").value'" required>
+         				@myForm("description").value
+         </textarea>
+         <p ng-show="couponForm.description.$error.minlength" class="help-block">Min length is 10.</p>
+	 	 <p ng-show="couponForm.description.$error.maxlength" class="help-block">Max length is 1000.</p>
+	 	 <p ng-show="couponForm.description.$error.pattern" class="help-block">
+		           Description contains illegal characters.</p>     
      </div>
      <!-- Input for remark -->
-     <div class='@("form-group has-error".when(myForm("remark").hasErrors)) form-group' >
+     <div class='@("form-group has-error".when(myForm("remark").hasErrors)) form-group'
+     	  ng-class="{ 'has-error' : couponForm.remark.$invalid && !couponForm.remark.$pristine,
+                   	  'has-success': couponForm.remark.$valid && !couponForm.remark.$pristine,
+                   	  @("form-group has-error".when(myForm("remark").hasErrors))}"	 >
      	 <label class="control-label" for="description">Remark</label>
-     	<textarea class="form-control" name="remark" id="remark" rows="6" placeholder="Remark of Coupon">@myForm("remark").value</textarea>
+     	<textarea class="form-control" name="remark" id="remark" rows="6" 
+     			  placeholder="Remark of Coupon" ng-model="coupon.remark" ng-maxlength="200"
+     			  pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w .,!?+'()]+|[\_]+/ig, )"
+     			  ng-init="coupon.remark='@myForm("remark").value'" > 
+     			  	@myForm("remark").value
+     	</textarea>
+     	<p ng-show="couponForm.remark.$error.maxlength" class="help-block">Max length is 200.</p>
+	 	<p ng-show="couponForm.remark.$error.pattern" class="help-block">
+		           Remark contains illegal characters.</p> 
      </div>
+     
      <!-- Input for min order -->
-  	 <div class='@("form-group has-error".when(myForm("minOrder").hasErrors)) form-group' >
+  	 <div class='@("form-group has-error".when(myForm("minOrder").hasErrors)) form-group'
+  	 	  ng-class="{ 'has-error' : couponForm.minOrder.$invalid && !couponForm.minOrder.$pristine,
+                   	  'has-success': couponForm.minOrder.$valid,
+                   	  @("form-group has-error".when(myForm("minOrder").hasErrors)) }"	 >
      	 <label class="control-label" for="minOrder">Minimal order for offer to be successful<span style="color:#AB1403"> *</span></label>
-     	 <input  class="form-control" value='@myForm("minOrder").value' type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" required/>
+     	 <input  class="form-control" value='@myForm("minOrder").value' type="number" name="minOrder"
+     	 		 id="minOrder" min="1" placeholder="Minimal order" ng-model="coupon.minOrder"
+     	 		 ng-init="coupon.minOrder='@myForm("minOrder").value'" required/>
+     	 <p ng-show="couponForm.minOrder.$error.min" class="help-block">Min order is 1.</p>		
+		 <p ng-show="couponForm.minOrder.$error.number" class="help-block">
+		           Only numbers allowed.</p>		 
      </div>
+     
      <!-- Input for max order -->
-  	 <div class='@("form-group has-error".when(myForm("maxOrder").hasErrors)) form-group' >
+  	 <div class='@("form-group has-error".when(myForm("maxOrder").hasErrors)) form-group'
+  	 	  ng-class="{ 'has-error' : couponForm.maxOrder.$invalid && !couponForm.maxOrder.$pristine,
+                   	  'has-success': couponForm.maxOrder.$valid,
+                   	  @("form-group has-error".when(myForm("maxOrder").hasErrors)) }"  >
      	 <label class="control-label" for="maxOrder">Maximum orders<span style="color:#AB1403"> *</span></label>
-     	 <input class="form-control" value='@myForm("maxOrder").value' type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" required/>
+     	 <input class="form-control" value='@myForm("maxOrder").value' type="number" name="maxOrder" 
+     	 		id="maxOrder" ng-min="coupon.minOrder" placeholder="Maximal order" ng-model="coupon.maxOrder" 
+     	 		ng-init="coupon.maxOrder='@myForm("maxOrder").value'" required/>
+     	 <p ng-show="couponForm.maxOrder.$error.min" class="help-block">This field must be equal or greater then {{coupon.minOrder}}.</p>		
+		 <p ng-show="couponForm.maxOrder.$error.number" class="help-block">
+		           Only numbers allowed.</p>			
      </div>     
       <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>	
+            
       <!-- Input for usage date -->
-       <div class='@("form-group has-error".when(myForm("usage").hasErrors)) form-group' >
+       <div class='@("form-group has-error".when(myForm("usage").hasErrors)) form-group'
+       	    ng-class="{ 'has-error' : couponForm.usage.$invalid && !couponForm.usage.$pristine,
+                   	  'has-success': couponForm.usage.$valid,
+                   	  @("form-group has-error".when(myForm("usage").hasErrors)) }"
+                   	   >
      	 <label class="control-label" for="usage">Usage date<span style="color:#AB1403"> *</span></label>
-     	 <input class="form-control datepicker-bit"  value='@myForm("usage").value' type="date" id="datepicker" name="usage" required>
+     	 <input class="form-control datepicker-bit datepicker"   type="date" 
+     	 		ng-model="coupon.usage" name="usage" ng-init="coupon.usage='@myForm("usage").value'" 
+     	 		ng-min="coupon.dateExpire" required>
+     	 <p ng-show="couponForm.usage.$error.date" class="help-block"> Invalid date.</p>  
+     	 <p ng-show="couponForm.usage.$error.min" class="help-block"> Usage date must be equal or greater then expire date.</p>  			
      </div>       
       <span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
-      <button  type="submit" class="btn btn-default" required>Create Coupon</button>
+      <button  type="submit" class="btn btn-block btn-success" ng-disabled="couponForm.$invalid" required>Create Coupon</button>
+      <p ng-show="couponForm.$invalid" class="help-block" style="text-align:center">Please make sure you filled all fields correctly.</p>
+
  </div>
    </form>
+</div>

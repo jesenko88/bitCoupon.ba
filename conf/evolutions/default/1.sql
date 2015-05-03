@@ -53,7 +53,7 @@ create table coupon (
   picture                   varchar(255),
   category_id               bigint,
   description               TEXT,
-  remark                    varchar(255),
+  remark                    TEXT,
   seller_id                 bigint,
   min_order                 integer,
   max_order                 integer,
@@ -110,7 +110,7 @@ create table post (
   image                     varchar(255),
   tags                      varchar(255),
   created                   timestamp,
-  creator_id                bigint not null,
+  creator_id                bigint,
   constraint pk_post primary key (id))
 ;
 

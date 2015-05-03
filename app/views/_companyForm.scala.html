@@ -1,0 +1,126 @@
+@(companyForm: Form[Company])
+
+ <form name="companyForm" action="@routes.CompanyController.registerC" method ="POST" enctype="multipart/form-data" novalidate >
+				<hr>
+				  @if(companyForm.hasGlobalErrors){
+					<div class="panel panel-danger">
+						<div class="panel-heading">Error Submiting Form</div>
+				  		<div class="panel-body">
+				   			 <ul>
+				   			 @for(err <- companyForm.globalErrors){
+				  				<li> @err.message </li>
+				   			 }
+				   			 </ul>
+				 		</div>
+					</div>
+					}
+                  <!-- Input email -->
+                   <div class='@("form-group has-error".when(companyForm("email").hasErrors)) form-group' 
+                   		ng-class="{ 'has-error' : companyForm.email.$invalid && !companyForm.email.$pristine,
+                   					'has-success': companyForm.email.$valid,
+                   					@("form-group has-error".when(companyForm("email").hasErrors)) }">
+			     	 <label class="control-label" for="email">Email<span style="color:#AB1403"> *</span></label>
+                 	 <input class="form-control" value='@companyForm("email").value' type="email" 
+                 	 		id="email" name="email"  placeholder="Email"  ng-model="company.email" 
+                 	 		ng-init="company.email='@companyForm("email").value'" ng-minlength="3" required/> 
+                   <p ng-show="companyForm.email.$error.minlength" class="help-block">Min length is 3.</p>
+		           <p ng-show="companyForm.email.$error.maxlength" class="help-block">Max length is 20.</p>
+		           <p ng-show="companyForm.email.$error.email" class="help-block">Email format is not valid</p>		      		
+		          </div>
+		          
+		          <!-- Password -->
+                  <div class='@("form-group has-error".when(companyForm("password").hasErrors)) form-group'
+                  	   ng-class="{ 'has-error' : companyForm.password.$invalid && !companyForm.password.$pristine,
+                   					'has-success': companyForm.password.$valid,
+                   					@("form-group has-error".when(companyForm("password").hasErrors)) }" >
+			     	 <label class="control-label" for="password">Password<span style="color:#AB1403"> *</span></label>
+					 <input class="form-control" value='@companyForm("password").value' id="password" 
+					 		type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" 
+					 		name="password"  placeholder="Password"  ng-minlength="6" ng-maxlength="15"
+					 		ng-model="company.password" />	
+				   <p ng-show="companyForm.password.$error.minlength" class="help-block">Min length is 6.</p>
+		           <p ng-show="companyForm.password.$error.maxlength" class="help-block">Max length is 20.</p>
+		           <p ng-show="companyForm.password.$error.pattern" class="help-block">
+		          		 Password must contain upper case, lower case and number</p>		
+				  </div>
+				  
+		         <!-- Confirm password -->
+		          <div class='@("form-group has-error".when(companyForm("password").hasErrors)) form-group'
+		          	   ng-class="{ 'has-error' : companyForm.confirmPassword.$invalid && !companyForm.confirmPassword.$pristine,
+                   					'has-success': companyForm.confirmPassword.$valid,
+                   					@("form-group has-error".when(companyForm("password").hasErrors)) }" >
+			     	 <label class="control-label" for="confirmPassword">Confirm password<span style="color:#AB1403"> *</span></label>
+ 					 <input class="form-control" value='@companyForm("confirmPassword").value' type="password"
+ 					 		 required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="confirmPassword"
+ 					   		 id="confirmPassword" placeholder="Confirm Password: " ng-model="company.confirmPassword"
+ 					   		 password-match="company.password" />	
+ 					  <p ng-show="companyForm.confirmPassword.$error.passwordMatch && !companyForm.confirmPassword.$pristine" class="help-block"> Passwords do not match.</p>	  		 
+ 		          </div>
+ 		          
+ 		          <!-- Name -->
+ 		          <div class='@("form-group has-error".when(companyForm("name").hasErrors)) form-group' 
+ 		          		ng-class="{ 'has-error' : companyForm.name.$invalid && !companyForm.name.$pristine,
+                   					'has-success': companyForm.name.$valid,
+                   					@("form-group has-error".when(companyForm("name").hasErrors)) }" >
+			     	 <label class="control-label" for="name">Name<span style="color:#AB1403"> *</span></label>
+                  	 <input class="form-control" value='@companyForm("name").value' type="text" id="name-c" 
+		                  	 name="name"  onClick="this.select()"  placeholder="Company name" 
+		                  	 ng-model="company.name" ng-minlength="3" ng-maxlength="45" 
+		                  	 ng-init="company.name='@companyForm("name").value'"
+		                  	 pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w ]+|[\_]+/ig, )" required/>	
+		           <p ng-show="companyForm.name.$error.minlength" class="help-block">Min length is 4.</p>
+		           <p ng-show="companyForm.name.$error.maxlength" class="help-block">Max length is 45.</p>
+		           <p ng-show="companyForm.name.$error.pattern" class="help-block"> Name format is not valid. </p> 
+		          </div>
+		          
+		          <!-- Contact -->
+ 		          <div class='@("form-group has-error".when(companyForm("contact").hasErrors)) form-group'
+ 		          		ng-class="{ 'has-error' : companyForm.contact.$invalid && !companyForm.contact.$pristine,
+                   					'has-success': companyForm.contact.$valid,
+                   					@("form-group has-error".when(companyForm("contact").hasErrors)) }"  >
+			     	 <label class="control-label" for="contact">Contact<span style="color:#AB1403"> *</span></label>
+               	     <input class="form-control" value='@companyForm("contact").value' type="text"
+               	     		 id="contact-c" name="contact"  ng-model="company.contact" 
+               	     		 pattern="(^\d{9}$)" placeholder="Company contact" 
+               	     		 ng-init="company.contact='@companyForm("contact").value'" required/>
+               	     <p ng-show="companyForm.contact.$error.pattern" class="help-block"> Contact must be in format 123456789</p> 
+               	     		 
+		          </div>
+		          
+		         
+ 		          <!-- Adress -->
+                 <div class='@("form-group has-error".when(companyForm("adress").hasErrors)) form-group'
+                 	  ng-class="{ 'has-error' : companyForm.adress.$invalid && !companyForm.adress.$pristine,
+                   					'has-success': companyForm.adress.$valid,
+                   					@("form-group has-error".when(companyForm("adress").hasErrors)) }"	 >
+			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
+                     <input class="form-control" value='@companyForm("adress").value' type="text" id="adress"
+                     		 name="adress"  onClick="this.select()"  placeholder="Adress" 
+                     		 ng-model="company.adress" pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w .,]+|[\_]+/ig, )" 
+                     		 ng-init="company.adress='@companyForm("adress").value'"
+                     		 ng-minlength="6" ng-maxlength="165" required/> 
+                    <p ng-show="companyForm.adress.$error.minlength" class="help-block">Min length is 6.</p>
+		            <p ng-show="companyForm.adress.$error.maxlength" class="help-block">Max length is 165.</p>
+		            <p ng-show="companyForm.adress.$error.pattern" class="help-block">
+		             Only letters and numbers allowed.</p>       		               
+ 		        </div>
+                <!-- City -->
+				<div class='@("form-group has-error".when(companyForm("city").hasErrors)) form-group' 
+					 ng-class="{ 'has-error' : companyForm.city.$invalid && !companyForm.city.$pristine,
+                   					'has-success': companyForm.city.$valid,
+                   					@("form-group has-error".when(companyForm("city").hasErrors)) }"	>
+			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
+              	     <input class="form-control" value='@companyForm("city").value' type="text" id="city"
+              	     		pattern="(^[\u00BF-\u1FFF\u2C00-\uD7FF\w .]+|[\_]+/ig, )"
+              	      		ng-model="company.city" ng-minlength="6" ng-maxlength="165"
+              	     		ng-init="company.city='@companyForm("city").value'"
+              	     		name="city"   placeholder="City" required/>
+              	    <p ng-show="companyForm.city.$error.minlength" class="help-block">Min length is 6.</p>
+		            <p ng-show="companyForm.city.$error.maxlength" class="help-block">Max length is 165.</p>
+		            <p ng-show="companyForm.city.$error.pattern" class="help-block">
+		             Only letters and numbers allowed.</p> 		
+ 		        </div>   
+                  <button type="submit" id="submit-company" ng-disabled="companyForm.$invalid" class="btn btn-block btn-success" >Submit</button>
+              	  <p ng-show="companyForm.$invalid" class="help-block" style="text-align:center">Please make sure you filled all fields correctly.</p>
+              	  
+               </form>
