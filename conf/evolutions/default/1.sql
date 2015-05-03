@@ -92,7 +92,7 @@ create table post (
   image                     varchar(255),
   tags                      varchar(255),
   created                   timestamp,
-  creator_id                bigint not null,
+  creator_id                bigint,
   constraint pk_post primary key (id))
 ;
 

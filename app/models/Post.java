@@ -58,7 +58,6 @@ public class Post extends Model {
 	public Date created;	
 
 	@OneToOne
-	@NotNull
 	public User creator;
 
 	public static final String NO_POST_IMAGE = "NO_IMAGE";

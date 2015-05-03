@@ -641,7 +641,7 @@ public class Coupon extends Model {
 	
 	public String validate() {
 		
-			if ( name.length() < 4 || name.length() > 70){
+			if ( name.length() < 3 || name.length() > 200){
 				return "Coupon name has to be in range 4 - 70 characters";
 			}
 			if ( price <= 0){
