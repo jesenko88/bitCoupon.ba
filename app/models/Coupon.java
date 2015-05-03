@@ -67,15 +67,15 @@ public class Coupon extends Model {
 	@Required
 	@MinLength(10)
 	@MaxLength(1000)
-	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,+\"'!?+\"'()_]*"
-			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?()_]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,+\"'!?+\"'()_-]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?()_-]*$",
 			message="Company description format is not valid."	)
 	public String description;
 	
 	
 	@MaxLength(200)
-	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*"
-			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_]*$",
+	@Pattern(value = "^[A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_-]*"
+			+ "[A-Za-z\\u00A1-\\uFFFF0-9][A-Za-z\\u00A1-\\uFFFF0-9 .,!?+\"'()_-]*$",
 			message="Company remark format is not valid."	)
 	public String remark;
 
