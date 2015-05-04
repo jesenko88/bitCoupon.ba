@@ -3,15 +3,18 @@ package helpers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import models.Image;
+
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
+
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 import com.google.common.io.Files;
+
+import controllers.ImageController;
 
 public class FileUpload extends Controller{
 	
@@ -41,7 +44,7 @@ public class FileUpload extends Controller{
 			return null;
 		}
 			
-		return 	Image.create(image);
+		return 	ImageController.create(image);
 
 	}	
 	/**

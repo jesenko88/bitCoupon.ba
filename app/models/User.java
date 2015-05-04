@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import controllers.ImageController;
+
 /**
  * 
  * Entity class for the User. Creates a table in the database with all of the
@@ -387,10 +389,6 @@ public class User extends SuperUser {
 		return "";
 	}
 	
-	public String getImageAs(int width, int height) {
-		String publicId = Image.getPublicId(profilePicture);
-		return Image.getSize(width, height, publicId);
-	}
 	
 	/**
 	 * Method for validating user registration form

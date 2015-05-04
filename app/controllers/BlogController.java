@@ -6,7 +6,6 @@ import helpers.FileUpload;
 import java.util.Date;
 import java.util.List;
 
-import models.Image;
 import models.Post;
 import models.User;
 import play.Logger;
