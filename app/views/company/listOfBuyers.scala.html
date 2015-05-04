@@ -28,33 +28,33 @@
  <h2 class="title text-center">@Messages("buyers")</h2> 
  
      <div class="container">
-      @for(buyer <- transactions){
-     
      <div id="content" class="divContent">
-         <ol>
-		<!--<li><a href="@routes.SuperUserController.profilePage(buyer.buyer_name)" class="btn btn-link">@buyer.buyer_name</a> </li> -->
-          <li><label><h4>@buyer.buyer_name @buyer.buyer_surname</h4></label></li>
-		</ol>
-	</div>
+
+         <label style="color:#FF6600"><h3>@transactions.get(0).coupon.name</h3></label>
+      @for(buyer <- transactions){     
+          <p>@buyer.buyer_name @buyer.buyer_surname</p>
+
       }
-      <button id="cmd"  class="btnCmd" >@Messages("downloadAsPDF")</button>
+
+	</div>
+
       </div>
       <style type="text/css">.center { text-align: center; list-style-position:inside;}</style>
  					<script>
-					$('.btnCmd').each(function(){
-						$(this).click(function () {
 							var doc = new jsPDF();
+						$('.btnCmd').click(function () {
 							var specialElementHandlers = {
 								    '#editor': function (element, renderer) {
 								        return true;
 								    }
 								};
-						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						    doc.fromHTML($('.divContent').html(), 15, 15, {
 						        'width': 170,
 						            'elementHandlers': specialElementHandlers
 						    });
 						    doc.save('list-of-buyers.pdf');
 						});
-					});
+					
 					</script>
+					
    }

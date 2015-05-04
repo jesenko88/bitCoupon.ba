@@ -57,8 +57,9 @@
 									<div class="productinfo text-center">
 									<img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
 									<div id="content" class="divContent">
-										<ul class="col-md-12" style="text-align: left" >
+										<ul class="col-md-12" style="text-align: left;list-style: none;" >
 											<br>
+
 											<li><strong>@Messages("couponName"): </strong> @transaction.coupon.name</li>
 											<li><strong>@Messages("buyer"):</strong> @username</li>
 											<li><strong>@Messages("seller"):</strong> @transaction.coupon.seller.name</li>											
@@ -68,6 +69,7 @@
 											<li><strong>@Messages("transactionDate"):</strong> @transaction.getDateString</li>
 											<li><strong>@Messages("paymentId"):</strong> @transaction.payment_id</li>
 											<li><strong>@Messages("token"):</strong> @transaction.token</li>
+
 										</ul>
 										</div>
             								<button id="cmd"  class="btnCmd" style="float:left">@Messages("downloadAsPDF")</button>
@@ -91,7 +93,7 @@
 								        return true;
 								    }
 								};
-						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 0, 0, {
 						        'width': 170,
 						            'elementHandlers': specialElementHandlers
 						    });
