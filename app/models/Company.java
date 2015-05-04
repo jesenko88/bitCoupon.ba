@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import models.Coupon.Status;
 import play.Logger;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
@@ -36,6 +37,8 @@ public class Company  extends SuperUser{
 	public String contact;
 		
 	public int notifications;
+	
+	public int status;
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -59,7 +62,8 @@ public class Company  extends SuperUser{
 		this.name = name;
 		this.created = created;
 		this.logo = "images/home/company-default.jpg";
-		this.contact = contact;	
+		this.contact = contact;
+		this.status = Status.DEFAULT;
 	}
 	
 	/**
@@ -73,10 +77,11 @@ public class Company  extends SuperUser{
 	 * @param contact
 	 * @return company id
 	 */
-	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
+	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact, int status){
 		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
 		Company company = new Company(name, email, password, now, logo, adress, city, contact);
+		company.status = status;
 		company.save();
 		return company.id;
 	
@@ -98,7 +103,8 @@ public class Company  extends SuperUser{
 	 */
 	public static void delete(long id){
 		Company company = find.byId(id);
-		company.delete();
+		company.status = Status.DELETED;
+		company.save();
 	}
 	
 	/**
@@ -200,31 +206,6 @@ public class Company  extends SuperUser{
 		return getFind().where().eq("name", name).findUnique() != null;
 	}
 	
-	/**
-	 * Method which finds all approved companies in DB
-	 * @return list of approved companies
-	 */
-	public static List<Company> approvedCompanies() {
-		List<Company> approvedCompanies =  find.where().
-				eq("status", true).findList();
-		if(approvedCompanies == null)
-			approvedCompanies = new ArrayList<Company>();
-		return approvedCompanies;
-			
-			
-	}
-	
-	/**
-	 * Method which finds all nonApproved companies in DB
-	 * @return list of nonApproved companies
-	 */
-	public static List<Company> nonApprovedCompanies() {
-		List<Company> nonApprovedCompanies = find.where().eq("status", false).findList();
-		if(nonApprovedCompanies == null)
-			nonApprovedCompanies = new ArrayList<Company>();
-		return nonApprovedCompanies;
-	}	
-	
 //	public String validate() {
 //		
 //		if ( name.length() < 4 || name.length() > 70){
@@ -258,5 +239,28 @@ public class Company  extends SuperUser{
 //		
 //	return null;
 //}
-
+	
+	/**
+	 * Method which finds all approved companies in DB
+	 * @return
+	 */
+	public static List<Company> approvedCompanies() {
+		//List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).orderBy().desc("dateCreated").findList();
+		List<Company> approvedCompanies =find.where().eq("status", Status.ACTIVE).findList();
+		if(approvedCompanies == null)
+			approvedCompanies = new ArrayList<Company>();
+		return approvedCompanies;
+	}
+	
+	/**
+	 * Method which finds all nonApproved companies in DB
+	 * @return list of nonApproved companies
+	 */
+	public static List<Company> nonApprovedCompanies() {
+			
+			List<Company> nonApprovedCompanies = find.where().eq("status", Status.DEFAULT).findList();
+			if(nonApprovedCompanies == null)
+				nonApprovedCompanies = new ArrayList<Company>();
+			return nonApprovedCompanies;
+		}
 }
