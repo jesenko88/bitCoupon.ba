@@ -19,12 +19,12 @@
    <div id="someId" class="container" >
       <div class="features_items">
          <!--features_items-->
-         <h2 class="title text-center">Registration</h2>
+         <h2 class="title text-center">@Messages("registration")</h2>
          <div class="col-sm-6 col-sm-offset-1">
             
                <!--sign up form-->
-               <button type="submit" id="companySignup" class="btn btn-default" onClick="registrationForm"> Register as company </button>
-               <h4>Sign Up</h4>
+               <button type="submit" id="companySignup" class="btn btn-default" onClick="registrationForm"> @Messages("registerAsCompany") </button>
+               <h4>@Messages("signUp")</h4>
 	               <div > 
 	               @_userForm(myForm)
 	           	   </div>
@@ -36,11 +36,11 @@
    <div style="display:none" id="companyRegistration" class="container" >
       <div class="features_items">
          <!--features_items-->
-         <h2 class="title text-center">Registration</h2>
+         <h2 class="title text-center">@Messages("registration")</h2>
          <div class="col-sm-6 col-sm-offset-1" >           
 	               <!--sign up form-->
 	               <button type="submit" id="signup" class="btn btn-default" onClick="someId"> Register as user </button>
-	               <h4>Company Registration</h4>
+	               <h4>@Messages("companyRegistration")</h4>
 	               @_companyForm(companyForm)	
             </div>
          </div>
