@@ -6,6 +6,10 @@
 
 @main("Company profile") {
 <header id="header">
+<link href="@routes.Assets.at("css/star-rating.css")" rel="stylesheet">
+      <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
+      <script src="@routes.Assets.at("js/star-rating.js")"></script>
+      <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
    <!--header-->
    <div class="header-middle">
       <!--header-middle-->
@@ -41,9 +45,30 @@
             <li>Company adress: @company.adress</li>
             <li>City:@company.city</li>
             <li>Company contact: @company.contact</li>
-
+            <div class="rate">
+				<li class="pull-left">Company rate</li>
+			       <input id="rating" value="@Rate.companyProgres(company.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
+                 </div>
+				<!-- /rate preview -->  
          </ul>
+         
       </div>
+      
+   </div>
+   
+   <div class="leftBox">
+   
+     @if(Sesija.companyCheck(ctx()) == false && Sesija.getCurrentUser(ctx()) != null){
+      @if( RateController.canRateCompany(Sesija.getCurrentUser(ctx()).id, company.id) == true) {
+      <label>Rate this company</label>
+      	<form id="rateForm" class="rating" action="@routes.RateController.ratingCompany(company.id)" method="POST">
+       	<input id="rate" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+       	<br/>
+   
+  		</form>
+  		}
+  		}
+   
    </div>
    
    
@@ -202,6 +227,24 @@
 						   });
 						 })
 		</script>
+		<script>	
+			        jQuery(document).ready(function() {
+			            $('.auto-submit-star').rating({
+			                callback: function(value, link){
+			                    alert(value);
+			                    this.rating('disable');
+			                }
+			            });
+			        });
+					</script> 
+					
+					<script>
+					$(function() {
+						   $("#rate").change(function() {
+						     $("#rateForm").submit();
+						   });
+						 })
+</script>
 
 
 }
