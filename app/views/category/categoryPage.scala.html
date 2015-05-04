@@ -33,15 +33,15 @@
          <div class="single-products">
             <div class="productinfo text-center">
                <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-               <h2>Only @coupon.getPriceString() KM</h2>
+               <h2>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
                <p>@coupon.name</p>
-               <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
+               <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>@Messages("viewCoupon")</a>
             </div>
             <div class="product-overlay">
                <div class="overlay-content">
-                  <h2>Only @coupon.getPriceString() KM</h2>
+                  <h2>>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
                   <p>@coupon.name</p>
-                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>View Coupon</a>
+                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@*<i class="fa fa-shopping-cart">*@</i>@Messages("viewCoupon")</a>
                </div>
             </div>
          </div>
