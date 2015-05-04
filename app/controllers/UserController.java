@@ -525,5 +525,4 @@ public class UserController extends Controller {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
 	}
-	
 }

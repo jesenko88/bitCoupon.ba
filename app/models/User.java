@@ -422,4 +422,12 @@ public class User extends SuperUser {
 		return null;
 	}
 	
+	/**
+	 * Method for counting notifications for admin
+	 * @return number of nonApproved coupons and nonApproved companies
+	 */
+	public static int adminNotifications() {
+		return Coupon.nonApprovedCoupons().size() + Company.nonApprovedCompanies().size();
+	}
+	
 }

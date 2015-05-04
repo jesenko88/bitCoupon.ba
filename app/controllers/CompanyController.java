@@ -70,7 +70,7 @@ public class CompanyController extends Controller {
 			String adress = companyForm.bindFromRequest().get().adress;
 			String city = companyForm.bindFromRequest().get().city;
 			String contact = companyForm.bindFromRequest().get().contact;
-
+			
 			if (name.length() < 4 || name.equals("Name")) {
 				flash("error", Messages.get("company.longName"));
 				return ok(signup.render(new Form<User>(User.class), registrationForm));
@@ -85,7 +85,7 @@ public class CompanyController extends Controller {
 			else if (Company.verifyRegistration(name, mail) == true) {
 
 				long id = Company.createCompany(name, mail, hashPass, logo,
-						adress, city, contact);
+						adress, city, contact,0);
 				String verificationEmail = EmailVerification.addNewRecord(id);
 
 				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
@@ -160,14 +160,6 @@ public class CompanyController extends Controller {
 
 	}
 
-	/*public static Result approveCompany(long id){
-		Company c = Company.findById(id);
-		c.status = true;
-		c.save();
-		flash("succes", "Company " +c.name +" has been approved");
-		return ok(couponsAll.render( Coupon.approvedCoupons(), Coupon.nonApprovedCoupons()));
-	}*/
-	
 	/**
 	 * Updates the user from the Admin control.
 	 * 
@@ -341,5 +333,26 @@ public class CompanyController extends Controller {
 		c.save();
 		List<TransactionCP> transactions = TransactionCP.allFromCompany(id);
 		return ok(notificationsForCompany.render(transactions));
+	}
+	
+
+	/**
+	 * This method is used only by admin/s and it approves company which has been registered
+	 * @param id of company
+	 * @return redirect to company panel
+	 */
+	@Security.Authenticated(AdminFilter.class)
+	public static Result approveCompany(long companyId) {
+		try {
+			Company company = Company.findById(companyId);
+			company.status = Coupon.Status.ACTIVE;
+			company.save();
+			flash("succes", Messages.get("company") + company.name + " " +  Messages.get("company.hasBeenApproved"));
+			return redirect("/userPanel");
+		} catch (Exception e) {
+			flash("error", ERROR_MSG_ADMIN);
+			Logger.error("Error at approveCoupon: " + e.getMessage());
+			return redirect("/");
+		}
 	}
 }
