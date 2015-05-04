@@ -6,6 +6,7 @@ import helpers.FileUpload;
 import java.util.Date;
 import java.util.List;
 
+import models.Image;
 import models.Post;
 import models.User;
 import play.Logger;
@@ -117,6 +118,7 @@ public class BlogController extends Controller {
 	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deletePost(long id){
+		
 		Post.deletePost(id);
 		flash("success", Messages.get("delete.success"));
 		return blog();

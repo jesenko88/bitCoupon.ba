@@ -3,22 +3,14 @@ package helpers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.imageio.ImageIO;
-
+import models.Image;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
-
 import play.Logger;
-import play.Play;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
-import com.cloudinary.Cloudinary;
 import com.google.common.io.Files;
 
 public class FileUpload extends Controller{
@@ -26,17 +18,7 @@ public class FileUpload extends Controller{
 	static final double MAX_IMAGE_SIZE = 2.5;
 
 	public static String imageUpload() {
-		
-		String cloudName = Play.application().configuration().getString("cloudinary_name");
-		String apiKey = Play.application().configuration().getString("cloudinary_api_key");
-		String apiSecret = Play.application().configuration().getString("cloudinary_api_secret");
-		
-		Map<String, String> config = new HashMap<String, String>();
-		config.put("cloud_name", cloudName);
-		config.put("api_key", apiKey);
-		config.put("api_secret", apiSecret);
-		Cloudinary cloudinary = new Cloudinary(config);
-		
+
 		MultipartFormData body = request().body().asMultipartFormData();	
 		FilePart filePart = body.getFile("picture");
 		
@@ -58,17 +40,8 @@ public class FileUpload extends Controller{
 			flash("error", "Image too large");
 			return null;
 		}
-		
-		@SuppressWarnings("rawtypes")
-		Map uploadResult = null;
-		try {
-			uploadResult = cloudinary.uploader().upload(image, Cloudinary.emptyMap());
-		} catch (IOException e2) {
-			Logger.error(e2.getMessage());
-			e2.printStackTrace();
-		}
-		
-		return 	(String) uploadResult.get("url");
+			
+		return 	Image.create(image);
 
 	}	
 	/**
@@ -122,6 +95,8 @@ public class FileUpload extends Controller{
 		
 		return image;
 	}
+	
+	
 	
 	
 	

@@ -387,6 +387,11 @@ public class User extends SuperUser {
 		return "";
 	}
 	
+	public String getImageAs(int width, int height) {
+		String publicId = Image.getPublicId(profilePicture);
+		return Image.getSize(width, height, publicId);
+	}
+	
 	/**
 	 * Method for validating user registration form
 	 * @return
