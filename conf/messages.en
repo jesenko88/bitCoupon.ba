@@ -28,9 +28,9 @@ company.updatePhoto = Photo updated successfully
 comment.tooLong = Comment should not be longer than 1200 characters
 clean = Clean
 contact = Contact
-
+contactFormat = Contact must be in format 123456789
 delete.success = Delete successful
-
+adress = Address
 error.msg.00 = Error occurred!
 error.msg.01 = Oops. Error occurred, please try again later
 error.msg.02 = Error occurred ! Please contact the administrator.
@@ -101,6 +101,7 @@ transaction.canceled = Transaction canceled
 transaction.complete = Transaction complete
 transaction.refund.success = All buyers of this coupon are successfully refunded
 
+update = Update
 updated = updated
 updatedSuccessfully = updated successfully
 updateSuccess = Update successful
@@ -110,8 +111,9 @@ user.photo.updated = You updated you're photo!
 user.with.email = A user with email: 
 user.notExists = doesn't exists
 
-
+allFieldsCorrectly = Please make sure you filled all fields correctly
 #HTML----------------------------
+errorSubmitingForm = Error Submiting Form
 footerProjectBitCoupon = Project BITCoupon mirror site of eKupon
 building = Building
 bih = Bosnia and Herzegovina
@@ -143,13 +145,65 @@ editProfile = Edit profile
 adminPanel = Admin Panel
 searchResult = Search Result
 viewCompany = View Company
-
-
-
-
-
-
-
+minLength = Min length is {0}
+maxLength = Max length is {0}
+minLength3 = Min length is 3
+minLength6 = Min length is 6
+maxLength20 = Max length is 20
+invalidEmailFormat = Email format is not valid
+invalidNameFormat = Name format is not valid
+passwordFormat = Password must contain upper case, lower case and number
+confirmPassword = Confirm password
+passwordsDontMatch = Passwords do not match
+name = Name
+password = Password
+username = Username
+surname = Surname
+onlyLettersAndNumbers = Only letters and numbers alowed.
+onlyLetters = Only letters allowed
+dateOfBirth = Date of birth
+dateIsNotAllowed = Date you provided is not alowed
+youMustBeOlderThan18 = You must be older then 18
+youAreUnder18 = You are underage of 18
+male = Male
+female = Female
+city = City
+couponCategories = Coupon categories
+facebook = Facebook
+aboutBitCoupon = About BitCoupon
+blog = Blog
+faq = FAQ
+registration = Registration
+registerAsCompany = Register as company
+companyRegistration = Company Registration
+signUp = Sign Up
+verification = Verification
+goToLogin = Go to Login
+goToProfilePage =  Go To Profile Page
+togleNavigation = Toggle navigation
+createNewPost = Create new post
+admin = ADMIN
+postedBy = Posted by
+onDate = on
+olderPosts = Older Posts
+tags = Tags
+error = Error
+title = Title
+subtite = Subtitle
+chooseYourPhoto = Choose your post photo
+content = Content
+createPost = Create New Post
+updatePost = Update post
+cleanBlogSamplePost = Clean Blog - Sample Post
+editThisPost = Edit this post
+areYouSureToDelete = Are you sure you want to delete this post?
+editFAQ = Edit FAQ
+newFaq = New FAQ
+home = Home
+edit = Edit
+delete = Delete
+addNewFaq = Add new FAQ
+addFaq = Add FAQ
 
 
 
