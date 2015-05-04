@@ -22,16 +22,16 @@
 <div class="container">
 
 
-	<h2 class="title text-center"> * Gift page *</h2>
+	<h2 class="title text-center"> * @Messages("giftPage") *</h2>
 
 <div class="table-responsive">
    <table class="table table-striped">
       <thead>
          <tr>
      
-            <th id="th-width-60">Coupon</th>
-            <th>Expiring</th>
-            <th>Price</th>
+            <th id="th-width-60">@Messages("coupon")</th>
+            <th>@Messages("expiring")</th>
+            <th>@Messages("price")</th>
          </tr>
       </thead>
       <tbody>
@@ -61,10 +61,10 @@
 				<table class="table table-striped">
 	    			 <thead>
 				         <tr>
-				            <th>Email</th>
-				            <th>Name</th>
-				            <th>Surname</th>
-				            <th>Quantity</th>
+				            <th>@Messages("email")</th>
+				            <th>@Messages("name")</th>
+				            <th>@Messages("surname")</th>
+				            <th>@Messages("quantity")</th>
 				         </tr>
 			      </thead>
 				      <tbody>
@@ -73,7 +73,7 @@
 				            <td>@user.username</td>
 				            <td>@user.surname</td>
 				            <td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
-				            <td>  <button  type="submit" id="submit-buy-for" class="btn btn-warning" >Proceed</button> </td>
+				            <td>  <button  type="submit" id="submit-buy-for" class="btn btn-warning" >@Messages("proceed")</button> </td>
 				         </tr>
 				      </tbody>
 	   			</table>
@@ -82,7 +82,7 @@
 		  @if(user == null){
 		  	<br>
 		  	<div class="col-sm-8 pull-right"
-		  	 <label>Recipient details</label>
+		  	 <label>@Messages("recipientDetails")</label>
 			  	<form action="/couponpurchase" method="POST">
 			  		<input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
 			  		<!-- setting the value to -1 so it can be identified as an unregistered user -->
@@ -90,9 +90,9 @@
 		        	<input class="form-control" id="email" name="email" type="email" placeholder="User email" required/><br>
 		        	<input class="form-control" id="name" name="name" type="text" placeholder="User first name" required/><br>
 		        	<input class="form-control" id="surname" name="surname" type="text" placeholder="User last name" required/><br>
-		        	<label>Enter quantity:</label><br>
+		        	<label>@Messages("enterQuantity")</label><br>
 		        	<td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
-		        	<td>  <button type="submit" id="submit-buy-for" class="btn btn-warning pull-right" >Proceed</button> </td>
+		        	<td>  <button type="submit" id="submit-buy-for" class="btn btn-warning pull-right" >@Messages("proceed")</button> </td>
 			  	</form>
 		  	</div>
 		  }

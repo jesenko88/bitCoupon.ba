@@ -27,7 +27,7 @@
 <div class="container">
    <div class="features_items">
       <!--features_items-->
-      <h2 class="title text-center">Edit User</h2>
+      <h2 class="title text-center">@Messages("editUser")</h2>
       <div class="col-sm-6 col-sm-offset-1">
          <h5>Edit user: @superUser.getUser().username</h5>
        
@@ -35,7 +35,7 @@
                <hr>
 				  @if(userForm.hasGlobalErrors){
 					<div class="panel panel-danger">
-						<div class="panel-heading">Error Submiting Form</div>
+						<div class="panel-heading">@Messages("errorSubmitingForm")</div>
 				  		<div class="panel-body">
 				   			 <ul>
 				   			 @for(err <- userForm.globalErrors){
@@ -49,48 +49,48 @@
 				  <!-- onchange="form.confirmPassword.pattern = this.value;" -->
                   <!-- Input email -->
                    <div class='@("form-group has-error".when(userForm("email").hasErrors)) form-group' >
-			     	 <label class="control-label" for="email">Email<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="email">@Messages("email")<span style="color:#AB1403"> *</span></label>
                  	 <input class="form-control" value='@userForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> 
 		          </div>		         
                  <!-- Username --> 
                 <div class='@("form-group has-error".when(userForm("username").hasErrors)) form-group' >
-			     	 <label class="control-label" for="username">Username<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="username">@Messages("username")<span style="color:#AB1403"> *</span></label>
                      <input class='@("has-error".when(userForm("username").hasErrors)) form-control'  value='@userForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" required/>	
  		        </div>
  		        <!-- Surname -->
                 <div class='@("form-group has-error".when(userForm("surname").hasErrors)) form-group' >
-			     	 <label class="control-label" for="surname">Surname<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="surname">@Messages("surname")<span style="color:#AB1403"> *</span></label>
                      <input class="form-control" value='@userForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" required/>	
  		        </div>
              	<!-- Birth day -->
                 <div class='@("form-group has-error".when(userForm("dob").hasErrors)) form-group' >
-			     	 <label class="control-label" for="dob">Date of birth<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="dob">@Messages("dateOfBirth")<span style="color:#AB1403"> *</span></label>
                      <input class="form-control datepicker-bit " value='@userForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
  		        </div> 
- 		        <span id="error" style="display:none; color:red"> You are underage of 18 </span>
+ 		        <span id="error" style="display:none; color:red"> @Messages("youAreUnder18") </span>
                 
                 <!-- GENDER -->
                 <label class="radio-inline">
                    <input  value='@userForm("gender").value' type="radio" id="gender-male" name="gender"  value="male" checked /> 
-				    Male
+				    @Messages("male")
                 </label>
                 <label class="radio-inline">
                   <input  value='@userForm("gender").value' type="radio" id="gender-female" name="gender"  value="female" /> 
-				    Female
+				    @Messages("female")
                 </label>
                 <br><br>
                 <!-- Adress -->
                  <div class='@("form-group has-error".when(userForm("adress").hasErrors)) form-group' >
-			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="adress">@Messages("address")<span style="color:#AB1403"> *</span></label>
                      <input class="form-control" value='@userForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
  		        </div>
                 <!-- City -->
 				<div class='@("form-group has-error".when(userForm("city").hasErrors)) form-group' >
-			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="city">@Messages("city")<span style="color:#AB1403"> *</span></label>
               	     <input class="form-control" value='@userForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
  		        </div>                                     
                  
-                  <button type="submit" id="submit-user" class="btn btn-default" >Submit</button>
+                  <button type="submit" id="submit-user" class="btn btn-default" >@Messages("submit")</button>
               	</div>
             </form>
         
@@ -110,7 +110,7 @@
                <hr>
 				  @if(companyForm.hasGlobalErrors){
 					<div class="panel panel-danger">
-						<div class="panel-heading">Error Submiting Form</div>
+						<div class="panel-heading">@Messages("Error Submiting Form")</div>
 				  		<div class="panel-body">
 				   			 <ul>
 				   			 @for(err <- companyForm.globalErrors){
@@ -122,36 +122,36 @@
 					}
                   <!-- Input email -->
                    <div class='@("form-group has-error".when(companyForm("email").hasErrors)) form-group' >
-			     	 <label class="control-label" for="email">Email<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="email">>@Messages("email")<span style="color:#AB1403"> *</span></label>
                  	 <input class="form-control" value='@companyForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> 
 		          </div>
 		          
  		          <!-- Name -->
  		          <div class='@("form-group has-error".when(companyForm("name").hasErrors)) form-group' >
-			     	 <label class="control-label" for="name">Name<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="name">>@Messages("name")<span style="color:#AB1403"> *</span></label>
                   	 <input class="form-control" value='@companyForm("name").value' type="text" id="name-c" name="name"  onClick="this.select()"  placeholder="Company name" required/>	
 		          </div>
 		          <!-- Contact -->
  		          <div class='@("form-group has-error".when(companyForm("contact").hasErrors)) form-group' >
-			     	 <label class="control-label" for="contact">Contact<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="contact">>@Messages("contact")<span style="color:#AB1403"> *</span></label>
                	     <input class="form-control" value='@companyForm("contact").value' type="text" id="contact-c" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>
 		          </div>
 		          <!-- Logo -->
 		          <div class='@("form-group has-error".when(companyForm("logo").hasErrors)) form-group' >
-			     	 <label class="control-label" for="logo">Logo<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="logo">>@Messages("logo")<span style="color:#AB1403"> *</span></label>
                   	 <input class="form-control" value='@companyForm("logo").value' type="text" id="logo-c" name="logo" onClick="this.select()" placeholder="Logo" required/> 
 		          </div>
  		          <!-- Adress -->
                  <div class='@("form-group has-error".when(companyForm("adress").hasErrors)) form-group' >
-			     	 <label class="control-label" for="adress">Adress<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="adress">>@Messages("address")<span style="color:#AB1403"> *</span></label>
                      <input class="form-control" value='@companyForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
  		        </div>
                 <!-- City -->
 				<div class='@("form-group has-error".when(companyForm("city").hasErrors)) form-group' >
-			     	 <label class="control-label" for="city">City<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="city">>@Messages("address")<span style="color:#AB1403"> *</span></label>
               	     <input class="form-control" value='@companyForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
  		        </div>   
-                  <button type="submit" id="submit-company" class="btn btn-default" >Submit</button>
+                  <button type="submit" id="submit-company" class="btn btn-default" >>@Messages("submit")</button>
               
             </form>
        
