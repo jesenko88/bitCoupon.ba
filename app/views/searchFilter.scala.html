@@ -14,7 +14,7 @@
             <div class="logo pull-right">
            		<div class="search_box">
             		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
-  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">@Messages("searchFilter")r</button>
   					<button type="button" class="btn-btn default"name="answer"  style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
                   			font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px"><a href="/companies">@Messages("searchCompany")</a></button>
                                   <script type="text/javascript">
@@ -74,9 +74,9 @@
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
                   <option value="" style="display:none">@Messages("orderBy") </option>
-                  <option>Category</option>
-                  <option >Price</option>
-                  <option>Date</option>
+                  <option>@Messages("category")</option>
+                  <option >@Messages("price")</option>
+                  <option>@Messages("date")</option>
                </select>
                <input type="radio" id="method" name="method" value="ascending" checked>@Messages("ascending") 
                <input type="radio" id="method" name="method" value="descending">@Messages("descending") 
@@ -88,7 +88,7 @@
       
       
    </div>
- <h2 class="title text-center">Search Result</h2>
+ <h2 class="title text-center">@Messages("searchResult")</h2>
    
      
    <div class="container">
