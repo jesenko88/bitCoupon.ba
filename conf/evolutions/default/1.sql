@@ -41,6 +41,7 @@ create table company (
   logo                      varchar(255),
   contact                   varchar(255),
   notifications             integer,
+  status                    integer,
   constraint pk_company primary key (id))
 ;
 

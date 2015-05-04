@@ -8,6 +8,7 @@ import java.util.Date;
 import models.Category;
 import models.Company;
 import models.Coupon;
+import models.Coupon.Status;
 import models.EmailVerification;
 import models.FAQ;
 import models.Post;
@@ -108,6 +109,7 @@ public class Global extends GlobalSettings {
 			bitCamp = new Company("Admin", "bitcouponadmin@gmail.com",
 					HashHelper.createPassword("bitadmin"), new Date(), picture,
 					adress, city, contact);
+			bitCamp.status = Status.ACTIVE;
 			bitCamp.save();
 		}
 
@@ -115,6 +117,7 @@ public class Global extends GlobalSettings {
 			bitCamp = new Company("BitCamp", "bitcamp@bitcamp.ba",
 					HashHelper.createPassword("bitcamp"), new Date(), picture,
 					adress, city, contact);
+			bitCamp.status = Status.ACTIVE;
 			bitCamp.save();
 		}
 
