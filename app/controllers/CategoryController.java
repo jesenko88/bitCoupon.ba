@@ -125,9 +125,9 @@ public class CategoryController extends Controller {
 				Category.createCategory(name, ""); //TODO default category image url
 			}
 			
-			Logger.info(session("name") + " created a new category: \"" + name
-					+ "\"");
+			Logger.info(session("name") + " created a new category: \"" + name + "\"");
 			flash("success", Messages.get("category.Added", name));
+			Logger.debug( Messages.get("category.Added", name));
 			return addCategoryView();			
 		}catch(Exception e){
 			flash("error", ERROR_MSG_ADMIN);

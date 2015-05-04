@@ -1,0 +1,34 @@
+@(curUser: SuperUser)(coupon: Coupon)(details: List[String])
+
+@import helper._
+
+@main("Welcome to bitCoupon") {
+	
+<div class="container">
+   <div class="paypal-info">
+      <ul class="pull-left">
+         @for( info <- details ){
+         <h4>
+            <li> @info </li>
+         </h4>
+         }	
+      </ul>
+      <form class="paypal-approve">
+         <button  type="submit" class="btn btn-warning" formaction="@routes.PayPalController.approveTransaction()">Approve</button>
+         <button  type="submit" class="btn btn-default" formaction="/api/backToMobile" >Cancel transaction</button>
+      </form>
+   </div>
+   <br>
+   <div class="product-information">
+      <!--/product-information-->
+      <h2> @coupon.name </h2>
+      <span>
+      <span> @coupon.getPriceString() KM</span>
+      <div>				
+         <textarea disabled rows="1">@coupon.getExpiration()</textarea>
+      </div>
+   </div>
+</div>	
+
+
+}

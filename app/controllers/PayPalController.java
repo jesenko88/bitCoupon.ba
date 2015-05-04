@@ -22,8 +22,8 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import views.html.index;
-import views.html.coupon.couponResult;
-import views.html.coupon.coupontemplate;
+import views.html.coupon.*;
+import views.html.mobile.*;
 
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Links;
@@ -58,6 +58,8 @@ public class PayPalController extends Controller {
 			.getString("cliendID");
 	private static final String CLIENT_SECRET = Play.application().configuration()
 			.getString("cliendSecret");
+	private static UserAgent userAgent = null;
+	private static String deviceType = null;
 
 	/**
 	 * Method starts the purchase process. First it collects the data from the
@@ -139,8 +141,8 @@ public class PayPalController extends Controller {
 			
 			RedirectUrls redirectUrls = new RedirectUrls();
 
-			UserAgent userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
-			String deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
 			
 			/*
 			 * Checking the device type in case the purchase is 
@@ -212,6 +214,12 @@ public class PayPalController extends Controller {
 			/*when the payment is built, the client is redirected to the
 			 * approval page */
 			
+			userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+				flash("info", Messages.get("transaction.approve"));
+				return ok(api_transactionApprove.render(currentUser, coupon, details));	
+			}			
 			flash("info", Messages.get("transaction.approve"));
 			return ok(couponResult.render(currentUser, coupon, details));
 		} catch (Exception e) {
@@ -229,6 +237,11 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result couponFail() {
+		userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+		deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+		if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+			return redirect("/api/backToMobile");	
+		}	
 		flash("error", Messages.get("transaction.canceled"));
 		return badRequest(coupontemplate.render(coupon));
 	}
@@ -266,7 +279,12 @@ public class PayPalController extends Controller {
 			
 			coupon.seller.notifications ++;
 			coupon.seller.save();
-			Logger.info(session("name") + " approved transaction: //TODO");
+			
+			userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+				return redirect("/api/backToMobile");	
+			}	
 			flash("success", Messages.get("transaction.complete"));
 			return ok(index.render(Coupon.all(), Category.all()));
 

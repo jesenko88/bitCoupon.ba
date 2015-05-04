@@ -147,8 +147,13 @@
             <li>Company contact: @superUser.getCompany().contact</li>
             @if(Coupon.ownedCoupons(superUser.getCompany().id).size() > 0) {
             <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</a></li>
+            <div class="rate">
+				<label class="pull-left">Company rate</label>
+			       <input id="rating" value="@Rate.companyProgres(superUser.getCompany().id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
+                 </div>
+				<!-- /rate preview -->  
             } else {
-            <li>Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>            
+            <li>Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>      
             }        
          </ul>
       </div>

@@ -39,9 +39,8 @@ import views.html.searchFilter;
 import views.html.admin.users.adminCouponPanel;
 import views.html.admin.users.couponsAll;
 import views.html.company.listOfBuyers;
-import views.html.coupon.couponPanel;
-import views.html.coupon.coupontemplate;
-import views.html.coupon.updateCouponView;
+import views.html.coupon.*;
+import views.html.mobile.*;
 import api.JSonHelper;
 
 import com.google.common.io.Files;
@@ -797,6 +796,26 @@ public class CouponController extends Controller {
 			return ok(listOfBuyers.render(new ArrayList<>()));
 		else
 			return ok(listOfBuyers.render(c.buyers));
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public static Result mobileCheckout(long couponId, long userid) {
+		Coupon coupon = Coupon.find(couponId);
+		User user = User.find(userid);
+		session("name", user.username);
+		session("email", user.email);
+		return ok(api_couponCheckout.render(coupon, user));
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public static Result backToMobile() {
+		return ok(api_backToApp.render());
 	}
 	
 }
