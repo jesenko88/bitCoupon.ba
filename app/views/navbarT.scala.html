@@ -22,8 +22,8 @@
                <ul class="dropdown-menu">
                   <li><a href="@routes.SuperUserController.userUpdateView">@Messages("editProfile")</a>
                      @if(Sesija.adminCheck(ctx()) == true) {
-                     	@if(Coupon.nonApprovedCoupons().size() > 0) {          
-                  <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">@Messages("adminPanel")   <i id="newBadge" class="newbadge">@Coupon.nonApprovedCoupons().size()</i></a></li>
+                     	@if(User.adminNotifications() > 0) {          
+                  <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">@Messages("adminPanel")   <i id="newBadge" class="newbadge">@User.adminNotifications()</i></a></li>
                      } else {
                     <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">@Messages("adminPanel")</a></li>                   
                      }

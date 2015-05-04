@@ -263,4 +263,19 @@ public class Company  extends SuperUser{
 				nonApprovedCompanies = new ArrayList<Company>();
 			return nonApprovedCompanies;
 		}
+	
+	/**
+	 * This method gets list of companies by status sent as parameter.
+	 * in case list is null or sent status is not valid, method
+	 * returns empty array list.
+	 * @param status
+	 * @return
+	 */
+	public static List<Company> findByStatus(int status){
+		List<Company> byStatus = find.where().eq("status", status).findList();
+		if(byStatus == null){
+			byStatus = new ArrayList<Company>();
+		}
+		return byStatus;
+	}
 }

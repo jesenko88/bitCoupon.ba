@@ -82,6 +82,7 @@ POST   /registerC                              controllers.CompanyController.reg
 POST   /updateCompany                          controllers.CompanyController.updateCompany(id: Long)
 GET    /deletCompany                           controllers.CompanyController.deleteCompany(id: Long)
 POST   /updateCompany/:id                      controllers.CompanyController.adminUpdateCompany(id: Long)
+GET    /approveCompany/:id                     controllers.CompanyController.approveCompany(id: Long)
 
 GET    /companyProfile/:id                     controllers.CompanyController.showCompanyProfile(id: Long)
 GET    /companies                              controllers.CompanyController.listCompanies()

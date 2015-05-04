@@ -161,14 +161,6 @@ public class CompanyController extends Controller {
 
 	}
 
-	/*public static Result approveCompany(long id){
-		Company c = Company.findById(id);
-		c.status = true;
-		c.save();
-		flash("succes", "Company " +c.name +" has been approved");
-		return ok(couponsAll.render( Coupon.approvedCoupons(), Coupon.nonApprovedCoupons()));
-	}*/
-	
 	/**
 	 * Updates the user from the Admin control.
 	 * 
@@ -369,7 +361,7 @@ public class CompanyController extends Controller {
 			company.status = Coupon.Status.ACTIVE;
 			company.save();
 			flash("succes", Messages.get("company") + company.name + " " +  Messages.get("company.hasBeenApproved"));
-			return ok("/");
+			return redirect("/userPanel");
 		} catch (Exception e) {
 			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at approveCoupon: " + e.getMessage());
