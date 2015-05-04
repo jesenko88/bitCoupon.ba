@@ -4946,7 +4946,8 @@ border-top-left-radius
 }
 
 .label-default {
-	background-color: #999
+	background-color: #999;
+	display:none
 }
 
 .label-default[href]:hover, .label-default[href]:focus {
@@ -4954,7 +4955,8 @@ border-top-left-radius
 }
 
 .label-primary {
-	background-color: #428bca
+	background-color: #428bca;
+	display:none
 }
 
 .label-primary[href]:hover, .label-primary[href]:focus {
@@ -4970,7 +4972,8 @@ border-top-left-radius
 }
 
 .label-info {
-	background-color: #5bc0de
+	background-color: #5bc0de;
+	display:none
 }
 
 .label-info[href]:hover, .label-info[href]:focus {

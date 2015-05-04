@@ -122,7 +122,7 @@ GET    /removeCommentReport/:id                controllers.CommentController.rem
 
 # Rate controller
 POST   /rate/:id                               controllers.RateController.rating(id: Long)
-
+POST   /rateCompany/:id                        controllers.RateController.ratingCompany(id: Long)
 # Question controller
 POST   /question/:id                           controllers.QuestionController.addQuestion(id: Long)	
 POST   /answer/:id                             controllers.QuestionController.addAnswer(id: Long)	
