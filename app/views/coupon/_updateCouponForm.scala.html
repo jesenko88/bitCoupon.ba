@@ -5,7 +5,7 @@
       enctype="multipart/form-data" >
 	      @if(myForm.hasGlobalErrors){
 	      <div class="panel panel-danger">
-	         <div class="panel-heading">Error Submiting Form</div>
+	         <div class="panel-heading">@Messages("errorSubmitingForm")</div>
 	         <div class="panel-body">
 	            <ul>
 	               @for(err <- myForm.globalErrors){
@@ -18,70 +18,70 @@
     <div class="form-group" style="padding:1%">
     <!-- Input for name -->
       <div class='@("form-group has-error".when(myForm("name").hasErrors)) form-group' >
-     	 <label class="control-label" for="name">Name<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="name">@Messages("name")<span style="color:#AB1403"> *</span></label>
      	 <input class="form-control"  value='@myForm("name").value' type="text" name="name" id="name" minlength="4" maxlength="200" placeholder="Name" required/>
      </div>
      <!-- Input for price -->
       <div class='@("form-group has-error".when(myForm("price").hasErrors)) form-group' >
-     	 <label class="control-label" for="price">Price<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="price">@Messages("price")<span style="color:#AB1403"> *</span></label>
          <input class="form-control"  value='@myForm("price").value' type="number" name="price" id="price" min="1" step="any" placeholder="Price" required/>
       </div>
      <!-- Input for expiration date --> 
       <div class='@("form-group has-error".when(myForm("dateExpire").hasErrors)) form-group' >
-     	 <label class="control-label" for="dateExpire">Date<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="dateExpire">@Messages("date")<span style="color:#AB1403"> *</span></label>
 		 <input class="form-control datepicker-bit"   value='@myForm("dateExpire").value' type="date" id="datepicker" name="dateExpire" required>
       </div>
      <!-- Input for photo -->     
      <div class='@("form-group has-error".when(myForm("picture").hasErrors)) form-group' >
-     	 <label class="control-label" for="picture">Picture</label>
+     	 <label class="control-label" for="picture">@Messages("picture")</label>
 		 <input class="form-control"  type="file" name="picture" id="picture" placeholder="Choose your photo" />
      </div>
      <!-- Input for category -->
      <div class='@("form-group has-error".when(myForm("category").hasErrors)) form-group' >
-     	 <label class="control-label" for="category">Category<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="category">@Messages("category")<span style="color:#AB1403"> *</span></label>
 		 <select class="form-control"  value='@myForm("category").value'  id="category" name="category" required>
 	         @if(coupon.category != null){
 	         <option select="selected" style="display:none" > @coupon.category.name </option>	         	
 	         }else{
-	         <option value='@myForm("category").value' style="display:none">Select category</option>	         
+	         <option value='@myForm("category").value' style="display:none">@Messages("selectCategory")</option>	         
 	         }
 	         @for(category <- Category.all()) {
 	         <option>@category.name</option>
 	         }
 	         @if(Sesija.adminCheck(ctx()) == true) {
-	         <option >New Category</option>
+	         <option >@Messages("newCategory")</option>
 	         }
       </select>	
       <input class="form-control"  type="text" name="newCategory" style="margin-top:10px; display:none;" id="newCategory" placeholder="New Category ?" />
      </div> 
      <!-- Input for description -->
      <div class='@("form-group has-error".when(myForm("description").hasErrors)) form-group' >
-     	 <label class="control-label" for="description">Description<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="description">@Messages("description")<span style="color:#AB1403"> *</span></label>
          <textarea class="form-control"  name="description" id="description" rows="6" style="margin-top:10px" placeholder="Description of Coupon" required>@myForm("description").value</textarea>
      </div>
      <!-- Input for remark -->
      <div class='@("form-group has-error".when(myForm("remark").hasErrors)) form-group' >
-     	 <label class="control-label" for="description">Remark</label>
+     	 <label class="control-label" for="description">@Messages("remark")</label>
      	<textarea class="form-control" name="remark" id="remark" rows="6" placeholder="Remark of Coupon">@myForm("remark").value</textarea>
      </div>
      <!-- Input for min order -->
   	 <div class='@("form-group has-error".when(myForm("minOrder").hasErrors)) form-group' >
-     	 <label class="control-label" for="minOrder">Minimal order for offer to be successful<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="minOrder">@Messages("minimalOrderForOfferSuccessful")<span style="color:#AB1403"> *</span></label>
      	 <input  class="form-control" value='@myForm("minOrder").value' type="number" name="minOrder" id="minOrder" min="1" placeholder="Minimal order" required/>
      </div>
      <!-- Input for max order -->
   	 <div class='@("form-group has-error".when(myForm("maxOrder").hasErrors)) form-group' >
-     	 <label class="control-label" for="maxOrder">Maximum orders<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="maxOrder">@Messages("maxOrders")<span style="color:#AB1403"> *</span></label>
      	 <input class="form-control" value='@myForm("maxOrder").value' type="number" name="maxOrder" id="maxOrder" min="1" placeholder="Maximal order" required/>
      </div>     
-      <span id="error" style="display:none; color:red"> Maximal order can not be smaller than minimal order </span>	
+      <span id="error" style="display:none; color:red"> @Messages("maxOrderCanNotBeSmallerThanMinimalOrder") </span>	
       <!-- Input for usage date -->
        <div class='@("form-group has-error".when(myForm("usage").hasErrors)) form-group' >
-     	 <label class="control-label" for="usage">Usage date<span style="color:#AB1403"> *</span></label>
+     	 <label class="control-label" for="usage">@Messages("usageDate")<span style="color:#AB1403"> *</span></label>
      	 <input class="form-control datepicker-bit datepicker"  value='@myForm("usage").value' type="date" 
      	 		 name="usage" required>
      </div>       
-      <span id="error1" style="display:none; color:red"> Date of usage can not be older than expiration date </span>     
-      <button  type="submit" class="btn btn-default" required>Edit Coupon</button>
+      <span id="error1" style="display:none; color:red"> @Messages("usageDateMustBeEqualOrGreaterThenExpireDate") </span>     
+      <button  type="submit" class="btn btn-default" required>@Messages("editCoupon")</button>
  </div>
    </form>
