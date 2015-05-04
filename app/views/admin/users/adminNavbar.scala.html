@@ -9,7 +9,7 @@
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
          </button>
-         <a class="navbar-brand" href="@routes.UserController.controlPanel(user.id)">Dashboard</a>
+         <a class="navbar-brand" href="@routes.UserController.controlPanel(user.id)">>@Messages("dashboard")</a>
       </div>
       <div class="navbar-collapse collapse">
          <ul class="nav navbar-nav navbar-right">
@@ -17,13 +17,13 @@
             @if(Coupon.nonApprovedCoupons().size() > 0) {
                <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-envelope"> @User.adminNotifications()</i> Admin <span class="caret"></span></a>
               } else {
-               <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"> </i> Admin <span class="caret"></span></a>              
+               <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"> </i> @Messages("adminLC") <span class="caret"></span></a>              
               }
                <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                  <li><a href="#">My Profile</a></li>
+                  <li><a href="#">@Messages("myProfile")</a></li>
                </ul>
             </li>
-            <li><a href="/logout"><i class="glyphicon glyphicon-lock"> </i> Logout</a></li>
+            <li><a href="/logout"><i class="glyphicon glyphicon-lock"> </i> @Messages("logout")</a></li>
          </ul>
       </div>
    </div>
@@ -38,38 +38,39 @@
    <hr>
    <ul class="nav nav-stacked">
       <li class="nav-header">
-         <a href="#" data-toggle="collapse" data-target="#userMenu">Settings <i class="glyphicon glyphicon-chevron-down"> </i></a>
+         <a href="#" data-toggle="collapse" data-target="#userMenu">@Messages("settings") <i class="glyphicon glyphicon-chevron-down"> </i></a>
          <ul class="nav nav-stacked collapse in" id="userMenu">
-            <li class="active"> <a href="/"><i class="glyphicon glyphicon-home"> </i> Home</a></li>
+
+            <li class="active"> <a href="/"><i class="glyphicon glyphicon-home"> </i> @Messages("home")</a></li>
             @if(Coupon.nonApprovedCoupons().size() > 0 && Company.nonApprovedCompanies().size() == 0) {
-            <li><a href="/allCoupons#coupons"><i class="glyphicon glyphicon-envelope"> </i> Notifications <span class="badge badge-info">@User.adminNotifications()</span></a></li>
+            <li><a href="/allCoupons#coupons"><i class="glyphicon glyphicon-envelope"> </i> @Messages("notifications") <span class="badge badge-info">@User.adminNotifications()</span></a></li>
             }
             @if(Company.nonApprovedCompanies().size() >= 0 && Coupon.nonApprovedCoupons().size() == 0) {
-            <li><a href="/userPanel#companies"><i class="glyphicon glyphicon-envelope"> </i> Notifications <span class="badge badge-info">@User.adminNotifications()</span></a></li>
+            <li><a href="/userPanel#companies"><i class="glyphicon glyphicon-envelope"> </i> @Messages("notifications") <span class="badge badge-info">@User.adminNotifications()</span></a></li>
 			} 
 			 @if(Company.nonApprovedCompanies().size() > 0 && Coupon.nonApprovedCoupons().size() > 0) {
-            <li><a href="/userPanel#companies"><i class="glyphicon glyphicon-envelope"> </i> Notifications <span class="badge badge-info">@User.adminNotifications()</span></a></li>
+            <li><a href="/userPanel#companies"><i class="glyphicon glyphicon-envelope"> </i> @Messages("notifications") <span class="badge badge-info">@User.adminNotifications()</span></a></li>
 			}          
             <li><a href="@routes.UserController.listUsers"><i class="glyphicon glyphicon-user"> </i>  User panel</a></li>
            
            <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2">
-            <i class="glyphicon glyphicon-tag"> </i> Coupon panel <i class="glyphicon glyphicon-chevron-right"> </i></a>
+            <i class="glyphicon glyphicon-tag"> </i> @Messages("couponPanel") <i class="glyphicon glyphicon-chevron-right"> </i></a>
                <ul class="nav nav-stacked collapse" id="menu2">
-                   <li><a href="@routes.CouponController.addCouponView">Add coupon</a></li>
-                  <li><a href="/allCoupons">All coupons</a></li>                        
+                   <li><a href="@routes.CouponController.addCouponView">@Messages("addCoupon")</a></li>
+                  <li><a href="/allCoupons">@Messages("allCoupons")</a></li>                        
                </ul>
             </li>
 
             <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu3">
-           <i class="glyphicon glyphicon-tasks"> </i>  Category panel <i class="glyphicon glyphicon-chevron-right"> </i></a>
+           <i class="glyphicon glyphicon-tasks"> </i>  @Messages("categoryPanel") <i class="glyphicon glyphicon-chevron-right"> </i></a>
                <ul class="nav nav-stacked collapse" id="menu3">
-                   <li><a href="/categoryPanel"> Add category</a></li>
-                  <li><a href="/categoryList">All categories</a></li>                        
+                   <li><a href="/categoryPanel"> @Messages("addCategory")</a></li>
+                  <li><a href="/categoryList">@Messages("allCategories")</a></li>                        
                </ul>
             </li>           
-            <li><a href="/newsletter"> <i class="glyphicon glyphicon-gift"> </i> Newsletter </a></li>  
-             <li><a href="/subscribers"> <i class="glyphicon glyphicon-heart"> </i> Subscribers </a></li>  
-        	<li><a href="@routes.UserController.getStatistic"> <i class="glyphicon glyphicon-download-alt"> </i> Download statistics </a></li>  
+            <li><a href="/newsletter"> <i class="glyphicon glyphicon-gift"> </i> @Messages("newsLetter")</a></li>  
+             <li><a href="/subscribers"> <i class="glyphicon glyphicon-heart"> </i> @Messages("subscribers") </a></li>  
+        	<li><a href="@routes.UserController.getStatistic"> <i class="glyphicon glyphicon-download-alt"> </i> @Messages("downloadStatistics") </a></li>  
          </ul>
       </li>     
       
