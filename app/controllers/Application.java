@@ -25,7 +25,6 @@ import play.mvc.Result;
 import views.html.Loginpage;
 import views.html.contact;
 import views.html.index;
-import views.html.indexC;
 import views.html.loginToComplete;
 import views.html.signup;
 
@@ -104,8 +103,7 @@ public class Application extends Controller {
 					session("email", user.email);
 					Logger.info(user.username + " logged in");
 					flash("success", loginSuccess + " " + mail);
-					return ok(index.render(approvedCoupons,
-							Category.all()));
+					return ok(index.render(approvedCoupons,	Category.all()));
 
 				}
 				if (Company.verifyLogin(mail, password) == true) {
@@ -126,7 +124,7 @@ public class Application extends Controller {
 					session("email", company.email);
 					flash("success", loginSuccess + " " + mail);
 					Logger.info(company.name + " logged in");
-					return ok(indexC.render(company, approvedCoupons));
+					return ok(index.render(approvedCoupons, Category.all()));
 					}
 				}
 

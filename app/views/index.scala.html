@@ -4,7 +4,7 @@
  <header id="header">
    <div class="col-sm-12">
       <div class="container">
-         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
          <div class="logo pull-right">
             <div class="search_box">
             	
@@ -83,7 +83,7 @@
 		         <div class="product-image-wrapper">
 		            <div class="single-products">
 		               <div class="productinfo text-center">
-		                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
+		                  <img src="@coupon.picture"/>
 		                  <h2>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
 		                  <p>@coupon.name</p>
 		                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
@@ -112,7 +112,6 @@
 		            <div class="single-products">
 		               <div class="productinfo text-center">
 		                  <div class="empty-offer"></div>
-		           <!--       <img src="@routes.Assets.at("images/default_image.jpg")" /> -->
 		                  <h2> @Messages("bitCoupon") </h2>
 		                  <p> @Messages("placeForCoupon")</p>
 		               </div>

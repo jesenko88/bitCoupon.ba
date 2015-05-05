@@ -16,7 +16,7 @@
    <div class="header-middle">
       <!--header-middle-->
       <div class="container">
-         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
          <div class="logo pull-right">
             <div class="search_box">
                <form action="/search" method="GET">
@@ -47,11 +47,11 @@
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
                <div class="item active">
-                  <img src="@routes.Assets.at(coupon.picture)"></img>
+                  <img src="@coupon.picture"></img>
                </div>
                @for(photo <- Photo.photosByCoupon(coupon)){
                <div class="item">
-                  <img src="@routes.Assets.at(photo.path)"></img>      
+                  <img src="@photo.path"></img>      
                </div>
                }
                ...
@@ -239,7 +239,7 @@
                      @for(comment <- Comment.findByCoupon(coupon)){           	
                      <li class="commentRow">
                         <div class="commenterImage">
-                           <img src="@routes.Assets.at(comment.user.profilePicture)" />
+                           <img src="@comment.user.profilePicture" />
                         </div>
                         <div class="commentText">
                            <p >@comment.comment</p>
@@ -286,7 +286,7 @@
                      @for(question <- Question.findByCoupon(coupon)){           	
 	                     <li class="questionRow">
 	                        <div class="askerImage">
-	                           <img src="@routes.Assets.at(question.user.profilePicture)" />
+	                           <img src="@question.user.profilePicture" />
 	                        </div>
 	                        <div class="commentText">
 	                           <p class="">@question.question</p>

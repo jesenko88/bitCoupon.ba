@@ -144,9 +144,8 @@ public class Global extends GlobalSettings {
 		}
 
 		if (Coupon.checkByName(nameCoupon1) == false) {
-			Coupon.createCoupon(nameCoupon1, 80, new Date(), "images"
-					+ File.separator + "coupon_photos" + File.separator + 1
-					+ ".jpg", travel, descriptionCoupon1, remarkCoupon1, 5, 25,
+			Coupon.createCoupon(nameCoupon1, 80, new Date(), "http://res.cloudinary.com/bitfiles/image/upload/v1430853980/staticImages/cp1.jpg",
+					travel, descriptionCoupon1, remarkCoupon1, 5, 25,
 					new Date(), bitCamp, status);
 		}
 		if (Coupon.checkByName(nameCoupon2) == false) {
@@ -155,7 +154,7 @@ public class Global extends GlobalSettings {
 					nameCoupon2,
 					40,
 					new Date(),
-					"images"+ File.separator + "coupon_photos" + File.separator +2 +".jpg" ,
+					"http://res.cloudinary.com/bitfiles/image/upload/v1430853989/staticImages/cp2.jpg",
 					other , descriptionCoupon2,
 					remarkCoupon2, 5, 20 ,new Date(), bitCamp, status);
 
@@ -171,8 +170,7 @@ public class Global extends GlobalSettings {
 				e.printStackTrace();
 			}
 			ownedCoupinID2 = Coupon.createCoupon(nameCoupon3, 20, date,
-					"images" + File.separator + "coupon_photos"
-							+ File.separator + 3 + ".jpg", food,
+					"http://res.cloudinary.com/bitfiles/image/upload/v1430854001/staticImages/cp3.jpg", food,
 					descriptionCoupon3, remarkCoupon3, 2, 5, new Date(),
 					bitCamp, status);
 		}
@@ -186,9 +184,8 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(nameCoupon4, 350, date, "images"
-					+ File.separator + "coupon_photos" + File.separator + 4
-					+ ".jpg", travel, descriptionCoupon4, remarkCoupon4, 5, 30,
+			Coupon.createCoupon(nameCoupon4, 350, date, "http://res.cloudinary.com/bitfiles/image/upload/v1430854005/staticImages/cp4.jpg",
+					travel, descriptionCoupon4, remarkCoupon4, 5, 30,
 					new Date(), bitCamp, status);
 		}
 
@@ -206,7 +203,7 @@ public class Global extends GlobalSettings {
 					nameCoupon5,
 					17,
 					date,
-					"images"+ File.separator + "coupon_photos" + File.separator + 5 +".jpg",
+					"http://res.cloudinary.com/bitfiles/image/upload/v1430854008/staticImages/cp5.jpg",
 					food, descriptionCoupon5,
 					remarkCoupon5, 5, 30 ,new Date(),bitCamp, status);
 
@@ -221,9 +218,7 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(nameCoupon6, 34, date, "images"
-					+ File.separator + "coupon_photos" + File.separator + 6
-					+ ".jpg", travel, descriptionCoupon6, remarkCoupon6, 5, 30,
+			Coupon.createCoupon(nameCoupon6, 34, date, "http://res.cloudinary.com/bitfiles/image/upload/v1430854011/staticImages/cp6.jpg", travel, descriptionCoupon6, remarkCoupon6, 5, 30,
 					new Date(), bitCamp, status);
 		}
 
@@ -236,9 +231,7 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(nameCoupon7, 219, date, "images"
-					+ File.separator + "coupon_photos" + File.separator + 7
-					+ ".jpg", travel, descriptionCoupon7, remarkCoupon7, 5, 30,
+			Coupon.createCoupon(nameCoupon7, 219, date, "http://res.cloudinary.com/bitfiles/image/upload/v1430854013/staticImages/cp7.jpg", travel, descriptionCoupon7, remarkCoupon7, 5, 30,
 					new Date(), bitCamp, status);
 		}
 
@@ -251,9 +244,7 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(nameCoupon8, 25, date, "images"
-					+ File.separator + "coupon_photos" + File.separator + 8
-					+ ".jpg", sport, descriptionCoupon8, remarkCoupon8, 5, 30,
+			Coupon.createCoupon(nameCoupon8, 25, date, "http://res.cloudinary.com/bitfiles/image/upload/v1430854016/staticImages/cp8.jpg", sport, descriptionCoupon8, remarkCoupon8, 5, 30,
 					new Date(), bitCamp, status);
 		}
 
@@ -266,9 +257,7 @@ public class Global extends GlobalSettings {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			Coupon.createCoupon(nameCoupon9, 239, date, "images"
-					+ File.separator + "coupon_photos" + File.separator + 9
-					+ ".jpg", travel, descriptionCoupon9, remarkCoupon9, 5, 30,
+			Coupon.createCoupon(nameCoupon9, 239, date, "http://res.cloudinary.com/bitfiles/image/upload/v1430854019/staticImages/cp9.jpg", travel, descriptionCoupon9, remarkCoupon9, 5, 30,
 					new Date(), bitCamp, status);
 		}
 
