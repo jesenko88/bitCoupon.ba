@@ -26,8 +26,7 @@
                <h4> @Messages("coupon"): @myForm("name").value </h4>
              
                   <!--sign up form-->
-                  @_updateCouponForm(myForm, coupon)
-              
+                  @_updateCouponForm(myForm, coupon)        
 
             </div>
          </div>
@@ -48,7 +47,7 @@
             @for(photo <- photos){
             <form method="POST" action="@routes.CouponController.deletePhoto(photo.id)">
                <div class="uploadPicture">
-                  <img alt="140x140" src="@routes.Assets.at(photo.path)" class="img-thumbnail" />
+                  <img alt="140x140" src="@photo.path" class="img-thumbnail" />
                   <button type="submit"  class="btn btn-danger btn-sm">@Messages("deleteUPPER")</button>
                </div>
             </form>
