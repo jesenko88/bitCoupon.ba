@@ -9,7 +9,7 @@
       <div class="col-sm-12">
          <!--header-middle-->
          <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
             
             <div class="logo pull-right">
            		<div class="search_box">
@@ -43,7 +43,7 @@
             <div class="product-image-wrapper">
                <div class="single-products">
                   <div class="productinfo text-center">
-                              <img src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
+                              <img src="@company.logo"/>
                   
                      <h2>@company.name</h2>
                     <a href="/companyProfile/@company.id" class="btn btn-default add-to-cart">@Messages("viewCompany")</a>
