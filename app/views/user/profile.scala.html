@@ -60,16 +60,12 @@
         
       <div class="userInforamtion">
          <div class="profilePicture">
-            @if(superUser.getUser().profilePicture == null){
-            <img src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
-            }else{
-            <img src='@routes.Assets.at(superUser.getUser().profilePicture)' class="avatar-profile"/>
-            }
+            <img src='@superUser.getUser().profilePicture' class="avatar-profile"/>         
          </div>
       </div>
-      
-
-
+     
+  	<img src='@ImageController.getSize(100, 200, superUser.getUser().profilePicture)'/>  
+ 
       <div class="rightBox">
 
       	
@@ -157,6 +153,8 @@
             }        
          </ul>
       </div>
+      
    </div>
+   
    }
 }

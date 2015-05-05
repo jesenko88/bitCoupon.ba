@@ -6,7 +6,6 @@ import helpers.FileUpload;
 import helpers.HashHelper;
 import helpers.MailHelper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -243,30 +242,18 @@ public class CompanyController extends Controller {
 	 */
 	@Security.Authenticated(CurrentCompanyFilter.class)
 	public static Result updatePhoto(long companyId) {
-		try{
+		try {
 			Company company = Company.findById(companyId);
-			String subFolder = "company_profile" + File.separator + "company_" + companyId;
-			boolean checkIfDirectoryExists = new File(FileUpload.IMAGES_FOLDER
-					+ subFolder).isDirectory();
-			if (checkIfDirectoryExists) {
-				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug(assetsPath);
-				company.logo = assetsPath;
-				company.save();
-				flash("success", Messages.get("company.updatePhoto"));
-				return redirect("/profile/@" + company.name);
-			} else {
-				new File(FileUpload.IMAGES_FOLDER + subFolder).mkdirs();
-				String assetsPath = FileUpload.imageUpload(subFolder);
-				Logger.debug(assetsPath);
-				company.logo = assetsPath;
-				company.save();
-				flash("success", Messages.get("company.updatePhoto"));
-				return redirect("/profile/@" + company.name);
-			}			
-		}catch(Exception e){
+			String assetsPath = FileUpload.imageUpload();
+			Logger.debug(assetsPath);
+			company.logo = assetsPath;
+			company.save();
+			flash("success", Messages.get("company.updatePhoto"));
+			return redirect("/profile/@" + company.name);
+
+		} catch (Exception e) {
 			flash("error", ERROR_MSG_ADMIN);
-			Logger.error("Error at update photo: " +e.getMessage());
+			Logger.error("Error at update photo: " + e.getMessage());
 			return redirect("/");
 		}
 	}	

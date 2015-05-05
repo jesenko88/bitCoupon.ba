@@ -23,5 +23,6 @@ libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "1.8.1",
   "com.ckeditor" % "ckeditor-java-core" % "3.5.3",
   "org.apache.poi" % "poi" % "3.11",
-  "nl.bitwalker" % "UserAgentUtils" % "1.2.4"
+  "nl.bitwalker" % "UserAgentUtils" % "1.2.4",
+  "com.cloudinary" % "cloudinary" % "1.0.2"
 )

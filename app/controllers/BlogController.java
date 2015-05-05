@@ -64,8 +64,7 @@ public class BlogController extends Controller {
 		String title = postForm.data().get("title");
 		String subtitle = postForm.data().get("subtitle");
 		String content = postForm.data().get("content");
-		String picturePath = Post.POST_IMAGE_FOLDER;
-		String picture = FileUpload.imageUpload(picturePath);
+		String picture = FileUpload.imageUpload();
 		Date created = new Date();
 		User creator = Sesija.getCurrentUser(ctx());
 		String tags = postForm.data().get("tags");
@@ -100,8 +99,7 @@ public class BlogController extends Controller {
 		String title = postForm.data().get("title");
 		String subtitle = postForm.data().get("subtitle");
 		String content = postForm.data().get("content");
-		String picturePath = Post.POST_IMAGE_FOLDER;
-		String picture = FileUpload.imageUpload(picturePath);		
+		String picture = FileUpload.imageUpload();		
 		
 		content = content.replaceAll("(?i)<(/?script[^>]*)>", "");		
 		System.out.println(content);
@@ -119,6 +117,7 @@ public class BlogController extends Controller {
 	
 	@Security.Authenticated(AdminFilter.class)
 	public static Result deletePost(long id){
+		
 		Post.deletePost(id);
 		flash("success", Messages.get("delete.success"));
 		return blog();

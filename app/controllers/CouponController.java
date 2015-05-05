@@ -258,9 +258,9 @@ public class CouponController extends Controller {
 			coupon.remark = couponForm.bindFromRequest().field("remark").value();
 			coupon.minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());
 			/* file upload only if its changed */
-			String assetsPath = FileUpload.imageUpload("coupon_photos");
-			if (!StringUtils.isNullOrEmpty(assetsPath)) {
-				coupon.picture = assetsPath;
+			String imageUrl = FileUpload.imageUpload();
+			if (!StringUtils.isNullOrEmpty(imageUrl)) {
+				coupon.picture = imageUrl;
 			}
 			//TODO check:  kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ?
 //			int status;
@@ -425,9 +425,9 @@ public class CouponController extends Controller {
 			 * Managing file upload.
 			 */
 			// Path for saving file.
-			String assetsPath = FileUpload.imageUpload("coupon_photos");
-			if (!StringUtils.isNullOrEmpty(assetsPath)) {
-				long id = Coupon.createCoupon(name, price, date, assetsPath,
+			String imageUrl = FileUpload.imageUpload();
+			if (!StringUtils.isNullOrEmpty(imageUrl)) {
+				long id = Coupon.createCoupon(name, price, date, imageUrl,
 						category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id);
 				flash("success", Messages.get("coupon.create.success"));
@@ -463,78 +463,78 @@ public class CouponController extends Controller {
 	 */
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result galleryUpload(long couponId) {
-		try {
-			/*
-			 * Save path where our photos are going to be saved. Each coupon
-			 * gets his own folder with name cpn(+ID of coupon)
-			 */
-			String savePath = FileUpload.IMAGES_FOLDER + "coupon_photos"
-					+ File.separator + "cpn" + couponId + File.separator;
-
-			Coupon coupon = Coupon.find(couponId);
-			int photos = Photo.photoStackLength(coupon);
-			Form<Coupon> form = Form.form(Coupon.class).fill(coupon);
-			/*
-			 * Checking if coupon has fulfilled his stack for photos and if user
-			 * has chosen more then available number of photos.
-			 */
-			if (photos >= 4) {
-				Logger.info(session("name") + " tried to add too many photos");
-				flash("error", Messages.get("coupon.photos.full"));
-				return redirect("/editCoupon/" + coupon.id);
-			}
-			MultipartFormData body = request().body().asMultipartFormData();
-			List<FilePart> photoParts = body.getFiles();
-			if (photoParts.size() > (4 - photos)) {
-				flash("error", Messages.get("coupon.photos.freeSpace ", (4 - photos)) );
-				return redirect("/editCoupon/" + coupon.id);
-			}
-
-			/*
-			 * Once all checks are passed, we create folder for this coupon and
-			 * add photos user selected. Also if user uploaded files which are
-			 * not photos they're not going to be accepted.
-			 */
-			new File(savePath).mkdir();
-			for (FilePart part : photoParts) {
-				if (FileUpload.confirmImage(part) != null) {
-					File temp = FileUpload.confirmImage(part);
-					String extension = FileUpload.getExtension(part);
-					String name = UUID.randomUUID().toString();
-					File saveFile = new File(savePath + name + extension);
-
-					// Resizing photos.
-					BufferedImage img;
-					try {
-						img = ImageIO.read(temp);
-						BufferedImage resizedImg = FileUpload.resize(img, 600,
-								400);
-						ImageIO.write(resizedImg, "jpg", temp);
-					} catch (IOException e1) {
-						Logger.error("Failed to resize image");
-					}
-
-					// Moving file.
-					try {
-						Files.move(temp, saveFile);
-					} catch (IOException e) {
-						Logger.error("File " + saveFile.getName()
-								+ " failed to move.");
-					}
-					String assetsPath = "images" + File.separator
-							+ "coupon_photos" + File.separator + "cpn"
-							+ couponId + File.separator + saveFile.getName();
-
-					Photo.create(assetsPath, saveFile.getPath(), coupon);
-				}
-			}
-			flash("success", Messages.get("coupon.photos.upload.success"));			
-			return ok(updateCouponView.render(form, coupon, Photo.photosByCoupon(coupon)));
-		} catch (Exception e) {
-			flash("error", ERROR_MSG_ADMIN);
-			Logger.error("Error at galleryUpload: " + e.getMessage());
+//		try {
+//			/*
+//			 * Save path where our photos are going to be saved. Each coupon
+//			 * gets his own folder with name cpn(+ID of coupon)
+//			 */
+//			String savePath = FileUpload.IMAGES_FOLDER + "coupon_photos"
+//					+ File.separator + "cpn" + couponId + File.separator;
+//
+//			Coupon coupon = Coupon.find(couponId);
+//			int photos = Photo.photoStackLength(coupon);
+//			Form<Coupon> form = Form.form(Coupon.class).fill(coupon);
+//			/*
+//			 * Checking if coupon has fulfilled his stack for photos and if user
+//			 * has chosen more then available number of photos.
+//			 */
+//			if (photos >= 4) {
+//				Logger.info(session("name") + " tried to add too many photos");
+//				flash("error", Messages.get("coupon.photos.full"));
+//				return redirect("/editCoupon/" + coupon.id);
+//			}
+//			MultipartFormData body = request().body().asMultipartFormData();
+//			List<FilePart> photoParts = body.getFiles();
+//			if (photoParts.size() > (4 - photos)) {
+//				flash("error", Messages.get("coupon.photos.freeSpace ", (4 - photos)) );
+//				return redirect("/editCoupon/" + coupon.id);
+//			}
+//
+//			/*
+//			 * Once all checks are passed, we create folder for this coupon and
+//			 * add photos user selected. Also if user uploaded files which are
+//			 * not photos they're not going to be accepted.
+//			 */
+//			new File(savePath).mkdir();
+//			for (FilePart part : photoParts) {
+//				if (FileUpload.confirmImage(part) != null) {
+//					File temp = FileUpload.confirmImage(part);
+//					String extension = FileUpload.getExtension(part);
+//					String name = UUID.randomUUID().toString();
+//					File saveFile = new File(savePath + name + extension);
+//
+//					// Resizing photos.
+//					BufferedImage img;
+//					try {
+//						img = ImageIO.read(temp);
+//						BufferedImage resizedImg = FileUpload.resize(img, 600,
+//								400);
+//						ImageIO.write(resizedImg, "jpg", temp);
+//					} catch (IOException e1) {
+//						Logger.error("Failed to resize image");
+//					}
+//
+//					// Moving file.
+//					try {
+//						Files.move(temp, saveFile);
+//					} catch (IOException e) {
+//						Logger.error("File " + saveFile.getName()
+//								+ " failed to move.");
+//					}
+//					String assetsPath = "images" + File.separator
+//							+ "coupon_photos" + File.separator + "cpn"
+//							+ couponId + File.separator + saveFile.getName();
+//
+//					Photo.create(assetsPath, saveFile.getPath(), coupon);
+//				}
+//			}
+//			flash("success", Messages.get("coupon.photos.upload.success"));			
+//			return ok(updateCouponView.render(form, coupon, Photo.photosByCoupon(coupon)));
+//		} catch (Exception e) {
+//			flash("error", ERROR_MSG_ADMIN);
+//			Logger.error("Error at galleryUpload: " + e.getMessage());
 			return redirect("/");
-		}
+//		}
 	}
 
 	/**

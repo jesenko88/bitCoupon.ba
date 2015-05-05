@@ -118,11 +118,11 @@ public class CategoryController extends Controller {
 				return addCategoryView();
 			}
 			/* If no picture is added, a default image is used */
-			String picture = FileUpload.imageUpload("category-photos");
+			String picture = FileUpload.imageUpload();
 			if (picture != null) {
 				Category.createCategory(name, picture);
 			} else {
-				Category.createCategory(name, FileUpload.DEFAULT_IMAGE);
+				Category.createCategory(name, ""); //TODO default category image url
 			}
 			
 			Logger.info(session("name") + " created a new category: \"" + name + "\"");
@@ -219,7 +219,7 @@ public class CategoryController extends Controller {
 			}
 			
 			category.name = name;
-			String picture = FileUpload.imageUpload("category-photos");
+			String picture = FileUpload.imageUpload();
 			
 			if (picture != null) {
 				category.picture = picture;
