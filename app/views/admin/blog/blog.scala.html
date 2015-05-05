@@ -157,7 +157,7 @@
 			<div class="col-md-2 column">	
 				<strong> @Messages("tags") </strong> <hr>			
 				@for(tag <- Post.allTags()){
-					<a href="@routes.BlogController.byTag(tag)"> <span class="label label-primary">@tag</span> </a>
+					<a href="@routes.BlogController.byTag(tag)"> <span >@tag</span> </a>
 				}				
 			</div>
 			</div>
