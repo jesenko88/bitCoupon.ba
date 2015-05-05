@@ -21,7 +21,7 @@
                    		ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine,
                    					'has-success': userForm.email.$valid,
                    					@("form-group has-error".when(myForm("email").hasErrors)) }">
-			     	 <label class="control-label" for="email">@Mesages("email")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="email">@Messages("email")<span style="color:#AB1403"> *</span></label>
                  	 <input class="form-control" ng-value='@myForm("email").value' type="email" id="email" 
                  	 		name="email" placeholder="Email" ng-minlength="3" ng-model="user.email"
                  	       	ng-init="user.email='@myForm("email").value'" required/> 
