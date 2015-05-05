@@ -347,9 +347,7 @@ public class Global extends GlobalSettings {
 			for(int i=0; i<10; i++){
 				Post.createPost("Man must explore, and this is exploration at its greatest",
 						"Problems look mighty small from 150 miles up"
-						, post_content, "images"
-								+ File.separator + "coupon_photos" + File.separator + 4
-								+ ".jpg", new Date(), User.find(true), "no,tag");				
+						, post_content, "http://res.cloudinary.com/bitfiles/image/upload/v1430859169/staticImages/explore.jpg", new Date(), User.find(true), "no,tag");				
 			}
 		}
 	}
