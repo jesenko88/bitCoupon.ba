@@ -317,6 +317,9 @@ public class PayPalController extends Controller {
 			List<TransactionCP> transactions = TransactionCP.find.where()
 					.eq("coupon_id", coupon.id).findList();
 			for (int i = 0; i < transactions.size(); i++) {
+				if(transactions.get(i).sale_id == "saleId" || transactions.get(i).sale_id == "bitSale")
+				i++;
+				else {
 				System.out.println(transactions.get(i).token);
 				totalPrice = transactions.get(i).quantity * coupon.price;
 				String totalPriceString = String.format("%1.2f", totalPrice);
@@ -331,7 +334,7 @@ public class PayPalController extends Controller {
 				refundObject.put(sale, refund);
 
 				listOfRefunds.add(refundObject);
-
+				}
 			}
 			for (int i = 0; i < listOfRefunds.size(); i++) {
 				for (Map.Entry<Sale, Refund> e : listOfRefunds.get(i)
