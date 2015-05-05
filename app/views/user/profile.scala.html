@@ -22,7 +22,7 @@
                <div class="col-sm-9">
                   <div class="navbar-header">
                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                     <span class="sr-only">Toggle navigation</span>
+                     <span class="sr-only">@Messages("togleNavigation")</span>
                      <span class="icon-bar"></span>
                      <span class="icon-bar"></span>
                      <span class="icon-bar"></span>
@@ -30,7 +30,7 @@
                   </div>
                   <div class="mainmenu pull-left">
                      <ul class="nav navbar-nav collapse navbar-collapse">
-                        <li><a href="@routes.UserController.showBoughtCoupons(superUser.id)">My Coupons</a></li>
+                        <li><a href="@routes.UserController.showBoughtCoupons(superUser.id)">@Messages("myCoupons")</a></li>
                      </ul>
                   </div>
                </div>
@@ -41,7 +41,7 @@
    <div class="container">
       <div class="features_items">
          <!--features_items-->
-         <h2 class="title text-center"> Profile page here </h2>
+         <h2 class="title text-center"> @Messages("profilePage") </h2>
          <div class="col-sm-6 col-sm-offset-1">
          </div>
       </div>
@@ -50,9 +50,9 @@
       @if(superUser.email.equals(Sesija.getCurrent(ctx()).email) && Sesija.adminCheck(ctx()) == false && Sesija.companyCheck(ctx()) == false){
       <!-- probaaaa -->
    	<div class="pull-right">
-          <h5>PIN: @Pin.getCode(superUser.getUser().id) </h5>
+          <h5>@Messages("pin") @Pin.getCode(superUser.getUser().id) </h5>
       		    <form action="@routes.UserController.newPin(superUser.getUser().id)" method ="POST">  
-     			<button type="submit" class="btn btn-default" >Generate pin</button> 
+     			<button type="submit" class="btn btn-default" >@Messages("generatePin")</button> 
    		  </form>
 	</div>
 	}
@@ -74,18 +74,18 @@
 
       	
          <ul>
-            <li>Name: @superUser.getUser().username</li>
-            <li>Surname: @superUser.getUser().surname</li>
-            <li>Date of birth: @superUser.getUser().dob</li>
-            <li>Gender: @superUser.getUser().gender</li>
-            <li>Adress: @superUser.getUser().adress</li>
-            <li>City: @superUser.getUser().city</li>
-            <li>Email: @superUser.getUser().email</li>
-            <li>Date create: @superUser.getUser().created</li>
+            <li>@Messages("name"): @superUser.getUser().username</li>
+            <li>@Messages("surname"): @superUser.getUser().surname</li>
+            <li>@Messages("dateOfBirth"): @superUser.getUser().dob</li>
+            <li>@Messages("gender"): @superUser.getUser().gender</li>
+            <li>@Messages("address"): @superUser.getUser().adress</li>
+            <li>@Messages("city"): @superUser.getUser().city</li>
+            <li>@Messages("email"): @superUser.getUser().email</li>
+            <li>@Messages("registered"): @superUser.getUser().created</li>
              @if(TransactionCP.allFromBuyer(superUser.getUser().id).size() > 0) {
-            <li><a href="@routes.UserController.showBoughtCoupons(superUser.getUser().id)">Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</a></li>
+            <li><a href="@routes.UserController.showBoughtCoupons(superUser.getUser().id)">@Messages("numOfBoughtCoupons"): @TransactionCP.allFromBuyer(superUser.getUser().id).size()</a></li>
            } else {
-            <li>Number of bought coupons: @TransactionCP.allFromBuyer(superUser.getUser().id).size()</li>            
+            <li>@Messages("numOfBoughtCoupons"): @TransactionCP.allFromBuyer(superUser.getUser().id).size()</li>            
             }
          </ul>
       </div>
@@ -99,7 +99,7 @@
             <div class="col-sm-9">
                <div class="navbar-header">
                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                  <span class="sr-only">Toggle navigation</span>
+                  <span class="sr-only">@Messages("togleNavigation")</span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
@@ -107,12 +107,12 @@
                </div>
                <div class="mainmenu pull-left">
                   <ul class="nav navbar-nav collapse navbar-collapse">
-                     <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> Published Coupons</a></li>
-                     <li><a href="@routes.CouponController.addCouponView">NEW Coupon</a></li>
+                     <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)"> @Messages("publishedCoupons")</a></li>
+                     <li><a href="@routes.CouponController.addCouponView">@Messages("newCoupon")</a></li>
 					@if(superUser.getCompany().notifications > 0) {
-			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i>Notifications</a></li>
+			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i>@Messages("notifications")</a></li>
                   	} else {
-			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)">Notifications</a></li>                  	
+			       	<li><a href="@routes.CompanyController.notifications(superUser.getCompany().id)">@Messages("notifications")</a></li>                  	
                   	}
                   </ul>
                </div>
@@ -125,7 +125,7 @@
    <div class="container">
       <div class="features_items">
          <!--features_items-->
-         <h2 class="title text-center"> Profile page</h2>
+         <h2 class="title text-center"> @Messages("profilePage")</h2>
          
       
       <div class="userInforamtion">
@@ -139,21 +139,21 @@
       </div>
       <div class="rightBox">
          <ul>
-            <li>Name: @superUser.getCompany().name</li>
-            <li>Email: @superUser.getCompany().email</li>
-            <li>Date create: @superUser.getCompany().created</li>
-            <li>Company adress: @superUser.getCompany().adress</li>
-            <li>City: @superUser.getCompany().city</li>
-            <li>Company contact: @superUser.getCompany().contact</li>
+            <li> @Messages("name"): @superUser.getCompany().name</li>
+            <li> @Messages("email"): @superUser.getCompany().email</li>
+            <li> @Messages("registered"): @superUser.getCompany().created</li>
+            <li>@Messages("companyAdress"): @superUser.getCompany().adress</li>
+            <li>@Messages("city"): @superUser.getCompany().city</li>
+            <li>@Messages("companyContact"): @superUser.getCompany().contact</li>
             @if(Coupon.ownedCoupons(superUser.getCompany().id).size() > 0) {
-            <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</a></li>
+            <li><a href="@routes.CompanyController.companyPanel(superUser.getCompany().id)">@Messages("numOfPublishedCoupons"): @Coupon.ownedCoupons(superUser.getCompany().id).size()</a></li>
             <div class="rate">
-				<label class="pull-left">Company rate</label>
+				<label class="pull-left">@Messages("companyRate")</label>
 			       <input id="rating" value="@Rate.companyProgres(superUser.getCompany().id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
                  </div>
 				<!-- /rate preview -->  
             } else {
-            <li>Number of published coupons: @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>      
+            <li>@Messages("numOfPublishedCoupons"): @Coupon.ownedCoupons(superUser.getCompany().id).size()</li>      
             }        
          </ul>
       </div>
