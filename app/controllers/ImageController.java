@@ -26,7 +26,7 @@ public class ImageController {
 		Map result;
 		try {
 			result = cloudinary.uploader().upload(image, Cloudinary.emptyMap());
-			return (String)result.get("url");
+			return (String)result.get("url"); 
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}
@@ -71,7 +71,7 @@ public class ImageController {
 	 * to destroy the image
 	 * @param url
 	 */
-	public void deleteImage(String url){
+	public static void deleteImage(String url){
 		
 		try {
 			cloudinary.uploader().destroy(getPublicId(url), null);
