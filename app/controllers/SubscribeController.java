@@ -114,8 +114,7 @@ public class SubscribeController extends Controller {
 	 * @param email
 	 * @return
 	 */
-	public static Result subscribe(String email) {
-		String refererUrl = request().getHeader("referer");
+	public static Result subscribe(String email) {		
 		try {
 			User user = User.findByEmail(email);
 			if (Subscriber.isSubscribed(email)) {
@@ -131,11 +130,11 @@ public class SubscribeController extends Controller {
 				flash("success", Messages.get("subscribe.confirmation") + " " + email);
 				Subscriber.subscribe(email);
 			}
-			return redirect(refererUrl);
+			return redirect("/");
 		} catch (Exception e) {
 			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at subscribe: " + e.getMessage());
-			return redirect(refererUrl);
+			return redirect("/");
 		}
 	}
 
