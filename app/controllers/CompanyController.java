@@ -130,11 +130,19 @@ public class CompanyController extends Controller {
 			
 			String name = updateForm.data().get("name");
 			String email = updateForm.data().get("email");
+			String adress = updateForm.data().get("adress");
+			String contact = updateForm.data().get("contact");
+			String city = updateForm.data().get("city");
+					
 			
 			Company company = Company.findById(id);
 			Form<Company> companyForm = Form.form(Company.class).fill(company);
 			company.name = name;
 			company.updated = new Date();
+			company.adress = adress;
+			company.contact = contact;
+			company.city = city;
+			
 			
 			if (!company.email.equals(email)) {
 				String verificationEmail = EmailVerification.addNewRecord(company.id);
