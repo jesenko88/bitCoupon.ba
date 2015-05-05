@@ -258,9 +258,9 @@ public class CouponController extends Controller {
 			coupon.remark = couponForm.bindFromRequest().field("remark").value();
 			coupon.minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());
 			/* file upload only if its changed */
-			String assetsPath = FileUpload.imageUpload();
-			if (!StringUtils.isNullOrEmpty(assetsPath)) {
-				coupon.picture = assetsPath;
+			String imageUrl = FileUpload.imageUpload();
+			if (!StringUtils.isNullOrEmpty(imageUrl)) {
+				coupon.picture = imageUrl;
 			}
 			//TODO check:  kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ?
 //			int status;
@@ -425,9 +425,9 @@ public class CouponController extends Controller {
 			 * Managing file upload.
 			 */
 			// Path for saving file.
-			String assetsPath = FileUpload.imageUpload();
-			if (!StringUtils.isNullOrEmpty(assetsPath)) {
-				long id = Coupon.createCoupon(name, price, date, assetsPath,
+			String imageUrl = FileUpload.imageUpload();
+			if (!StringUtils.isNullOrEmpty(imageUrl)) {
+				long id = Coupon.createCoupon(name, price, date, imageUrl,
 						category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id);
 				flash("success", Messages.get("coupon.create.success"));

@@ -328,8 +328,8 @@ public class UserController extends Controller {
 	public static Result updatePhoto(long userId) {
 		try {
 			User user = User.find(userId);
-			String assetsPath = FileUpload.imageUpload();
-			user.profilePicture = assetsPath;
+			String imageUrl = FileUpload.imageUpload();
+			user.profilePicture = imageUrl;
 			user.save();
 			flash("success", "user.photo.uploaded");
 			return redirect("/profile/@" + user.username);
