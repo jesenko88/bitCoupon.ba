@@ -304,56 +304,53 @@ public class PayPalController extends Controller {
 	 */
 	public static Result refundProcessing(long couponId) {
 
-		try {
-			String accessToken = new OAuthTokenCredential(CLIENT_ID,
-					CLIENT_SECRET).getAccessToken();
-
-			Map<String, String> sdkConfig = new HashMap<String, String>();
-			List<Map<Sale, Refund>> listOfRefunds = new ArrayList<Map<Sale, Refund>>();
-			sdkConfig.put("mode", "sandbox");
-			apiContext = new APIContext(accessToken);
-			apiContext.setConfigurationMap(sdkConfig);
-
-			coupon = Coupon.find(couponId);
 			List<TransactionCP> transactions = TransactionCP.find.where()
 					.eq("coupon_id", couponId).findList();
-			Map<Sale, Refund> refundObject = new HashMap<Sale, Refund>();
-			Sale sale = new Sale();
-			Refund refund = new Refund();
 			for (int i = 0; i < transactions.size(); i++) {
-				if(transactions.get(i).sale_id != "bitSale" && transactions.get(i).sale_id != null && transactions.get(i).isRefunded == false) {
-				System.out.println(transactions.get(i).token);
-				totalPrice = transactions.get(i).quantity * coupon.price;
-				String totalPriceString = String.format("%1.2f", totalPrice);
-				sale.setId(transactions.get(i).sale_id);
-				Amount amount = new Amount();
-				amount.setCurrency("USD");
-				amount.setTotal(totalPriceString);
-				refund.setAmount(amount);
-				
-				refundObject.put(sale, refund);
-						
-				listOfRefunds.add(refundObject);
+			executeRefund(couponId);
+			}
+			return ok(index.render(Coupon.all(), Category.all()));
+	}
+	
+	public static void executeRefund(long couponId) {
+		try {
+		String accessToken = new OAuthTokenCredential(CLIENT_ID,
+				CLIENT_SECRET).getAccessToken();
+
+		Map<String, String> sdkConfig = new HashMap<String, String>();
+		sdkConfig.put("mode", "sandbox");
+		apiContext = new APIContext(accessToken);
+		apiContext.setConfigurationMap(sdkConfig);
+
+		coupon = Coupon.find(couponId);
+		List<TransactionCP> transactions = TransactionCP.find.where()
+				.eq("coupon_id", couponId).findList();
+		Sale sale = new Sale();
+		Refund refund = new Refund();
+		for (int i = 0; i < transactions.size(); i++) {
+			if(transactions.get(i).sale_id != "bitSale" && transactions.get(i).sale_id != null && transactions.get(i).isRefunded == false) {
+			System.out.println(transactions.get(i).token);
+			totalPrice = transactions.get(i).quantity * coupon.price;
+			String totalPriceString = String.format("%1.2f", totalPrice);
+			sale.setId(transactions.get(i).sale_id);
+			Amount amount = new Amount();
+			amount.setCurrency("USD");
+			amount.setTotal(totalPriceString);
+			refund.setAmount(amount);
+			sale.refund(apiContext, refund);
+			transactions.get(i).isRefunded = true;
+			transactions.get(i).save();
+			}
+			if(transactions.get(i).sale_id == "bitSale" || transactions.get(i).sale_id == null || transactions.get(i).isRefunded == true) {
 				transactions.get(i).isRefunded = true;
 				transactions.get(i).save();
-				}
-				if(transactions.get(i).sale_id == "bitSale" || transactions.get(i).sale_id == null || transactions.get(i).isRefunded == true) {
-					transactions.get(i).isRefunded = true;
-					transactions.get(i).save();
-				}
 			}
-			
-			for (int j = 0; j < listOfRefunds.size(); j++) {
-				sale.refund(apiContext, refund);
-			}
-			
-			flash("success", Messages.get("transaction.refund.success"));
-			return ok(index.render(Coupon.all(), Category.all()));
-
+		  } 
+		flash("success", Messages.get("transaction.refund.success"));
 		} catch (PayPalRESTException e) {
-			flash("error", Messages.get("error.msg.02"));
+			//flash("error", Messages.get("error.msg.02"));
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
-			return redirect("/");
+			
 		}
 	}
 }
