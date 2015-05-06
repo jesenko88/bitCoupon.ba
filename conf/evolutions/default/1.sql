@@ -35,13 +35,13 @@ create table company (
   password                  varchar(255),
   adress                    varchar(255),
   city                      varchar(255),
+  status                    integer,
   name                      varchar(255),
   created                   timestamp,
   updated                   timestamp,
   logo                      varchar(255),
   contact                   varchar(255),
   notifications             integer,
-  status                    integer,
   constraint pk_company primary key (id))
 ;
 
@@ -192,6 +192,7 @@ create table transaction_cp (
   buyer_email               varchar(255),
   coupon_id                 bigint,
   date                      timestamp,
+  is_refunded               boolean,
   constraint pk_transaction_cp primary key (id))
 ;
 
@@ -201,6 +202,7 @@ create table user (
   password                  varchar(255),
   adress                    varchar(255),
   city                      varchar(255),
+  status                    integer,
   username                  varchar(255),
   surname                   varchar(255),
   dob                       timestamp,

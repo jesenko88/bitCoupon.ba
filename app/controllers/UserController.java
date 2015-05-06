@@ -17,6 +17,7 @@ import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.Pin;
+import models.Post;
 import models.ResetPasword;
 import models.Statistic;
 import models.Subscriber;
@@ -49,9 +50,11 @@ public class UserController extends Controller {
 	static String PATH = Play.application().configuration().getString("PATH"); 
 	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
 	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+	static final String MAIL_VERIFICATION_SUBJECT = Play.application().configuration().getString("emailVerificationSubject");
 	static String name = null;
 	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	static Form<User> userForm = new Form<User>(User.class);
+	
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -97,11 +100,14 @@ public class UserController extends Controller {
 				long id = User.createUser(username, surname, dob, gender,
 						adress, city, mail, hashPass, false, defaultPicture);
 				String verificationEmail = EmailVerification.addNewRecord(id);
-				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
-								+ "http://" + PATH + "/verifyEmail/"
+				MailHelper.send(MAIL_VERIFICATION_SUBJECT, mail,
+						Messages.get("registration.mail.verificationLinkText")
+								+ "<br>" + "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success", Messages.get("registration.mail.flash.verification"));
-				Logger.info("A verification mail has been sent to email address: " + mail);
+				flash("success",
+						Messages.get("registration.mail.flash.verification"));
+				Logger.info("A verification mail has been sent to email address: "
+						+ mail);
 				return ok(Loginpage.render(" "));
 
 			} else {
@@ -162,9 +168,10 @@ public class UserController extends Controller {
 			if (!cUser.email.equals(email)) {
 				String verificationEmail = EmailVerification
 						.addNewRecord(cUser.id);
-				MailHelper.send(email, Messages.get("registration.mail.verificationLinkText ") + "<br>"
-								+ "http://" + PATH + "/verifyEmailUpdate/"
-								+ verificationEmail);
+				MailHelper.send(MAIL_VERIFICATION_SUBJECT, email,
+						Messages.get("registration.mail.verificationLinkText ")
+								+ "<br>" + "http://" + PATH
+								+ "/verifyEmailUpdate/" + verificationEmail);
 				cUser.email = email;
 				cUser.save();
 				flash("success", Messages.get("registration.mail.flash.verification") + " " + email);
@@ -193,24 +200,27 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateUser(long id) {
 
-		if (userForm.hasErrors()) {
+		DynamicForm updateForm = Form.form().bindFromRequest();
+		if (userForm.hasErrors() || userForm.hasGlobalErrors()) {
 			return redirect("/@editUser/:" + id); // provjeriti
 		}
 		try {
-			String username = userForm.bindFromRequest().field("username")
-					.value();
-			String surname = userForm.bindFromRequest().field("surname")
-					.value();
-			Date dob = userForm.bindFromRequest().get().dob;
-			String gender = userForm.bindFromRequest().field("gender").value();
-			String adress = userForm.bindFromRequest().field("adress").value();
-			String city = userForm.bindFromRequest().field("city").value();
-			String email = userForm.bindFromRequest().field("email").value();
-			String newPass = userForm.bindFromRequest().field("newPassword")
-					.value();
-			String admin = userForm.bindFromRequest().field("isAdmin").value();
-
+			String username = updateForm.data().get("username");
+			String surname = updateForm.data().get("surname");
+			String dobString = updateForm.data().get("dob");
+			String gender = updateForm.data().get("gender");
+			String adress = updateForm.data().get("adress");
+			String city = updateForm.data().get("city");
+			String email = updateForm.data().get("email");
+			String admin = updateForm.data().get("isAdmin");
+			Date dob = null;
 			User cUser = User.find(id);
+			
+			if (!dobString.isEmpty()){
+				dob = new SimpleDateFormat("yy-mm-dd").parse(dobString);
+				cUser.dob = dob;
+			}			
+
 			cUser.username = username;
 			cUser.surname = surname;
 			cUser.dob = dob;
@@ -219,17 +229,12 @@ public class UserController extends Controller {
 			cUser.city = city;
 			cUser.email = email;
 
-			// if admin doesn't explicitly change the users password, it stays
-			// intact
-			if (newPass.length() > 5) {
-				cUser.password = HashHelper.createPassword(newPass);
-			}
 			if (!User.isLastAdmin(cUser)) {
 				cUser.isAdmin = Boolean.parseBoolean(admin);
 			}
 			cUser.updated = new Date();
 			cUser.save();
-			flash("success", cUser.username + Messages.get("updatedSuccessfully"));
+			flash("success", cUser.username + " " + Messages.get("updatedSuccessfully"));
 			Logger.info(session("name") + " updated user: " + cUser.username);
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		} catch (Exception e) {
@@ -268,16 +273,16 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
-		List<SuperUser> all = SuperUser.allSuperUsers();
+		List<SuperUser> all = SuperUser.allVerfiedSuperUsers();
 		if (all == null) {
 			flash("error", ERROR_MSG_ADMIN);
 			return redirect("/");
 		}
 		/* content negotiation */
 		if (request().accepts("text/html")) {
-			return ok(userList.render(SuperUser.allSuperUsers()));
+			return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 		}
-		return ok(JSonHelper.superUserListToJson(SuperUser.allSuperUsers()));
+		return ok(JSonHelper.superUserListToJson(SuperUser.allVerfiedSuperUsers()));
 	}
 
 	/**
@@ -297,11 +302,10 @@ public class UserController extends Controller {
 
 			if (adminList.size() == 1 && id == currentUser.id) {
 				flash("error", Messages.get("admin.last.info"));
-				return ok(userList.render(SuperUser.allSuperUsers()));
+				return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 			}
 			if (currentUser.id == id || Sesija.adminCheck(ctx())) {
-				User u = User.find(id);
-				Subscriber.unsubscribe(u);
+				User u = User.find(id);				
 				User.delete(u.id);
 
 				if (currentUser.id == id) {
@@ -309,7 +313,7 @@ public class UserController extends Controller {
 					return redirect("/signup ");
 				}
 			}
-			return ok(userList.render(SuperUser.allSuperUsers()));
+			return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 		} catch (Exception e) {
 			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at deleteUser: " + e.getMessage(), e);
@@ -462,6 +466,14 @@ public class UserController extends Controller {
 		c.maxOrder = c.maxOrder - quantity;
 		c.seller.save();
 		c.save();
+		MailHelper.sendPurchaseInfo(
+				client.username,
+				client.surname, 
+				client.email, 
+				coupon.price, 
+				quantity, 
+				saleId, paymentId, 
+				"http://" + PATH + "/coupon/" + coupon.id);
 		flash("success", Messages.get("transaction.complete"));
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
@@ -525,4 +537,6 @@ public class UserController extends Controller {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
 	}
+	
+	
 }

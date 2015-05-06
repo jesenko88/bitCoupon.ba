@@ -252,4 +252,13 @@ public class Post extends Model {
 		 }
 		 return errorList;
 	}
+	
+	/**
+	 * Returns all posts from a creator
+	 * @param id of the User
+	 * @return List<Post>
+	 */
+	public static List<Post> allFromCreator(long id) {
+		return find.where().eq("creator", id).findList();
+	}
 }

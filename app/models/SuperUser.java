@@ -15,7 +15,12 @@ import play.db.ebean.Model;
 
 @MappedSuperclass
 public abstract class SuperUser extends Model {
-
+    	
+    	//Constants for status codes of user.
+    	public static final int DEFAULT = 0;
+    	public static final int VERFIED = 1;
+    	public static final int DELETED = -1;
+    
 	@Id
 	public long id;
 
@@ -41,7 +46,8 @@ public abstract class SuperUser extends Model {
 			message="City not valid, only letters and numbers alowed."	)
 	public String city;
 	
-
+	public int status = DEFAULT;
+	
 	/**
 	 * Constructor for SuperUser
 	 * @param email
@@ -139,6 +145,16 @@ public abstract class SuperUser extends Model {
 			return user;
 		}
 		return company;
+	}
+
+	public static List<SuperUser> allVerfiedSuperUsers() {
+	   List<Company> allCompanies = Company.findVerfied();
+	   List<User> allUsers = User.findVerfied();
+	   
+	    List<SuperUser> all = new ArrayList<SuperUser>();
+	    all.addAll(allCompanies);
+	    all.addAll(allUsers);
+	    return all;
 	}
 
 }

@@ -6,10 +6,10 @@
 
 @main("Company profile") {
 <header id="header">
-<link href="@routes.Assets.at("css/star-rating.css")" rel="stylesheet">
-      <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
-      <script src="@routes.Assets.at("js/star-rating.js")"></script>
-      <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
+   <link href="@routes.Assets.at("css/star-rating.css")" rel="stylesheet">
+   <link href="@routes.Assets.at("css/star-rating.min.css")" rel="stylesheet">
+   <script src="@routes.Assets.at("js/star-rating.js")"></script>
+   <script src="@routes.Assets.at("js/star-rating.min.js")"></script>
    <!--header-->
    <div class="header-middle">
       <!--header-middle-->
@@ -28,13 +28,10 @@
 <div class="container">
    <h2 class="title text-center">@Messages("companyName") @company.name</h2>
    <div class="features_items">
-         <!--features_items-->
-         
-      
+      <!--features_items-->
       <div class="userInforamtion">
-         <div class="profilePicture">
-                        <img style="width: 400px; height: 400px"src="@routes.Assets.at(company.logo)" alt="@routes.Assets.at(company.logo)"/>
-
+         <div class="">
+            <img style="width: 400px; height: 400px"src="@company.logo" />
          </div>
       </div>
       <div class="rightBox">
@@ -46,99 +43,77 @@
             <li>@Messages("city"):@company.city</li>
             <li>@Messages("companyContact"): @company.contact</li>
             <div class="rate">
-				<li class="pull-left">@Messages("companyRate")</li>
-			       <input id="rating" value="@Rate.companyProgres(company.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
-                 </div>
-				<!-- /rate preview -->  
+               <li class="pull-left">@Messages("companyRate")</li>
+               <input id="rating" value="@Rate.companyProgres(company.id)" name="rating" class="rating" min=0 max=5 step=1 data-size="xs" disabled/>
+            </div>
+            <!-- /rate preview -->  
          </ul>
-         
       </div>
-      
    </div>
-   
    <div class="leftBox">
-   
-     @if(Sesija.companyCheck(ctx()) == false && Sesija.getCurrentUser(ctx()) != null){
+      @if(Sesija.companyCheck(ctx()) == false && Sesija.getCurrentUser(ctx()) != null){
       @if( RateController.canRateCompany(Sesija.getCurrentUser(ctx()).id, company.id) == true) {
       <label>@Messages("rateThisCompany")</label>
-      	<form id="rateForm" class="rating" action="@routes.RateController.ratingCompany(company.id)" method="POST">
-       	<input id="rate" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
-       	<br/>
-   
-  		</form>
-  		}
-  		}
-   
+      <form id="rateForm" class="rating" action="@routes.RateController.ratingCompany(company.id)" method="POST">
+         <input id="rate" value="" name="rate"  class="auto-submit-star" min=0 max=5 step=1 data-size="xs" />
+         <br/>
+      </form>
+      }
+      }
    </div>
-   
-   
    <h2 class="title text-center">@Messages("companyComments")</h2>
-   
-   
    <!--  COMMENTS   -->
-   
-<div class="container">
-   <div class="tabbable" id="tabs-706598">
-      <ul class="nav nav-tabs">
-         <li class="active">
-            <a href="#panel-935988" data-toggle="tab">@Messages("comments")</a>
-         </li>
-      </ul>
-      <div class="tab-content">
-         <div class="tab-pane active" id="panel-935988">
-            <!-- comments -->   
-            <div class="detailBox">
-               <div class="titleBox">
-                  <label>@Messages("comments")</label>
-               </div>
-  
-               <div class="actionBox">
-                  <ul class="commentList">
-                     @for(comment <- CommentCompany.findByCompany(company)){           	
-                     <li class="commentRow">
-                        <div class="commenterImage">
-                           <img src="@comment.user.profilePicture" />
+   <div class="container">
+      <div class="tabbable" id="tabs-706598">
+         <ul class="nav nav-tabs">
+            <li class="active">
+               <a href="#panel-935988" data-toggle="tab">@Messages("comments")</a>
+            </li>
+         </ul>
+         <div class="tab-content">
+            <div class="tab-pane active" id="panel-935988">
+               <!-- comments -->   
+               <div class="detailBox">
+                  <div class="titleBox">
+                     <label>@Messages("comments")</label>
+                  </div>
+                  <div class="actionBox">
+                     <ul class="commentList">
+                        @for(comment <- CommentCompany.findByCompany(company)){           	
+                        <li class="commentRow">
+                           <div class="commenterImage">
+                              <img src="@comment.user.profilePicture" />
+                           </div>
+                           <div class="commentText">
+                              <p >@comment.comment</p>
+                              <span class="date sub-text">@Messages("commentBy") @comment.user.username @Messages("onDate") @comment.date</span>					
+                              <span style="margin-left:20px" title="Report this comment">
+                              <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
+                              </span>
+                           </div>
+                        </li>
+                        <br>
+                        }
+                     </ul>
+                     @if(Sesija.getCurrent(ctx()) != null){
+                     @if(Sesija.buyerCheck(ctx(), company.id) == true){
+                     <form class="form" id="commentForm">
+                        <div class="form-group">
+                           <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments" required></textarea>
                         </div>
-                        <div class="commentText">
-                           <p >@comment.comment</p>
-                           <span class="date sub-text">@Messages("commentBy") @comment.user.username @Messages("onDate") @comment.date</span>					
-                           <span style="margin-left:20px" title="Report this comment">
-                           <a class="report" style="color:#2a6496" style="cursor: hand;" onClick="report(@comment.id)" ><i class="glyphicon glyphicon-ban-circle"> </i></a> 
-                           </span>
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-default">@Messages("comment")</button>
                         </div>
-
-                     </li>                     
-                     <br>
-                     
+                     </form>
                      }
-                  </ul>
-        
-          @if(Sesija.getCurrent(ctx()) != null){
-                  @if(Sesija.buyerCheck(ctx(), company.id) == true){
-
-                  <form class="form" id="commentForm">
-                     <div class="form-group">
-                        <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Your comments" required></textarea>
-                     </div>
-                     <div class="form-group">
-                        <button type="submit" class="btn btn-default">@Messages("comment")</button>
-                     </div>
-                  </form>    
-   
-                  }
-                  }
-
+                     }
+                  </div>
                </div>
             </div>
          </div>
-
       </div>
    </div>
-</div>
-   
    <!-- END OF COMMENTS -->
-   
-   
    <h2 class="title text-center">Company coupons:</h2>
    @for(coupon <- coupons){
    <div class="col-sm-4">
@@ -165,87 +140,81 @@
    </div>
    }
 </div>
-
-
-   <!-- AJAX HANDLE REPORT  -->
-                <script>						
-						function report(id) {		
-							$.ajax({					
-								  method: "GET",
-								  url: "/reportComentCompany/" +id,							  
-								  
-								}).done(function(msg) {
-									 console.log("FAILED");								 
-								   	  alert( "You successfuly reported this comment." );
-								 }).fail(function( msg ) {
-									  console.log("FAILED");
-									  console.log(msg);
-									  console.log("ID IS "+id)
-								   	  alert( "Reporting failed, please try again later." );
-								  });
-										e.preventDefault();
-							}
-							
-							
-							$("#commentForm").submit(function(e)
-				 				{	
-				 			e.preventDefault();
-				 														
-										$.ajax({							
-											  method: "POST",
-											  url: "/commentCompany/@company.id",							  
-											  data : $("#commentForm").serialize()
-											}).done(function(msg) {
-												  $(".commentList").append(msg);				 
-											 }).fail(function( msg ) {
-												  console.log("FAILED");
-											   	  alert("Question should not be longer than 600 characters");
-											  });
-										e.preventDefault();
-										$("#commentForm")[0].reset();
-										return false;	
-										
-				 			  });
-	
-					</script>
-				
-					<script>	
-			        jQuery(document).ready(function() {
-			            $('.auto-submit-star').rating({
-			                callback: function(value, link){
-			                    alert(value);
-			                    this.rating('disable');
-			                }
-			            });
-			        });
-					</script> 
-					
-					<script>
-					$(function() {
-						   $("#rate").change(function() {
-						     $("#rateForm").submit();
-						   });
-						 })
-		</script>
-		<script>	
-			        jQuery(document).ready(function() {
-			            $('.auto-submit-star').rating({
-			                callback: function(value, link){
-			                    alert(value);
-			                    this.rating('disable');
-			                }
-			            });
-			        });
-					</script> 
-					
-					<script>
-					$(function() {
-						   $("#rate").change(function() {
-						     $("#rateForm").submit();
-						   });
-						 })
+<!-- AJAX HANDLE REPORT  -->
+<script>						
+   function report(id) {		
+   	$.ajax({					
+   		  method: "GET",
+   		  url: "/reportComentCompany/" +id,							  
+   		  
+   		}).done(function(msg) {
+   			 console.log("FAILED");								 
+   		   	  alert( "You successfuly reported this comment." );
+   		 }).fail(function( msg ) {
+   			  console.log("FAILED");
+   			  console.log(msg);
+   			  console.log("ID IS "+id)
+   		   	  alert( "Reporting failed, please try again later." );
+   		  });
+   				e.preventDefault();
+   	}
+   	
+   	
+   	$("#commentForm").submit(function(e)
+   			{	
+   		e.preventDefault();
+   													
+   				$.ajax({							
+   					  method: "POST",
+   					  url: "/commentCompany/@company.id",							  
+   					  data : $("#commentForm").serialize()
+   					}).done(function(msg) {
+   						  $(".commentList").append(msg);				 
+   					 }).fail(function( msg ) {
+   						  console.log("FAILED");
+   					   	  alert("Question should not be longer than 600 characters");
+   					  });
+   				e.preventDefault();
+   				$("#commentForm")[0].reset();
+   				return false;	
+   				
+   		  });
+   
 </script>
-
+<script>	
+   jQuery(document).ready(function() {
+       $('.auto-submit-star').rating({
+           callback: function(value, link){
+               alert(value);
+               this.rating('disable');
+           }
+       });
+   });
+</script> 
+<script>
+   $(function() {
+   	   $("#rate").change(function() {
+   	     $("#rateForm").submit();
+   	   });
+   	 })
+</script>
+<script>	
+   jQuery(document).ready(function() {
+       $('.auto-submit-star').rating({
+           callback: function(value, link){
+               alert(value);
+               this.rating('disable');
+           }
+       });
+   });
+</script> 
+<script>
+   $(function() {
+   	   $("#rate").change(function() {
+   	     $("#rateForm").submit();
+   	   });
+   	 })
+</script>
 
 }
 	

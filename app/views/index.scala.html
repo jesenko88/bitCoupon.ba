@@ -32,10 +32,11 @@
 <div class="container">
 <div class="features_items">
    <!--features_items-->
-   <!-- SANELA PART -->
    <div class="row" id="toggle" style="display:none">
       <div class="col-md-12" style="margin: 20px 0" >
+      	<div class="col-sm-1"></div>
          <div class="col-sm-5">
+         	<div>
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
                   <option value="" style="display:none">@Messages("selectCategory")</option>
@@ -45,6 +46,7 @@
                </select>
                <input type="submit" class="btn btn-fefault cart"> 
             </form>
+            </div>
             <form action="@routes.CouponController.filterPrice(Coupon.commaSeparatedIds(coupons))" method="POST">
                <input type="number" name="start_price" id="start_price" min="1" step="any" placeholder="Price"/>
                <input type="number" name="end_price" id="end_price" min="1" step="any" placeholder="Price"/>

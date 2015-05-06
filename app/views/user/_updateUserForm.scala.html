@@ -1,48 +1,47 @@
 @(myForm: Form[User],superUser: SuperUser)
  <form id="myForm" action="@routes.UserController.updateUser(superUser.getUser().id)" method ="POST" enctype="multipart/form-data" >
-				 <hr>
-				  @if(myForm.hasGlobalErrors){
-					<div class="panel panel-danger">
-						<div class="panel-heading">@Messages("errorSubmitingForm")/div>
-				  		<div class="panel-body">
-				   			 <ul>
-				   			 @for(err <- myForm.globalErrors){
-				  				<li> @err.message </li>
-				   			 }
-				   			 </ul>
-				 		</div>
-					</div>
-					}				
-				 <div class="form group">
-				  <!-- onchange="form.confirmPassword.pattern = this.value;" -->
-                  <!-- Input email -->
-                   <div class='@("form-group has-error".when(myForm("email").hasErrors)) form-group' >
-                 	 <input class="form-control" value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" /> 
-		          </div>		         
-                 <!-- Username --> 
-                <div class='@("form-group has-error".when(myForm("username").hasErrors)) form-group' >
-                     <input class='@("has-error".when(myForm("username").hasErrors)) form-control'  value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" />	
- 		        </div>
- 		        <!-- Surname -->
-                <div class='@("form-group has-error".when(myForm("surname").hasErrors)) form-group' >
-                     <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" />	
- 		        </div>
-             	<!-- Birth day -->
-                <div class='@("form-group has-error".when(myForm("dob").hasErrors)) form-group' >
-                     <input class="form-control datepicker-bit " id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" />
- 		        </div> 
- 		        <span id="error" style="display:none; color:red"> @Messages("youAreUnderage18")</span>
-                
-                <!-- Adress -->
-                 <div class='@("form-group has-error".when(myForm("adress").hasErrors)) form-group' >
-                     <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" />               
- 		        </div>
-                <!-- City -->
-				<div class='@("form-group has-error".when(myForm("city").hasErrors)) form-group' >
-              	     <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" />
- 		        </div>                                     
-                 <br>
-                  <button type="submit" id="submit-user" class="btn btn-default" >@Messages("update")</button>
-              	</div>
-               </form>
-               
+   <hr>
+   @if(myForm.hasGlobalErrors){
+   <div class="panel panel-danger">
+   <div class="panel-heading">
+      @Messages("errorSubmitingForm")/div>
+      <div class="panel-body">
+         <ul>
+            @for(err <- myForm.globalErrors){
+            <li> @err.message </li>
+            }
+         </ul>
+      </div>
+   </div>
+   }				
+   <div class="form group">
+      <!-- onchange="form.confirmPassword.pattern = this.value;" -->
+      <!-- Input email -->
+      <div class='@("form-group has-error".when(myForm("email").hasErrors)) form-group' >
+         <input class="form-control" value='@myForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" /> 
+      </div>
+      <!-- Username --> 
+      <div class='@("form-group has-error".when(myForm("username").hasErrors)) form-group' >
+         <input class='@("has-error".when(myForm("username").hasErrors)) form-control'  value='@myForm("username").value' type="text" id="username" name="username"  onClick="this.select()"  placeholder="Name" />	
+      </div>
+      <!-- Surname -->
+      <div class='@("form-group has-error".when(myForm("surname").hasErrors)) form-group' >
+         <input class="form-control" value='@myForm("surname").value' type="text" id="surname" name="surname"  onClick="this.select()"  placeholder="Surname" />	
+      </div>
+      <!-- Birth day -->
+      <div class='@("form-group has-error".when(myForm("dob").hasErrors)) form-group' >
+         <input class="form-control datepicker-bit " id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" />
+      </div>
+      <span id="error" style="display:none; color:red"> @Messages("youAreUnderage18")</span>
+      <!-- Adress -->
+      <div class='@("form-group has-error".when(myForm("adress").hasErrors)) form-group' >
+         <input class="form-control" value='@myForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" />               
+      </div>
+      <!-- City -->
+      <div class='@("form-group has-error".when(myForm("city").hasErrors)) form-group' >
+         <input class="form-control" value='@myForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" />
+      </div>
+      <br>
+      <button type="submit" id="submit-user" class="btn btn-default" >@Messages("update")</button>
+   </div>
+</form>

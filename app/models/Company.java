@@ -36,9 +36,8 @@ public class Company  extends SuperUser{
 	
 	public String contact;
 		
-	public int notifications;
+	public int notifications;	
 	
-	public int status;
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -61,7 +60,7 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = "images/home/company-default.jpg";
+		this.logo = "http://res.cloudinary.com/bitfiles/image/upload/v1430936866/staticImages/company-default.jpg";
 		this.contact = contact;
 		this.status = Status.DEFAULT;
 	}
@@ -277,5 +276,12 @@ public class Company  extends SuperUser{
 			byStatus = new ArrayList<Company>();
 		}
 		return byStatus;
+	}
+
+	public static List<Company> findVerfied() {
+	   List<Company> verfied = find.where().eq("status", SuperUser.VERFIED).findList();
+	   if(verfied == null)
+	       return new ArrayList<Company>();
+	    return verfied;
 	}
 }

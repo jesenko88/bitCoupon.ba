@@ -51,10 +51,9 @@
       <div>
          <label class="pull-left" >@Messages("remark")</label>
          <textarea disabled rows="4">@coupon.remark</textarea>
-         
          <label class="pull-left" >@Messages("publishedBy")</label>
          <span><a href="@routes.CompanyController.showCompanyProfile(coupon.seller.id)">@coupon.seller.name</a></span>
       </div>
    </div>
-</div>					
+</div>		
 }

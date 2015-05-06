@@ -24,19 +24,13 @@
    <div class="container">
    
  <h2 class="title text-center">@Messages("notifications")</h2> 
- 
      <div class="container">
       @for(question <- Question.newQuestions(Sesija.getCurrentCompany(ctx()).id)){
-      	
-     
          <ul class="actionBox">
-		
           <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">@Messages("newQuestionForCouponID") @question.coupon.id</a> </li>
 		</ul>
-
       }
       </div> 
- 
  
  <h2 class="title text-center">@Messages("soldCoupons")</h2> 
    <div class="container">
@@ -66,10 +60,4 @@
       }
       </div>
    </div>
-   
-   
-   
-   
-   
-   
    }

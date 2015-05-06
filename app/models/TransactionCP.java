@@ -62,6 +62,8 @@ public class TransactionCP extends Model{
 	
 	public Date date;
 	
+	public boolean isRefunded;
+		
 	/* ebean finder */
 	public static Finder<Long, TransactionCP> find = new Finder<Long, TransactionCP>(Long.class,
 			TransactionCP.class);
@@ -82,6 +84,7 @@ public class TransactionCP extends Model{
 		this.buyer_email = buyer.email;
 		this.coupon = coupon;
 		this.date = new Date();
+		this.isRefunded = false;
 	}
 	
 	/* constructor for unregistered users */
@@ -100,6 +103,8 @@ public class TransactionCP extends Model{
 		this.buyer_email = email;
 		this.coupon = coupon;
 		this.date = new Date();
+		this.isRefunded = false;
+
 	}
 
 	/**
@@ -116,6 +121,7 @@ public class TransactionCP extends Model{
 			double totalPrice, String token, User buyer,  Coupon coupon) {
 		
 		TransactionCP transaction = new TransactionCP(payment_id, saleId, couponPrice, quantity,totalPrice, token, buyer, coupon);
+		transaction.isRefunded = false;
 		transaction.save();
 		
 		return transaction.id;
@@ -138,6 +144,7 @@ public class TransactionCP extends Model{
 	public static long createTransactionForUnregisteredUser(String payment_id, String saleId, double couponPrice,int quantity,
 			double totalPrice, String token, String username, String surname, String email, Coupon coupon) {	
 		TransactionCP transaction = new TransactionCP(payment_id, saleId, couponPrice, quantity,totalPrice, token, username, surname,email, coupon);
+		transaction.isRefunded = false;
 		transaction.save();
 		return transaction.id;
 		
@@ -207,6 +214,14 @@ public class TransactionCP extends Model{
 		return forCompany;
 	}
 	
-	
+	public static boolean isRefundedAll(long couponId) {
+		List<TransactionCP> transactions = TransactionCP.find.where()
+				.eq("coupon_id", couponId).findList();
+		for(int i = 0; i < transactions.size(); i++) {
+			if(transactions.get(i).isRefunded == false)
+				return false;
+		}
+		return true;
+	}
 	
 }

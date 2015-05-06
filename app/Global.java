@@ -270,17 +270,18 @@ public class Global extends GlobalSettings {
 			User user = new User("Jesenko", "Gavric", new Date(), "", "", "",
 					"jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false, picture);
+			
 			user.save();
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();
 			Coupon c1 = Coupon.find(ownedCoupinID1);
 			Coupon c2 = Coupon.find(ownedCoupinID2);
-			TransactionCP.createTransaction("AH-324ASDas", "saleId",  c1.price, quantity,
+			TransactionCP.createTransaction("AH-324ASDas", "bitSale",  c1.price, quantity,
 					c1.price, "TOKEN01010", user, c1);
 			c1.maxOrder = c1.maxOrder - quantity;
 			c1.statistic.bought(quantity);
 			c1.save();
-			TransactionCP.createTransaction("AH-324ASsadD", "saleId", c2.price, quantity,
+			TransactionCP.createTransaction("AH-324ASsadD", "bitSale", c2.price, quantity,
 					c2.price, "TOKEN2222", user, c2);
 			c2.maxOrder = c2.maxOrder - quantity;
 			c2.statistic.bought(quantity);

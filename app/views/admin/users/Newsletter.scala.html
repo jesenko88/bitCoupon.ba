@@ -7,13 +7,10 @@
    <h2 class="title text-center"> @Messages("createNewsLetter")</h2>
    <h6 class="title text-center"> @Messages("pleaseSelectNUMcoupons", 3)</h6>
 </div>
-
 <div class="signup-form">
-  
    <!--newsletter form-->
    <form action="@routes.SubscribeController.sendNewsletters" method ="POST" >
       <input type="text" name="subject" id="subject" placeholder="Subject here" required/>
-      
       <div class="row">
          @for(coupon <- coupons){      
          <div class="col-sm-6 col-md-4" style="height:450px">
@@ -27,23 +24,18 @@
          </div>
          }               
       </div>
-       <br>
-        <br>
- 		<textarea name="message" id="message">@Messages("enterYourMessage")</textarea>
+      <br>
+      <br>
+      <textarea name="message" id="message">@Messages("enterYourMessage")</textarea>
       <br>
       <button style="float: right" type="submit" class="btn btn-default">@Messages("sendNewsLetter")</button>
       <br>
       <br>
-       
-      
-      
    </form>
    <!--/sign up form-->
-
 </div>
 </div>
-
- <script>
-			CKEDITOR.replace('message');			
-  </script>
+<script>
+   CKEDITOR.replace('message');			
+</script>
 }

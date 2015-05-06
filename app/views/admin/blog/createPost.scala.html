@@ -10,9 +10,8 @@
       <title> @Messages("blog")</title>
       <link href="@routes.Assets.at("css/clean-blog.min.css")" rel="stylesheet">
       <link href="@routes.Assets.at("css/clean-blog.css")" rel="stylesheet">
-    	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">	
-     <link href="@routes.Assets.at("tags/bootstrap-tagsinput.css")" rel="stylesheet">
-      
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+      <link href="@routes.Assets.at("tags/bootstrap-tagsinput.css")" rel="stylesheet">
       <!-- Custom Fonts -->
       <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
       <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,26 +23,26 @@
    <body>
       <!-- Navigation -->
       <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header page-scroll">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">@Messages("togleNavigation")</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
- 				<a class="navbar-brand" href="/">@Messages("bitCoupon")</a>
-                <a class="navbar-brand" href="/blog">@Messages("blog")</a>   			</div>
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					@if(Sesija.adminCheck(ctx())){
-						<li><a href="@routes.BlogController.createPostPage">@Messages("createNewPost")</a></li>						
-					}
-				</ul>
+         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+               <button type="button" class="navbar-toggle" data-toggle="collapse"
+                  data-target="#bs-example-navbar-collapse-1">
+               <span class="sr-only">@Messages("togleNavigation")</span> <span
+                  class="icon-bar"></span> <span class="icon-bar"></span> <span
+                  class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="/">@Messages("bitCoupon")</a>
+               <a class="navbar-brand" href="/blog">@Messages("blog")</a>   			
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse"
+               id="bs-example-navbar-collapse-1">
+               <ul class="nav navbar-nav navbar-right">
+                  @if(Sesija.adminCheck(ctx())){
+                  <li><a href="@routes.BlogController.createPostPage">@Messages("createNewPost")</a></li>
+                  }
+               </ul>
             </div>
             <!-- /.navbar-collapse -->
          </div>
@@ -65,42 +64,39 @@
          </div>
       </header>
       <div class="container">
-     
-				  @if(form.hasGlobalErrors || form.hasErrors){
-					<div class="panel panel-danger">
-						<div class="panel-heading">@Messages("error")</div>
-				  		<div class="panel-body">
-				   			 <ul>
-				   			 @for(err <- Post.errors(form)){				   			 	
-				  				<li> @err </li>
-				   			
-				   			 }
-				   			 </ul>
-				 		</div>
-					</div>
-				   }
-      
-      
+         @if(form.hasGlobalErrors || form.hasErrors){
+         <div class="panel panel-danger">
+            <div class="panel-heading">@Messages("error")</div>
+            <div class="panel-body">
+               <ul>
+                  @for(err <- Post.errors(form)){				   			 	
+                  <li> @err </li>
+                  }
+               </ul>
+            </div>
+         </div>
+         }
          <form action="@routes.BlogController.createPost" method ="POST"
             enctype="multipart/form-data" >
-            <div class="example example_markup">               
+            <div class="example example_markup">
                <div class='@("form-group has-error".when(form("title").hasErrors)) form-group' >
-  					<label class="control-label" for="title">@Messages("title")<span style="color:#AB1403"> *</span></label>
- 					<input  class="form-control" value='@form("title").value' type="text" name="title" id="title" minlength="4" maxlength="70" placeholder="Title" required/>
-			   </div>
-			   <div class='@("form-group has-error".when(form("subtitle").hasErrors)) form-group' >
-  					  <label class="control-label" for="subtitle">@Messages("subtitle")<span style="color:#AB1403"> *</span></label>
-              		  <input  class="form-control"  value='@form("subtitle").value' type="text" name="subtitle" id="subtitle"  placeholder="Subtitle" required/>
-                </div> 
+                  <label class="control-label" for="title">@Messages("title")<span style="color:#AB1403"> *</span></label>
+                  <input  class="form-control" value='@form("title").value' type="text" name="title" id="title" minlength="4" maxlength="70" placeholder="Title" required/>
+               </div>
+               <div class='@("form-group has-error".when(form("subtitle").hasErrors)) form-group' >
+                  <label class="control-label" for="subtitle">@Messages("subtitle")<span style="color:#AB1403"> *</span></label>
+                  <input  class="form-control"  value='@form("subtitle").value' type="text" name="subtitle" id="subtitle"  placeholder="Subtitle" required/>
+               </div>
                <label class="control-label" for="picture"> @Messages("chooseYourPhoto")</label>
                <input class="form-control" type="file" name="picture" id="picture" placeholder="Choose your photo" />
                <br>	
                <labelclass="control-label" for="content">@Messages("content"):<span style="color:#AB1403"> *</span></label>
                <textarea class="form-control" name="content" id="content" required> @form("content").value </textarea>
                <div class='@("form-group has-error".when(form("tags").hasErrors)) bootstrap-tagsinput' >
-  					<label class="control-label" for="tags"> @Messages("tags") </label>              		
-               		<input  value='@form("tags").value' type="text" name="tags" id="tags" data-role="tagsinput"  />                	
-                </div> <br>
+                  <label class="control-label" for="tags"> @Messages("tags") </label>              		
+                  <input  value='@form("tags").value' type="text" name="tags" id="tags" data-role="tagsinput"  />                	
+               </div>
+               <br>
                <button type="submit" class="btn btn-default" required>@Messages("createPost")</button>
             </div>
          </form>
@@ -147,16 +143,11 @@
       <script src="@routes.Assets.at("ckeditor/clean-blog.js")"></script>
       <script src="@routes.Assets.at("ckeditor/ckeditor.js")"></script>
       <script src="@routes.Assets.at("tags/bootstrap-tagsinput.js")"></script>
-	  <script src="@routes.Assets.at("tags/bootstrap-tagsinput.min.js")"></script>
-	  <script src="@routes.Assets.at("tags/bootstrap-tagsinput-angular.js")"></script>
-	  <script src="@routes.Assets.at("tags/bootstrap-tagsinput.min.js")"></script>
-	  
- <script>
-			CKEDITOR.replace('content');			
-  </script>
-  
-  
-      
-  </body>
-   
+      <script src="@routes.Assets.at("tags/bootstrap-tagsinput.min.js")"></script>
+      <script src="@routes.Assets.at("tags/bootstrap-tagsinput-angular.js")"></script>
+      <script src="@routes.Assets.at("tags/bootstrap-tagsinput.min.js")"></script>
+      <script>
+         CKEDITOR.replace('content');			
+      </script>
+   </body>
 </html>
