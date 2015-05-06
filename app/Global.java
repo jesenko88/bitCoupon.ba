@@ -122,18 +122,15 @@ public class Global extends GlobalSettings {
 		}
 
 		if (Category.exists("Food") == false) {
-			food = new Category("Food", "images" + File.separator
-					+ "category-photos" + File.separator + "food.png");
+			food = new Category("Food", "http://res.cloudinary.com/bitfiles/image/upload/v1430902947/staticImages/food.png");
 			food.save();
 		}
 		if (Category.exists("Travel") == false) {
-			travel = new Category("Travel", "images" + File.separator
-					+ "category-photos" + File.separator + "travel.png");
+			travel = new Category("Travel", "http://res.cloudinary.com/bitfiles/image/upload/v1430902953/staticImages/travel.png");
 			travel.save();
 		}
 		if (Category.exists("Sport") == false) {
-			sport = new Category("Sport", "images" + File.separator
-					+ "category-photos" + File.separator + "sport.png");
+			sport = new Category("Sport", "http://res.cloudinary.com/bitfiles/image/upload/v1430902950/staticImages/sport.png");
 			sport.save();
 		}
 
