@@ -1,18 +1,19 @@
 @(question: Question)(coupon: Coupon)
 
 <li class="questionRow">
-                        <div class="askerImage">
-                           <img src="@question.user.profilePicture">
-                        </div>
-                        <div class="commentText">
-                           <p class="">@question.question</p>
-                           <span class="date sub-text">@Messages("questionBy") @question.user.username @Messages("onDate") @question.questionDate</span>	
-                     </div>
+   <div class="askerImage">
+      <img src="@question.user.profilePicture">
+   </div>
+   <div class="commentText">
+      <p class="">@question.question</p>
+      <span class="date sub-text">@Messages("questionBy") @question.user.username @Messages("onDate") @question.questionDate</span>	
+   </div>
 </li>
-
-              @if(Sesija.getCurrentCompany(ctx()) == coupon.seller || Sesija.getCurrentUser(ctx()) == question.user){ 
-		                     <form action="@routes.QuestionController.deleteQuestion(question.id)">
-		                     	<button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Delete question?');"><h6>@Messages("deleteQuestion")</h6></button>	
-		                     </form>	
-                     	<br>
-                     	}
+@if(Sesija.getCurrentCompany(ctx()) == coupon.seller || Sesija.getCurrentUser(ctx()) == question.user){ 
+<form action="@routes.QuestionController.deleteQuestion(question.id)">
+   <button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Delete question?');">
+      <h6>@Messages("deleteQuestion")</h6>
+   </button>
+</form>
+<br>
+}

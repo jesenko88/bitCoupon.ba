@@ -130,9 +130,9 @@
       <div class="userInforamtion">
          <div class="profilePicture">
             @if(superUser.getCompany().logo == null){
-            <img style="width: 400px; height: 400px" src='@routes.Assets.at("images/home/avatar.jpg")' class="avatar-profile"/>
+            <img style="width: 400px; height: 400px" src='http://res.cloudinary.com/bitfiles/image/upload/v1430936866/staticImages/company-default.jpg' class="avatar-profile"/>
             }else{
-            <img style="width: 400px; height: 400px" src='@routes.Assets.at(superUser.getCompany().logo)' alt="LOGO" class="avatar-profile"/>
+            <img style="width: 400px; height: 400px" src='@superUser.getCompany().logo'/>
             }
          </div>
       </div>

@@ -156,16 +156,14 @@ public class SuperUserController extends Controller {
 		Company companyToUpdate = Company.findByEmail(email);
 		if(userToUpdate != null){
 			Form<User> userForm = Form.form(User.class).fill(userToUpdate);
-			Logger.debug("In user edit");
-			flash("error", ERROR_MSG_ADMIN);
 			return ok(adminEditUser.render(userToUpdate, adminList, userForm, null));
 		}else if(companyToUpdate != null){
-			Logger.debug("In company edit");
-			flash("error", ERROR_MSG_ADMIN);
 			Form<Company> companyForm = Form.form(Company.class).fill(companyToUpdate);
 			return ok(adminEditUser.render(companyToUpdate, adminList, null, companyForm));
 		}else{
-			return TODO;
+			Logger.debug("In company edit");
+			flash("error", ERROR_MSG_ADMIN);
+			return redirect("/");
 		}
 		
 	}

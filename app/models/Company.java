@@ -61,7 +61,7 @@ public class Company  extends SuperUser{
 		super(email,password, adress, city);
 		this.name = name;
 		this.created = created;
-		this.logo = "images/home/company-default.jpg";
+		this.logo = "http://res.cloudinary.com/bitfiles/image/upload/v1430936866/staticImages/company-default.jpg";
 		this.contact = contact;
 		this.status = Status.DEFAULT;
 	}
