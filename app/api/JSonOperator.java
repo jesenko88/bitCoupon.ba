@@ -245,10 +245,14 @@ public class JSonOperator extends Controller {
 			String id = json.findPath("id").textValue();
 			String username = json.findPath("username").textValue();
 			String surname = json.findPath("surname").textValue();
+			String city = json.findPath("city").textValue();
+			String address = json.findPath("address").textValue();
 			try {
 				User cUser = User.find(Long.parseLong(id));
 				cUser.username = username;
 				cUser.surname = surname;
+				cUser.city = city;
+				cUser.adress = address;
 				cUser.updated = new Date();
 				cUser.save();
 				flash("success", "Profile updated!");
