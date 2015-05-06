@@ -4,57 +4,49 @@
 
    <header id="header">
    <script src="@routes.Assets.at("js/jspdf.js")"></script>
-      <script src="@routes.Assets.at("js/jspdf.plugin.from_html.js")"></script>
-      <script src="@routes.Assets.at("js/jspdf.plugin.split_text_to_size.js")"></script>
-      <script src="@routes.Assets.at("js/jspdf.plugin.standard_fonts_metrics.js")"></script>
-      <script src="@routes.Assets.at("js/FileSaver.js")"></script>
-     <script src="@routes.Assets.at("js/FileSaver.min.js")"></script>     
-      <div class="col-sm-12">
-         <!--header-middle-->
-         <div class="container">
-            <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png /></a>
-            
+   <script src="@routes.Assets.at("js/jspdf.plugin.from_html.js")"></script>
+   <script src="@routes.Assets.at("js/jspdf.plugin.split_text_to_size.js")"></script>
+   <script src="@routes.Assets.at("js/jspdf.plugin.standard_fonts_metrics.js")"></script>
+   <script src="@routes.Assets.at("js/FileSaver.js")"></script>
+   <script src="@routes.Assets.at("js/FileSaver.min.js")"></script>     
+   <div class="col-sm-12">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png /></a>
             <div class="logo pull-right">
-           		
-            </div>
-            <div class="logo pull-right">
-               
-            </div>
-         </div>
-      </div>	
-   </header>
-   <div class="container">
-   
- <h2 class="title text-center">@Messages("buyers")</h2> 
- 
-     <div class="container">
-     <div id="content" class="divContent">
-
-         <label style="color:#FF6600"><h3>@transactions.get(0).coupon.name</h3></label>
-      @for(buyer <- transactions){     
-          <p>@buyer.buyer_name @buyer.buyer_surname</p>
-
-      }
-
-	</div>
-
       </div>
-      <style type="text/css">.center { text-align: center; list-style-position:inside;}</style>
- 					<script>
-							var doc = new jsPDF();
-						$('.btnCmd').click(function () {
-							var specialElementHandlers = {
-								    '#editor': function (element, renderer) {
-								        return true;
-								    }
-								};
-						    doc.fromHTML($('.divContent').html(), 15, 15, {
-						        'width': 170,
-						            'elementHandlers': specialElementHandlers
-						    });
-						    doc.save('list-of-buyers.pdf');
-						});
-					
-					</script>
-					
-   }
+      <div class="logo pull-right">
+      </div>
+   </div>
+   </div>	
+</header>
+<div class="container">
+<h2 class="title text-center">@Messages("buyers")</h2>
+<div class="container">
+   <div id="content" class="divContent">
+      <label style="color:#FF6600">
+         <h3>@transactions.get(0).coupon.name</h3>
+      </label>
+      @for(buyer <- transactions){     
+      <p>@buyer.buyer_name @buyer.buyer_surname</p>
+      }
+   </div>
+</div>
+<style type="text/css">.center { text-align: center; list-style-position:inside;}</style>
+<script>
+   var doc = new jsPDF();
+   $('.btnCmd').click(function () {
+   var specialElementHandlers = {
+   	    '#editor': function (element, renderer) {
+   	        return true;
+   	    }
+   	};
+      doc.fromHTML($('.divContent').html(), 15, 15, {
+          'width': 170,
+              'elementHandlers': specialElementHandlers
+      });
+      doc.save('list-of-buyers.pdf');
+   });
+   
+</script>
+}

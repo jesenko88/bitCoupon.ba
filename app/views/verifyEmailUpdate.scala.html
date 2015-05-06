@@ -3,25 +3,27 @@
 @import helper._
 
 @main("E-mail Verification") {
-<header id="header"><!--header-->
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-			<a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
-				<div class="logo pull-right">
-					<div class="search_box">
-						<form action="/search" method="GET">
-						<input id="q" name="q" type="text" placeholder="Search" />
-						</form>
-					</div>
-				</div>	
-			</div>		
-		</div>
-	</header>
-	<div class="container">
-	<span>@message</span>
-	<form action="@routes.SuperUserController.profilePage(username)" >
-	<button type="submit" id="submit" class="btn btn-fefault cart"> @Messages("goToProfilePage") </button>
-	</form>
-	</div>
+<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</header>
+<div class="container">
+   <span>@message</span>
+   <form action="@routes.SuperUserController.profilePage(username)" >
+      <button type="submit" id="submit" class="btn btn-fefault cart"> @Messages("goToProfilePage") </button>
+   </form>
+</div>
 }
 

@@ -24,7 +24,7 @@
             </tr>
          </thead>
          <tbody>
-          @if(Report.reports() != null){
+            @if(Report.reports() != null){
             @for((comment, value) <- Report.reports()){          
             <tr>
                <td style="max-width: 200px; word-wrap:break-word;" >@comment.comment </td>
@@ -39,8 +39,8 @@
                   class="btn btn-danger">@Messages("removeReport")</a></td>
             </tr>
             }
-          }
-           @if(ReportCommentCompany.reports() != null){
+            }
+            @if(ReportCommentCompany.reports() != null){
             @for((comment, value) <- ReportCommentCompany.reports()){          
             <tr>
                <td style="max-width: 200px; word-wrap:break-word;" >@comment.comment </td>
@@ -55,54 +55,50 @@
                   class="btn btn-danger">@Messages("removeReport")</a></td>
             </tr>
             }
-          }
+            }
          </tbody>
       </table>
    </div>
    <!--/tabs-->
    <hr>
    <div class="col-sm-12">
-   <div class="review-payment">
-      <h2>Statistic</h2>
+      <div class="review-payment">
+         <h2>Statistic</h2>
+      </div>
+      <div class="table-responsive">
+         <table class="table table-striped">
+            <thead>
+               <tr class="cart_menu">
+                  <th >Coupon id</th>
+                  <th>Coupon name</th>
+                  <th>Visited times</th>
+                  <th>Bought times</th>
+               </tr>
+            </thead>
+            <tbody>
+               @for(stat <- Statistic.all()){          
+               <tr>
+                  <td style="max-width: 200px; word-wrap:initial;" >@stat.coupon.id </td>
+                  <td><a href="@routes.CouponController.showCoupon(stat.coupon.id)" class="btn btn-default" >@stat.coupon.name </a></td>
+                  <td>@stat.visited</td>
+                  <td>@stat.bought</td>
+               </tr>
+               }
+            </tbody>
+         </table>
+      </div>
+      <!--/col-span-6-->
    </div>
-   <div class="table-responsive">
-      <table class="table table-striped">
-         <thead>
-            <tr class="cart_menu">
-               <th >Coupon id</th>
-               <th>Coupon name</th>
-               <th>Visited times</th>
-               <th>Bought times</th>               
-            </tr>
-         </thead>
-         <tbody>         
-            @for(stat <- Statistic.all()){          
-            <tr>
-               <td style="max-width: 200px; word-wrap:initial;" >@stat.coupon.id </td>
-               <td><a href="@routes.CouponController.showCoupon(stat.coupon.id)" class="btn btn-default" >@stat.coupon.name </a></td>
-               <td>@stat.visited</td>  
-               <td>@stat.bought</td>  
-            </tr>
-            }
-         
-         </tbody>
-      </table>
-   </div>
-   <!--/col-span-6-->
+   <!--/row-->          
 </div>
-<!--/row-->          
-</div>  
 <!--/col-span-9-->
-</div>
 
-</div>
 <!-- /Main -->
 <footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
-</div>
-</div>
 <!-- /.modal -->
 <!-- script references -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/scripts.js"></script>
+COPY TO CLIPBOARD	 SEL
 }

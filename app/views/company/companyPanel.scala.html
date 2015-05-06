@@ -20,39 +20,40 @@
    </div>
 </header>
 <div class="container">
-<div class="features_items">
-   <!--features_items-->
-   <h2 class="title text-center">@Messages("myCoupons")</h2>
-   <div class="col-sm-4">
-      <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
-         <select id="orderby" name="orderby" required>
-            <option value="" style="display:none">@Messages("orderBy") </option>
-            <option>@Messages("category")</option>
-            <option >@Messages("price")</option>
-            <option>@Messages("date")</option>
-         </select>
-         <input type="radio" id="method" name="method" value="ascending" checked>@Messages("ascending")
-         <input type="radio" id="method" name="method" value="descending">@Messages("descending")
-         <input type="submit" class="btn btn-success">                  
-      </form>
+   <div class="features_items">
+      <!--features_items-->
+      <h2 class="title text-center">@Messages("myCoupons")</h2>
+      <div class="col-sm-4">
+         <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
+            <select id="orderby" name="orderby" required>
+               <option value="" style="display:none">@Messages("orderBy") </option>
+               <option>@Messages("category")</option>
+               <option >@Messages("price")</option>
+               <option>@Messages("date")</option>
+            </select>
+            <input type="radio" id="method" name="method" value="ascending" checked>@Messages("ascending")
+            <input type="radio" id="method" name="method" value="descending">@Messages("descending")
+            <input type="submit" class="btn btn-success">                  
+         </form>
+      </div>
    </div>
-</div>
-<div class="container">
-   @for(coupon <- coupons){
-   <div class="col-sm-4">
-      <div class="logo pull-left">
-         <div class="product-image-wrapper">
-            <div class="single-products">
-               <div class="productinfo text-center">
-                  <img src="@coupon.picture"/>
-                  <h2>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
-                  <p>@coupon.name</p>
-                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
+   <div class="container">
+      @for(coupon <- coupons){
+      <div class="col-sm-4">
+         <div class="logo pull-left">
+            <div class="product-image-wrapper">
+               <div class="single-products">
+                  <div class="productinfo text-center">
+                     <img src="@coupon.picture"/>
+                     <h2>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
+                     <p>@coupon.name</p>
+                     <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
+                  </div>
                </div>
             </div>
          </div>
       </div>
+      }			
    </div>
-   }			
 </div>
 }

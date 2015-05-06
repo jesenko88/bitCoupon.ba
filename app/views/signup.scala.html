@@ -1,35 +1,35 @@
 @(myForm: Form[User])(companyForm: Form[Company])
 
 @main("Registration"){
- <header id="header"><!--header-->
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-			<a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
-				<div class="logo pull-right">
-					<div class="search_box">
-					<form action="/search" method="GET">
-					<input id="q" name="q" type="text" placeholder="Search" />
-					</form>
-					</div>
-				</div>	
-			</div>		
-		</div>
-	</header>
-	<div ng-app="formApp" ng-controller="formController">
+ <header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</header>
+<div ng-app="formApp" ng-controller="formController">
    <div id="someId" class="container" >
       <div class="features_items">
          <!--features_items-->
          <h2 class="title text-center">@Messages("registration")</h2>
          <div class="col-sm-6 col-sm-offset-1">
-            
-               <!--sign up form-->
-               <button type="submit" id="companySignup" class="btn btn-default" onClick="registrationForm"> @Messages("registerAsCompany") </button>
-               <h4>@Messages("signUp")</h4>
-	               <div > 
-	               @_userForm(myForm)
-	           	   </div>
+            <!--sign up form-->
+            <button type="submit" id="companySignup" class="btn btn-default" onClick="registrationForm"> @Messages("registerAsCompany") </button>
+            <h4>@Messages("signUp")</h4>
+            <div > 
+               @_userForm(myForm)
+            </div>
             <br>
-           
          </div>
       </div>
    </div>
@@ -37,14 +37,13 @@
       <div class="features_items">
          <!--features_items-->
          <h2 class="title text-center">@Messages("registration")</h2>
-         <div class="col-sm-6 col-sm-offset-1" >           
-	               <!--sign up form-->
-	               <button type="submit" id="signup" class="btn btn-default" onClick="someId"> Register as user </button>
-	               <h4>@Messages("companyRegistration")</h4>
-	               @_companyForm(companyForm)	
-            </div>
+         <div class="col-sm-6 col-sm-offset-1" >
+            <!--sign up form-->
+            <button type="submit" id="signup" class="btn btn-default" onClick="someId"> Register as user </button>
+            <h4>@Messages("companyRegistration")</h4>
+            @_companyForm(companyForm)	
          </div>
       </div>
    </div>
 </div>
-   }
+}
