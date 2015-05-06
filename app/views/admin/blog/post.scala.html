@@ -10,12 +10,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Sample Post</title>
+    <title>@Messages("cleanBlogSamplePost")</title>
 
       <link href="@routes.Assets.at("css/clean-blog.min.css")" rel="stylesheet">
       <link href="@routes.Assets.at("css/clean-blog.css")" rel="stylesheet">
-		<link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet">
-		<link href="@routes.Assets.at("css/bootstrap.css")" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">	
+
 		
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -34,13 +34,13 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">@Messages("togleNavigation")</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">BitCoupon</a>
-                <a class="navbar-brand" href="/blog">Blog</a>                
+                <a class="navbar-brand" href="/">@Messages("bitCoupon")</a>
+                <a class="navbar-brand" href="/blog">@Messages("blog")</a>                
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -48,7 +48,7 @@
                @if(Sesija.adminCheck(ctx())){
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="@routes.BlogController.editPostPage(post.id)">Edit this post</a>
+                        <a href="@routes.BlogController.editPostPage(post.id)">@Messages("editThisPost")</a>
                     </li>    
                     <li>
                         <a href="@routes.BlogController.deletePost(post.id)"
@@ -110,7 +110,7 @@
     </article>
     <hr>
              <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align: center">
-            	<strong> Tags: </strong>
+            	<strong> @Messages("tags"): </strong>
              @for(tag <- post.getTagsArray()){
              	<span style="margin-right:1%" class="tag label label-info"> @tag </span>
              	

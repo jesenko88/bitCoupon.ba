@@ -10,7 +10,7 @@
       <div class="col-sm-12">
          <!--header-middle-->
          <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
             
             <div class="logo pull-right">
            		
@@ -23,7 +23,7 @@
    </header>
    <div class="container">
    
- <h2 class="title text-center">Notifications</h2> 
+ <h2 class="title text-center">@Messages("notifications")</h2> 
  
      <div class="container">
       @for(question <- Question.newQuestions(Sesija.getCurrentCompany(ctx()).id)){
@@ -31,15 +31,14 @@
      
          <ul class="actionBox">
 		
-          <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">New Question for coupon ID: @question.coupon.id</a> </li>
+          <li>   <a href="@routes.QuestionController.showCoupon(question.id)" class="btn btn-link">@Messages("newQuestionForCouponID") @question.coupon.id</a> </li>
 		</ul>
 
       }
       </div> 
  
  
- 
- <h2 class="title text-center">Sold coupons</h2> 
+ <h2 class="title text-center">@Messages("soldCoupons")</h2> 
    <div class="container">
       @for(transaction <- transactions){
       	
@@ -48,17 +47,17 @@
             <div class="product-image-wrapper">
                <div class="single-products">
                   <div class="productinfo text-center">
-                     <img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
-                     <h2>Price: @transaction.coupon.getPriceString() KM</h2>
-                     <p>Coupon name: @transaction.coupon.name</p>
-                     <p>Quantity: @transaction.quantity</p>
+                     <img src="@transaction.coupon.picture"/>
+                     <h2>@Messages("price"): @transaction.coupon.getPriceString() @Messages("currency")</h2>
+                     <p>@Messages("couponName"): @transaction.coupon.name</p>
+                     <p>@Messages("quantity"): @transaction.quantity</p>
                      @if(transaction.buyer != null){
-                     <p>Buyer: <a href="@routes.SuperUserController.profilePage(transaction.buyer.username)">@transaction.buyer.username @transaction.buyer.surname</p>
+                     <p>@Messages("buyer"): <a href="@routes.SuperUserController.profilePage(transaction.buyer.username)">@transaction.buyer.username @transaction.buyer.surname</p>
                      }
                     @if(transaction.buyer == null){
-                    <p>Buyer: @transaction.buyer_name @transaction.buyer_surname</p>
+                    <p>@Messages("buyer"): @transaction.buyer_name @transaction.buyer_surname</p>
                     }
-                     <a href="@routes.CouponController.showCoupon(transaction.coupon.id)" class="btn btn-default add-to-cart">View Coupon</a>
+                     <a href="@routes.CouponController.showCoupon(transaction.coupon.id)" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
                   </div>
                </div>
             </div>

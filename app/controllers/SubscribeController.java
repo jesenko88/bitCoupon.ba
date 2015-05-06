@@ -14,6 +14,7 @@ import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -22,6 +23,9 @@ import views.html.admin.users.subscribers;
 
 public class SubscribeController extends Controller {
 
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+	
 	/**
 	 * Rendering newsletter panel.
 	 * 
@@ -31,7 +35,7 @@ public class SubscribeController extends Controller {
 	public static Result newsletterPanel() {
 		List<Coupon> coupons = Coupon.approvedCoupons();
 		if(coupons == null){
-			flash("error", "Error has occured. Please try again.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("List is empty at newsletterPanel.");
 			return redirect("/");
 		}
@@ -75,8 +79,7 @@ public class SubscribeController extends Controller {
 
 			// If checked coupons are more then 3, returning back.
 			if (formResult.size() != 5) {
-				flash("warning",
-						"Number of selected coupons must be exactly 3.");
+				flash("warning", Messages.get("coupon.newsletter.maxselected"));
 				return redirect("/newsletter");
 			}
 
@@ -91,15 +94,14 @@ public class SubscribeController extends Controller {
 			}
 			String message = form.data().get("message");
 			if(message.contains("<script>")){
-				flash("warning", "No scripts allowed!");
+				flash("warning", Messages.get("scripts.restriction"));
 				return redirect("/newsletter");
 			}
 			MailHelper.sendNewsletter(subscribers, subject, coupons, message);
-			flash("success", "Newsletter has been sent.");
+			flash("success", Messages.get("subscribe.newsletter.sent"));
 			return redirect(refererUrl);
 		} catch (Exception e) {
-			flash("error", "Error while sending newsletter."
-					+ "Please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at sendNewsletters: " + e.getMessage(),e );
 			return redirect(refererUrl);
 		}
@@ -112,12 +114,11 @@ public class SubscribeController extends Controller {
 	 * @param email
 	 * @return
 	 */
-	public static Result subscribe(String email) {
-		String refererUrl = request().getHeader("referer");
+	public static Result subscribe(String email) {		
 		try {
 			User user = User.findByEmail(email);
 			if (Subscriber.isSubscribed(email)) {
-				flash("warning", "That email is already subscribed");
+				flash("warning", Messages.get("subscribe.allreadySubscribed"));
 				return redirect("/");
 			}
 
@@ -126,15 +127,14 @@ public class SubscribeController extends Controller {
 				Logger.debug("User " + user.email + " subscribed.");
 			} else {
 				Logger.debug("Visitor with email " + email + " subscribed.");
-				flash("success", "You are now subscribed with following email: " + email);
+				flash("success", Messages.get("subscribe.confirmation") + " " + email);
 				Subscriber.subscribe(email);
 			}
-			return redirect(refererUrl);
+			return redirect("/");
 		} catch (Exception e) {
-			flash("error", "Error while subscribing. "
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at subscribe: " + e.getMessage());
-			return redirect(refererUrl);
+			return redirect("/");
 		}
 	}
 
@@ -148,11 +148,10 @@ public class SubscribeController extends Controller {
 		try {
 			Subscriber subscriber = Subscriber.findByToken(token);
 			Subscriber.unsubscribe(subscriber);
-			flash("success", "You have been unsubscribed.");
+			flash("success", Messages.get("subscribe.unsubscribe"));
 			return redirect("/");
 		} catch (Exception e) {
-			flash("error", "Error while unsubscribing. "
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at unsubscribe: " + e.getMessage());
 			return redirect("/");
 		}
@@ -169,11 +168,10 @@ public class SubscribeController extends Controller {
 		try {
 			Subscriber subscriber = Subscriber.find.byId(id);
 			Subscriber.unsubscribe(subscriber);
-			flash("success", "Subscriber has been removed");
+			flash("success", Messages.get("subscribe.removeSubscribe"));
 			return redirect("/subscribers");
 		} catch (Exception e) {
-			flash("error", "Error while deleting subscriber. "
-					+ "Please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at deleteSubscriber: " + e.getMessage());
 			return redirect("/subscribers");
 		}

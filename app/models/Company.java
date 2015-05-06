@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import models.Coupon.Status;
 import play.Logger;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
@@ -36,6 +37,8 @@ public class Company  extends SuperUser{
 	public String contact;
 		
 	public int notifications;
+	
+	public int status;
 
 	@OneToMany(mappedBy="seller",cascade=CascadeType.ALL)
 	public List<Coupon> coupons;
@@ -59,31 +62,64 @@ public class Company  extends SuperUser{
 		this.name = name;
 		this.created = created;
 		this.logo = "images/home/company-default.jpg";
-		this.contact = contact;	
+		this.contact = contact;
+		this.status = Status.DEFAULT;
 	}
-	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact){
+	
+	/**
+	 * Method which creates company
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param logo
+	 * @param adress
+	 * @param city
+	 * @param contact
+	 * @return company id
+	 */
+	public static long createCompany(String name, String email, String password, String logo, String adress, String city, String contact, int status){
 		logo = "images/home/No-Logo.jpg";
 		Date now = new Date();
 		Company company = new Company(name, email, password, now, logo, adress, city, contact);
+		company.status = status;
 		company.save();
 		return company.id;
 	
 	}
 	
+	/**
+	 * Method which finds company by id
+	 * @param id of company
+	 * @return company
+	 */
 	public static Company findById(long id){
 		Company company = find.byId(id);
 		return company;
 	}
 	
+	/**
+	 * Method for deleting company
+	 * @param id of company
+	 */
 	public static void delete(long id){
 		Company company = find.byId(id);
-		company.delete();
+		company.status = Status.DELETED;
+		company.save();
 	}
 	
+	/**
+	 * Method which finds certain company by email adress
+	 * @param email of company
+	 * @return company
+	 */
 	public static Company findByEmail(String email) {
 		return getFind().where().eq("email", email).findUnique();
 	}
 	
+	/**
+	 * Method which finds list of all companies in DB
+	 * @return
+	 */
 	public static List<Company> all(){
 		List<Company> all = find.all();
 		if(all == null)
@@ -91,6 +127,11 @@ public class Company  extends SuperUser{
 		return all;
 	}
 	
+	/**
+	 * Method which finds list of companies by name 
+	 * @param name of companies
+	 * @return list of companies
+	 */
 	public static List<Company> findByName(String name){
 		List<Company> byName = find.where().eq("name", name).findList();
 		if(byName == null)
@@ -165,23 +206,6 @@ public class Company  extends SuperUser{
 		return getFind().where().eq("name", name).findUnique() != null;
 	}
 	
-	public static List<Company> approvedCompanies() {
-		List<Company> approvedCompanies =  find.where().
-				eq("status", true).findList();
-		if(approvedCompanies == null)
-			approvedCompanies = new ArrayList<Company>();
-		return approvedCompanies;
-			
-			
-	}
-	
-	public static List<Company> nonApprovedCompanies() {
-		List<Company> nonApprovedCompanies = find.where().eq("status", false).findList();
-		if(nonApprovedCompanies == null)
-			nonApprovedCompanies = new ArrayList<Company>();
-		return nonApprovedCompanies;
-	}	
-	
 //	public String validate() {
 //		
 //		if ( name.length() < 4 || name.length() > 70){
@@ -215,5 +239,43 @@ public class Company  extends SuperUser{
 //		
 //	return null;
 //}
-
+	
+	/**
+	 * Method which finds all approved companies in DB
+	 * @return
+	 */
+	public static List<Company> approvedCompanies() {
+		//List<Coupon> approvedCoupons =find.where().eq("status", Status.ACTIVE).orderBy().desc("dateCreated").findList();
+		List<Company> approvedCompanies =find.where().eq("status", Status.ACTIVE).findList();
+		if(approvedCompanies == null)
+			approvedCompanies = new ArrayList<Company>();
+		return approvedCompanies;
+	}
+	
+	/**
+	 * Method which finds all nonApproved companies in DB
+	 * @return list of nonApproved companies
+	 */
+	public static List<Company> nonApprovedCompanies() {
+			
+			List<Company> nonApprovedCompanies = find.where().eq("status", Status.DEFAULT).findList();
+			if(nonApprovedCompanies == null)
+				nonApprovedCompanies = new ArrayList<Company>();
+			return nonApprovedCompanies;
+		}
+	
+	/**
+	 * This method gets list of companies by status sent as parameter.
+	 * in case list is null or sent status is not valid, method
+	 * returns empty array list.
+	 * @param status
+	 * @return
+	 */
+	public static List<Company> findByStatus(int status){
+		List<Company> byStatus = find.where().eq("status", status).findList();
+		if(byStatus == null){
+			byStatus = new ArrayList<Company>();
+		}
+		return byStatus;
+	}
 }

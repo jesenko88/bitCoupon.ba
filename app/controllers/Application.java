@@ -25,7 +25,6 @@ import play.mvc.Result;
 import views.html.Loginpage;
 import views.html.contact;
 import views.html.index;
-import views.html.indexC;
 import views.html.loginToComplete;
 import views.html.signup;
 
@@ -104,18 +103,29 @@ public class Application extends Controller {
 					session("email", user.email);
 					Logger.info(user.username + " logged in");
 					flash("success", loginSuccess + " " + mail);
-					return ok(index.render(approvedCoupons,
-							Category.all()));
+					return ok(index.render(approvedCoupons,	Category.all()));
 
 				}
 				if (Company.verifyLogin(mail, password) == true) {
 					Company company = Company.findByEmail(mail);
+					if(company.status == models.Coupon.Status.DEFAULT) {
+						Logger.info("Non approved company try to login");
+						flash("error", "You're not approved yet");
+						return badRequest(Loginpage.render(" "));
+					}
+					if(company.status == models.Coupon.Status.DELETED) {
+						Logger.info("Deleted company try to login");
+						flash("error", "Your profile has been deleted");
+						return badRequest(Loginpage.render(" "));
+					}
+					if(company.status != models.Coupon.Status.DELETED) {
 					session().clear();
 					session("name", company.name);
 					session("email", company.email);
 					flash("success", loginSuccess + " " + mail);
 					Logger.info(company.name + " logged in");
-					return ok(indexC.render(company, approvedCoupons));
+					return ok(index.render(approvedCoupons, Category.all()));
+					}
 				}
 
 				flash("error", Messages.get("login.InvalidEmailOrPassword"));
@@ -183,6 +193,13 @@ public class Application extends Controller {
 		}
 	}
 
+	/**
+	 * This method is used for sending e-mail.
+	 * First, checks if the recaptcha key is filled properly,
+	 * if it's not filled properly, or if it's missing, user get flash error message,
+	 * else method sends e-mail.
+	 * @return holder(Promise of type Result)
+	 */
 	public static Promise<Result> sendMail() {
 		final DynamicForm dynamicForm = DynamicForm.form().bindFromRequest();			
 		Promise<Result> holder = WS

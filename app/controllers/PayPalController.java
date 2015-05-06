@@ -17,12 +17,13 @@ import play.Logger;
 import play.Play;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import views.html.index;
-import views.html.coupon.couponResult;
-import views.html.coupon.coupontemplate;
+import views.html.coupon.*;
+import views.html.mobile.*;
 
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Links;
@@ -40,6 +41,8 @@ import com.paypal.base.rest.PayPalRESTException;
 public class PayPalController extends Controller {
 
     static String PATH = Play.application().configuration().getString("PATH");
+	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
+	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
 
 	private static User currentUser; // = User.find(session("name"));
 	private static Coupon coupon;
@@ -55,6 +58,8 @@ public class PayPalController extends Controller {
 			.getString("cliendID");
 	private static final String CLIENT_SECRET = Play.application().configuration()
 			.getString("cliendSecret");
+	private static UserAgent userAgent = null;
+	private static String deviceType = null;
 
 	/**
 	 * Method starts the purchase process. First it collects the data from the
@@ -120,8 +125,8 @@ public class PayPalController extends Controller {
 
 			/* details to render in the success view */
 			details = new ArrayList<String>();
-			details.add("Quantity: " + Integer.toString(quantity));
-			details.add("Total price: " + totalPriceString);
+			details.add(Messages.get("quantity") + " " + Integer.toString(quantity));
+			details.add(Messages.get("priceTotal") + " " + totalPriceString);
 
 			List<Transaction> transactions = new ArrayList<Transaction>();
 			transactions.add(transaction);
@@ -136,8 +141,8 @@ public class PayPalController extends Controller {
 			
 			RedirectUrls redirectUrls = new RedirectUrls();
 
-			UserAgent userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
-			String deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
 			
 			/*
 			 * Checking the device type in case the purchase is 
@@ -172,12 +177,11 @@ public class PayPalController extends Controller {
 			}
 			Logger.debug(createdPayment.toJSON());
 
-			flash("error", "Something went wrong, please try again later");
+			flash("error", ERROR_MSG_CLIENT);
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (Exception e) {
-			flash("error", "Error occured while purchasing through paypal."
-					+ " If you're admin please check your logs");
+			flash("error", ERROR_MSG_CLIENT);
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
 			return redirect("/");
 		}
@@ -210,11 +214,16 @@ public class PayPalController extends Controller {
 			/*when the payment is built, the client is redirected to the
 			 * approval page */
 			
-			flash("info", "Approve transaction");
+			userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+				flash("info", Messages.get("transaction.approve"));
+				return ok(api_transactionApprove.render(currentUser, coupon, details));	
+			}			
+			flash("info", Messages.get("transaction.approve"));
 			return ok(couponResult.render(currentUser, coupon, details));
 		} catch (Exception e) {
-			flash("error",
-					"Error occoured. If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.debug("Error at couponSucess: " + e.getMessage(), e);
 			return redirect("/");
 		}
@@ -228,7 +237,12 @@ public class PayPalController extends Controller {
 	 * @return
 	 */
 	public static Result couponFail() {
-		flash("error", "Transaction canceled");
+		userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+		deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+		if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+			return redirect("/api/backToMobile");	
+		}	
+		flash("error", Messages.get("transaction.canceled"));
 		return badRequest(coupontemplate.render(coupon));
 	}
 
@@ -251,7 +265,7 @@ public class PayPalController extends Controller {
 					totalPrice, token, currentUser, coupon);
 			}else{
 				TransactionCP.createTransactionForUnregisteredUser(paymentID, saleId, coupon.price, quantity,
-						totalPrice, token, currentUser.username, currentUser.surname, coupon);
+						totalPrice, token, currentUser.username, currentUser.surname, currentUser.email, coupon);
 			}		
 			coupon.statistic.bought(quantity);
 			/* decrementing available coupons */
@@ -265,13 +279,17 @@ public class PayPalController extends Controller {
 			
 			coupon.seller.notifications ++;
 			coupon.seller.save();
-			Logger.info(session("name") + " approved transaction: //TODO");
-			flash("success", "Transaction complete");
+			
+			userAgent = UserAgent.parseUserAgentString(Http.Context.current().request().getHeader("User-Agent"));
+			deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
+			if (deviceType.equals("MOBILE") || deviceType.equals("TABLET")){
+				return redirect("/api/backToMobile");	
+			}	
+			flash("success", Messages.get("transaction.complete"));
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (PayPalRESTException e) {
-			flash("error", "Error occured while approving transaction. "
-					+ "If you're admin please check your logs.");
+			flash("error", ERROR_MSG_ADMIN);
 			Logger.debug("Error at approveTransaction: " + e.getMessage() + e);
 			return redirect("/");
 		}
@@ -324,12 +342,11 @@ public class PayPalController extends Controller {
 					sale.refund(apiContext, refund);
 				}
 			}
-			flash("success", "All buyers of this coupon are successfully refunded!");
+			flash("success", Messages.get("transaction.refund.success"));
 			return ok(index.render(Coupon.all(), Category.all()));
 
 		} catch (PayPalRESTException e) {
-			flash("error", "Error occured while purchasing through paypal."
-					+ " If you're admin please check your logs");
+			flash("error", Messages.get("error.msg.02"));
 			Logger.error("Error at purchaseProcessing: " + e.getMessage());
 			return redirect("/");
 		}

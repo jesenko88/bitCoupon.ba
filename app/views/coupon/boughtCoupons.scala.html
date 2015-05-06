@@ -17,7 +17,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+							<a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
 						</div>
 					</div>
 				</div>
@@ -28,7 +28,7 @@
 					<div class="col-sm-9">
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
+								<span class="sr-only">@Messages("togleNavigation")</span>
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
@@ -36,7 +36,7 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="@routes.SuperUserController.profilePage(username)">Back to Profile</a></li>
+								<li><a href="@routes.SuperUserController.profilePage(username)">@Messages("backToProfile")</a></li>
 							</ul>
 						</div>
 						
@@ -55,22 +55,24 @@
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center">
-									<img src="@routes.Assets.at(transaction.coupon.picture)" alt="@routes.Assets.at(transaction.coupon.picture)"/>
+									<img src="@transaction.coupon.picture"/>
 									<div id="content" class="divContent">
-										<ul class="col-md-12" style="text-align: left" >
+										<ul class="col-md-12" style="text-align: left;list-style: none;" >
 											<br>
-											<li><strong>Coupon name: </strong> @transaction.coupon.name</li>
-											<li><strong>Buyer: </strong> @username</li>
-											<li><strong>Seller:</strong> @transaction.coupon.seller.name</li>											
-											<li><strong>Coupon price:</strong> @transaction.coupon.getPriceString()</li>
-											<li><strong>Quantity:</strong> @transaction.quantity</li>
-											<li><strong>Total price:</strong> @transaction.totalPrice</li>
-											<li><strong>Transaction date:</strong> @transaction.getDateString</li>
-											<li><strong>Payment id:</strong> @transaction.payment_id</li>
-											<li><strong>Token:</strong> @transaction.token</li>
+
+											<li><strong>@Messages("couponName"): </strong> @transaction.coupon.name</li>
+											<li><strong>@Messages("buyer"):</strong> @username</li>
+											<li><strong>@Messages("seller"):</strong> @transaction.coupon.seller.name</li>											
+											<li><strong>@Messages("Coupon price"):</strong> @transaction.coupon.getPriceString()</li>
+											<li><strong>@Messages("quantity"):</strong> @transaction.quantity</li>
+											<li><strong>@Messages("priceTotal"):</strong> @transaction.totalPrice</li>
+											<li><strong>@Messages("transactionDate"):</strong> @transaction.getDateString</li>
+											<li><strong>@Messages("paymentId"):</strong> @transaction.payment_id</li>
+											<li><strong>@Messages("token"):</strong> @transaction.token</li>
+
 										</ul>
 										</div>
-            								<button id="cmd"  class="btnCmd" style="float:left">Download as PDF</button>
+            								<button id="cmd"  class="btnCmd" style="float:left">@Messages("downloadAsPDF")</button>
 									</div>
 								</div>
 							</div>
@@ -91,7 +93,7 @@
 								        return true;
 								    }
 								};
-						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 0, 0, {
 						        'width': 170,
 						            'elementHandlers': specialElementHandlers
 						    });
@@ -104,7 +106,7 @@
 @main("Login to Complete"){
 	<div class="container">
 		<div class="col-md-5 col-md-offset-3">
-			<h1> :( You need to login to access this page.</h1>
+			<h1> :( @Messages("loginToAccess")</h1>
 		</div>
 	</div>
 }

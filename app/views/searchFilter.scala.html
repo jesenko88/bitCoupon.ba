@@ -9,14 +9,14 @@
       <div class="col-sm-12">
          <!--header-middle-->
          <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
             
             <div class="logo pull-right">
            		<div class="search_box">
             		<button type="button" class="btn-btn default"name="answer" onclick="showDiv('toggle')" style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
-  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">Search filter</button>
+  							font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px">@Messages("searchFilter")r</button>
   					<button type="button" class="btn-btn default"name="answer"  style="background: #F0F0E9; border: medium none; color: #B2B2B2; font-family: 'roboto';
-                  			font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px"><a href="/companies">Search company</a></button>
+                  			font-size: 12px; font-weight: 300; height: 35px; outline: medium none; padding-left: 10px; width: 155px; background-position: 130px; margin-left: 5px"><a href="/companies">@Messages("searchCompany")</a></button>
                                   <script type="text/javascript">
 									function showDiv(toggle){
 									document.getElementById(toggle).style.display = 'block';
@@ -51,7 +51,7 @@
          <div class="col-sm-5">
             <form action="@routes.CouponController.filterCategory(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="category" name="category" required>
-                  <option value="" style="display:none">Select category</option>
+                  <option value="" style="display:none">@Messages("selectCategory")</option>
                   @for(category <- categorys) {
                   <option>@category.name</option>
                   }
@@ -73,13 +73,13 @@
             <div class="col-sm-5">
             <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
                <select id="orderby" name="orderby" required>
-                  <option value="" style="display:none">Order by: </option>
-                  <option>Category</option>
-                  <option >Price</option>
-                  <option>Date</option>
+                  <option value="" style="display:none">@Messages("orderBy") </option>
+                  <option>@Messages("category")</option>
+                  <option >@Messages("price")</option>
+                  <option>@Messages("date")</option>
                </select>
-               <input type="radio" id="method" name="method" value="ascending" checked>Ascending
-               <input type="radio" id="method" name="method" value="descending">Descending
+               <input type="radio" id="method" name="method" value="ascending" checked>@Messages("ascending") 
+               <input type="radio" id="method" name="method" value="descending">@Messages("descending") 
                <input type="submit" class="btn btn-fefault cart">                  
             </form>
          </div>
@@ -88,7 +88,7 @@
       
       
    </div>
- <h2 class="title text-center">Search Result</h2>
+ <h2 class="title text-center">@Messages("searchResult")</h2>
    
      
    <div class="container">
@@ -99,17 +99,17 @@
             <div class="product-image-wrapper">
                <div class="single-products">
                   <div class="productinfo text-center">
-                     <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-                     <h2>Only @coupon.getPriceString() KM</h2>
+                     <img src="@coupon.picture"/>
+                     <h2>@Messages("only")@coupon.getPriceString() @Messages("currency")</h2>
                      <p>@coupon.name</p>
-                     <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+                     <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
                   </div>
                   <div class="product-overlay">
                      <div class="overlay-content">
-                        <h2>Only @coupon.getPriceString() KM</h2>
+                        <h2>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
                         <p>@coupon.name</p>
                         <p>@coupon.getExpiration()</p>
-                        <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+                        <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
                      </div>
                   </div>
                </div>

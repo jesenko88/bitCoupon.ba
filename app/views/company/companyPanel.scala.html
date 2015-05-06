@@ -8,7 +8,7 @@
    <div class="header-middle">
       <!--header-middle-->
       <div class="container">
-         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
          <div class="logo pull-right">
             <div class="search_box">
                <form action="/search" method="GET">
@@ -22,17 +22,17 @@
 <div class="container">
 <div class="features_items">
    <!--features_items-->
-   <h2 class="title text-center">My Coupons</h2>
+   <h2 class="title text-center">@Messages("myCoupons")</h2>
    <div class="col-sm-4">
       <form action="@routes.CouponController.sort(Coupon.commaSeparatedIds(coupons))" method="POST">
          <select id="orderby" name="orderby" required>
-            <option value="" style="display:none">Order by: </option>
-            <option>Category</option>
-            <option >Price</option>
-            <option>Date</option>
+            <option value="" style="display:none">@Messages("orderBy") </option>
+            <option>@Messages("category")</option>
+            <option >@Messages("price")</option>
+            <option>@Messages("date")</option>
          </select>
-         <input type="radio" id="method" name="method" value="ascending" checked>Ascending
-         <input type="radio" id="method" name="method" value="descending">Descending
+         <input type="radio" id="method" name="method" value="ascending" checked>@Messages("ascending")
+         <input type="radio" id="method" name="method" value="descending">@Messages("descending")
          <input type="submit" class="btn btn-success">                  
       </form>
    </div>
@@ -44,10 +44,10 @@
          <div class="product-image-wrapper">
             <div class="single-products">
                <div class="productinfo text-center">
-                  <img src="@routes.Assets.at(coupon.picture)" alt="@routes.Assets.at(coupon.picture)"/>
-                  <h2>Only @coupon.getPriceString() KM</h2>
+                  <img src="@coupon.picture"/>
+                  <h2>@Messages("only") @coupon.getPriceString() @Messages("currency")</h2>
                   <p>@coupon.name</p>
-                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">View Coupon</a>
+                  <a href="/coupon/@coupon.id" class="btn btn-default add-to-cart">@Messages("viewCoupon")</a>
                </div>
             </div>
          </div>

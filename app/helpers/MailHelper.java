@@ -91,8 +91,7 @@ public class MailHelper {
 	 * @param coupons
 	 */
 	public static void sendNewsletter(List<String> emails, String subject, List<Coupon> coupons, String addHTML)  {
-		copyImages(coupons);
-		
+				
 		Email mail = new Email();
 		mail.setSubject(subject);
 		mail.setFrom("bitCoupon.ba <bit.play.test@gmail.com>");
@@ -104,7 +103,7 @@ public class MailHelper {
 		try {
 			sc = new Scanner(new File("./public/Email/index.html"));			
 			while(sc.hasNextLine()){
-				message +=sc.nextLine();
+			    message +=sc.nextLine();
 			}
 		} catch (FileNotFoundException e) {
 			Logger.error("COULD'T READ EMAIL FILE");
@@ -141,16 +140,22 @@ public class MailHelper {
 		couponOneName.appendText(coupons.get(0).name);		
 		Element couponOnePrice = doc.getElementById("Cp1-price");
 		couponOnePrice.appendText(coupons.get(0).price +"€");
+		Element couponOneImage = doc.getElementById("image_one");
+		couponOneImage.attr("src", coupons.get(0).picture);
 		
 		Element couponTwoName = doc.getElementById("Cp2-name");
 		couponTwoName.appendText(coupons.get(1).name);		
 		Element couponTwoPrice = doc.getElementById("Cp2-price");
 		couponTwoPrice.appendText(coupons.get(1).price +"€");
+		Element couponTwoImage = doc.getElementById("image_two");
+		couponTwoImage.attr("src", coupons.get(1).picture);
 		
 		Element couponThreeName = doc.getElementById("Cp3-name");
 		couponThreeName.appendText(coupons.get(2).name);		
 		Element couponThreePrice = doc.getElementById("Cp3-price");
 		couponThreePrice.appendText(coupons.get(2).price +"€");
+		Element couponThreeImage = doc.getElementById("image_three");
+		couponThreeImage.attr("src", coupons.get(2).picture);
 		
 		Element unsubscribe = doc.getElementById("unsubscribe");
 		String token = Subscriber.getToken(email);
@@ -162,21 +167,5 @@ public class MailHelper {
 		return doc;
 	}
 	
-	
-	/**
-	 * Method takes pictures from coupons and add them
-	 * into img folder for email template.
-	 * TODO: Less hardcode
-	 * @param coupons
-	 */
-	private static void copyImages(List<Coupon> coupons) {
-		String photoOne = "./public/" +coupons.get(0).picture;
-		String photoTwo = "./public/" +coupons.get(1).picture;
-		String photoThree = "./public/" +coupons.get(2).picture;
-		
-		FileUpload.CopyFile(photoOne, "./public/Email/img/twocolimg1.png");
-		FileUpload.CopyFile(photoTwo, "./public/Email/img/twocolimg2.png");
-		FileUpload.CopyFile(photoThree, "./public/Email/img/twocolimg3.png");
-	}
 	
 }

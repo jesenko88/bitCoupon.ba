@@ -4,8 +4,8 @@
 
 <div class="features_items">
    <!--features_items-->
-   <h2 class="title text-center"> Create newsletter</h2>
-   <h6 class="title text-center"> Please select 3 coupons</h6>
+   <h2 class="title text-center"> @Messages("createNewsLetter")</h2>
+   <h6 class="title text-center"> @Messages("pleaseSelectNUMcoupons", 3)</h6>
 </div>
 
 <div class="signup-form">
@@ -18,7 +18,7 @@
          @for(coupon <- coupons){      
          <div class="col-sm-6 col-md-4" style="height:450px">
             <div class="thumbnail">
-               <img src="@routes.Assets.at(coupon.picture)" alt="..." class="thumbnail">
+               <img src="@coupon.picture" alt="..." class="thumbnail">
                <div class="caption"  style="overflow: hidden;" >
                   <p>@coupon.name</p>
                   <input  type="checkbox" name="@coupon.id" id="@coupon.id" > 
@@ -29,9 +29,9 @@
       </div>
        <br>
         <br>
- 		<textarea name="message" id="message">Enter your message.</textarea>
+ 		<textarea name="message" id="message">@Messages("enterYourMessage")</textarea>
       <br>
-      <button style="float: right" type="submit" class="btn btn-default">SEND NEWSLETTER</button>
+      <button style="float: right" type="submit" class="btn btn-default">@Messages("sendNewsLetter")</button>
       <br>
       <br>
        

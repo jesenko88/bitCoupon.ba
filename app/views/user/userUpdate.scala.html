@@ -11,7 +11,7 @@
          <div class="row">
             <div class="col-sm-4">
                <div class="logo pull-left">
-                  <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+                  <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" /></a>
                </div>
             </div>
          </div>
@@ -25,9 +25,9 @@
             <div class="container">
                <div class="features_items">
                   <!--features_items-->
-                  <h2 class="title text-center">Edit User</h2>
+                  <h2 class="title text-center">@Messages("editUser")</h2>
                   <div class="col-sm-6 col-sm-offset-1">
-                     <h5>Update account</h5>
+                     <h5>@Messages("updateAccount")</h5>
                     
                       @_updateUserForm(userForm, superUser)
                      
@@ -43,20 +43,20 @@
                   <div class="col-sm-7 col-sm-offset-1">                  
                      <div class="signup-form">
                      	<div class="signup-form">
-                   		  <h6> Upload new photo </h6>
+                   		  <h6>@Messages("uploadNewPhoto") </h6>
                       	<form action="@routes.UserController.updatePhoto(superUser.getUser().id)" enctype="multipart/form-data" method="post">
                          	 <input name="picture" id="picture" type="file" />
-                        	  <button type="submit" class="btn btn-fefault cart" style="margin-left:0px;" >Change photo</button>
+                        	  <button type="submit" class="btn btn-fefault cart" style="margin-left:0px;" >@Messages("changePhoto")</button>
                        	</form>
                      </div>
                         <br>
-                 <a id="changePassButton1">Change password</a>
+                 <a id="changePassButton1">@Messages("changePassword")</a>
                  <div id="changePassForm1" style="display:none;" class="signup-form">
                         <form action="@routes.SuperUserController.changePass(superUser.email)" method ="POST" >
                            <input type="password" name="password" id="password" placeholder="Old password" value="" />
                            <input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
                            <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>
-                           <button type="submit" class="btn btn-default">Update password</button>
+                           <button type="submit" class="btn btn-default">@Messages("updatePassword")</button>
                         </form>
                      </div>
                   </div>
@@ -68,9 +68,9 @@
          <div class="container">
             <div class="features_items">
                <!--features_items-->
-                <h2 class="title text-center">Edit User</h2>
+                <h2 class="title text-center">@Messages("editUser")</h2>
                <div class="col-sm-6 col-sm-offset-1">
-                  <h5>Update account</h5>
+                  <h5>@Messages("updateAccount")</h5>
                   @_editCompanyForm(companyForm, superUser)
                </div>
             </div>
@@ -84,21 +84,21 @@
                <div class="col-sm-7 col-sm-offset-1">
                    <div class="signup-form">
                      <!--sign up form-->
-                     <h6> Upload new photo </h6>
+                     <h6> @Messages("uploadNewPhoto") </h6>
                      <form action="@routes.CompanyController.updatePhoto(superUser.getCompany().id)" enctype="multipart/form-data" method="post">
                         <input name="picture" id="picture" type="file" />
-                        <button type="submit" class="btn btn-default">Save photo</button>
+                        <button type="submit" class="btn btn-default">@Messages("savePhoto")</button>
                      </form>
                   </div>
                   <br>
                   <div class="signup-form">
-                 <a id="changePassButton">Change password</a>
+                 <a id="changePassButton">@Messages("changePassword")</a>
                     <div id="changePassForm" style="display:none;" class="signup-form">
                      <form action="@routes.SuperUserController.changePass(superUser.email)" method ="POST" >
                         <input type="password" name="password" id="password" placeholder="Old password" value="" />
                         <input type="password" name="newPassword" id="newPassword" placeholder="New Pasword" value="" />
                         <input type="password" id="confirmPassword" name="confirmPassword" onClick="this.select()" placeholder="Confirm Password" required/> <br>
-                        <button type="submit" class="btn btn-default">Update password</button>
+                        <button type="submit" class="btn btn-default">@Messages("updatePassword")</button>
                      </form>
                   </div>
                </div>

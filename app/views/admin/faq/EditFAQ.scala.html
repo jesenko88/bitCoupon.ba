@@ -9,7 +9,7 @@
    <div class="header-middle">
       <!--header-middle-->
       <div class="container">
-         <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
          <div class="logo pull-right">
             <div class="search_box">
                <form action="/search" method="GET">
@@ -23,14 +23,14 @@
 <div class="container">
    <div class="features_items">
       <!--features_items-->
-      <h2 class="title text-center"> Edit FAQ</h2>
+      <h2 class="title text-center"> @Messages("editFAQ")</h2>
       <div class="col-sm-6 col-sm-offset-1">
          <div class="signup-form">
             <!--sign up form-->
             <form action="@routes.FAQController.updateFAQ(faq.id)" method ="POST" >
                <input type="text" name="question" id="question" value= "@faq.question" />
                <textarea name="answer" id="answer" rows="6"> @faq.answer </textarea>
-               <button type="submit" class="btn btn-default">Update</button>
+               <button type="submit" class="btn btn-default">@Messages("update")</button>
             </form>
          </div>
       </div>

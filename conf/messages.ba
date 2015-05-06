@@ -1,0 +1,112 @@
+coupon = Kupon
+coupon.hasBeenApproved = je odobren
+coupon.cannotDelete = Ovaj kupon ne može biti izbrisan. Molimo vas, kontaktirajte administratora za više informacija.
+coupon.shortName = Ime kupona mora biti minimalno 4 karaktera dugo
+coupon.longName = Ime kupona moze biti maksimalno 120 karaktera dugo
+coupon.expirationDate.invalid = Molimo vas, unesite validan datum isteka
+coupon.category.newEmpty = Molimo vas unesite novo ime za kategoriju
+coupon.update.success = Ažuriranje kupona uspješno 
+coupon.create.success = Kupon uspješno kreiran
+coupon.create.withoutImage = Kupon kreiran bez slike
+coupon.photos.full = Album sa slikama je popunjen. Izbrišite neke slike kako biste mogli dodati nove
+coupon.photos.freeSpace = Imate prostora za još %s slike
+coupon.photos.upload.success = Uspješno ste dodali nove slike
+
+send = Pošalji
+clean = Očisti
+submit = Potvrdi
+
+contact = Kontakt
+nameAndSurname = Ime i prezime
+email = E-pošta
+phoneNumber = Broj telefona
+
+category.Added = Kategorija %s 
+category.Updated = Kategorija %s updated
+category.alreadyExists = Kategorija već postoji
+category.shortName = Ime kategorije minimalno 4 karaktera 
+category.longName = Ime kategorije maksimalno 120 karaktera
+
+comment.tooLong = Komentari mogu biti dugi maksimalno 1200 karaktera
+
+company.longName = Ime kompanije minimalno 4 karaktera 
+company = Kompanija
+company.notExist = Kompanija ne postoji
+company.updatePhoto = Fotografija ažurirana usjpešno
+
+delete.success = Brisanje uspješno
+
+#error messagess
+error.msg.00 = Došlo je do greške!
+error.msg.01 = Oops. Došlo je do greške, molimo vas pokušajte ponovo kasnije
+error.captcha =  Došlo je do greške! Morate ispuniti reCaptcha formu
+error.form = Došlo je do greške u formi!
+
+filter.noResult = Nema novih rezultata
+filter.price.invalid = Molimo vas, unesite validne vrijednosti
+filter.date.invalid = Molimo vas, unesite validan datum
+
+login.Error01 = Prijava nije uspjela
+login.IncorrectPasword = Netačan password
+login.InvalidEmailOrPassword = Neispravna email adresa ili password
+login.Success = Prijavljeni ste kao: 
+
+logoutSuccess = Uspješno ste odjavljeni!
+loginToComplete = Prijavite se kako bi mogli izvršiti ovu akciju
+
+mail.MissingSecretKey = Tajni ključ nedostaje!
+mail.InvalidSecretKey = Neispravan tajni ključ!
+mail.MissingResponseParameter = Vaš 'response' parametar nedostaje
+mail.MalformedParameter = Vaš 'response' parametar je neispravan
+
+post.CreateError = Došlo je do greške pri kreiranju posta
+post.EditError = Došlo je do greške pri uredjivanju posta
+profile.updated = Prodil uspješno uredjen
+password.shortPassword = Password mora biti minimalno 6 karaktera dug
+password.dontMatch = Passwordi se ne podudaraju
+price.invalid = Molimo vas, unesit validnu cijenu
+
+registration.mail.flash.verification = Veerifikacijski email je poslan na vašu adresu
+registration.mail.verificationLinkText = Kliknite na link ispod kako bi ste verifikovali vašu email adresu
+registration.emailAlreadyExists = Email adresa već postoji
+
+search.noResult = Nema rezultata za vašu pretragu
+
+updated = azuriran
+
+
+
+#HTML----------------------------
+footerProjectBitCoupon = Projekt BITCoupon klon stranice eKupon
+building = Zgrada
+bih = Bosna i Hercegovina
+subscribe = Pretplati me
+unsubscribe = Iskljuci pretplatu
+subscribe.successful = Sada ste pretplaceni sa ovom e-mail adresom:
+searchFilter = Filter pretrage
+searchCompany = Pretraga kompanija
+selectCategory = Izaberite kategoriju
+orderBy = Soritraj po:
+ascending = Rastuce
+descending = Opadajuce
+availableCoupons = Dostupni kuponi
+only = Samo
+currency = KM
+viewCoupon = Pogledaj kupon
+expiring = Ističe:
+bitCoupon = BitKupon
+placeForCoupon = Mjesto za vaš kupon
+
+
+
+
+
+
+
+
+
+
+
+
+
+

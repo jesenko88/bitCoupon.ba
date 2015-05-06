@@ -39,9 +39,8 @@ import views.html.searchFilter;
 import views.html.admin.users.adminCouponPanel;
 import views.html.admin.users.couponsAll;
 import views.html.company.listOfBuyers;
-import views.html.coupon.couponPanel;
-import views.html.coupon.coupontemplate;
-import views.html.coupon.updateCouponView;
+import views.html.coupon.*;
+import views.html.mobile.*;
 import api.JSonHelper;
 
 import com.google.common.io.Files;
@@ -259,9 +258,9 @@ public class CouponController extends Controller {
 			coupon.remark = couponForm.bindFromRequest().field("remark").value();
 			coupon.minOrder = Integer.valueOf(couponForm.bindFromRequest().field("minOrder").value());
 			/* file upload only if its changed */
-			String assetsPath = FileUpload.imageUpload("coupon_photos");
-			if (!StringUtils.isNullOrEmpty(assetsPath)) {
-				coupon.picture = assetsPath;
+			String imageUrl = FileUpload.imageUpload();
+			if (!StringUtils.isNullOrEmpty(imageUrl)) {
+				coupon.picture = imageUrl;
 			}
 			//TODO check:  kompanija ima/nema pravo editovati kupon bez administratorskog odobrenja ?
 //			int status;
@@ -426,9 +425,9 @@ public class CouponController extends Controller {
 			 * Managing file upload.
 			 */
 			// Path for saving file.
-			String assetsPath = FileUpload.imageUpload("coupon_photos");
-			if (!StringUtils.isNullOrEmpty(assetsPath)) {
-				long id = Coupon.createCoupon(name, price, date, assetsPath,
+			String imageUrl = FileUpload.imageUpload();
+			if (!StringUtils.isNullOrEmpty(imageUrl)) {
+				long id = Coupon.createCoupon(name, price, date, imageUrl,
 						category, description, remark, minOrder, maxOrder, usage, company, status);
 				Logger.info(session("name") + " created coupon " + id);
 				flash("success", Messages.get("coupon.create.success"));
@@ -465,13 +464,7 @@ public class CouponController extends Controller {
 	@Security.Authenticated(SuperUserFilter.class)
 	public static Result galleryUpload(long couponId) {
 		try {
-			/*
-			 * Save path where our photos are going to be saved. Each coupon
-			 * gets his own folder with name cpn(+ID of coupon)
-			 */
-			String savePath = FileUpload.IMAGES_FOLDER + "coupon_photos"
-					+ File.separator + "cpn" + couponId + File.separator;
-
+			
 			Coupon coupon = Coupon.find(couponId);
 			int photos = Photo.photoStackLength(coupon);
 			Form<Coupon> form = Form.form(Coupon.class).fill(coupon);
@@ -494,39 +487,23 @@ public class CouponController extends Controller {
 			/*
 			 * Once all checks are passed, we create folder for this coupon and
 			 * add photos user selected. Also if user uploaded files which are
-			 * not photos they're not going to be accepted.
-			 */
-			new File(savePath).mkdir();
+			 * not photos they're not going to be accepted.			 */
+			
 			for (FilePart part : photoParts) {
 				if (FileUpload.confirmImage(part) != null) {
-					File temp = FileUpload.confirmImage(part);
-					String extension = FileUpload.getExtension(part);
-					String name = UUID.randomUUID().toString();
-					File saveFile = new File(savePath + name + extension);
-
+					File image = FileUpload.confirmImage(part);					
 					// Resizing photos.
 					BufferedImage img;
 					try {
-						img = ImageIO.read(temp);
+						img = ImageIO.read(image);
 						BufferedImage resizedImg = FileUpload.resize(img, 600,
 								400);
-						ImageIO.write(resizedImg, "jpg", temp);
+						ImageIO.write(resizedImg, "jpg", image);
 					} catch (IOException e1) {
 						Logger.error("Failed to resize image");
 					}
-
-					// Moving file.
-					try {
-						Files.move(temp, saveFile);
-					} catch (IOException e) {
-						Logger.error("File " + saveFile.getName()
-								+ " failed to move.");
-					}
-					String assetsPath = "images" + File.separator
-							+ "coupon_photos" + File.separator + "cpn"
-							+ couponId + File.separator + saveFile.getName();
-
-					Photo.create(assetsPath, saveFile.getPath(), coupon);
+					String path = ImageController.create(image);
+					Photo.create(path, path, coupon);
 				}
 			}
 			flash("success", Messages.get("coupon.photos.upload.success"));			
@@ -550,10 +527,12 @@ public class CouponController extends Controller {
 		try {
 			Photo photo = Photo.find(id);
 			Coupon coupon = photo.coupon;
+			String url = photo.path;
 			File image = new File(photo.savePath);
 			image.delete();
 			photo.delete();
 			photo.save();
+			ImageController.deleteImage(url);
 			Logger.info(session("name") + " deleted image id:\"" + id
 					+ "\" from " + coupon.name);
 			flash("succes", Messages.get("delete.success"));
@@ -797,6 +776,26 @@ public class CouponController extends Controller {
 			return ok(listOfBuyers.render(new ArrayList<>()));
 		else
 			return ok(listOfBuyers.render(c.buyers));
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public static Result mobileCheckout(long couponId, long userid) {
+		Coupon coupon = Coupon.find(couponId);
+		User user = User.find(userid);
+		session("name", user.username);
+		session("email", user.email);
+		return ok(api_couponCheckout.render(coupon, user));
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public static Result backToMobile() {
+		return ok(api_backToApp.render());
 	}
 	
 }

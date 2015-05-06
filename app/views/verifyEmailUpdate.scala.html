@@ -6,7 +6,7 @@
 <header id="header"><!--header-->
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
-			<a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+			<a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
 				<div class="logo pull-right">
 					<div class="search_box">
 						<form action="/search" method="GET">
@@ -20,7 +20,7 @@
 	<div class="container">
 	<span>@message</span>
 	<form action="@routes.SuperUserController.profilePage(username)" >
-	<button type="submit" id="submit" class="btn btn-fefault cart"> Go To Profile Page </button>
+	<button type="submit" id="submit" class="btn btn-fefault cart"> @Messages("goToProfilePage") </button>
 	</form>
 	</div>
 }

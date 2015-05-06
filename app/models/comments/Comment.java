@@ -47,6 +47,12 @@ public class Comment extends Model{
 		
 	static Finder<Long, Comment> find = new Finder<Long, Comment>(Long.class, Comment.class);
 	
+	/**
+	 * Constructor for Comment
+	 * @param comment
+	 * @param coupon
+	 * @param user
+	 */
 	public Comment(String comment, Coupon coupon, User user){
 		this.comment = comment;
 		this.coupon = coupon;
@@ -54,22 +60,43 @@ public class Comment extends Model{
 		this.date = new Date();
 	}
 	
+	/**
+	 * Method which create comment
+	 * @param comment
+	 * @param coupon
+	 * @param user
+	 * @return
+	 */
 	public static long create(String comment, Coupon coupon, User user){
 		Comment comm = new Comment(comment, coupon, user);
 		comm.save();
 		return comm.id;
 	}
 	
+	/**
+	 * Method which delete comment from DB
+	 * @param id
+	 */
 	public static void delete(long id){
 		find.where().eq("id", id).findUnique().delete();
 	}
 	
+	/**
+	 * Method which update comment
+	 * @param id
+	 * @param newComment
+	 */
 	public static void update(long id, String newComment){
 		Comment comment = find.where().eq("id", id).findUnique();
 		comment.comment = newComment;
 		comment.update();
 	}
 	
+	/**
+	 * This method finds all comments of certain coupon in DB
+	 * @param coupon
+	 * @return list of comments
+	 */
 	public static List<Comment> findByCoupon(Coupon coupon){
 		List<Comment> comments = find.where().eq("coupon", coupon).findList();
 		if (comments == null)
@@ -77,6 +104,11 @@ public class Comment extends Model{
 		return comments;
 	}
 	
+	/**
+	 * This method finds certain comment in DB
+	 * @param id of comment
+	 * @return comment
+	 */
 	public static Comment findById(long id){
 		return find.where().eq("id", id).findUnique();
 	}

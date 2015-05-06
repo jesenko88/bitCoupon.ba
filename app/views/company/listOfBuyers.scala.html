@@ -12,7 +12,7 @@
       <div class="col-sm-12">
          <!--header-middle-->
          <div class="container">
-            <a href="/"><img src="@routes.Assets.at("images/home/logo.png")" alt="" /></a>
+            <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png /></a>
             
             <div class="logo pull-right">
            		
@@ -25,37 +25,36 @@
    </header>
    <div class="container">
    
- <h2 class="title text-center">Buyers</h2> 
+ <h2 class="title text-center">@Messages("buyers")</h2> 
  
      <div class="container">
-      @for(buyer <- transactions){
-     
      <div id="content" class="divContent">
-         <label style="color:#FF6600"><h3>@buyer.coupon.name</h3></label>
-         <ol>
-		<!--<li><a href="@routes.SuperUserController.profilePage(buyer.buyer_name)" class="btn btn-link">@buyer.buyer_name</a> </li> -->
-          <li><label><h4>@buyer.buyer_name @buyer.buyer_surname</h4></label></li>
-		</ol>
-	</div>
+
+         <label style="color:#FF6600"><h3>@transactions.get(0).coupon.name</h3></label>
+      @for(buyer <- transactions){     
+          <p>@buyer.buyer_name @buyer.buyer_surname</p>
+
       }
-      <button id="cmd"  class="btnCmd" >Download as PDF</button>
+
+	</div>
+
       </div>
       <style type="text/css">.center { text-align: center; list-style-position:inside;}</style>
  					<script>
-					$('.btnCmd').each(function(){
-						$(this).click(function () {
 							var doc = new jsPDF();
+						$('.btnCmd').click(function () {
 							var specialElementHandlers = {
 								    '#editor': function (element, renderer) {
 								        return true;
 								    }
 								};
-						    doc.fromHTML($('.divContent').eq($('.btnCmd').index(this)).html(), 15, 15, {
+						    doc.fromHTML($('.divContent').html(), 15, 15, {
 						        'width': 170,
 						            'elementHandlers': specialElementHandlers
 						    });
 						    doc.save('list-of-buyers.pdf');
 						});
-					});
+					
 					</script>
+					
    }
