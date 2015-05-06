@@ -17,6 +17,7 @@ import models.Company;
 import models.Coupon;
 import models.EmailVerification;
 import models.Pin;
+import models.Post;
 import models.ResetPasword;
 import models.Statistic;
 import models.Subscriber;
@@ -193,24 +194,27 @@ public class UserController extends Controller {
 	@Security.Authenticated(AdminFilter.class)
 	public static Result adminUpdateUser(long id) {
 
-		if (userForm.hasErrors()) {
+		DynamicForm updateForm = Form.form().bindFromRequest();
+		if (userForm.hasErrors() || userForm.hasGlobalErrors()) {
 			return redirect("/@editUser/:" + id); // provjeriti
 		}
 		try {
-			String username = userForm.bindFromRequest().field("username")
-					.value();
-			String surname = userForm.bindFromRequest().field("surname")
-					.value();
-			Date dob = userForm.bindFromRequest().get().dob;
-			String gender = userForm.bindFromRequest().field("gender").value();
-			String adress = userForm.bindFromRequest().field("adress").value();
-			String city = userForm.bindFromRequest().field("city").value();
-			String email = userForm.bindFromRequest().field("email").value();
-			String newPass = userForm.bindFromRequest().field("newPassword")
-					.value();
-			String admin = userForm.bindFromRequest().field("isAdmin").value();
-
+			String username = updateForm.data().get("username");
+			String surname = updateForm.data().get("surname");
+			String dobString = updateForm.data().get("dob");
+			String gender = updateForm.data().get("gender");
+			String adress = updateForm.data().get("adress");
+			String city = updateForm.data().get("city");
+			String email = updateForm.data().get("email");
+			String admin = updateForm.data().get("isAdmin");
+			Date dob = null;
 			User cUser = User.find(id);
+			
+			if (!dobString.isEmpty()){
+				dob = new SimpleDateFormat("yy-mm-dd").parse(dobString);
+				cUser.dob = dob;
+			}			
+
 			cUser.username = username;
 			cUser.surname = surname;
 			cUser.dob = dob;
@@ -219,11 +223,6 @@ public class UserController extends Controller {
 			cUser.city = city;
 			cUser.email = email;
 
-			// if admin doesn't explicitly change the users password, it stays
-			// intact
-			if (newPass.length() > 5) {
-				cUser.password = HashHelper.createPassword(newPass);
-			}
 			if (!User.isLastAdmin(cUser)) {
 				cUser.isAdmin = Boolean.parseBoolean(admin);
 			}
@@ -301,7 +300,23 @@ public class UserController extends Controller {
 			}
 			if (currentUser.id == id || Sesija.adminCheck(ctx())) {
 				User u = User.find(id);
-				Subscriber.unsubscribe(u);
+				if(Subscriber.isSubscribed(u)){
+					Subscriber.unsubscribe(u);
+				}
+//				List<TransactionCP> transactions = TransactionCP.allFromBuyer(id);
+//				if(transactions != null) {
+//					for(TransactionCP t : transactions){
+//						t.buyer = null;
+//						t.save();
+//					}
+//				}
+//				List<Post> posts = Post.allFromCreator(id);
+//				if(posts != null){
+//					for(Post p : posts){
+//						p.creator = null;
+//						p.save();
+//					}
+//				}
 				User.delete(u.id);
 
 				if (currentUser.id == id) {

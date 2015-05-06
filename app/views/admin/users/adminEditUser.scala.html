@@ -65,7 +65,7 @@
              	<!-- Birth day -->
                 <div class='@("form-group has-error".when(userForm("dob").hasErrors)) form-group' >
 			     	 <label class="control-label" for="dob">@Messages("dateOfBirth")<span style="color:#AB1403"> *</span></label>
-                     <input class="form-control datepicker-bit " value='@userForm("dob").value' id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" required/>
+                     <input class="form-control datepicker-bit " id="datepicker" name="dob" type="date" onClick="this.select()" max="1997-01-01" placeholder="Date of birth" />
  		        </div> 
  		        <span id="error" style="display:none; color:red"> @Messages("youAreUnder18") </span>
                 
@@ -82,12 +82,12 @@
                 <!-- Adress -->
                  <div class='@("form-group has-error".when(userForm("adress").hasErrors)) form-group' >
 			     	 <label class="control-label" for="adress">@Messages("address")<span style="color:#AB1403"> *</span></label>
-                     <input class="form-control" value='@userForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
+                     <input class="form-control" value='@userForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" />               
  		        </div>
                 <!-- City -->
 				<div class='@("form-group has-error".when(userForm("city").hasErrors)) form-group' >
 			     	 <label class="control-label" for="city">@Messages("city")<span style="color:#AB1403"> *</span></label>
-              	     <input class="form-control" value='@userForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
+              	     <input class="form-control" value='@userForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" />
  		        </div>                                     
                  
                   <button type="submit" id="submit-user" class="btn btn-default" >@Messages("submit")</button>
