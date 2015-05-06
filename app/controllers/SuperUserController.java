@@ -283,10 +283,13 @@ public class SuperUserController extends Controller {
 			}
 			
 			String verificationEmail = ResetPasword.createRequest(superuser.email);
-			MailHelper.send(email,
-					"Click on the link below to set a new password <br>"
-							+ "http://" + UserController.PATH + "/newPassword/"
-							+ verificationEmail);
+			MailHelper.send(
+					Messages.get("newPasswordSubject"), 
+					email,
+					Messages.get("clickOnLinkForNewPassword")
+					+ "<br>"
+					+ "http://" + UserController.PATH + "/newPassword/"
+					+ verificationEmail);
 			flash("success", Messages.get("password.reset.requestSuccess") + email);
 			return  redirect("/");			
 		}catch(Exception e){

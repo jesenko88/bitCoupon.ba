@@ -14,20 +14,25 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import play.Logger;
+import play.Play;
+import play.i18n.Messages;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerPlugin;
 
 public class MailHelper {
+	
+	private static final String MAIL_FROM = Play.application().configuration().getString("emailFrom");
+	private static final String ADD_TO = Play.application().configuration().getString("emailAddTo");
 
-	public static void send(String email, String message) {
+	public static void send(String subject, String email, String message) {
 
 		/**
 		 * Set subject, body and sender of mail and send mail
 		 */
 		Email mail = new Email();
-		mail.setSubject("Mail for registration to bitCoupon.ba");
-		mail.setFrom("bitCoupon.ba <bit.play.test@gmail.com>");
-		mail.addTo("bitCoupon.ba Contact <bit.play.test@gmail.com>");
+		mail.setSubject(subject);
+		mail.setFrom(MAIL_FROM);
+		mail.addTo(ADD_TO);
 		mail.addTo(email);
 		
 		mail.setBodyText(message);
@@ -94,8 +99,8 @@ public class MailHelper {
 				
 		Email mail = new Email();
 		mail.setSubject(subject);
-		mail.setFrom("bitCoupon.ba <bit.play.test@gmail.com>");
-		mail.addTo("bitCoupon.ba Contact <bit.play.test@gmail.com>");		
+		mail.setFrom(MAIL_FROM);
+		mail.addTo(ADD_TO);		
 		
 		//READING HTML FROM FILE
 		String message = "";
@@ -166,6 +171,50 @@ public class MailHelper {
 		
 		return doc;
 	}
-	
+
+	/**
+	 * Method for sending purchase details to buyer email
+	 * @param buyerName String
+	 * @param buyerSurname String
+	 * @param email String
+	 * @param price double
+	 * @param quantity int
+	 * @param token String
+	 * @param paymentId String
+	 * @param link String
+	 */
+	public static void sendPurchaseInfo(String buyerName, String buyerSurname, String email,
+			double price, int quantity, String token, String paymentId, String link) {
+		String  couponPurchase = Messages.get("couponPurchase");
+		String  congratulations = Messages.get("congratulations");
+		String	yourNewCouponIsReady = Messages.get("yourNewCouponIsReady");
+		String	visitUsAgain = Messages.get("visitUsAgain");
+		String	yourBitCoupon = Messages.get("yourBitCoupon");
+		MailHelper.send(couponPurchase, email,
+				congratulations + "<br>" +
+				yourNewCouponIsReady + "<br>" +
+				visitUsAgain + " " + yourBitCoupon 
+				+ "<br><br>"
+				+ Messages.get("buyerDetails")
+				+ "<br>"
+				+ Messages.get("buyer") + ": " + buyerName
+				+ " " + buyerSurname
+				+ "<br>"
+				+ Messages.get("email") + ": " + email
+				+ "<br><br>"
+				+ Messages.get("paymentDetails")
+				+ "<br>"
+				+ Messages.get("price") + ": " +price
+				+ "<br>"
+				+ Messages.get("quantity") + ": " +  quantity
+				+ "<br>"
+				+ Messages.get("token") + ": " + token
+				+ "<br>"
+				+ Messages.get("paymentId") + ": " + paymentId
+				+ "<br>"
+				+ Messages.get("toSeeCouponClickLinkBelow") 
+				+ "<br>"
+				+ link);
+	}
 	
 }

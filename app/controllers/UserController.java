@@ -50,9 +50,11 @@ public class UserController extends Controller {
 	static String PATH = Play.application().configuration().getString("PATH"); 
 	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
 	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+	static final String MAIL_VERIFICATION_SUBJECT = Play.application().configuration().getString("emailVerificationSubject");
 	static String name = null;
 	static String defaultPicture = Play.application().configuration().getString("defaultProfilePicture");
 	static Form<User> userForm = new Form<User>(User.class);
+	
 
 	/**
 	 * Pulls the input form from the registration form fields and creates a new
@@ -98,11 +100,14 @@ public class UserController extends Controller {
 				long id = User.createUser(username, surname, dob, gender,
 						adress, city, mail, hashPass, false, defaultPicture);
 				String verificationEmail = EmailVerification.addNewRecord(id);
-				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
-								+ "http://" + PATH + "/verifyEmail/"
+				MailHelper.send(MAIL_VERIFICATION_SUBJECT, mail,
+						Messages.get("registration.mail.verificationLinkText")
+								+ "<br>" + "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
-				flash("success", Messages.get("registration.mail.flash.verification"));
-				Logger.info("A verification mail has been sent to email address: " + mail);
+				flash("success",
+						Messages.get("registration.mail.flash.verification"));
+				Logger.info("A verification mail has been sent to email address: "
+						+ mail);
 				return ok(Loginpage.render(" "));
 
 			} else {
@@ -163,9 +168,10 @@ public class UserController extends Controller {
 			if (!cUser.email.equals(email)) {
 				String verificationEmail = EmailVerification
 						.addNewRecord(cUser.id);
-				MailHelper.send(email, Messages.get("registration.mail.verificationLinkText ") + "<br>"
-								+ "http://" + PATH + "/verifyEmailUpdate/"
-								+ verificationEmail);
+				MailHelper.send(MAIL_VERIFICATION_SUBJECT, email,
+						Messages.get("registration.mail.verificationLinkText ")
+								+ "<br>" + "http://" + PATH
+								+ "/verifyEmailUpdate/" + verificationEmail);
 				cUser.email = email;
 				cUser.save();
 				flash("success", Messages.get("registration.mail.flash.verification") + " " + email);
@@ -460,6 +466,14 @@ public class UserController extends Controller {
 		c.maxOrder = c.maxOrder - quantity;
 		c.seller.save();
 		c.save();
+		MailHelper.sendPurchaseInfo(
+				client.username,
+				client.surname, 
+				client.email, 
+				coupon.price, 
+				quantity, 
+				saleId, paymentId, 
+				"http://" + PATH + "/coupon/" + coupon.id);
 		flash("success", Messages.get("transaction.complete"));
 		return ok(index.render(Coupon.all(), Category.all()));
 	}
@@ -523,4 +537,6 @@ public class UserController extends Controller {
 		Coupon coupon = Coupon.find(id);
 		return ok(buyForUser.render(coupon, null));
 	}
+	
+	
 }
