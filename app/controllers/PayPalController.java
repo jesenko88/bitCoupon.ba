@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import models.Category;
 import models.Coupon;
@@ -257,6 +256,12 @@ public class PayPalController extends Controller {
 	 * @return render index page with a flash message
 	 */
 	public static Result approveTransaction() {
+		String  couponPurchase = Messages.get("couponPurchase");
+		String  congratulations = Messages.get("congratulations");
+		String	yourNewCouponIsReady = Messages.get("yourNewCouponIsReady");
+		String	visitUsAgain = Messages.get("visitUsAgain");
+		String	yourBitCoupon = Messages.get("yourBitCoupon");
+		String	newPurchase = Messages.get("newPurchase");
 		
 		try {
 			Payment response = payment.execute(apiContext, paymentExecution);
@@ -267,15 +272,26 @@ public class PayPalController extends Controller {
 			}else{
 				TransactionCP.createTransactionForUnregisteredUser(paymentID, saleId, coupon.price, quantity,
 						totalPrice, token, currentUser.username, currentUser.surname, currentUser.email, coupon);
+				
 			}		
+			MailHelper.sendPurchaseInfo(
+					currentUser.username,
+					currentUser.surname, 
+					currentUser.email, 
+					coupon.price, 
+					quantity, 
+					token, paymentID, 
+					"http://" + PATH + "/coupon/" + coupon.id);
 			coupon.statistic.bought(quantity);
 			/* decrementing available coupons */
 			coupon.maxOrder = coupon.maxOrder - quantity;
 			Coupon.updateCoupon(coupon);
-			MailHelper.send(coupon.seller.email,
-					"Congratulations. Your coupon " + coupon.name
-							+ " is purchased. "
-							+ "To see details go to your profile. <br>"
+			MailHelper.send(newPurchase
+					, coupon.seller.email,
+					Messages.get("yourCouponIsPurchased", coupon.name)
+							+ "<br>"
+							+ Messages.get("toSeeDetailsGoToProfile") 
+							+ "<br>"
 							+ "http://" + PATH + "/loginpage");
 			
 			coupon.seller.notifications ++;
@@ -313,6 +329,7 @@ public class PayPalController extends Controller {
 	}
 	
 	public static void executeRefund(long couponId) {
+		
 		try {
 		String accessToken = new OAuthTokenCredential(CLIENT_ID,
 				CLIENT_SECRET).getAccessToken();

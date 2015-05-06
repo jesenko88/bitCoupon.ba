@@ -40,6 +40,7 @@ public class CompanyController extends Controller {
 	public static final Company COMPANY_ADMIN = Company.findById(1);
 	static final String ERROR_MSG_ADMIN = Messages.get("error.msg.00");
 	static final String ERROR_MSG_CLIENT = Messages.get("error.msg.01");
+	static final String MAIL_VERIFICATION_SUBJECT = Play.application().configuration().getString("emailVerificationSubject");
 
 
 	/**
@@ -88,7 +89,7 @@ public class CompanyController extends Controller {
 						adress, city, contact,0);
 				String verificationEmail = EmailVerification.addNewRecord(id);
 
-				MailHelper.send(mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
+				MailHelper.send(MAIL_VERIFICATION_SUBJECT, mail, Messages.get("registration.mail.verificationLinkText") + "<br>"
 								+ "http://" + PATH + "/verifyEmail/"
 								+ verificationEmail);
 				flash("success", Messages.get("registration.mail.flash.verification"));
@@ -145,7 +146,7 @@ public class CompanyController extends Controller {
 			
 			if (!company.email.equals(email)) {
 				String verificationEmail = EmailVerification.addNewRecord(company.id);
-				MailHelper.send(email,
+				MailHelper.send(MAIL_VERIFICATION_SUBJECT, email,
 						Messages.get("registration.mail.verificationLinkText") + "<br>"
 								+ "http://"+ PATH + "/verifyEmailUpdate/"
 								+ verificationEmail);
