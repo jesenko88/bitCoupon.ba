@@ -234,7 +234,7 @@ public class UserController extends Controller {
 			}
 			cUser.updated = new Date();
 			cUser.save();
-			flash("success", cUser.username + Messages.get("updatedSuccessfully"));
+			flash("success", cUser.username + " " + Messages.get("updatedSuccessfully"));
 			Logger.info(session("name") + " updated user: " + cUser.username);
 			return ok(userList.render(SuperUser.allSuperUsers()));
 		} catch (Exception e) {
