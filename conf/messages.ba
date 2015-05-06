@@ -363,9 +363,23 @@ newCoupon = NOVI kuponi
 numOfPublishedCoupons = Broj objavljenih kupona
 uploadNewPhoto =  Unos novu sliku
 changePhoto  = Promijeni sliku
-changePassword = Promoijeni lozinku
+changePassword = Promijeni lozinku
 updatePassword = Ažuriraj lozinku
 savePhoto = Spasi sliku
 buy = Kupi kupona
+
+clickOnLinkForNewPassword = Kliknite na link ispod kako bi postavili novu lozinku
+newPasswordSubject = Postavi novu lozinku
+newPurchase = Nova kupovina!
+couponPurchase = Kupljeni kupon
+congratulations = Čestitamo !
+yourNewCouponIsReady = Vaš novi kupon je spreman
+visitUsAgain = Posjetite nas opet
+yourBitCoupon = Vaš bitCoupon.
+yourCouponIsPurchased =  Vaš kupon {0} prodat.
+toSeeDetailsGoToProfile = Kako biste vidjeli detalje, idite na vaš profil.
+toSeeCouponClickLinkBelow = Ako želite vidjeti kupon, kliknite na link ispod.
+paymentDetails = Detalji o kupovini:
+buyerDetails = Detalji o kupcu: 
 
 
