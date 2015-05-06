@@ -7,7 +7,6 @@
             <li><a href="/faq" class="active"><i class="active"></i> @Messages("faq") </a></li>
             <li><a href="/contact" class="active"><i></i> @Messages("contact")</a></li>
             <li><a href="/blog" class="active"><i></i> @Messages("blog")</a></li>
-            
          </ul>
          <ul class="nav navbar-nav pull-right">
             <!-- if statement for enable od disable button in case of login -->	
@@ -16,30 +15,30 @@
             <li><a href="/signup" class="active"><i  class="glyphicon glyphicon-user"></i> @Messages("registration")</a></li>
             } else {
             @if(superUser.isUser()) {
-              <li><a href="@routes.SuperUserController.profilePage(superUser.getUser().username)" method="GET" class="active"> @superUser.getUser().username </a></li>
+            <li><a href="@routes.SuperUserController.profilePage(superUser.getUser().username)" method="GET" class="active"> @superUser.getUser().username </a></li>
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Messages("menu")<strong class="caret"></strong></a>
                <ul class="dropdown-menu">
                   <li><a href="@routes.SuperUserController.userUpdateView">@Messages("editProfile")</a>
                      @if(Sesija.adminCheck(ctx()) == true) {
-                     	@if(User.adminNotifications() > 0) {          
+                     @if(User.adminNotifications() > 0) {          
                   <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">@Messages("adminPanel")   <i id="newBadge" class="newbadge">@User.adminNotifications()</i></a></li>
-                     } else {
-                    <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">@Messages("adminPanel")</a></li>                   
-                     }
-                     }                   
+                  } else {
+                  <li><a href="@routes.UserController.controlPanel(superUser.getUser().id)" class="fa fa-lock">@Messages("adminPanel")</a></li>
+                  }
+                  }                   
                   <li class="divider">
                   </li>
                   <li><a href="/logout" class="active"><i></i> @Messages("logout")</a></li>
                </ul>
             </li>
             }
-             @if(superUser.isCompany()) {
-             	@if(superUser.getCompany().notifications > 0) {
-              <li><a href="@routes.SuperUserController.profilePage(superUser.getCompany().name)" method="GET" class="active"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i> @superUser.getCompany().name </a></li>
-              } else {
-              <li><a href="@routes.SuperUserController.profilePage(superUser.getCompany().name)" method="GET" class="active">@superUser.getCompany().name </a></li>
-              }
+            @if(superUser.isCompany()) {
+            @if(superUser.getCompany().notifications > 0) {
+            <li><a href="@routes.SuperUserController.profilePage(superUser.getCompany().name)" method="GET" class="active"><i id="newBadge" class="newbadge">@superUser.getCompany().notifications</i> @superUser.getCompany().name </a></li>
+            } else {
+            <li><a href="@routes.SuperUserController.profilePage(superUser.getCompany().name)" method="GET" class="active">@superUser.getCompany().name </a></li>
+            }
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Messages("menu")<strong class="caret"></strong></a>
                <ul class="dropdown-menu">

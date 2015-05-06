@@ -2,20 +2,21 @@
 @import views.html.admin.users._
 @import views.html.coupon
 @main("Admin add coupon") {
-@adminNavbar()
-@if(Sesija.adminCheck(ctx()) == true || Sesija.companyCheck(ctx()) == true) {
-<hr>
-<div class="panel panel-default" >
-   <div class="panel-heading">
-      <div class="panel-title">
-         <i class="glyphicon glyphicon-wrench pull-right"></i>
-         <h4>@Messages("createCoupon")</h4>
-      </div>
-   </div>
-   <div ng-app="formApp" ng-controller="formController">
-  	@views.html.coupon._couponForm(myForm) 
-  </div >
-</div>
-<!--/sign up form-->
-}	
+	@adminNavbar()
+	@if(Sesija.adminCheck(ctx()) == true || Sesija.companyCheck(ctx()) == true) {
+
+	<hr>
+	<div class="panel panel-default" >
+	   <div class="panel-heading">
+	      <div class="panel-title">
+	         <i class="glyphicon glyphicon-wrench pull-right"></i>
+	         <h4>@Messages("createCoupon")</h4>
+	      </div>
+	   </div>
+	   <div ng-app="formApp" ng-controller="formController">
+	  	@views.html.coupon._couponForm(myForm) 
+	  </div >
+	</div>
+	<!--/sign up form-->
+	}	
 }

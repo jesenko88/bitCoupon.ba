@@ -20,86 +20,80 @@
    </div>
 </header>
 <div class="container">
-
-
-	<h2 class="title text-center"> * @Messages("giftPage") *</h2>
-
-<div class="table-responsive">
-   <table class="table table-striped">
-      <thead>
-         <tr>
-     
-            <th id="th-width-60">@Messages("coupon")</th>
-            <th>@Messages("expiring")</th>
-            <th>@Messages("price")</th>
-         </tr>
-      </thead>
-      <tbody>
-         <tr>   
-            <td id="td-padding-1"><img id="img-thumb-coupon" src="@routes.Assets.at(coupon.picture)"/>@coupon.name</td>
-            <td><h4>@coupon.getExpiration()</h4></td>
-            <td><h4>@coupon.price</h4></td>
-         </tr>
-      </tbody>
-   </table>
+   <h2 class="title text-center"> * @Messages("giftPage") *</h2>
+   <div class="table-responsive">
+      <table class="table table-striped">
+         <thead>
+            <tr>
+               <th id="th-width-60">@Messages("coupon")</th>
+               <th>@Messages("expiring")</th>
+               <th>@Messages("price")</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td id="td-padding-1"><img id="img-thumb-coupon" src="@routes.Assets.at(coupon.picture)"/>@coupon.name</td>
+               <td>
+                  <h4>@coupon.getExpiration()</h4>
+               </td>
+               <td>
+                  <h4>@coupon.price</h4>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+   <div class="col-sm-9">
+      @if(user != null) {
+      <label>Recipient details</label>
+      <!-- form action when admin buys for user -->
+      @if(Sesija.adminCheck(ctx()) == true) {
+      <form action="/buyForUser" method="POST">
+         } 
+         <!-- form action when user buys a gift for user -->
+         @if(Sesija.getCurrent(ctx()).isUser() && Sesija.adminCheck(ctx()) == false ){     
+      <form  action="/couponpurchase" method="POST">
+         }       
+         <input type="text" id="user_id" name="user_id" value=@user.id hidden/>
+         <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
+         <table class="table table-striped">
+            <thead>
+               <tr>
+                  <th>@Messages("email")</th>
+                  <th>@Messages("name")</th>
+                  <th>@Messages("surname")</th>
+                  <th>@Messages("quantity")</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>@user.email</td>
+                  <td>@user.username</td>
+                  <td>@user.surname</td>
+                  <td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
+                  <td>  <button  type="submit" id="submit-buy-for" class="btn btn-warning" >@Messages("proceed")</button> </td>
+               </tr>
+            </tbody>
+         </table>
+      </form>
+      }
+      @if(user == null){
+      <br>
+      <div class="col-sm-8 pull-right"
+      <label>@Messages("recipientDetails")</label>
+      <form action="/couponpurchase" method="POST">
+         <input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
+         <!-- setting the value to -1 so it can be identified as an unregistered user -->
+         <input type="text" id="user_id" name="user_id" value="-1" hidden/>
+         <input class="form-control" id="email" name="email" type="email" placeholder="User email" required/><br>
+         <input class="form-control" id="name" name="name" type="text" placeholder="User first name" required/><br>
+         <input class="form-control" id="surname" name="surname" type="text" placeholder="User last name" required/><br>
+         <label>@Messages("enterQuantity")</label><br>
+         <td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
+         <td>  <button type="submit" id="submit-buy-for" class="btn btn-warning pull-right" >@Messages("proceed")</button> </td>
+      </form>
+   </div>
+   }
 </div>
- 
-   		 <div class="col-sm-9">
-      
-	      @if(user != null) {
-	         <label>Recipient details</label>
-	         <!-- form action when admin buys for user -->
-	    	 @if(Sesija.adminCheck(ctx()) == true) {
-		     	<form action="/buyForUser" method="POST">
-		     } 
-		     <!-- form action when user buys a gift for user -->
-		     @if(Sesija.getCurrent(ctx()).isUser() && Sesija.adminCheck(ctx()) == false ){     
-		        <form  action="/couponpurchase" method="POST">
-		     }       
-	         <input type="text" id="user_id" name="user_id" value=@user.id hidden/>
-	         <input type="text" id="coupon_id" name="coupon_id" value="@coupon.id" hidden/>
-				<table class="table table-striped">
-	    			 <thead>
-				         <tr>
-				            <th>@Messages("email")</th>
-				            <th>@Messages("name")</th>
-				            <th>@Messages("surname")</th>
-				            <th>@Messages("quantity")</th>
-				         </tr>
-			      </thead>
-				      <tbody>
-				         <tr>   
-				            <td>@user.email</td>
-				            <td>@user.username</td>
-				            <td>@user.surname</td>
-				            <td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
-				            <td>  <button  type="submit" id="submit-buy-for" class="btn btn-warning" >@Messages("proceed")</button> </td>
-				         </tr>
-				      </tbody>
-	   			</table>
-		    </form>
-		  }
-		  @if(user == null){
-		  	<br>
-		  	<div class="col-sm-8 pull-right"
-		  	 <label>@Messages("recipientDetails")</label>
-			  	<form action="/couponpurchase" method="POST">
-			  		<input id="coupon_id" name="coupon_id" type="text" value=@coupon.id hidden />
-			  		<!-- setting the value to -1 so it can be identified as an unregistered user -->
-			  		<input type="text" id="user_id" name="user_id" value="-1" hidden/>
-		        	<input class="form-control" id="email" name="email" type="email" placeholder="User email" required/><br>
-		        	<input class="form-control" id="name" name="name" type="text" placeholder="User first name" required/><br>
-		        	<input class="form-control" id="surname" name="surname" type="text" placeholder="User last name" required/><br>
-		        	<label>@Messages("enterQuantity")</label><br>
-		        	<td> <input type="number" step="1" id="quantity" name="quantity" min="1" max=@coupon.maxOrder placeholder="0" required/> </td>
-		        	<td>  <button type="submit" id="submit-buy-for" class="btn btn-warning pull-right" >@Messages("proceed")</button> </td>
-			  	</form>
-		  	</div>
-		  }
-		    
-		    
-		    
-	   </div> 		
-   	 
-</div>					
+</div>			
 }

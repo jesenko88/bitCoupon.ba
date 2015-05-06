@@ -1,6 +1,6 @@
 @(myForm: Form[Coupon])
 
-<div >
+<div>
  <form name="couponForm" action="@routes.CouponController.addCoupon" method ="POST"
       enctype="multipart/form-data" >
 	      @if(myForm.hasGlobalErrors){

@@ -4,9 +4,9 @@
 @adminNavbar()
 
 <div class="col-sm-12">
-      <div class="review-payment">
-         <h2>@Messages("listOfUsers")</h2>
- </div>
+<div class="review-payment">
+   <h2>@Messages("listOfUsers")</h2>
+</div>
 <div class="table-responsive">
    <table class="table table-striped">
       <thead>
@@ -36,11 +36,11 @@
    </table>
 </div>
 <br>
- <!-- ACTIVE COMPANIES -->
+<!-- ACTIVE COMPANIES -->
 <div class="col-sm-12">
-      <div class="review-payment">
-         <h2>@Messages("listOfActiveCompanies")</h2>
-      </div>
+<div class="review-payment">
+   <h2>@Messages("listOfActiveCompanies")</h2>
+</div>
 <br>   
 <div class="table-responsive">
    <table class="table table-striped">
@@ -68,12 +68,11 @@
       </tbody>
    </table>
 </div>
-
- <!--  NONAPPROVED COMPANIES -->
+<!--  NONAPPROVED COMPANIES -->
 <div id="companies" class="col-sm-12">
-      <div class="review-payment">
-         <h2>@Messages("listOfCompaniesToBeApproved")</h2>
-      </div>
+<div class="review-payment">
+   <h2>@Messages("listOfCompaniesToBeApproved")</h2>
+</div>
 <br>   
 <div class="table-responsive">
    <table class="table table-striped">
@@ -96,17 +95,17 @@
             <td>@company.updated</td>
             <td> <a href="@routes.SuperUserController.adminEditUserView(company.email)" class="btn btn-default" >@Messages("edit")</a></td>
             <td> <a href="@routes.CompanyController.deleteCompany(company.id)" onclick="return confirm('Are you sure you want to delete this user?');"class="btn btn-danger">@Messages("delete")</a></td>
-            <td> <a href="@routes.CompanyController.approveCompany(company.id)" class="btn btn-success">@Messages("approve")</a></td> 
+            <td> <a href="@routes.CompanyController.approveCompany(company.id)" class="btn btn-success">@Messages("approve")</a></td>
          </tr>
          }
       </tbody>
    </table>
 </div>
- <!--  DELETED COMPANIES -->
- <div id="companies" class="col-sm-12">
-      <div class="review-payment">
-         <h2>@Messages("listOfDeltedCompanies")</h2>
-      </div>
+<!--  DELETED COMPANIES -->
+<div id="companies" class="col-sm-12">
+<div class="review-payment">
+   <h2>@Messages("listOfDeltedCompanies")</h2>
+</div>
 <br>   
 <div class="table-responsive">
    <table class="table table-striped">

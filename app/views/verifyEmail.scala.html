@@ -4,31 +4,33 @@
 
 @main("E-mail Verification") {
 	
- 	<header id="header"><!--header-->
-		<div class="header-middle"><!--header-middle-->
-			<div class="container">
-			<a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
-				<div class="logo pull-right">
-					<div class="search_box">
-						<form action="/search" method="GET">
-						<input id="q" name="q" type="text" placeholder="Search" />
-						</form>
-					</div>
-				</div>	
-			</div>		
-		</div>
-	</header>
-
-	<div class="container">
-		<div class="features_items"><!--features_items-->
-			<h2 class="title text-center">@Messages("verification")</h2>
-				<span>@message</span>
-			<div class="col-sm-6 col-sm-offset-1">
-				<form action="/loginpage">
-				<button type="submit" id="submit" class="btn btn-fefault cart"> @Messages("goToLogin") </button>
-				</form>
-			</div>
-		</div>
-	</div>
+ 	<header id="header">
+   <!--header-->
+   <div class="header-middle">
+      <!--header-middle-->
+      <div class="container">
+         <a href="/"><img src="http://res.cloudinary.com/bitfiles/image/upload/v1430750951/staticImages/logo.png" alt="" /></a>
+         <div class="logo pull-right">
+            <div class="search_box">
+               <form action="/search" method="GET">
+                  <input id="q" name="q" type="text" placeholder="Search" />
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</header>
+<div class="container">
+   <div class="features_items">
+      <!--features_items-->
+      <h2 class="title text-center">@Messages("verification")</h2>
+      <span>@message</span>
+      <div class="col-sm-6 col-sm-offset-1">
+         <form action="/loginpage">
+            <button type="submit" id="submit" class="btn btn-fefault cart"> @Messages("goToLogin") </button>
+         </form>
+      </div>
+   </div>
+</div>
 }
 

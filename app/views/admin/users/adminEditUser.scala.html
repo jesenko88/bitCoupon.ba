@@ -122,36 +122,36 @@
 					}
                   <!-- Input email -->
                    <div class='@("form-group has-error".when(companyForm("email").hasErrors)) form-group' >
-			     	 <label class="control-label" for="email">>@Messages("email")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="email">@Messages("email")<span style="color:#AB1403"> *</span></label>
                  	 <input class="form-control" value='@companyForm("email").value' type="email" id="email" name="email" onClick="this.select()" placeholder="Email" required/> 
 		          </div>
 		          
  		          <!-- Name -->
  		          <div class='@("form-group has-error".when(companyForm("name").hasErrors)) form-group' >
-			     	 <label class="control-label" for="name">>@Messages("name")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="name">@Messages("name")<span style="color:#AB1403"> *</span></label>
                   	 <input class="form-control" value='@companyForm("name").value' type="text" id="name-c" name="name"  onClick="this.select()"  placeholder="Company name" required/>	
 		          </div>
 		          <!-- Contact -->
  		          <div class='@("form-group has-error".when(companyForm("contact").hasErrors)) form-group' >
-			     	 <label class="control-label" for="contact">>@Messages("contact")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="contact">@Messages("contact")<span style="color:#AB1403"> *</span></label>
                	     <input class="form-control" value='@companyForm("contact").value' type="text" id="contact-c" name="contact"  onClick="this.select()"  placeholder="Company contact" required/>
 		          </div>
 		          <!-- Logo -->
 		          <div class='@("form-group has-error".when(companyForm("logo").hasErrors)) form-group' >
-			     	 <label class="control-label" for="logo">>@Messages("logo")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="logo">@Messages("logo")<span style="color:#AB1403"> *</span></label>
                   	 <input class="form-control" value='@companyForm("logo").value' type="text" id="logo-c" name="logo" onClick="this.select()" placeholder="Logo" required/> 
 		          </div>
  		          <!-- Adress -->
                  <div class='@("form-group has-error".when(companyForm("adress").hasErrors)) form-group' >
-			     	 <label class="control-label" for="adress">>@Messages("address")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="adress">@Messages("address")<span style="color:#AB1403"> *</span></label>
                      <input class="form-control" value='@companyForm("adress").value' type="text" id="adress" name="adress"  onClick="this.select()"  placeholder="Adress" required/>               
  		        </div>
                 <!-- City -->
 				<div class='@("form-group has-error".when(companyForm("city").hasErrors)) form-group' >
-			     	 <label class="control-label" for="city">>@Messages("address")<span style="color:#AB1403"> *</span></label>
+			     	 <label class="control-label" for="city">@Messages("address")<span style="color:#AB1403"> *</span></label>
               	     <input class="form-control" value='@companyForm("city").value' type="text" id="city" name="city"  onClick="this.select()"  placeholder="City" required/>
  		        </div>   
-                  <button type="submit" id="submit-company" class="btn btn-default" >>@Messages("submit")</button>
+                  <button type="submit" id="submit-company" class="btn btn-default" >@Messages("submit")</button>
               
             </form>
        
