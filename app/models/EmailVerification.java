@@ -37,6 +37,11 @@ public class EmailVerification extends Model {
 		this.userId = userId;
 		this.createdOn = new Date();
 		this.isVerified = isVerified;
+		if(isVerified == true){
+		    User user = User.find(userId);
+		    user.status = SuperUser.VERFIED;
+		    user.save();
+		}
 	}
 
 	static Finder<String, EmailVerification> find = new Finder<String, EmailVerification>(
@@ -60,6 +65,11 @@ public class EmailVerification extends Model {
 	 */
 	public static void makeNewRecord(long userId, boolean verified) {
 		EmailVerification verify = new EmailVerification(userId, verified);
+		User user = User.find(verify.userId);
+		if(verified == true){
+		    user.status = SuperUser.VERFIED;
+		    user.save();
+		}		
 		verify.save();
 	}
 
@@ -69,6 +79,9 @@ public class EmailVerification extends Model {
 	 */
 	public static void updateRecord(EmailVerification recordToUpdate) {
 		recordToUpdate.isVerified = true;
+		User user = User.find(recordToUpdate.userId);
+		user.status = SuperUser.VERFIED;
+		user.save();
 		recordToUpdate.save();
 	}
 
