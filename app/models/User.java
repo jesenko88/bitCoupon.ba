@@ -75,7 +75,8 @@ public class User extends SuperUser {
 	public List<TransactionCP> bought_coupons;
 	
 	@OneToOne(mappedBy="user",cascade=CascadeType.ALL)
-	public Pin pin;
+	public Pin pin;	
+	
 	
 	private static Finder<Long, User> find = new Finder<Long, User>(Long.class,
 			User.class);
@@ -202,7 +203,7 @@ public class User extends SuperUser {
 	public static boolean verifyLogin(String mail, String password) {
 		try {
 			User user = getFind().where().eq("email", mail).findUnique();
-			if (user != null && EmailVerification.isEmailVerified(user.id)) {
+			if (user != null &&  user.status == SuperUser.VERFIED) {
 				return HashHelper.checkPass(password, user.password);
 			} else {
 				return false;
@@ -297,7 +298,9 @@ public class User extends SuperUser {
 	 * @param id of user
 	 */
 	public static void delete(long id) {
-		getFind().byId(id).delete();
+		User user = getFind().byId(id);
+		user.status = SuperUser.DELETED;
+		user.save();
 	}
 
 	/**
@@ -429,5 +432,12 @@ public class User extends SuperUser {
 	public static int adminNotifications() {
 		return Coupon.nonApprovedCoupons().size() + Company.nonApprovedCompanies().size();
 	}
-	
+
+	public static List<User> findVerfied() {
+	    List<User> verfied = find.where().eq("status", SuperUser.VERFIED).findList();
+	    if(verfied == null)
+		return new ArrayList<User>();
+	    return verfied;
+	}	
+
 }

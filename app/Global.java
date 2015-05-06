@@ -270,6 +270,7 @@ public class Global extends GlobalSettings {
 			User user = new User("Jesenko", "Gavric", new Date(), "", "", "",
 					"jesenko.gavric@bitcamp.ba",
 					HashHelper.createPassword("johndoe"), false, picture);
+			
 			user.save();
 			EmailVerification setVerified = new EmailVerification(2, true);
 			setVerified.save();

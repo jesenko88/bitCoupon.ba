@@ -223,10 +223,10 @@ public class CompanyController extends Controller {
 			Company currentCompany = Company.findById(id);
 			if ( currentCompany == null){
 				flash("error", Messages.get("company.notExist"));
-				return badRequest(userList.render(SuperUser.allSuperUsers()));
+				return badRequest(userList.render(SuperUser.allVerfiedSuperUsers()));
 			}
 			Company.delete(id);	
-			return ok(userList.render(SuperUser.allSuperUsers()));
+			return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 		}catch(Exception e){
 			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at delete company: " +e.getMessage());

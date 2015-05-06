@@ -267,16 +267,16 @@ public class UserController extends Controller {
 	 */
 	@Security.Authenticated(AdminFilter.class)
 	public static Result listUsers() {
-		List<SuperUser> all = SuperUser.allSuperUsers();
+		List<SuperUser> all = SuperUser.allVerfiedSuperUsers();
 		if (all == null) {
 			flash("error", ERROR_MSG_ADMIN);
 			return redirect("/");
 		}
 		/* content negotiation */
 		if (request().accepts("text/html")) {
-			return ok(userList.render(SuperUser.allSuperUsers()));
+			return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 		}
-		return ok(JSonHelper.superUserListToJson(SuperUser.allSuperUsers()));
+		return ok(JSonHelper.superUserListToJson(SuperUser.allVerfiedSuperUsers()));
 	}
 
 	/**
@@ -296,27 +296,10 @@ public class UserController extends Controller {
 
 			if (adminList.size() == 1 && id == currentUser.id) {
 				flash("error", Messages.get("admin.last.info"));
-				return ok(userList.render(SuperUser.allSuperUsers()));
+				return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 			}
 			if (currentUser.id == id || Sesija.adminCheck(ctx())) {
-				User u = User.find(id);
-				if(Subscriber.isSubscribed(u)){
-					Subscriber.unsubscribe(u);
-				}
-//				List<TransactionCP> transactions = TransactionCP.allFromBuyer(id);
-//				if(transactions != null) {
-//					for(TransactionCP t : transactions){
-//						t.buyer = null;
-//						t.save();
-//					}
-//				}
-//				List<Post> posts = Post.allFromCreator(id);
-//				if(posts != null){
-//					for(Post p : posts){
-//						p.creator = null;
-//						p.save();
-//					}
-//				}
+				User u = User.find(id);				
 				User.delete(u.id);
 
 				if (currentUser.id == id) {
@@ -324,7 +307,7 @@ public class UserController extends Controller {
 					return redirect("/signup ");
 				}
 			}
-			return ok(userList.render(SuperUser.allSuperUsers()));
+			return ok(userList.render(SuperUser.allVerfiedSuperUsers()));
 		} catch (Exception e) {
 			flash("error", ERROR_MSG_ADMIN);
 			Logger.error("Error at deleteUser: " + e.getMessage(), e);

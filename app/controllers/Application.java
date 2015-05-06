@@ -8,6 +8,7 @@ import models.Category;
 import models.Company;
 import models.Coupon;
 import models.Login;
+import models.SuperUser;
 import models.User;
 import play.Logger;
 import play.Play;
@@ -108,23 +109,23 @@ public class Application extends Controller {
 				}
 				if (Company.verifyLogin(mail, password) == true) {
 					Company company = Company.findByEmail(mail);
-					if(company.status == models.Coupon.Status.DEFAULT) {
+					if(company.status == SuperUser.DEFAULT) {
 						Logger.info("Non approved company try to login");
 						flash("error", "You're not approved yet");
 						return badRequest(Loginpage.render(" "));
 					}
-					if(company.status == models.Coupon.Status.DELETED) {
+					if(company.status == SuperUser.DELETED) {
 						Logger.info("Deleted company try to login");
 						flash("error", "Your profile has been deleted");
 						return badRequest(Loginpage.render(" "));
 					}
-					if(company.status != models.Coupon.Status.DELETED) {
-					session().clear();
-					session("name", company.name);
-					session("email", company.email);
-					flash("success", loginSuccess + " " + mail);
-					Logger.info(company.name + " logged in");
-					return ok(index.render(approvedCoupons, Category.all()));
+					if(company.status == SuperUser.VERFIED) {
+        					session().clear();
+        					session("name", company.name);
+        					session("email", company.email);
+        					flash("success", loginSuccess + " " + mail);
+        					Logger.info(company.name + " logged in");
+        					return ok(index.render(approvedCoupons, Category.all()));
 					}
 				}
 
