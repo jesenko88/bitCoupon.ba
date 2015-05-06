@@ -192,6 +192,7 @@ create table transaction_cp (
   buyer_email               varchar(255),
   coupon_id                 bigint,
   date                      timestamp,
+  is_refunded               boolean,
   constraint pk_transaction_cp primary key (id))
 ;
 

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import models.Category;
 import models.Coupon;
@@ -315,36 +316,37 @@ public class PayPalController extends Controller {
 
 			coupon = Coupon.find(couponId);
 			List<TransactionCP> transactions = TransactionCP.find.where()
-					.eq("coupon_id", coupon.id).findList();
+					.eq("coupon_id", couponId).findList();
+			Map<Sale, Refund> refundObject = new HashMap<Sale, Refund>();
+			Sale sale = new Sale();
+			Refund refund = new Refund();
 			for (int i = 0; i < transactions.size(); i++) {
-				if(transactions.get(i).sale_id == "saleId" || transactions.get(i).sale_id == "bitSale")
-				i++;
-				else {
+				if(transactions.get(i).sale_id != "bitSale" && transactions.get(i).sale_id != null && transactions.get(i).isRefunded == false) {
 				System.out.println(transactions.get(i).token);
 				totalPrice = transactions.get(i).quantity * coupon.price;
 				String totalPriceString = String.format("%1.2f", totalPrice);
-				Map<Sale, Refund> refundObject = new HashMap<Sale, Refund>();
-				Sale sale = new Sale();
 				sale.setId(transactions.get(i).sale_id);
-				Refund refund = new Refund();
 				Amount amount = new Amount();
 				amount.setCurrency("USD");
 				amount.setTotal(totalPriceString);
 				refund.setAmount(amount);
+				
 				refundObject.put(sale, refund);
-
+						
 				listOfRefunds.add(refundObject);
+				transactions.get(i).isRefunded = true;
+				transactions.get(i).save();
+				}
+				if(transactions.get(i).sale_id == "bitSale" || transactions.get(i).sale_id == null || transactions.get(i).isRefunded == true) {
+					transactions.get(i).isRefunded = true;
+					transactions.get(i).save();
 				}
 			}
-			for (int i = 0; i < listOfRefunds.size(); i++) {
-				for (Map.Entry<Sale, Refund> e : listOfRefunds.get(i)
-						.entrySet()) {
-					Sale sale = e.getKey();
-					Refund refund = e.getValue();
-
-					sale.refund(apiContext, refund);
-				}
+			
+			for (int j = 0; j < listOfRefunds.size(); j++) {
+				sale.refund(apiContext, refund);
 			}
+			
 			flash("success", Messages.get("transaction.refund.success"));
 			return ok(index.render(Coupon.all(), Category.all()));
 
