@@ -9,6 +9,9 @@ import models.Coupon;
 import models.Subscriber;
 import models.User;
 
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,19 +32,32 @@ public class MailHelper {
 		/**
 		 * Set subject, body and sender of mail and send mail
 		 */
-		Email mail = new Email();
-		mail.setSubject(subject);
-		mail.setFrom(MAIL_FROM);
-		mail.addTo(ADD_TO);
-		mail.addTo(email);
-		
-		mail.setBodyText(message);
-		mail.setBodyHtml(String
-				.format("<html><body><strong> %s </strong>: <p> %s </p> </body></html>",
-						email, message));
-		MailerPlugin.send(mail);
+		try {
+			HtmlEmail mail = new HtmlEmail();
+			mail.setSubject(subject);
+			mail.setFrom(MAIL_FROM);
+			mail.addTo(ADD_TO);
+			mail.addTo(email);
+			mail.setMsg(message);
+			mail.setHtmlMsg(String
+					.format("<html><body><strong> %s </strong>: <p> %s </p> </body></html>",
+							email, message));
+			mail.setHostName("smtp.gmail.com");
+		//	mail.setSmtpPort(587);
+			mail.setStartTLSEnabled(true);
+			mail.setSSLOnConnect(true);
+			mail.setAuthenticator(new DefaultAuthenticator(
+					Play.application().configuration().getString("EMAIL_USERNAME_ENV"), 
+					Play.application().configuration().getString("EMAIL_PASSWORD_ENV")
+					));
 
-	}	
+			mail.send();
+
+		} catch (EmailException e) {
+			Logger.error(e.getMessage());
+		}
+
+	}
 	
 	
 	/**

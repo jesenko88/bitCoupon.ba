@@ -58,15 +58,15 @@
                      <div id="content" class="divContent">
                         <ul class="col-md-12" style="text-align: left;list-style: none;" >
                            <br>
-                           <li><strong>@Messages("couponName"): </strong> @transaction.coupon.name</li>
-                           <li><strong>@Messages("buyer"):</strong> @username</li>
-                           <li><strong>@Messages("seller"):</strong> @transaction.coupon.seller.name</li>
-                           <li><strong>@Messages("Coupon price"):</strong> @transaction.coupon.getPriceString()</li>
-                           <li><strong>@Messages("quantity"):</strong> @transaction.quantity</li>
-                           <li><strong>@Messages("priceTotal"):</strong> @transaction.totalPrice</li>
-                           <li><strong>@Messages("transactionDate"):</strong> @transaction.getDateString</li>
-                           <li><strong>@Messages("paymentId"):</strong> @transaction.payment_id</li>
-                           <li><strong>@Messages("token"):</strong> @transaction.token</li>
+							<p><strong>Coupon name: </strong> @transaction.coupon.name</p>
+							<p><strong>Buyer: </strong> @username</p>
+							<p><strong>Seller:</strong> @transaction.coupon.seller.name</p>											
+							<p><strong>Coupon price:</strong> @transaction.coupon.getPriceString()</p>
+							<p><strong>Quantity:</strong> @transaction.quantity</p>
+							<p><strong>Total price:</strong> @transaction.totalPrice</p>
+							<p><strong>Transaction date:</strong> @transaction.getDateString</p>
+							<p><strong>Payment id:</strong> @transaction.payment_id</p>
+							<p><strong>Token:</strong> @transaction.token</p>
                         </ul>
                      </div>
                      <button id="cmd"  class="btnCmd" style="float:left">@Messages("downloadAsPDF")</button>
