@@ -67,39 +67,45 @@ public class MailHelper {
 	 * @param phone
 	 * @param message
 	 */
-	public static void sendFeedback(String email, String name, String phone, String message) {
-		
+	public static void sendFeedback(String email, String name, String phone,
+			String message) {
+
 		/**
 		 * Set subject, body and sender of mail and send mail
 		 */
-		Email mail = new Email();
-		mail.setSubject("bitCoupon.ba Feedback!");
-		mail.setFrom(email);
-		
-		mail.addTo("bitCoupon.ba Feedback <bit.play.test@gmail.com>");
-		
-		List<String> emailList = User.allAdminMails();
-		
-		for(String e : emailList){
-			mail.addTo(e);
+		try {
+			HtmlEmail mail = new HtmlEmail();
+			mail.setSubject("bitCoupon.ba Feedback!");
+			mail.setFrom(email);
+
+			mail.addTo(ADD_TO);
+
+			List<String> emailList = User.allAdminMails();
+
+			for (String e : emailList) {
+				mail.addTo(e);
+			}
+
+			mail.setMsg(message);
+			mail.setHtmlMsg(String.format("<html>" + "<body>"
+					+ "<strong> My email </strong>: " + "%s" + "<br></br>"
+					+ "<strong> My name  </strong>: " + "%s" + "<br></br>"
+					+ "<strong> My phone number </strong>: " + "%s"
+					+ "<br></br>" + "<p> %s </p> " + "</body>" + "</html>",
+					email, name, phone, message));
+			mail.setHostName("smtp.gmail.com");
+			mail.setStartTLSEnabled(true);
+			mail.setSSLOnConnect(true);
+			mail.setAuthenticator(new DefaultAuthenticator(
+						Play.application().configuration().getString("EMAIL_USERNAME_ENV"), 
+						Play.application().configuration().getString("EMAIL_PASSWORD_ENV")
+						));
+			mail.send();
+
+		} catch (EmailException e) {
+			Logger.error(e.getMessage());
 		}
-	
-		mail.setBodyText(message);
-		mail.setBodyHtml(String
-				.format("<html>"
-						+ "<body>"
-						+ "<strong> My email </strong>: " + "%s"
-						+ "<br></br>"
-						+ "<strong> My name  </strong>: " + "%s"
-						+ "<br></br>"
-						+ "<strong> My phone number </strong>: " + "%s" 
-						+ "<br></br>"
-						+ "<p> %s </p> "
-						+ "</body>"
-						+ "</html>",
-						email, name, phone, message));
-		MailerPlugin.send(mail);
-		
+
 	}
 	
 	/**
@@ -111,37 +117,50 @@ public class MailHelper {
 	 * @param subject
 	 * @param coupons
 	 */
-	public static void sendNewsletter(List<String> emails, String subject, List<Coupon> coupons, String addHTML)  {
-				
-		Email mail = new Email();
-		mail.setSubject(subject);
-		mail.setFrom(MAIL_FROM);
-		mail.addTo(ADD_TO);		
-		
-		//READING HTML FROM FILE
-		String message = "";
-		Scanner sc = null;
-		try {
-			sc = new Scanner(new File("./public/Email/index.html"));			
-			while(sc.hasNextLine()){
-			    message +=sc.nextLine();
-			}
-		} catch (FileNotFoundException e) {
-			Logger.error("COULD'T READ EMAIL FILE");
-		}finally{
-			sc.close();
-		}
-		
-		Document preparedHTML;
-		for(String email: emails){
-			mail.addTo(email);
-			preparedHTML = getPreparedHTML(email, message, coupons);
-			preparedHTML.getElementById("appendableText").append(addHTML);
-			mail.setBodyHtml(preparedHTML.toString());
-			MailerPlugin.send(mail);			
-		}	
+	public static void sendNewsletter(List<String> emails, String subject,
+			List<Coupon> coupons, String addHTML) {
 
-	}	
+		try {
+			HtmlEmail mail = new HtmlEmail();
+			mail.setSubject(subject);
+			mail.setFrom(MAIL_FROM);
+			mail.addTo(ADD_TO);
+
+			// READING HTML FROM FILE
+			String message = "";
+			Scanner sc = null;
+			try {
+				sc = new Scanner(new File("./public/Email/index.html"));
+				while (sc.hasNextLine()) {
+					message += sc.nextLine();
+				}
+			} catch (FileNotFoundException e) {
+				Logger.error("COULD'T READ EMAIL FILE");
+			} finally {
+				sc.close();
+			}
+
+			Document preparedHTML;
+			for (String email : emails) {
+				mail.addTo(email);
+				preparedHTML = getPreparedHTML(email, message, coupons);
+				preparedHTML.getElementById("appendableText").append(addHTML);
+				mail.setHtmlMsg(preparedHTML.toString());
+				mail.setHostName("smtp.gmail.com");
+				mail.setStartTLSEnabled(true);
+				mail.setSSLOnConnect(true);
+				mail.setAuthenticator(new DefaultAuthenticator(Play
+						.application().configuration()
+						.getString("EMAIL_USERNAME_ENV"), Play.application()
+						.configuration().getString("EMAIL_PASSWORD_ENV")));
+				mail.send();
+			}
+
+		} catch (EmailException e) {
+			Logger.error(e.getMessage());
+		}
+
+	}
 	
 	/**
 	 * Method gets html template, email and list of coupons.
