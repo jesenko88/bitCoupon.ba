@@ -180,7 +180,7 @@ public class MailHelper {
 		
 		Element unsubscribe = doc.getElementById("unsubscribe");
 		String token = Subscriber.getToken(email);
-		String unsubscribePath = "http://localhost:9000" +"/unsubscribe/" +token;
+		String unsubscribePath = Play.application().configuration().getString("PATH") +token;
 		Logger.debug(unsubscribePath);
 		unsubscribe.attr("href", unsubscribePath);
 		
